@@ -12,10 +12,10 @@
 
   <ItemGroup>
     <Folder Include="Approvals\EventHandlers\" />
-    <Folder Include="Approvals\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.3.6" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
   </ItemGroup>
 
