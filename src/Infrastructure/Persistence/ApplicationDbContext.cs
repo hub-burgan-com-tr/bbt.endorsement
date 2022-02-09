@@ -54,9 +54,37 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 .Where(domainEvent => !domainEvent.IsPublished)
                 .ToArray();
 
-        var result = base.SaveChanges();
-        // var result = await base.SaveChangesAsync(cancellationToken);
+        var result = await base.SaveChangesAsync(cancellationToken);
         await DispatchEvents(events);
+        return result;
+    }
+
+    public override int SaveChanges()
+    {
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    //entry.Entity.CreatedBy = _currentUserService.UserId;
+                    entry.Entity.Created = _dateTime.Now;
+                    break;
+
+                case EntityState.Modified:
+                    // entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                    entry.Entity.LastModified = _dateTime.Now;
+                    break;
+            }
+        }
+
+        var events = ChangeTracker.Entries<IHasDomainEvent>()
+                .Select(x => x.Entity.DomainEvents)
+                .SelectMany(x => x)
+                .Where(domainEvent => !domainEvent.IsPublished)
+                .ToArray();
+
+        var result = base.SaveChanges();
+        _ = DispatchEvents(events);
         return result;
     }
 

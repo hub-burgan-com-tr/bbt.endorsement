@@ -10,5 +10,6 @@ namespace Application.Common.Interfaces
         DbSet<Callback> Callbacks { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        int SaveChanges();
     }
 }
