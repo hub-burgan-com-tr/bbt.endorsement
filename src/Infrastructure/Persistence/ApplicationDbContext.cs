@@ -2,6 +2,7 @@
 using Domain.Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Infrastructure.Persistence;
 
@@ -95,5 +96,22 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             @event.IsPublished = true;
             await _domainEventService.Publish(@event);
         }
+    }
+
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        //builder.Entity<Approval>()
+        //       .HasOne(s => s.)
+        //       .WithOne(ad => ad.ApplyContract)
+        //       .HasForeignKey<Config>(ad => ad.ApplyContractId);
+
+        //builder.Entity<ApplyContract>()
+        //        .HasOne(s => s.Reference)
+        //        .WithOne(ad => ad.ApplyContract)
+        //        .HasForeignKey<Reference>(ad => ad.ApplyContractId);
+
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        base.OnModelCreating(builder);
     }
 }

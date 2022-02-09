@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Domain.Events.Approvals;
 using MediatR;
 
 namespace Application.Approvals.Commands;
@@ -21,16 +22,18 @@ public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalComman
 
     public async Task<Response<bool>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
     {
-        _context.Approvals.Add(new Domain.Entities.Approval
+        var entity = new Domain.Entities.Approval
         {
             ApprovalId = Guid.NewGuid().ToString(),
             InstanceId = request.InstanceId,
             ApprovalTitle = request.ApprovalTitle
-        });
+        };
 
-        _context.SaveChanges();
+        entity.DomainEvents.Add(new ApprovalCreateEvent(entity));
+        _context.Approvals.Add(entity);
+        var i = _context.SaveChanges();
 
-        return Response<bool>.Success(true, 200);
+        return Response<bool>.Success(i > 0, 200);
     }
 }
 
