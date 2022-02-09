@@ -3,7 +3,9 @@ using Application.Approvals.Queries.GetApprovals;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Application.Approvals.Queries.GetApprovalsDetails;
 using Application.Approvals.Queries.GetMyApprovals;
+using Application.Approvals.Queries.GetMyApprovalsDetails;
 using Application.Approvals.Queries.GetWantApprovals;
 
 namespace Api.Controllers
@@ -32,13 +34,13 @@ namespace Api.Controllers
             return Ok();
         }
 
-        [Route("approvalsdetail")]
+        [Route("approvalsdetails")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalsDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetApprovalsDetailsAsync([FromBody] int approvalId)
         {
-            await Mediator.Send(new GetApprovalDetailQuery() { ApprovalId = approvalId });
+            await Mediator.Send(new GetApprovalDetailsQuery() { ApprovalId = approvalId });
             return Ok();
         }
 
@@ -54,13 +56,13 @@ namespace Api.Controllers
         }
 
 
-        [Route("myapprovalsdetail")]
+        [Route("myapprovalsdetails")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetMyApprovalsDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetMyApprovalsDetailsAsync([FromBody] int approvalId)
         {
-            await Mediator.Send(new GetMyApprovalDetailQuery { ApprovalId = approvalId });
+            await Mediator.Send(new GetMyApprovalDetailsQuery { ApprovalId = approvalId });
             return Ok();
         }
 

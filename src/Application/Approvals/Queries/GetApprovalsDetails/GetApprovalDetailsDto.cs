@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Approvals.Queries.GetApprovals
+﻿namespace Application.Approvals.Queries.GetApprovalsDetails
 {
-    public class GetApprovalDetailDto
+    public class GetApprovalDetailsDto
     {
         public string ApprovalName { get; set; }
         public string ApprovalDescription { get; set; }
