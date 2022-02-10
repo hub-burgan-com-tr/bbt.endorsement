@@ -1,0 +1,35 @@
+<app-main-content blockTitle="İzleme" subTitle="En az bir kriter girmelisiniz">
+  <div right>
+    <app-main-content-button-group></app-main-content-button-group>
+  </div>
+  <div class="box p-4 mb-4">
+    <div class="alert alert-danger"
+         *ngIf="ngForm.submitted &&formGroup.hasError('atLeastOneValueRequired')">Kriter girilmelidir
+    </div>
+    <form [formGroup]="formGroup" #ngForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="approving">Onaylayan</label>
+            <input type="text" class="form-control" id="approving" name="approving" formControlName="approving"
+                   onlyNumber maxlength="11">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="seeking-approval">Onay İsteyen</label>
+            <input type="text" class="form-control" id="seeking-approval" name="seeking-approval"
+                   formControlName="seekingApproval" onlyNumber maxlength="11">
+          </div>
+        </div>
+        <div class="col-md col-md-auto col-sm-12 d-flex  align-items-end">
+          <button class="btn btn-primary px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 w-100" type="submit">Sorgula</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="box" *ngIf="show">
+    <app-list-item *ngFor="let d of data" [data]="d" [routerLink]="['./detail']"></app-list-item>
+  </div>
+</app-main-content>

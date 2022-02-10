@@ -1,0 +1,89 @@
+<ngx-smart-modal #confirmModal identifier="confirmModal">
+  <h1>İşlem Başarılı</h1>
+  <p>Onay gönderiminiz başarılı olmuştur. <br>Detayları incelemek için tıklayın.</p>
+
+  <div class="button-container">
+    <button class="btn btn-primary" [routerLink]="'../completed'">Tamam</button>
+  </div>
+</ngx-smart-modal>
+<ngx-smart-modal #myModal identifier="myModal">
+  <h1>Bilgilendirme</h1>
+  <p>Onay gönderilecektir. Emin misiniz?</p>
+
+  <div class="button-container">
+    <button class="btn btn-primary" (click)="send()">Gönder</button>
+    <button class="btn btn-outline-primary" (click)="myModal.close()">İptal</button>
+  </div>
+</ngx-smart-modal>
+<app-main-content blockTitle="Onayımdakiler" subTitle="Onayımdakiler | Sigorta Teklif Talimatı | Onaylama">
+  <div class="row">
+    <div class="col-md-3 col-sm-12 mb-3">
+      <div class="left-box">
+        <div class="left-box-title">Sigorta Teklif Talimatı</div>
+        <div class="attachment">
+          <img src="/assets/img/attachment.png">
+        </div>
+        <div class="arrow">
+          <img src="/assets/img/right-arrow.png">
+        </div>
+      </div>
+    </div>
+    <div class="col-md col-sm-12">
+      <div class="box p-3 mb-4">
+        <b class="mb-2 d-block">1- Mng Hayat Teklif Alma İzni</b>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pulvinar sit amet nibh ut feugiat. Proin
+          ultricies dolor condimentum purus laoreet, in elementum nisl vehicula. Integer quis rutrum felis. In ultrices
+          lorem et sapien feugiat eleifend. Proin tempus lacinia placerat. Proin nisi magna, hendrerit vitae ante vel,
+          scelerisque porta ex. Cras ac convallis diam, quis ultrices metus. Praesent vitae nibh id orci auctor gravida
+          sed
+          vitae dui. Praesent porta maximus justo ut tristique. Vestibulum sed purus scelerisque, porta eros et,
+          elementum
+          diam. Duis in sem ac magna tempus placerat ut nec enim. Nulla blandit eleifend metus, ut aliquam sem dapibus
+          sit
+          amet. Donec fermentum iaculis felis non dapibus.
+        </p>
+        <p>
+          Aliquam vitae fermentum eros. Cras convallis ante vitae augue semper, ut tincidunt est consectetur. Nunc
+          pellentesque mauris eu augue venenatis, eu gravida nibh ullamcorper. Sed felis felis, hendrerit rhoncus
+          pulvinar
+          non, scelerisque non lorem. Nunc egestas volutpat ex, ac convallis ante ullamcorper ac. Pellentesque ac
+          vulputate
+          dui, a ullamcorper lectus. Nulla accumsan urna in posuere accumsan. Vivamus aliquet sem sodales, posuere ante
+          vel,
+          pretium turpis. Donec id elit posuere, finibus libero id, sodales lorem. Sed molestie, felis quis semper
+          euismod,
+          ligula metus efficitur turpis, sed accumsan neque arcu ac ex. Nunc sagittis, leo at accumsan ullamcorper,
+          justo
+          velit fringilla nisl, et congue neque nisl quis ante. Nam sed odio vel mi maximus suscipit at sed arcu. Nulla
+          egestas nec sem convallis tincidunt.
+        </p>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked disabled>
+          <label class="form-check-label" for="flexCheckChecked">
+            Okudum, Anladım
+          </label>
+        </div>
+      </div>
+      <div class="box p-3">
+        <b class="mb-2 d-block">2- Mng Hayat Teklif Alma İzni</b>
+        <p>
+          <a href="#"><img src="/assets/img/attachment.png"> <span class="mx-2">sozlesme_metni.pdf</span></a>
+        </p>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" disabled>
+          <label class="form-check-label" for="flexRadioDefault1">
+            Okudum, Anladım
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked disabled>
+          <label class="form-check-label" for="flexRadioDefault2">
+            Okudum, Anlayamadım
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-orange px-5 float-end mt-5" (click)="myModal.open()">Onayla
+  </button>
+</app-main-content>
