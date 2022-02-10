@@ -7,6 +7,7 @@ using Application.Approvals.Queries.GetApprovalsDetails;
 using Application.Approvals.Queries.GetMyApprovals;
 using Application.Approvals.Queries.GetMyApprovalsDetails;
 using Application.Approvals.Queries.GetWantApprovals;
+using Application.Approvals.Queries.GetWatchApprovals;
 
 namespace Api.Controllers
 {
@@ -74,6 +75,17 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWantApprovalsAsync([FromBody] string instanceId)
         {
             await Mediator.Send(new GetWantApprovalQuery { InstanceId = instanceId });
+            return Ok();
+        }
+
+
+        [Route("watchapprovals")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetWatchApprovalsAsync([FromBody] GetWatchApprovalQuery input)
+        {
+            await Mediator.Send(input);
             return Ok();
         }
 
