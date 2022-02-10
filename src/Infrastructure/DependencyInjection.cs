@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,9 @@ namespace Infrastructure
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
             services.AddScoped<IDomainEventService, DomainEventService>();
             services.AddTransient<IDateTime, DateTimeService>();
+
+            services.AddSingleton<IServerEventService, ServerEventService>();
+            services.AddSingleton<IClientEventService, ClientEventService>();
 
             return services;
         }
