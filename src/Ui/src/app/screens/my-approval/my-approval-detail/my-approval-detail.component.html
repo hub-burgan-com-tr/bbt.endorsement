@@ -15,7 +15,7 @@
     <button class="btn btn-outline-primary" (click)="myModal.close()">İptal</button>
   </div>
 </ngx-smart-modal>
-<app-main-content blockTitle="Onayımdakiler" subTitle="Onayımdakiler | Sigorta Teklif Talimatı | Onaylama">
+<app-main-content blockTitle="Onayımdakiler" subTitle="Onayımdakiler | Sigorta Teklif Talimatı">
   <div class="row">
     <div class="col-md-3 col-sm-12 mb-3">
       <div class="left-box">
@@ -58,7 +58,7 @@
           egestas nec sem convallis tincidunt.
         </p>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked disabled>
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked >
           <label class="form-check-label" for="flexCheckChecked">
             Okudum, Anladım
           </label>
@@ -70,13 +70,13 @@
           <a href="#"><img src="/assets/img/attachment.png"> <span class="mx-2">sozlesme_metni.pdf</span></a>
         </p>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" disabled>
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" >
           <label class="form-check-label" for="flexRadioDefault1">
             Okudum, Anladım
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked disabled>
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked >
           <label class="form-check-label" for="flexRadioDefault2">
             Okudum, Anlayamadım
           </label>
@@ -84,6 +84,8 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-orange px-5 float-end mt-5" (click)="myModal.open()">Onayla
-  </button>
+  <div class="justify-content-center d-flex">
+    <button class="btn btn-orange px-5 mt-5" (click)="myModal.open()">Onayla
+    </button>
+  </div>
 </app-main-content>
