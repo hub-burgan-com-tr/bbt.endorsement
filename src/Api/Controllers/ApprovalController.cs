@@ -3,7 +3,10 @@ using Application.Approvals.Queries.GetApprovals;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Application.Approvals.Queries.CreateApproverFormCommands;
+using Application.Approvals.Queries.CreateFormCommands;
 using Application.Approvals.Queries.GetApprovalsDetails;
+using Application.Approvals.Queries.GetFormCommands;
 using Application.Approvals.Queries.GetMyApprovals;
 using Application.Approvals.Queries.GetMyApprovalsDetails;
 using Application.Approvals.Queries.GetWantApprovals;
@@ -89,5 +92,37 @@ namespace Api.Controllers
             return Ok();
         }
 
+
+        [Route("formcommands")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetFormCommandAsync([FromBody] string instanceId)
+        {
+            await Mediator.Send(new GetFormCommandQuery{InstanceId = instanceId});
+            return Ok();
+        }
+
+
+        [Route("createformcommand")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreateFormCommandAsync([FromBody] CreateFormCommandQuery input)
+        {
+            await Mediator.Send(input);
+            return Ok();
+        }
+
+
+        [Route("createapproverformcommand")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreateApproverFormCommandAsync([FromBody] CreateApproverFormCommandQuery input)
+        {
+            await Mediator.Send(input);
+            return Ok();
+        }
     }
 }
