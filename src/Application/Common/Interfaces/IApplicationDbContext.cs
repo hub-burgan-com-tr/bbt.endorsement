@@ -8,6 +8,7 @@ namespace Application.Common.Interfaces
         DbSet<Approval> Approvals { get;}
         DbSet<Reference> References { get;  }
         DbSet<Callback> Callbacks { get; }
+        DbSet<Config> Configs { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         int SaveChanges();

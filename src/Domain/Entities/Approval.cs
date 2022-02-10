@@ -25,7 +25,8 @@ namespace Domain.Entities
         }
 
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
-        public virtual Reference Reference { get; set; } = null!;
+        public virtual Reference Reference { get; set; }
+        public virtual Config Config { get; set; }
 
     }
 }

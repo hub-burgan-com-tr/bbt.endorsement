@@ -20,6 +20,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<Approval> Approvals { get; set; }
     public virtual DbSet<Reference> References { get; set; }
     public virtual DbSet<Callback> Callbacks { get; set; }
+    public virtual DbSet<Config> Configs { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -101,15 +102,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        //builder.Entity<Approval>()
-        //       .HasOne(s => s.)
-        //       .WithOne(ad => ad.ApplyContract)
-        //       .HasForeignKey<Config>(ad => ad.ApplyContractId);
+        builder.Entity<Approval>()
+               .HasOne(s => s.Config)
+               .WithOne(ad => ad.Approval)
+               .HasForeignKey<Config>(ad => ad.ApprovalId);
 
-        //builder.Entity<ApplyContract>()
-        //        .HasOne(s => s.Reference)
-        //        .WithOne(ad => ad.ApplyContract)
-        //        .HasForeignKey<Reference>(ad => ad.ApplyContractId);
+        builder.Entity<Approval>()
+                .HasOne(s => s.Reference)
+                .WithOne(ad => ad.Approval)
+                .HasForeignKey<Reference>(ad => ad.ApprovalId);
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
