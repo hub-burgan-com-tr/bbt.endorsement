@@ -1,12 +1,6 @@
-﻿using Application.Approvals.Queries.CreateFormCommands;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace Application.ApproverForms.Commands.CreateFormCommands
+namespace Application.OrderForms.Commands.CreateOrderFormCommands
 {
     public class CreateOrderFormCommandValidator : AbstractValidator<CreateOrderFormCommand>
     {

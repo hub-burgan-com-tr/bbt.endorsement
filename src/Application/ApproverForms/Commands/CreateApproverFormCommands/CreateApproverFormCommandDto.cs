@@ -1,4 +1,4 @@
-﻿namespace Application.Approvals.Queries.CreateApproverFormCommands
+﻿namespace Application.ApproverForms.Commands.CreateApproverFormCommands
 {
     public class CreateApproverFormCommandDto
     {

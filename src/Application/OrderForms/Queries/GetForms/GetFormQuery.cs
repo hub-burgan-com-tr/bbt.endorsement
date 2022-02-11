@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using MediatR;
 
-namespace Application.Approvals.Queries.GetFormCommands
+namespace Application.OrderForms.Queries.GetForms
 {
     public class GetFormQuery : IRequest<Response<List<GetFormDto>>>
     {

@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using MediatR;
 
-namespace Application.Approvals.Queries.CreateApproverFormCommands
+namespace Application.ApproverForms.Commands.CreateApproverFormCommands
 {
     public class CreateApproverFormCommand : IRequest<Response<List<CreateApproverFormCommandDto>>>
     {

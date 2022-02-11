@@ -1,4 +1,4 @@
-﻿namespace Application.Approvals.Queries.GetFormCommands
+﻿namespace Application.OrderForms.Queries.GetForms
 {
     public class GetFormDto
     {
