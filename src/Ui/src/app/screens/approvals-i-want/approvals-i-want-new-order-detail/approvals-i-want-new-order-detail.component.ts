@@ -20,6 +20,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   formGroupApproval: FormGroup;
   formNewDocument: FormGroup;
   files: any[] = [];
+  approvalFormValidationMessage = '';
 
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private modal: NgxSmartModalService) {
     this.formNewDocument = this.fb.group({
@@ -42,8 +43,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
     });
     this.formGroupApproval = this.fb.group({
       choice: ['', Validators.required],
-      withIdentityNo: '',
-      withName: '',
+      with: ''
     });
   }
 
@@ -115,9 +115,14 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   }
 
   rdoChanged() {
-    this.formGroupApproval.controls.withIdentityNo.setValidators(this.formGroupApproval.controls.choice.value === 1 ? [Validators.required, Validators.minLength(11)] : null);
-    this.formGroupApproval.controls.withIdentityNo.updateValueAndValidity();
-    this.formGroupApproval.controls.withName.setValidators(this.formGroupApproval.controls.choice.value === 2 ? [Validators.required] : null);
-    this.formGroupApproval.controls.withName.updateValueAndValidity();
+    if (this.formGroupApproval.controls.choice.value === 1) {
+      this.approvalFormValidationMessage = 'TCKN girilmelidir.'
+      this.formGroupApproval.controls.with.setValidators([Validators.required, Validators.minLength(11)]);
+      this.formGroupApproval.controls.with.updateValueAndValidity();
+    } else {
+      this.approvalFormValidationMessage = 'Müşteri No girilmelidir.';
+      this.formGroupApproval.controls.with.setValidators(Validators.required);
+      this.formGroupApproval.controls.with.updateValueAndValidity();
+    }
   }
 }

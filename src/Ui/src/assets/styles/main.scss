@@ -516,6 +516,21 @@ app-root {
         }
       }
 
+      .approval-add-panel {
+        & > .content {
+          background-color: #bde5f5;
+          margin-top: 15px;
+          padding: 15px;
+
+          .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1c76df;
+            margin-bottom: 20px;
+          }
+        }
+      }
+
       app-list-item {
         cursor: pointer;
         padding: 15px;
@@ -624,11 +639,13 @@ app-root {
       background: #0061af;
       padding: 10px;
       z-index: 1;
-      ul{
-        li{
+
+      ul {
+        li {
           margin-right: 0 !important;
         }
       }
+
       .sign-out {
         position: relative !important;
       }
