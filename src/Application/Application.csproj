@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ApproverForms\Queries\" />
+  </ItemGroup>
+
 </Project>

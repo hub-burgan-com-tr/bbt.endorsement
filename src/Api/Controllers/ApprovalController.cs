@@ -99,7 +99,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetFormCommandAsync([FromBody] string instanceId)
         {
-            await Mediator.Send(new GetFormCommandQuery{InstanceId = instanceId});
+            await Mediator.Send(new GetFormQuery{InstanceId = instanceId});
             return Ok();
         }
 
@@ -108,7 +108,7 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateFormCommandAsync([FromBody] CreateFormCommandQuery input)
+        public async Task<IActionResult> CreateFormCommandAsync([FromBody] CreateOrderFormCommand input)
         {
             await Mediator.Send(input);
             return Ok();
@@ -119,7 +119,7 @@ namespace Api.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateApproverFormCommandAsync([FromBody] CreateApproverFormCommandQuery input)
+        public async Task<IActionResult> CreateApproverFormCommandAsync([FromBody] CreateApproverFormCommand input)
         {
             await Mediator.Send(input);
             return Ok();
