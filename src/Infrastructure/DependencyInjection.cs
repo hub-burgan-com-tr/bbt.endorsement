@@ -2,6 +2,7 @@
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
+using Infrastructure.ZeebeServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace Infrastructure
 
             services.AddSingleton<IServerEventService, ServerEventService>();
             services.AddSingleton<IClientEventService, ClientEventService>();
+            services.AddSingleton<IZeebeService, ZeebeService>();
 
             return services;
         }
