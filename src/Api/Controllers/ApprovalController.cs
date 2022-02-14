@@ -92,37 +92,5 @@ namespace Api.Controllers
             return Ok();
         }
 
-
-        [Route("formcommands")]
-        [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetFormCommandAsync([FromBody] string instanceId)
-        {
-            await Mediator.Send(new GetFormQuery{InstanceId = instanceId});
-            return Ok();
-        }
-
-
-        [Route("createformcommand")]
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateFormCommandAsync([FromBody] CreateOrderFormCommand input)
-        {
-            await Mediator.Send(input);
-            return Ok();
-        }
-
-
-        [Route("createapproverformcommand")]
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateApproverFormCommandAsync([FromBody] CreateApproverFormCommand input)
-        {
-            await Mediator.Send(input);
-            return Ok();
-        }
     }
 }
