@@ -7,8 +7,14 @@ namespace Application.Approvals.Commands.CreateApprovalCommands;
 
 public class CreateApprovalCommand : IRequest<Response<bool>>
 {
+    /// <summary>
+    /// InstanceId
+    /// </summary>
     public string InstanceId { get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public string Title { get; set; }
     public string Process { get; set; }
     public string Stage { get; set; }

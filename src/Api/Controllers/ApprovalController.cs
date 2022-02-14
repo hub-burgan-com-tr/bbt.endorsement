@@ -10,15 +10,19 @@ using Application.Approvals.Queries.GetWatchApprovals;
 
 namespace Api.Controllers
 {
+    /// <summary>
+    /// Onay 
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ApprovalController : ApiControllerBase
     {
         /// <summary>
-        /// 
+        /// Yeni Onay Oluştur
         /// </summary>
         /// <param name="command"></param>
-        /// <returns></returns>
+        /// <returns>Response</returns>
+        /// <response code="400">If the item is null</response>
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
