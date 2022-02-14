@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Approvals\Commands\DeleteApprovalCommands\" />
+    <Folder Include="Approvals\Commands\UpdateApprovalCommands\" />
     <Folder Include="ApproverForms\Queries\" />
     <Folder Include="Documents\Commands\DocumentCommands\" />
     <Folder Include="Documents\Commands\Queries\" />

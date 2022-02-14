@@ -9,7 +9,7 @@ namespace Api.Controllers
     [ApiController]
     public class OrderFormController : ApiControllerBase
     {
-        [Route("formcommands")]
+        [Route("form")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -18,7 +18,8 @@ namespace Api.Controllers
             await Mediator.Send(new GetFormQuery { InstanceId = instanceId });
             return Ok();
         }
-        [Route("createformcommand")]
+
+        [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -27,5 +28,6 @@ namespace Api.Controllers
             await Mediator.Send(input);
             return Ok();
         }
+
     }
 }

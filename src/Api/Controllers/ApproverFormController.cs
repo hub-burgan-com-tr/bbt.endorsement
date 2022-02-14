@@ -11,7 +11,7 @@ namespace Api.Controllers
     public class ApproverFormController :  ApiControllerBase
     {
         
-        [Route("createapproverformcommand")]
+        [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -20,5 +20,7 @@ namespace Api.Controllers
             await Mediator.Send(input);
             return Ok();
         }
+
+
     }
 }
