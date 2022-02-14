@@ -7,6 +7,7 @@ namespace Application.Approvals.Commands
         public CreateApprovalCommandValidator()
         {
             RuleFor(v => v.InstanceId).NotEmpty();
+
             RuleFor(v => v.ApprovalTitle).NotEmpty();
         }
     }
