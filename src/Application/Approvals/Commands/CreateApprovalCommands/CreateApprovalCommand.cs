@@ -3,7 +3,7 @@ using Application.Common.Models;
 using Domain.Events.Approvals;
 using MediatR;
 
-namespace Application.Approvals.Commands;
+namespace Application.Approvals.Commands.CreateApprovalCommands;
 
 public class CreateApprovalCommand : IRequest<Response<bool>>
 {

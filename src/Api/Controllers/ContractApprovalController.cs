@@ -5,7 +5,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContractApprovalController : ControllerBase
+    public class ContractApprovalController : ApiControllerBase
     {
     }
 }

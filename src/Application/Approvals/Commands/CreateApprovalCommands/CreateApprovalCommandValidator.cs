@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Approvals.Commands
+namespace Application.Approvals.Commands.CreateApprovalCommands
 {
     public class CreateApprovalCommandValidator : AbstractValidator<CreateApprovalCommand>
     {
