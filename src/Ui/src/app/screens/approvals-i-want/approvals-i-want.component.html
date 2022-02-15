@@ -1,0 +1,8 @@
+<app-main-content blockTitle="İstediğim Onaylar" subTitle="Lütfen Seçim Yapınız">
+  <div right>
+    <app-main-content-button-group></app-main-content-button-group>
+  </div>
+  <div class="box">
+    <app-list-item *ngFor="let d of data" [data]="d" [routerLink]="['./detail']"></app-list-item>
+  </div>
+</app-main-content>
