@@ -5,7 +5,7 @@ namespace Application.ApproverForms.Commands.CreateApproverFormCommands
 {
     public class CreateApproverFormCommand : IRequest<Response<List<CreateApproverFormCommandDto>>>
     {
-        public int ApprovalId { get; set; }
+        public int FormId { get; set; }
         public string TC { get; set; }
         public string CustomerNumber { get; set; }
     }

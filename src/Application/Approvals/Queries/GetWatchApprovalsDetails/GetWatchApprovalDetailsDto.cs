@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Approvals.Commands.CreateApprovalCommands;
 using Application.Documents.Commands.CreateDocumentCommands;
 
-namespace Application.Approvals.Commands.CreateApprovalCommands
+namespace Application.Approvals.Queries.GetWatchApprovalsDetails
 {
-    public class CreateApprovalCommandDto
+    public class GetWatchApprovalDetailsDto
     {
         public CreateApprovalCommand ApprovalCommand { get; set; }
         public List<CreateDocumentCommandDto> Documents { get; set; }

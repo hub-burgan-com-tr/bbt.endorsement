@@ -14,12 +14,12 @@
     <PackageReference Include="FluentValidation" Version="10.3.6" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Approvals\Commands\DeleteApprovalCommands\" />
-    <Folder Include="Approvals\Commands\UpdateApprovalCommands\" />
     <Folder Include="ApproverForms\Queries\" />
     <Folder Include="Documents\Commands\Queries\" />
   </ItemGroup>

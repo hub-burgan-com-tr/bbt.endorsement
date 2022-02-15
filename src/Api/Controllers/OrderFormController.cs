@@ -5,10 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    /// <summary>
+    /// Form İşlemleri 
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     public class OrderFormController : ApiControllerBase
     {
+        /// <summary>
+        ///  Form Listesi
+        /// </summary>
+        /// <param name="instanceId"></param>
+        /// <returns>Response</returns>
+        /// <response code="404">If the item is null</response>
         [Route("form")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -19,13 +28,19 @@ namespace Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        ///  Form ile Emir Ekle
+        /// </summary>
+        /// <param name="instanceId"></param>
+        /// <returns>Response</returns>
+        /// <response code="404">If the item is null</response>
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateFormCommandAsync([FromBody] CreateOrderFormCommand input)
+        public async Task<IActionResult> CreateFormCommandAsync([FromBody] CreateOrderFormCommand command)
         {
-            await Mediator.Send(input);
+            await Mediator.Send(command);
             return Ok();
         }
 
