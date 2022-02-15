@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Dtos
+﻿using Application.Approvals.Commands.CreateApprovalCommands;
+
+namespace Infrastructure.Dtos
 {
     public class ContractApprovalData
     {
@@ -12,5 +14,7 @@
         public bool Completed { get; set; }
         public bool RetryEnd { get; set; }
         public bool IsProcess { get; set; }
+
+        public CreateApprovalRequest Request { get; set; }
     }
 }

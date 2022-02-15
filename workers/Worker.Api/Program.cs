@@ -2,6 +2,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Services;
 using Infrastructure.ZeebeServices;
+using Worker.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,14 +30,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHub<EventHub>("/eventhub");
+
 using (var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
     if (zeebeService != null)
     {
-        zeebeService.Deploy("Approval.bpmn");
-        zeebeService.StartWorkers("https://localhost:7285/eventhub");
+        zeebeService.Deploy("ContractApproval.bpmn");
+        zeebeService.StartWorkers("https://localhost:7130/eventhub");
 
         var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
         if (contractApprovalService != null)

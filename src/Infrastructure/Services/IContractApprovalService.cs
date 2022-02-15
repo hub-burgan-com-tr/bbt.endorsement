@@ -82,12 +82,12 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractApprovalData>(job.Variables);
             if (variables != null)
             {
-                var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
-                var response = await _mediator.Send(new CreateApprovalCommand
-                {
-                    InstanceId = variables.InstanceId,
-                    Title = ""
-                });
+                //var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
+                //var response = await _mediator.Send(new CreateApprovalCommand
+                //{
+                //    InstanceId = variables.InstanceId,
+                //    Title = ""
+                //});
                 variables.IsProcess = true;
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
