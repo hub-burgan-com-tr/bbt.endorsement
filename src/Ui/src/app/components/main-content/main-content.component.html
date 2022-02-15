@@ -1,0 +1,12 @@
+<div class="container" id="mainContent">
+  <div class="row">
+    <div class="col-md col-sm-12">
+      <div class="title text-white">{{blockTitle}}</div>
+      <div class="sub-title text-white">{{subTitle}}</div>
+    </div>
+    <div class="col-md col-sm-12">
+      <ng-content select="[right]"></ng-content>
+    </div>
+  </div>
+  <ng-content></ng-content>
+</div>
