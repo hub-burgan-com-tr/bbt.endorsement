@@ -6,7 +6,7 @@ namespace Application.OrderForms.Commands.CreateOrderFormCommands
     public class CreateOrderFormCommand : IRequest<Response<bool>>
     {
         public int ApprovalId { get; set; }
-        public string TC { get; set; }
+        public string CitizenShipNumber { get; set; }
         public string NameAndSurname { get; set; }
     }
 

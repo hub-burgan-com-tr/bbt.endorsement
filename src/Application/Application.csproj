@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="ApproverForms\Queries\" />
-    <Folder Include="Documents\Commands\DocumentCommands\" />
     <Folder Include="Documents\Commands\Queries\" />
   </ItemGroup>
 
