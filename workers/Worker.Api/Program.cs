@@ -1,5 +1,7 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Services;
+using Infrastructure.ZeebeServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,5 +28,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
+    if (zeebeService != null)
+    {
+        zeebeService.Deploy("Approval.bpmn");
+        zeebeService.StartWorkers("https://localhost:7285/eventhub");
+
+        var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
+        if (contractApprovalService != null)
+            contractApprovalService.StartWorkers();
+    }
+}
 
 app.Run();

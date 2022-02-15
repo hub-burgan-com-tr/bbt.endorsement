@@ -8,7 +8,7 @@ namespace Application.Approvals.Commands.CreateApprovalCommands
         {
             RuleFor(v => v.InstanceId).NotEmpty();
 
-            RuleFor(v => v.ApprovalTitle).NotEmpty();
+            RuleFor(v => v.Title).NotEmpty();
         }
     }
 }
