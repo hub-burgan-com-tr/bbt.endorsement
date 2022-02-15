@@ -5,7 +5,7 @@ using Infrastructure.Services;
 using Infrastructure.ZeebeServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Worker.Services;
+using Worker.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
