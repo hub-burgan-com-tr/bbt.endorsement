@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Approvals.Commands.CreateApprovalCommands;
 
-public class CreateApprovalCommand : IRequest<Response<bool>>
+public class CreateApprovalCommand : IRequest<Response<List<CreateApprovalCommandDto>>>
 {
     /// <summary>
     /// InstanceId
@@ -24,7 +24,7 @@ public class CreateApprovalCommand : IRequest<Response<bool>>
     public int MaxRetryCount { get; set; }
 }
 
-public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalCommand, Response<bool>>
+public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalCommand, Response<List<CreateApprovalCommandDto>>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -32,21 +32,25 @@ public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalComman
     {
         _context = context;
     }
-
-    public async Task<Response<bool>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
+    public async Task<Response<List<CreateApprovalCommandDto>>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Domain.Entities.Approval
-        {
-            ApprovalId = Guid.NewGuid().ToString(),
-            InstanceId = request.InstanceId,
-            ApprovalTitle = request.Title
-        };
-
-        entity.DomainEvents.Add(new ApprovalCreateEvent(entity));
-        _context.Approvals.Add(entity);
-        var i = _context.SaveChanges();
-
-        return Response<bool>.Success(i > 0, 200);
+        var list = new List<CreateApprovalCommandDto>();
+        return Response<List<CreateApprovalCommandDto>>.Success(list, 200);
     }
+    //public async Task<Response<bool>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
+    //{
+    //    var entity = new Domain.Entities.Approval
+    //    {
+    //        ApprovalId = Guid.NewGuid().ToString(),
+    //        InstanceId = request.InstanceId,
+    //        ApprovalTitle = request.Title
+    //    };
+
+    //    entity.DomainEvents.Add(new ApprovalCreateEvent(entity));
+    //    _context.Approvals.Add(entity);
+    //    var i = _context.SaveChanges();
+
+    //    return Response<bool>.Success(i > 0, 200);
+    //}
 }
 
