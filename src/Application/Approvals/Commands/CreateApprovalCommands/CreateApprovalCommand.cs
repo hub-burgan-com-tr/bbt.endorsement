@@ -7,8 +7,21 @@ namespace Application.Approvals.Commands.CreateApprovalCommands;
 
 public class CreateApprovalCommand : IRequest<Response<bool>>
 {
+    /// <summary>
+    /// InstanceId
+    /// </summary>
     public string InstanceId { get; set; }
-    public string ApprovalTitle { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Title { get; set; }
+    public string Process { get; set; }
+    public string Stage { get; set; }
+    public string TransactionNumber { get; set; }
+    public string TimeoutMinutes { get; set; }
+    public string RetryFrequence { get; set; }
+    public int MaxRetryCount { get; set; }
 }
 
 public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalCommand, Response<bool>>
@@ -26,7 +39,7 @@ public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalComman
         {
             ApprovalId = Guid.NewGuid().ToString(),
             InstanceId = request.InstanceId,
-            ApprovalTitle = request.ApprovalTitle
+            ApprovalTitle = request.Title
         };
 
         entity.DomainEvents.Add(new ApprovalCreateEvent(entity));

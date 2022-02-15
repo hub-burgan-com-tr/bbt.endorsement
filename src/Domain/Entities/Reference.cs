@@ -14,9 +14,20 @@ namespace Domain.Entities
         public string ApprovalId { get; set; } = null!;
         public string InstanceId { get; set; } = null!;
 
-        public string Name { get; set; } = null!;
-        public string State { get; set; } = null!;
-        public string Number { get; set; } = null!;
+        /// <summary>
+        /// Süreç
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Aşama
+        /// </summary>
+        public string State { get; set; }
+
+        /// <summary>
+        /// İşlem No
+        /// </summary>
+        public string Number { get; set; }
 
         public virtual Approval Approval { get; set; } = null!;
         public virtual ICollection<Callback> Callbacks { get; set; }
