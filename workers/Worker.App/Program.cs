@@ -9,7 +9,7 @@ using Worker.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder);
 
 builder.Services.AddHostedService<ZeebeWorkService>();
 

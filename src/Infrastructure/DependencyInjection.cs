@@ -1,8 +1,10 @@
 ﻿using Application.Common.Interfaces;
+using Infrastructure.Configurations;
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
 using Infrastructure.ZeebeServices;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,11 +13,11 @@ namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, WebApplicationBuilder builder)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
+                    builder.Configuration.GetConnectionString("DefaultConnection"),
                     configure =>
                     {
                         configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
@@ -33,6 +35,8 @@ namespace Infrastructure
             services.AddSingleton<IContractApprovalService, ContractApprovalService>();
 
             services.AddSignalR();
+
+            builder.ConfigureLog();
 
             return services;
         }
