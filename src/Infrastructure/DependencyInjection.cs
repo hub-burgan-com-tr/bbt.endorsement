@@ -1,12 +1,10 @@
 ﻿using Application.Common.Interfaces;
-using Infrastructure.Configurations;
+using Infrastructure.Configuration;
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
 using Infrastructure.ZeebeServices;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
@@ -15,14 +13,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    configure =>
-                    {
-                        configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                        configure.EnableRetryOnFailure();
-                    }));
+            services.AddDbContext(builder.Configuration);
 
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
@@ -32,7 +23,7 @@ namespace Infrastructure
             services.AddSingleton<IServerEventService, ServerEventService>();
             services.AddSingleton<IClientEventService, ClientEventService>();
             services.AddSingleton<IZeebeService, ZeebeService>();
-            services.AddSingleton<IContractApprovalService, ContractApprovalService>();
+            services.AddSingleton<ContractApprovalService, ContractApprovalService>();
 
             services.AddSignalR();
 

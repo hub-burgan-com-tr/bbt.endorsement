@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Configuration;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,8 +29,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.ConfigureSwagger();
 }
 
 app.UseHttpsRedirection();

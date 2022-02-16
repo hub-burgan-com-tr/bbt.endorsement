@@ -15,7 +15,7 @@ namespace Infrastructure.Persistence.Configurations
         {
             builder.Ignore(e => e.DomainEvents);
 
-            builder.Property(t => t.ApprovalTitle)
+            builder.Property(t => t.Title)
                 .HasMaxLength(250)
                 .IsRequired();
         }
