@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces;
-using Infrastructure.Configurations;
+using Infrastructure.Configuration;
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;

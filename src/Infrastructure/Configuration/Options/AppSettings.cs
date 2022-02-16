@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Logging.Options;
 
-namespace Infrastructure.Configurations;
+namespace Infrastructure.Configuration.Options;
 
 public class AppSettings
 {
