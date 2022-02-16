@@ -23,7 +23,7 @@ namespace Infrastructure
             services.AddSingleton<IServerEventService, ServerEventService>();
             services.AddSingleton<IClientEventService, ClientEventService>();
             services.AddSingleton<IZeebeService, ZeebeService>();
-            services.AddSingleton<IContractApprovalService, ContractApprovalService>();
+            services.AddSingleton<ContractApprovalService, ContractApprovalService>();
 
             services.AddSignalR();
 

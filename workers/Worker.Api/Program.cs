@@ -41,7 +41,7 @@ using (var scope = app.Services.CreateScope())
         zeebeService.Deploy("ContractApproval.bpmn");
         zeebeService.StartWorkers("https://localhost:7130/eventhub");
 
-        var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
+        var contractApprovalService = serviceProvider.GetRequiredService<ContractApprovalService>();
         if (contractApprovalService != null)
             contractApprovalService.StartWorkers();
     }
