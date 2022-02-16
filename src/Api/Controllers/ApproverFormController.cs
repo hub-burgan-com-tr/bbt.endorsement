@@ -11,8 +11,10 @@ namespace Api.Controllers
     /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ApproverFormController :  ApiControllerBase
+    public class ApproverFormController : ApiControllerBase
     {
+        #region Onaycı Ekleme İşlemi
+
         /// <summary>
         ///  Onaycı Ekleme
         /// </summary>
@@ -28,7 +30,6 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
-
-
+        #endregion
     }
 }

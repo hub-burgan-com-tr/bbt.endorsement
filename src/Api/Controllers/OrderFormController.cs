@@ -12,6 +12,8 @@ namespace Api.Controllers
     [ApiController]
     public class OrderFormController : ApiControllerBase
     {
+        #region Form Listese Ve Ekleme 
+        #region Form Listesi
         /// <summary>
         ///  Form Listesi
         /// </summary>
@@ -27,7 +29,8 @@ namespace Api.Controllers
             await Mediator.Send(new GetFormQuery { InstanceId = instanceId });
             return Ok();
         }
-
+        #endregion
+        #region Form ile Emir Ekle
         /// <summary>
         ///  Form ile Emir Ekle
         /// </summary>
@@ -42,7 +45,9 @@ namespace Api.Controllers
         {
             await Mediator.Send(command);
             return Ok();
-        }
+        }  
+        #endregion
+        #endregion
 
     }
 }
