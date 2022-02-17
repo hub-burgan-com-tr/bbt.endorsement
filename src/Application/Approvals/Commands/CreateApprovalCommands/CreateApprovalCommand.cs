@@ -11,16 +11,33 @@ public class CreateApprovalCommand : IRequest<Response<List<CreateApprovalComman
     /// InstanceId
     /// </summary>
     public string InstanceId { get; set; }
-
     /// <summary>
-    /// 
+    ///Baslik
     /// </summary>
     public string Title { get; set; }
+    /// <summary>
+    /// İşlem
+    /// </summary>
     public string Process { get; set; }
+    /// <summary>
+    /// Aşama
+    /// </summary>
     public string Stage { get; set; }
+    /// <summary>
+    /// İşlem No
+    /// </summary>
     public string TransactionNumber { get; set; }
+    /// <summary>
+    /// Geçerlilik
+    /// </summary>
     public string TimeoutMinutes { get; set; }
+    /// <summary>
+    /// Hatırlatma Frekansı
+    /// </summary>
     public string RetryFrequence { get; set; }
+    /// <summary>
+    /// Hatırlatma Sayısı
+    /// </summary>
     public int MaxRetryCount { get; set; }
 }
 
@@ -32,6 +49,12 @@ public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalComman
     {
         _context = context;
     }
+    /// <summary>
+    /// Yeni Onaylama Emri Ekleme
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task<Response<List<CreateApprovalCommandDto>>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
     {
         var list = new List<CreateApprovalCommandDto>();

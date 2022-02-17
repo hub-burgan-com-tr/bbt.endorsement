@@ -9,9 +9,21 @@ namespace Application.Approvals.Commands.CreateApprovalCommands
 {
     public class CreateApprovalCommandDto
     {
+        /// <summary>
+        /// Yeni Onay Emri Detay
+        /// </summary>
         public CreateApprovalCommand ApprovalCommand { get; set; }
+        /// <summary>
+        /// Belgeler
+        /// </summary>
         public List<CreateDocumentCommandDto> Documents { get; set; }
-        public int Id { get; set; }
+        /// <summary>
+        /// Onay Id
+        /// </summary>
+        public int ApprovalId { get; set; }
+        /// <summary>
+        /// Onaylar
+        /// </summary>
         public string Approver { get; set; }
     }
 }
