@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
@@ -11,14 +12,23 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddControllers()
+                .AddJsonOptions(opts =>
+                {
+                    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
         Title = "Contract Approval API",
-        Description = "Müþterilerin oanylamasý gereken sözleþmeler için onaylatma altyapýsý sunar."
+        Description = "Mï¿½ï¿½terilerin oanylamasï¿½ gereken sï¿½zleï¿½meler iï¿½in onaylatma altyapï¿½sï¿½ sunar."
     });
+
+    options.CustomSchemaIds(x => x.FullName);
 });
 
 builder.Services.AddApplication();
@@ -30,6 +40,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.ConfigureSwagger();
+    app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "bbt.endorsement.api v1");
+                    c.RoutePrefix = "";
+                });
+    
 }
 
 app.UseHttpsRedirection();
