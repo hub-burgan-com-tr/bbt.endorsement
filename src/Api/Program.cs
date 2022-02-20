@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Application;
 using Infrastructure;
@@ -29,6 +30,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     options.CustomSchemaIds(x => x.FullName);
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+
+    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
 builder.Services.AddApplication();
@@ -45,7 +52,7 @@ if (app.Environment.IsDevelopment())
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "bbt.endorsement.api v1");
                     c.RoutePrefix = "";
                 });
-    
+
 }
 
 app.UseHttpsRedirection();

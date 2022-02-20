@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 
 
@@ -8,11 +9,15 @@ namespace Api.Controllers
     [ApiController]
     public class EndorsementController : ApiControllerBase
     {
-
+        [SwaggerOperation(
+            Summary = "Create new endorsement order. After endorsement is created, process is started immediately.",
+            Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders")]
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [SwaggerResponse(201, "Success, endorsement order is created successfully", typeof(void))]
+        [SwaggerResponse(460, "Approved is not found", typeof(void))]
+        [SwaggerResponse(461, "Not attached any document", typeof(void))]
         public IActionResult NewOrder([FromBody] StartRequest command)
         {
             throw new NotImplementedException();
@@ -22,6 +27,7 @@ namespace Api.Controllers
         {
             public Guid Id { get; set; }
             public ReferenceClass Reference { get; set; }
+            public long Customer { get; set; }
             public long Approver { get; set; }
             public StartRequest.DocumentClass[] Documents { get; set; }
             public class DocumentClass
@@ -57,19 +63,27 @@ namespace Api.Controllers
             }
         }
 
+        /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
+        /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
+        [SwaggerOperation(
+           Summary = "Query endorsement orders.",
+           Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+       
         public IActionResult GetOrders(
-            [FromQuery] long approver,
-            [FromQuery] long[] submitter,
-            [FromQuery] long status,
-            [FromQuery] string referenceProcess,
-            [FromQuery] Guid referenceId,
-            [FromQuery] int pageSize = 20,
-            [FromQuery] int page = 0
-            )
+           [FromQuery] long approver,
+           [FromQuery] long customer,
+           [FromQuery] long[] submitter,
+           [FromQuery] long status,
+           [FromQuery] string referenceProcess,
+           [FromQuery] Guid referenceId,
+           [FromQuery] int pageSize = 20,
+           [FromQuery] int page = 0
+           )
         {
             throw new NotImplementedException();
         }
