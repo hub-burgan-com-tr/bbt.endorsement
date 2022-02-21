@@ -13,9 +13,15 @@ namespace Application.Documents.Commands.UpdateDocumentCommands
 {
     public class UpdateDocumentCommand :CreateDocumentCommand, IRequest<Response<List<UpdateDocumentCommandDto>>>
     {
+        /// <summary>
+        /// Id
+        /// </summary>
         public int Id { get; set; }
        
     }
+    /// <summary>
+    /// Belge Guncelleme
+    /// </summary>
     public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentCommand, Response<List<UpdateDocumentCommandDto>>>
     {
         private readonly IApplicationDbContext _context;

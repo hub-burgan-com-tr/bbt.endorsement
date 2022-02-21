@@ -5,9 +5,14 @@ namespace Application.Approvals.Queries.GetApprovalsDetails
 {
     public class GetApprovalDetailsQuery : IRequest<Response<List<GetApprovalDetailsDto>>>
     {
+        /// <summary>
+        /// Onay Id
+        /// </summary>
         public int ApprovalId { get; set; }
     }
-
+    /// <summary>
+    /// Onayimdakiler Detay Sayfasi
+    /// </summary>
     public class GetApprovalDetailQueryHandler : IRequestHandler<GetApprovalDetailsQuery, Response<List<GetApprovalDetailsDto>>>
     {
         public async Task<Response<List<GetApprovalDetailsDto>>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)

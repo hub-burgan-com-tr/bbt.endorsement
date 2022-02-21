@@ -10,9 +10,15 @@ namespace Application.Approvals.Queries.GetWantApprovalsDetails
 {
     public class GetWantApprovalDetailsQuery : IRequest<Response<List<GetWantApprovalDetailsDto>>>
     {
+        /// <summary>
+        /// Onay Id
+        /// </summary>
         public int ApprovalId { get; set; }
     }
 
+    /// <summary>
+    /// İstedigim Onaylar Detay Sayfası
+    /// </summary>
     public class GetWantApprovalDetailQueryHandler : IRequestHandler<GetWantApprovalDetailsQuery, Response<List<GetWantApprovalDetailsDto>>>
     {
         public async Task<Response<List<GetWantApprovalDetailsDto>>> Handle(GetWantApprovalDetailsQuery request, CancellationToken cancellationToken)
