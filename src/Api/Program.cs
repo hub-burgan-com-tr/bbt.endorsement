@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Contract Approval API",
-        Description = "Müþterilerin oanylamasý gereken sözleþmeler için onaylatma altyapýsý sunar.",
+        Description = "Müþterilerin onaylamasý gereken sözleþmeler için onaylatma altyapýsý sunar.",
         Contact = new OpenApiContact
         {
             Name = "Contract Approval API",
