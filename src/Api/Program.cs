@@ -37,7 +37,7 @@ builder.Services.AddSwaggerGen(options =>
    options.CustomSchemaIds(x => x.FullName);
     //options.IncludeXmlComments(xmlFilename);
 
-    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+    //options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
 builder.Services.AddApplication();
