@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Configuration.Options;
 using Infrastructure.Logging;
+using Infrastructure.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -22,5 +23,10 @@ public static class ConfigureContainer
             configuration.Bind(appSettings);
             return appSettings.Logging;
         });
+    }
+
+    public static void AddUseMiddleware(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<ErrorHandlerMiddleware>();
     }
 }
