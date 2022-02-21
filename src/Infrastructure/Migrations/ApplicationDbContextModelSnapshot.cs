@@ -27,11 +27,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("ApprovalId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApprovalTitle")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -49,6 +44,11 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("ApprovalId");
 
