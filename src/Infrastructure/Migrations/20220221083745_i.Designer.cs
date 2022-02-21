@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220209144059_Initial01")]
-    partial class Initial01
+    [Migration("20220221083745_i")]
+    partial class i
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,11 +29,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("ApprovalId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApprovalTitle")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -44,7 +39,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("InstanceId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -52,6 +46,11 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("ApprovalId");
 
@@ -70,7 +69,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InstanceId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -80,15 +78,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReferenceId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CallbackId");
@@ -96,6 +91,40 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ReferenceId");
 
                     b.ToTable("Callbacks");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Config", b =>
+                {
+                    b.Property<string>("ApprovalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InstanceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxRetryCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RetryFrequence")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TimeoutMinutes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApprovalId");
+
+                    b.ToTable("Configs");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
@@ -110,7 +139,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InstanceId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -120,15 +148,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Number")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApprovalId");
@@ -140,11 +165,20 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Reference", "Reference")
                         .WithMany("Callbacks")
-                        .HasForeignKey("ReferenceId")
+                        .HasForeignKey("ReferenceId");
+
+                    b.Navigation("Reference");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Config", b =>
+                {
+                    b.HasOne("Domain.Entities.Approval", "Approval")
+                        .WithOne("Config")
+                        .HasForeignKey("Domain.Entities.Config", "ApprovalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Reference");
+                    b.Navigation("Approval");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
@@ -160,8 +194,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Approval", b =>
                 {
-                    b.Navigation("Reference")
-                        .IsRequired();
+                    b.Navigation("Config");
+
+                    b.Navigation("Reference");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
