@@ -36,23 +36,14 @@ builder.Services.AddSwaggerGen(options =>
     });
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    //options.SwaggerDoc("v1", new OpenApiInfo
-    //{
-    //    Version = "v1",
-    //    Title = "Contract Approval API",
-    //    Description = "Müşterilerin oanylaması gereken sözleşmeler için onaylatma altyapısı sunar."
-    //});
-        Description = "M��terilerin oanylamas� gereken s�zle�meler i�in onaylatma altyap�s� sunar."
-    });
-
     options.CustomSchemaIds(x => x.FullName);
-
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
+    options.IncludeXmlComments(xmlFilename);
 
     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
+
+    
+
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
