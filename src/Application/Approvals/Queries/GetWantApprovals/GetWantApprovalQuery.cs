@@ -13,7 +13,9 @@ namespace Application.Approvals.Queries.GetWantApprovals
         public string InstanceId { get; set; }
 
     }
-
+    /// <summary>
+    /// İstedim Onaylar Listesi
+    /// </summary>
     public class GetWantApprovalQueryHandler : IRequestHandler<GetWantApprovalQuery, Response<List<GetWantApprovalDto>>>
     {
         public async Task<Response<List<GetWantApprovalDto>>> Handle(GetWantApprovalQuery request, CancellationToken cancellationToken)

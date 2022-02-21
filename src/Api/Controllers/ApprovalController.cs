@@ -13,6 +13,7 @@ using Application.Approvals.Queries.GetWatchApprovalsDetails;
 
 namespace Api.Controllers
 {
+      
     /// <summary>
     /// Onay İşlemleri
     /// </summary>
@@ -20,6 +21,8 @@ namespace Api.Controllers
     [ApiController]
     public class ApprovalController : ApiControllerBase
     {
+        #region Onay Ekleme ve Güncelleme
+        #region OnayEkleme
         /// <summary>
         ///  Onay Ekleme
         /// </summary>
@@ -35,13 +38,15 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+        #endregion
+        #region Onay Guncelleme
         /// <summary>
         ///  Onay Guncelle
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
         /// <response code="400">If the item is null</response>
-        [Route("update")] 
+        [Route("update")]
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -50,12 +55,17 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+        #endregion
+        #endregion
+        #region Onayimdakiler Listesi ve Detay Sayfası
+        #region Onayimdakiler Listesi
         /// <summary>
         ///  Onayımdakiler Listesi
         /// </summary>
         /// <param name="instanceId"></param>
         /// <returns></returns>
-        /// <response code="404">If the item is null</response>
+        /// <response code="404">If the item is null</response> 
+
         [Route("approval")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -65,6 +75,8 @@ namespace Api.Controllers
             await Mediator.Send(new GetApprovalQuery { InstanceId = instanceId });
             return Ok();
         }
+        #endregion
+        #region Onayimdakiler Detay Sayfası
         /// <summary>
         ///  Onayımdakiler Detay sayfası
         /// </summary>
@@ -80,7 +92,10 @@ namespace Api.Controllers
             await Mediator.Send(new GetApprovalDetailsQuery() { ApprovalId = approvalId });
             return Ok();
         }
-
+        #endregion
+        #endregion
+        #region Onayladıklarım Listesi ve Detay Sayfası
+        #region Onayladıklarım Listesi
         /// <summary>
         ///  Onayladıklarım Listesi
         /// </summary>
@@ -96,7 +111,8 @@ namespace Api.Controllers
             await Mediator.Send(new GetMyApprovalQuery { InstanceId = instanceId });
             return Ok();
         }
-
+        #endregion
+        #region Onayladıklarım Detay Sayfası
         /// <summary>
         ///  Onayladıklarım detay sayfası
         /// </summary>
@@ -112,7 +128,10 @@ namespace Api.Controllers
             await Mediator.Send(new GetMyApprovalDetailsQuery { ApprovalId = approvalId });
             return Ok();
         }
-
+        #endregion
+        #endregion
+        #region İstedigim Onaylar Listesi Ve Detay Sayfası
+        #region İstedigim Onaylar
         /// <summary>
         ///  İstediğim Onaylar Listesi
         /// </summary>
@@ -128,6 +147,8 @@ namespace Api.Controllers
             await Mediator.Send(new GetWantApprovalQuery { InstanceId = instanceId });
             return Ok();
         }
+        #endregion
+        #region İstedigim Onaylar Detay Sayfası
         /// <summary>
         ///  İstediğim Onaylar detay sayfası
         /// </summary>
@@ -143,6 +164,10 @@ namespace Api.Controllers
             await Mediator.Send(new GetWantApprovalDetailsQuery() { ApprovalId = approvalId });
             return Ok();
         }
+        #endregion
+        #endregion
+        #region İzleme Listesi Ve Detay Sayfası
+        #region İzleme Listesi
         /// <summary>
         ///  İzleme Listesi
         /// </summary>
@@ -158,6 +183,8 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+        #endregion
+        #region İzleme Detay Sayfası
         /// <summary>
         ///  İzleme Detay Sayfası
         /// </summary>
@@ -172,6 +199,8 @@ namespace Api.Controllers
         {
             await Mediator.Send(new GetWatchApprovalDetailsQuery() { ApprovalId = approvalId });
             return Ok();
-        }
+        }  
+        #endregion
+        #endregion
     }
 }

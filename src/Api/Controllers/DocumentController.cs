@@ -14,6 +14,8 @@ namespace Api.Controllers
     [ApiController]
     public class DocumentController : ApiControllerBase
     {
+        #region Belge Ekleme Güncelleme Ve Silme
+        #region Belge Ekleme
         /// <summary>
         ///  Belge Ekleme
         /// </summary>
@@ -29,12 +31,14 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+        #endregion
         /// <summary>
         /// Belge Güncelleme
         /// </summary>
         /// <param name="command"></param>
         /// <returns>Response</returns>
         /// <response code="400">If the item is null</response>
+        #region Belge Guncelleme
         [Route("update")]
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -44,6 +48,8 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+        #endregion
+        #region Belge Silme 
         /// <summary>
         /// Belge Silme
         /// </summary>
@@ -59,7 +65,9 @@ namespace Api.Controllers
         {
             await Mediator.Send(command);
             return Ok();
-        }
+        }  
+        #endregion
+        #endregion
     }
 
 

@@ -11,7 +11,10 @@ using MediatR;
 namespace Application.Documents.Commands.DeleteDocumentCommands
 {
     public class DeleteDocumentCommand : IRequest<Response<List<DeleteDocumentCommandDto>>>
-    {
+    { 
+        /// <summary>
+        /// Id
+        /// </summary>
         public int Id { get; set; }
     }
 
@@ -22,6 +25,12 @@ namespace Application.Documents.Commands.DeleteDocumentCommands
         {
             _context = context;
         }
+        /// <summary>
+        /// Belge Silme
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<Response<List<DeleteDocumentCommandDto>>> Handle(DeleteDocumentCommand request, CancellationToken cancellationToken)
         {
             var list = new List<DeleteDocumentCommandDto>();
