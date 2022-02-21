@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
@@ -11,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -24,16 +30,14 @@ builder.Services.AddSwaggerGen(options =>
             Name = "Contract Approval API",
             Url = new Uri("http://168.119.122.177:9090/my-approval")
         },
-       
+
     });
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    //options.SwaggerDoc("v1", new OpenApiInfo
-    //{
-    //    Version = "v1",
-    //    Title = "Contract Approval API",
-    //    Description = "Müþterilerin oanylamasý gereken sözleþmeler için onaylatma altyapýsý sunar."
-    //});
+    options.CustomSchemaIds(x => x.FullName);
+    //options.IncludeXmlComments(xmlFilename);
+
+    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
 builder.Services.AddApplication();
@@ -49,10 +53,10 @@ if (app.Environment.IsDevelopment())
     {
         options.SerializeAsV2 = true;
     });
-    app.UseSwaggerUI(options =>
+    app.UseSwaggerUI(c =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty;
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "bbt.endorsement.api v1");
+        c.RoutePrefix = "";
     });
 }
 
