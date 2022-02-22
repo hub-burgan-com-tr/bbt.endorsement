@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 
@@ -18,12 +20,17 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, endorsement order is created successfully", typeof(void))]
         [SwaggerResponse(460, "Approved is not found", typeof(void))]
         [SwaggerResponse(461, "Not attached any document", typeof(void))]
+<<<<<<< HEAD
         [SwaggerResponse(462, "Attachemnt size too long. Allowed maximum size is 500kb", typeof(void))]
         public IActionResult NewOrder([FromBody] StartRequest command)
+=======
+        public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
+>>>>>>> fd08222cda00eabbb9799f6a003a7b576fcd7f5e
         {
-            throw new NotImplementedException();
+            return await Mediator.Send(new NewOrderCommand { StartRequest = request });
         }
 
+<<<<<<< HEAD
         public class StartRequest
         {
             /// <summary>
@@ -67,6 +74,51 @@ namespace Api.Controllers
                 }
             }
         }
+=======
+        //public class StartRequest
+        //{
+        //    /// <summary>
+        //    /// Unique Id of order. Id is corrolation key of workflow also. 
+        //    /// </summary>
+        //    public Guid Id { get; set; }
+        //    public ReferenceClass Reference { get; set; }
+        //    public long Customer { get; set; }
+        //    public long Approver { get; set; }
+        //    public StartRequest.DocumentClass[] Documents { get; set; }
+        //    public class DocumentClass
+        //    {
+        //        public string Name { get; set; }
+        //        public string Content { get; set; }
+        //        public ContentType Type { get; set; }
+        //        public enum ContentType { HTML, PDF, PlainText }
+
+        //        public ActionClass[] Actions { get; set; }
+
+        //        public class ActionClass
+        //        {
+        //            public bool IsDefault { get; set; }
+        //            public string Title { get; set; }
+        //            public ActionType Type { get; set; }
+        //            public enum ActionType { Approve, Reject }
+
+        //        }
+        //    }
+        //    public class ReferenceClass
+        //    {
+        //        public string Process { get; set; }
+        //        public string State { get; set; }
+        //        public Guid Id { get; set; }
+        //        public CallbackClass Callback { get; set; }
+        //        public class CallbackClass
+        //        {
+        //            public CalbackMode Mode { get; set; }
+        //            public string URL { get; set; }
+        //            public enum CalbackMode { Completed, Verbose }
+        //        }
+        //    }
+        //}
+
+>>>>>>> fd08222cda00eabbb9799f6a003a7b576fcd7f5e
 
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>

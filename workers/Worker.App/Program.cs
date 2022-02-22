@@ -1,8 +1,8 @@
 ﻿
 using Application;
+using Application.Common.Interfaces;
 using Infrastructure;
 using Infrastructure.Services;
-using Infrastructure.ZeebeServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Worker.App.Services;
