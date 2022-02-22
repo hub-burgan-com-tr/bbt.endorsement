@@ -2,6 +2,9 @@
 
 public class StartRequest
 {
+    /// <summary>
+    /// Unique Id of order. Id is corrolation key of workflow also. 
+    /// </summary>
     public Guid Id { get; set; }
     public ReferenceClass Reference { get; set; }
     public long Customer { get; set; }

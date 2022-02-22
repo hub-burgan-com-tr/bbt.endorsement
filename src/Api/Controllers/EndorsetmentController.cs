@@ -25,22 +25,22 @@ namespace Api.Controllers
             return await Mediator.Send(new NewOrderCommand { StartRequest = request });
         }
 
-        public class StartRequest
-        {
-            /// <summary>
-            /// Unique Id of order. Id is corrolation key of workflow also. 
-            /// </summary>
-            public Guid Id { get; set; }
-            public ReferenceClass Reference { get; set; }
-            public long Customer { get; set; }
-            public long Approver { get; set; }
-            public StartRequest.DocumentClass[] Documents { get; set; }
-            public class DocumentClass
-            {
-                public string Name { get; set; }
-                public string Content { get; set; }
-                public ContentType Type { get; set; }
-                public enum ContentType { HTML, PDF, PlainText }
+        //public class StartRequest
+        //{
+        //    /// <summary>
+        //    /// Unique Id of order. Id is corrolation key of workflow also. 
+        //    /// </summary>
+        //    public Guid Id { get; set; }
+        //    public ReferenceClass Reference { get; set; }
+        //    public long Customer { get; set; }
+        //    public long Approver { get; set; }
+        //    public StartRequest.DocumentClass[] Documents { get; set; }
+        //    public class DocumentClass
+        //    {
+        //        public string Name { get; set; }
+        //        public string Content { get; set; }
+        //        public ContentType Type { get; set; }
+        //        public enum ContentType { HTML, PDF, PlainText }
 
         //        public ActionClass[] Actions { get; set; }
 
@@ -67,6 +67,7 @@ namespace Api.Controllers
         //        }
         //    }
         //}
+
 
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
