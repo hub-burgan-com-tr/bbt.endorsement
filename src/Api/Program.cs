@@ -28,16 +28,16 @@ builder.Services.AddSwaggerGen(options =>
         Contact = new OpenApiContact
         {
             Name = "Contract Approval API",
-            Url = new Uri("http://168.119.122.177:9090/my-approval")
+            //Url = new Uri("http://168.119.122.177:9090/my-approval")
         },
 
     });
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-   options.CustomSchemaIds(x => x.FullName);
-    //options.IncludeXmlComments(xmlFilename);
 
-    //options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+    options.IncludeXmlComments(xmlPath);
+    options.CustomSchemaIds(x => x.FullName);
+    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
 builder.Services.AddApplication();

@@ -18,6 +18,7 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, endorsement order is created successfully", typeof(void))]
         [SwaggerResponse(460, "Approved is not found", typeof(void))]
         [SwaggerResponse(461, "Not attached any document", typeof(void))]
+        [SwaggerResponse(462, "Attachemnt size too long. Allowed maximum size is 500kb", typeof(void))]
         public IActionResult NewOrder([FromBody] StartRequest command)
         {
             throw new NotImplementedException();
@@ -29,10 +30,12 @@ namespace Api.Controllers
             /// Unique Id of order. Id is corrolation key of workflow also. 
             /// </summary>
             public Guid Id { get; set; }
+
+            public OrderConfig Config { get; set; }
             public ReferenceClass Reference { get; set; }
             public long Customer { get; set; }
             public long Approver { get; set; }
-            public StartRequest.DocumentClass[] Documents { get; set; }
+            public DocumentClass[] Documents { get; set; }
             public class DocumentClass
             {
                 public string Name { get; set; }
@@ -48,7 +51,6 @@ namespace Api.Controllers
                     public string Title { get; set; }
                     public ActionType Type { get; set; }
                     public enum ActionType { Approve, Reject }
-
                 }
             }
             public class ReferenceClass
@@ -136,15 +138,27 @@ namespace Api.Controllers
             /// Unique Id of order. Id is corrolation key of workflow also. 
             /// </summary>
             public Guid Id { get; set; }
-            public ReferenceClass Reference { get; set; }
+
             public long Customer { get; set; }
             public long Approver { get; set; }
-            public StartRequest.DocumentClass[] Documents { get; set; }
+
+            public OrderConfig Config { get; set; }
+
+            public NotificationLog[] NotificationLogs { get; set; }
+            public class NotificationLog
+            {
+                public Guid Id { get; set; }
+                public DateTime At { get; set; }
+                public string Message { get; set; }
+                public string Channel { get; set; }
+                public string Trigger { get; set; }
+            }
+
+            public DocumentClass[] Documents { get; set; }
             public class DocumentClass
             {
                 public Guid Id { get; set; }
                 public string Name { get; set; }
-                public string Content { get; set; }
                 public ContentType Type { get; set; }
                 public enum ContentType { HTML, PDF, PlainText }
                 public ActionClass[] Actions { get; set; }
@@ -152,11 +166,20 @@ namespace Api.Controllers
                 {
                     public bool IsDefault { get; set; }
                     public string Title { get; set; }
-                    public ActionType Type { get; set; }
-                    public enum ActionType { Approve, Reject }
-
+                    public ActionType State { get; set; }
+                    public enum ActionType { Approved, Rejected }
+                }
+                public Log[] Logs { get; set; }
+                public class Log
+                {
+                    public Guid Id { get; set; }
+                    public DateTime At { get; set; }
+                    public string Device { get; set; }
+                    public enum LogType { Displayed, Approved, Rejected }
                 }
             }
+
+            public ReferenceClass Reference { get; set; }
             public class ReferenceClass
             {
                 public string Process { get; set; }
@@ -168,7 +191,17 @@ namespace Api.Controllers
                     public CalbackMode Mode { get; set; }
                     public string URL { get; set; }
                     public enum CalbackMode { Completed, Verbose }
+
+                    public Log[] Logs { get; set; }
+                    public class Log
+                    {
+                        public Guid Id { get; set; }
+                        public DateTime At { get; set; }
+                        public int ResponseCode { get; set; }
+                        public string Response { get; set; }
+                    }
                 }
+
             }
         }
 
@@ -218,6 +251,19 @@ namespace Api.Controllers
             )
         {
             throw new NotImplementedException();
+        }
+
+
+
+        public class OrderConfig
+        {
+            public int MaxRetryCount { get; set; }
+            public string RetryFrequence { get; set; }
+            public int ExpireInMinutes { get; set; }
+            public string NotifyMessageSMS { get; set; }
+            public string NotifyMessagePush { get; set; }
+            public string RenotifyMessageSMS { get; set; }
+            public string RenotifyMessagePush { get; set; }
         }
 
     }
