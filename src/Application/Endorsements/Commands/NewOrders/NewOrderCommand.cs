@@ -27,7 +27,7 @@ namespace Application.Endorsements.Commands.NewOrders
             {
                 StartRequest = request.StartRequest,
                 Device = false,
-                InstanceId = Guid.NewGuid()
+                InstanceId = request.StartRequest.Id
             };
 
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
