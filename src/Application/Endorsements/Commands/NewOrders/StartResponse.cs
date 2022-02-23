@@ -2,6 +2,9 @@
 {
     public class StartResponse
     {
-        public Guid InstanceId { get; set; }
+        /// <summary>
+        /// Unique Id of order. Id is corrolation key of workflow also. 
+        /// </summary>
+        public Guid Id { get; set; }
     }
 }
