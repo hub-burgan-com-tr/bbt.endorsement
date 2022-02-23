@@ -4,7 +4,6 @@ using Application.Models;
 using MediatR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Application.Models.ContractModel;
 
 namespace Application.Endorsements.Commands.NewOrders
 {
