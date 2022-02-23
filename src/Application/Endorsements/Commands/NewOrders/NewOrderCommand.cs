@@ -4,7 +4,6 @@ using Application.Models;
 using MediatR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using static Application.Models.ContractModel;
 
 namespace Application.Endorsements.Commands.NewOrders
 {
@@ -28,7 +27,7 @@ namespace Application.Endorsements.Commands.NewOrders
             {
                 StartRequest = request.StartRequest,
                 Device = false,
-                InstanceId = Guid.NewGuid()
+                InstanceId = request.StartRequest.Id
             };
 
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });

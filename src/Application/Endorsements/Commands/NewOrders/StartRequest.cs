@@ -6,6 +6,7 @@ public class StartRequest
     /// Unique Id of order. Id is corrolation key of workflow also. 
     /// </summary>
     public Guid Id { get; set; }
+    public OrderConfig Config { get; set; }
     public ReferenceClass Reference { get; set; }
     public long Customer { get; set; }
     public long Approver { get; set; }
@@ -25,9 +26,9 @@ public class StartRequest
             public string Title { get; set; }
             public ActionType Type { get; set; }
             public enum ActionType { Approve, Reject }
-
         }
     }
+
     public class ReferenceClass
     {
         public string Process { get; set; }
@@ -40,5 +41,16 @@ public class StartRequest
             public string URL { get; set; }
             public enum CalbackMode { Completed, Verbose }
         }
+    }
+
+    public class OrderConfig
+    {
+        public int MaxRetryCount { get; set; }
+        public string RetryFrequence { get; set; }
+        public int ExpireInMinutes { get; set; }
+        public string NotifyMessageSMS { get; set; }
+        public string NotifyMessagePush { get; set; }
+        public string RenotifyMessageSMS { get; set; }
+        public string RenotifyMessagePush { get; set; }
     }
 }
