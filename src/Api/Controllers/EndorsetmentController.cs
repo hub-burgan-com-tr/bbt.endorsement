@@ -6,6 +6,7 @@ using System.Net;
 
 namespace Api.Controllers
 {
+
     [Route("[controller]")]
     [ApiController]
     public class EndorsementController : ApiControllerBase
