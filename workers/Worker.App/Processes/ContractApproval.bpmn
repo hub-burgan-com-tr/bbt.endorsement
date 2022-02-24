@@ -307,7 +307,7 @@
   <bpmn:error id="Error_0pxvq9a" name="ErrorMessage" errorCode="ErrorCode" />
   <bpmn:error id="Error_0em2x5a" name="ErrorSendOtpMessage" errorCode="ErrorCode" />
   <bpmn:error id="Error_00xjw5e" name="ErrorSendOtpEnd" errorCode="ErrorCode" />
-  <bpmn:error id="Error_0z0me8j" name="Error" errorCode="ErrorCode" />
+  <bpmn:error id="Error_0z0me8j" name="Contract_Approval_Error" errorCode="ErrorCode" />
   <bpmn:error id="Error_1vyqfbf" name="ErrorMessageEnd" errorCode="ErrorCode" />
   <bpmn:error id="Error_01mpbq6" name="Error" errorCode="ErrorCode" />
   <bpmn:error id="Error_02veinm" name="Error" errorCode="ErrorCode" />
@@ -370,10 +370,6 @@
       <bpmndi:BPMNShape id="Activity_0pi01du_di" bpmnElement="Activity_TimeoutProcess" isExpanded="true">
         <dc:Bounds x="880" y="760" width="470" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0o7f4ec_di" bpmnElement="Flow_0o7f4ec">
-        <di:waypoint x="1250" y="860" />
-        <di:waypoint x="1282" y="860" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0kjapnp_di" bpmnElement="Flow_0kjapnp">
         <di:waypoint x="956" y="860" />
         <di:waypoint x="1010" y="860" />
@@ -382,10 +378,20 @@
         <di:waypoint x="1110" y="860" />
         <di:waypoint x="1150" y="860" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o7f4ec_di" bpmnElement="Flow_0o7f4ec">
+        <di:waypoint x="1250" y="860" />
+        <di:waypoint x="1282" y="860" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1mm5oyp_di" bpmnElement="Timeout_End">
         <dc:Bounds x="1282" y="842" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1290" y="885" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ep9ev1_di" bpmnElement="Timeout_Start">
+        <dc:Bounds x="920" y="842" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="926" y="885" width="25" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_01mhvr5_di" bpmnElement="Activity_01mhvr5">
@@ -393,12 +399,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0pn50pi_di" bpmnElement="Activity_UpdateEntity">
         <dc:Bounds x="1010" y="820" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1ep9ev1_di" bpmnElement="Timeout_Start">
-        <dc:Bounds x="920" y="842" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="926" y="885" width="25" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1idhy85_di" bpmnElement="Event_Timeout">
         <dc:Bounds x="1412" y="842" width="36" height="36" />

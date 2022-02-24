@@ -1,4 +1,5 @@
-﻿using Infrastructure.Notification.Web.SignalR;
+﻿using Application.Common.Interfaces;
+using Infrastructure.Notification.Web.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -8,15 +9,15 @@ using Zeebe.Client.Api.Responses;
 
 namespace Infrastructure.ZeebeServices
 {
-    public interface IZeebeService
-    {
-        public Task<ITopology> Status();
-        public Task<IDeployResponse> Deploy(string modelFilename);
-        public Task<string> SendMessage(string instanceId, string messageName, string payload);
-        public void StartWorkers(string url);
-        public IZeebeClient Client();
+    //public interface IZeebeService
+    //{
+    //    public Task<ITopology> Status();
+    //    public Task<IDeployResponse> Deploy(string modelFilename);
+    //    public Task<string> SendMessage(string instanceId, string messageName, string payload);
+    //    public void StartWorkers(string url);
+    //    public IZeebeClient Client();
 
-    }
+    //}
 
 
     public class ZeebeService : IZeebeService
