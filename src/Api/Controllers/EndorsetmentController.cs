@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Application.Endorsements.Queries.GetOrders;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
@@ -38,7 +39,7 @@ namespace Api.Controllers
         [SwaggerResponse(200, "Success, queried orders are returned successfully.", typeof(OrderItem[]))]
         [SwaggerResponse(204, "Success but there is no order available for the query.", typeof(void))]
 
-        public IActionResult GetOrders(
+        public async Task<Response<OrderItem[]>> GetOrders(
            [FromQuery] long approver,
            [FromQuery] long customer,
            [FromQuery] long[] submitter,
@@ -49,36 +50,20 @@ namespace Api.Controllers
            [FromQuery] int page = 0
            )
         {
-            throw new NotImplementedException();
+            var response = await Mediator.Send(new GetOrdersCommand
+            {
+                Approver = approver,
+                Customer = customer,
+                Page = page,    
+                PageSize = pageSize,
+                ReferenceProcess = referenceProcess,    
+                ReferenceId = referenceId,
+                Status = status,
+                Submitter=submitter
+            });
+            return response;
         }
 
-        public class OrderItem
-        {
-
-            public Guid Id { get; set; }
-
-            public long Customer { get; set; }
-            public long Approver { get; set; }
-            public ReferenceClass Reference { get; set; }
-
-            public class ReferenceClass
-            {
-                public string Process { get; set; }
-                public string State { get; set; }
-                public Guid Id { get; set; }
-            }
-            public StatusType Status { get; set; }
-            public enum StatusType { Completed, InProgress, Canceled, Halted }
-
-            public DocumentClass[] Documents { get; set; }
-            public class DocumentClass
-            {
-                public Guid Id { get; set; }
-                public string Name { get; set; }
-                public StatusType Status { get; set; }
-                public enum StatusType { Approved, InProgress, Rejected }
-            }
-        }
 
         [Route("Orders/{id}")]
         [HttpGet]

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Enum;
+﻿using Domain.Enum;
 using FluentValidation;
 
 namespace Application.Documents.Commands.UpdateDocumentCommands

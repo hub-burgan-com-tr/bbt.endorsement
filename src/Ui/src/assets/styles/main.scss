@@ -6,6 +6,34 @@
 app-root {
   color: #464646;
 
+  .cursor-none {
+    cursor: inherit;
+  }
+
+  .btn-success {
+    background-color: #39b54a;
+    border-color: #39b54a;
+  }
+
+  .btn-warning {
+    background-color: #fccf1b;
+    border-color: #fccf1b;
+  }
+
+  .fit {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  .table > thead {
+    border: 0;
+    border-bottom-color: #0099d8;
+  }
+
+  .table > :not(:first-child) {
+    border-top: 1px solid #0099d8 !important;
+  }
+
   .w-45px {
     width: 45px;
   }

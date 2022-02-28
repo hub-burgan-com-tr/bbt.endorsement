@@ -8,10 +8,10 @@
 </ngx-smart-modal>
 <ngx-smart-modal #myModal identifier="myModal">
   <h1>Bilgilendirme</h1>
-  <p>Onay gönderilecektir. Emin misiniz?</p>
+  <p>Onay kaydedilecektir. Emin misiniz?</p>
 
   <div class="button-container">
-    <button class="btn btn-primary" (click)="send()">Gönder</button>
+    <button class="btn btn-primary" (click)="send()">Kaydet</button>
     <button class="btn btn-outline-primary" (click)="myModal.close()">İptal</button>
   </div>
 </ngx-smart-modal>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="col-md col-sm-12">
-      <div class="box p-3 mb-4">
+      <div class="box p-3 mb-4" *ngIf="step===1">
         <b class="mb-2 d-block">1- Mng Hayat Teklif Alma İzni</b>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pulvinar sit amet nibh ut feugiat. Proin
           ultricies dolor condimentum purus laoreet, in elementum nisl vehicula. Integer quis rutrum felis. In ultrices
@@ -58,34 +58,36 @@
           egestas nec sem convallis tincidunt.
         </p>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked >
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
           <label class="form-check-label" for="flexCheckChecked">
             Okudum, Anladım
           </label>
         </div>
       </div>
-      <div class="box p-3">
+      <div class="box p-3" *ngIf="step===2">
         <b class="mb-2 d-block">2- Mng Hayat Teklif Alma İzni</b>
         <p>
           <a href="#"><img src="/assets/img/attachment.png"> <span class="mx-2">sozlesme_metni.pdf</span></a>
         </p>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" >
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
           <label class="form-check-label" for="flexRadioDefault1">
             Okudum, Anladım
           </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked >
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
           <label class="form-check-label" for="flexRadioDefault2">
             Okudum, Anlayamadım
           </label>
         </div>
       </div>
+      <div class="justify-content-center d-flex">
+        <button class="btn btn-orange px-5 mt-5" (click)="continue()" *ngIf="step===1">Devam Et
+        </button>
+        <button class="btn btn-orange px-5 mt-5" (click)="myModal.open()" *ngIf="step===2">Kaydet
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="justify-content-center d-flex">
-    <button class="btn btn-orange px-5 mt-5" (click)="myModal.open()">Onayla
-    </button>
   </div>
 </app-main-content>
