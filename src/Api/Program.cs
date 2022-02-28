@@ -24,13 +24,18 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Contract Approval API",
-        Description = "Müşterilerin onaylaması gereken sözleşmeler için onaylatma altyapısı sunar.",
+        Description = "Provides validation infrastructure for contracts that customers need to approve.",
         Contact = new OpenApiContact
         {
             Name = "Contract Approval API",
-            //Url = new Uri("http://168.119.122.177:9090/my-approval")
+            //Url = new Uri("http://168.119.122.177:9090/my-approval"),
+            Email = ""
         },
-
+        License = new OpenApiLicense
+        {
+            Name = "",
+            //Url = new Uri("http://168.119.122.177:9090/my-approval"),
+        }
     });
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
