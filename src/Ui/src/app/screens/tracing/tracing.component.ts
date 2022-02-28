@@ -70,8 +70,9 @@ export class TracingComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.formGroup = this.fb.group({
       approving: '',
-      seekingApproval: ''
-    }, {validators: this.atLeastOneHasValue(['approving', 'seekingApproval']), updateOn: 'submit'});
+      seekingApproval: '',
+      nameSurname: '',
+    }, {validators: this.atLeastOneHasValue(['approving', 'seekingApproval', 'nameSurname']), updateOn: 'submit'});
   }
 
   ngOnInit(): void {
