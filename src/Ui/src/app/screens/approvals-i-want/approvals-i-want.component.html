@@ -3,6 +3,7 @@
     <app-main-content-button-group></app-main-content-button-group>
   </div>
   <div class="box">
-    <app-list-item *ngFor="let d of data" [data]="d" [routerLink]="['./detail']"></app-list-item>
+    <app-list-item *ngFor="let d of data" [data]="d"
+                   [routerLink]="['./detail']" [queryParams]="{step: d.status}"></app-list-item>
   </div>
 </app-main-content>

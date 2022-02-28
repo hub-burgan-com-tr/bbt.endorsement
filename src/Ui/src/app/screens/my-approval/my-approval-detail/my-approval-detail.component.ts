@@ -8,6 +8,7 @@ import {NgxSmartModalService} from "ngx-smart-modal";
   styleUrls: ['./my-approval-detail.component.scss']
 })
 export class MyApprovalDetailComponent implements OnInit {
+  step: number = 1;
 
   constructor(public ngxSmartModalService: NgxSmartModalService) {
   }
@@ -18,6 +19,10 @@ export class MyApprovalDetailComponent implements OnInit {
   send() {
     this.ngxSmartModalService.close('myModal');
     this.ngxSmartModalService.open('confirmModal');
+  }
+
+  continue() {
+    this.step++;
   }
 
   redirect() {
