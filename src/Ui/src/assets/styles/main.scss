@@ -13,11 +13,34 @@ app-root {
   .btn-success {
     background-color: #39b54a;
     border-color: #39b54a;
+
+    &.no-hover {
+      background-color: #39b54a !important;
+      border-color: #39b54a !important;
+      box-shadow: none !important;
+    }
   }
 
   .btn-warning {
     background-color: #fccf1b;
     border-color: #fccf1b;
+
+    &.no-hover {
+      background-color: #fccf1b !important;
+      border-color: #fccf1b !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+
+    &.no-hover {
+      background-color: #dc3545 !important;
+      border-color: #dc3545 !important;
+      box-shadow: none !important;
+    }
   }
 
   .fit {
@@ -309,7 +332,7 @@ app-root {
     }
   }
 
-  .btn {
+  .btn:not(.input-button) {
     border-radius: 20px;
     padding: 10px 0.75rem
   }

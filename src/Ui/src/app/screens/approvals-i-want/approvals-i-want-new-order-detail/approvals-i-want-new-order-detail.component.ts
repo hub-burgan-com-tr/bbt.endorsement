@@ -21,6 +21,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   formNewDocument: FormGroup;
   files: any[] = [];
   approvalFormValidationMessage = '';
+  showChoiceAddPanel: boolean = false;
+  choices: string[] = [];
 
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private modal: NgxSmartModalService) {
     this.formNewDocument = this.fb.group({
@@ -30,7 +32,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
       content: '',
       formDd: null,
       identityNo: '',
-      nameSurname: ''
+      nameSurname: '',
+      choiceText: ''
     });
     this.formGroup = this.fb.group({
       title: ['Maaş Ödeme Talimatı', Validators.required],
@@ -48,6 +51,13 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  addChoice() {
+    if (!this.formNewDocument.get('choiceText'))
+      return;
+    this.choices.push(this.formNewDocument.get('choiceText')?.value);
+    this.formNewDocument.get('choiceText')?.setValue('');
   }
 
   closeAddPanel() {

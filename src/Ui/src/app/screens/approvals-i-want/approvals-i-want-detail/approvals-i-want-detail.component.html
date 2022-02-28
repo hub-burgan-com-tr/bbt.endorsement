@@ -1,9 +1,13 @@
 <app-main-content blockTitle="İstediğim Onaylar" subTitle="İstediğim Onaylar | Sigorta Teklif Talimatı">
-  <div right *ngIf="step&&step!=0" class="d-flex justify-content-end">
+  <div right *ngIf="step" class="d-flex justify-content-end">
     <button class="btn btn-outline-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 me-3" *ngIf="step==1">İptal Et</button>
-    <button class="btn btn-warning text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none" *ngIf="step==1">Bekliyor
+    <button class="btn btn-warning text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none no-hover" *ngIf="step==1">
+      Bekliyor
     </button>
-    <button class="btn btn-success text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none" *ngIf="step==2">Onaylandı
+    <button class="btn btn-success text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none no-hover" *ngIf="step==2">
+      Onaylandı
+    </button>
+    <button class="btn btn-danger text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none no-hover" *ngIf="step==0">Ret
     </button>
   </div>
   <div class="box mb-4">
@@ -29,9 +33,19 @@
       </tbody>
     </table>
   </div>
-  <div class="box mb-4">
-    <div class="title no-border">Başlık</div>
-    <p class="fs-18 px-15px fw-600">Maaş Ödeme Talimatı</p>
+  <div class="box mb-4 py-3">
+    <div class="px-15px">
+      <div class="row">
+        <div class="col-8">
+          <div>Başlık</div>
+          <p class="fs-18 fw-600">Maaş Ödeme Talimatı</p>
+        </div>
+        <div class="col">
+          <div>Onaycı</div>
+          <p class="fs-18 fw-600">Uğur Karataş</p>
+        </div>
+      </div>
+    </div>
     <div class="title no-border">Referans</div>
     <div class="px-15px">
       <div class="row">
