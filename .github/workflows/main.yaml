@@ -61,7 +61,7 @@ jobs:
           manifests: |
             ${{ github.workspace }}/manifests/deployment.yaml
             ${{ github.workspace }}/manifests/service.yaml
-            ${{ github.workspace }}/manifests/ingress.yaml
+          # ${{ github.workspace }}/manifests/ingress.yaml
           images: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
           imagepullsecrets: |
