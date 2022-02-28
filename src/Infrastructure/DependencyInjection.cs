@@ -1,25 +1,19 @@
 ﻿using Application.Common.Interfaces;
+using Infrastructure.Configuration;
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Infrastructure.ZeebeServices;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
-                    configure =>
-                    {
-                        configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                        configure.EnableRetryOnFailure();
-                    }));
+            services.AddDbContext(builder.Configuration);
 
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
@@ -28,6 +22,12 @@ namespace Infrastructure
 
             services.AddSingleton<IServerEventService, ServerEventService>();
             services.AddSingleton<IClientEventService, ClientEventService>();
+            services.AddSingleton<IZeebeService, ZeebeService>();
+            services.AddSingleton<ContractApprovalService, ContractApprovalService>();
+
+            services.AddSignalR();
+
+            builder.ConfigureLog();
 
             return services;
         }

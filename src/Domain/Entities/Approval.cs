@@ -6,7 +6,7 @@ namespace Domain.Entities
     public class Approval : AuditableEntity, IHasDomainEvent
     {
         public string ApprovalId { get; set; } = null!;
-        public string ApprovalTitle { get; set; } = null!;
+        public string Title { get; set; } = null!;
         public string InstanceId { get; set; } = null!;
 
         private bool _done;
