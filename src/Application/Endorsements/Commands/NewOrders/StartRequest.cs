@@ -1,4 +1,6 @@
-﻿namespace Application.Endorsements.Commands.NewOrders;
+﻿using Domain.Enum;
+
+namespace Application.Endorsements.Commands.NewOrders;
 
 public class StartRequest
 {
@@ -16,7 +18,6 @@ public class StartRequest
         public string Name { get; set; }
         public string Content { get; set; }
         public ContentType Type { get; set; }
-        public enum ContentType { HTML, PDF, PlainText }
 
         public ActionClass[] Actions { get; set; }
 
@@ -25,7 +26,6 @@ public class StartRequest
             public bool IsDefault { get; set; }
             public string Title { get; set; }
             public ActionType Type { get; set; }
-            public enum ActionType { Approve, Reject }
         }
     }
 
@@ -39,7 +39,6 @@ public class StartRequest
         {
             public CalbackMode Mode { get; set; }
             public string URL { get; set; }
-            public enum CalbackMode { Completed, Verbose }
         }
     }
 

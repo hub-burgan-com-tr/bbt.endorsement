@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: endorsement
+  namespace: bbt-endorsement
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5070
+    targetPort: 5070
+  selector:
+    app: endorsement

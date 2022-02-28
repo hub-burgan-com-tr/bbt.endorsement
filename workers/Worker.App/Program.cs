@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
         // open job worker
         using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
         {
-            var contractApprovalService = serviceProvider.GetRequiredService<ContractApprovalService>();
+            var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
             if (contractApprovalService != null)
                 contractApprovalService.StartWorkers();
 
