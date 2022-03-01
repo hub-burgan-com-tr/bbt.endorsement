@@ -29,6 +29,7 @@ namespace Api.Controllers
             return await Mediator.Send(new NewOrderCommand { StartRequest = request });
         }
 
+
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
         [SwaggerOperation(
@@ -38,8 +39,7 @@ namespace Api.Controllers
         [Route("Orders")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried orders are returned successfully.", typeof(OrderItem[]))]
-        [SwaggerResponse(204, "Success but there is no order available for the query.", typeof(void))]
-
+        [SwaggerResponse(204, "Success but there is no order available for the query.", typeof(void))]    
         public async Task<Response<OrderItem[]>> GetOrders(
            [FromQuery] long approver,
            [FromQuery] long customer,
@@ -86,6 +86,10 @@ namespace Api.Controllers
             return response;
         }
 
+        [SwaggerOperation(
+          Summary = "Query endorsement order status.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{id}/Status")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -98,6 +102,10 @@ namespace Api.Controllers
         }
 
 
+        [SwaggerOperation(
+          Summary = "Cancel endorsement order.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{id}")]
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -110,6 +118,10 @@ namespace Api.Controllers
         }
 
 
+        [SwaggerOperation(
+          Summary = "Query endorsement order documents.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{orderId}/Documents")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -122,6 +134,10 @@ namespace Api.Controllers
         }
 
 
+        [SwaggerOperation(
+          Summary = "Query the Confirmation order documents that you want to approve",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{orderId}/Documents/{documentId}/Approve")]
         [HttpPatch]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -133,19 +149,5 @@ namespace Api.Controllers
         {
             throw new NotImplementedException();
         }
-
-
-
-        public class OrderConfig
-        {
-            public int MaxRetryCount { get; set; }
-            public string RetryFrequence { get; set; }
-            public int ExpireInMinutes { get; set; }
-            public string NotifyMessageSMS { get; set; }
-            public string NotifyMessagePush { get; set; }
-            public string RenotifyMessageSMS { get; set; }
-            public string RenotifyMessagePush { get; set; }
-        }
-
     }
 }
