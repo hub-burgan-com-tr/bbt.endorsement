@@ -9,6 +9,7 @@ using Application.Endorsements.Queries.GetOrderStatuses;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Application.Endorsements.Commands.CancelOrders;
 
 namespace Api.Controllers
 {
@@ -116,11 +117,11 @@ namespace Api.Controllers
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult CancelOrder(
+        public async Task<Response<bool>> CancelOrder(
             [FromRoute] Guid id
             )
         {
-            throw new NotImplementedException();
+            return await Mediator.Send(new CancelOrderCommand { Id = id });
         }
 
 
