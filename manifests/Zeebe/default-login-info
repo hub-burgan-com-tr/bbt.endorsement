@@ -1,0 +1,59 @@
+NAME: camuda-zeebe
+LAST DEPLOYED: Tue Mar  1 17:11:39 2022
+NAMESPACE: bbt-endorsement
+STATUS: deployed
+REVISION: 1
+NOTES:
+______     ______     __    __     __  __     __   __     _____     ______        ______     __         ______     __  __     _____
+/\  ___\   /\  __ \   /\ "-./  \   /\ \/\ \   /\ "-.\ \   /\  __-.  /\  __ \      /\  ___\   /\ \       /\  __ \   /\ \/\ \   /\  __-.
+\ \ \____  \ \  __ \  \ \ \-./\ \  \ \ \_\ \  \ \ \-.  \  \ \ \/\ \ \ \  __ \     \ \ \____  \ \ \____  \ \ \/\ \  \ \ \_\ \  \ \ \/\ \
+ \ \_____\  \ \_\ \_\  \ \_\ \ \_\  \ \_____\  \ \_\\"\_\  \ \____-  \ \_\ \_\     \ \_____\  \ \_____\  \ \_____\  \ \_____\  \ \____-
+  \/_____/   \/_/\/_/   \/_/  \/_/   \/_____/   \/_/ \/_/   \/____/   \/_/\/_/      \/_____/   \/_____/   \/_____/   \/_____/   \/____/
+
+(ccsm-helm - 0.0.21)
+
+### Installed Services:
+
+- Zeebe:
+  - Docker Image used for Zeebe: camunda/zeebe:1.3.4
+  - Zeebe Cluster Name: "camuda-zeebe-zeebe"
+  - Prometheus ServiceMonitor Enabled: false
+- Operate:
+  - Enabled: true
+  - Docker Image used for Operate: camunda/operate:1.3.4
+- Tasklist:
+  - Enabled: true
+  - Docker Image used for Tasklist: camunda/tasklist:1.3.4
+- Elasticsearch:
+  - Enabled: true
+  - ElasticSearch URL: http://elasticsearch-master:9200
+
+### Zeebe
+
+The Cluster itself is not exposed as a service that means that you can use `kubectl port-forward` to access the Zeebe cluster from outside Kubernetes:
+
+> kubectl port-forward svc/camuda-zeebe-zeebe-gateway 26500:26500 -n bbt-endorsement
+
+Now you can connect your workers and clients to `localhost:26500`
+
+### Operate
+
+As part of the Operate HELM Chart an Ingress definition is deployed, but you require to have an Ingress Controller for that Ingress to be Exposed.
+If you don't have an Ingress Controller you can do kubectl port-forward to access Operate from outside the cluster:
+
+> kubectl port-forward svc/camuda-zeebe-operate 8080:80
+
+Now you can point your browser to `http://localhost:8080`
+
+Default user and password: "demo/demo"
+
+### Tasklist
+
+As part of Tasklist an Ingress definition is deployed, but you require to have an Ingress Contoller for that Ingress to be Exposed.
+If you don't have an Ingress Controller you can do kubectl port-forward to access tasklist from outside the cluster:
+
+> kubectl port-forward svc/camuda-zeebe-tasklist 8081:80
+
+Now you can point your browser to `http://localhost:8080`
+
+Default user and password: "demo/demo"
