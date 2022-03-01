@@ -43,8 +43,14 @@ namespace Application.Documents.Commands.CreateDocumentCommands
         /// </summary>
         public string NameAndSurname { get; set; }
 
-    }
+        public List<CreateDocumentCommandApprovedDto> CreateDocumentCommandApprovedDto { get; set; }
 
+    }
+    public class CreateDocumentCommandApprovedDto
+    {
+        public string ApprovedName { get; set; }
+        public bool IsApproved { get; set; }
+    }
     /// <summary>
     /// Belge Ekleme Servisi
     /// </summary>

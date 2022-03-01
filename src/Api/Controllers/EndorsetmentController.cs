@@ -1,4 +1,7 @@
-﻿using Application.Common.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
+using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
 using Application.Endorsements.Queries.GetOrderDetails;
 using Application.Endorsements.Queries.GetOrders;

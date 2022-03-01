@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Application.Documents.Commands.CreateDocumentCommands;
 using Application.Documents.Commands.DeleteDocumentCommands;
+using Application.Documents.Commands.Queries.GetDocumentDetails;
 using Application.Documents.Commands.UpdateDocumentCommands;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -62,6 +63,20 @@ namespace Api.Controllers
             return Ok();
         }
         #endregion
+
+        #region Belge Detay
+        [Route("detail")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, document detail is returned successfully.", typeof(GetDocumentDetailsDto))]
+        [SwaggerResponse(404, "document detail is not found.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetDocumentDetailAsync([FromBody] int Id)
+        {
+            await Mediator.Send(new GetDocumentDetailsQuery() { Id = Id });
+            return Ok();
+        }
+        #endregion
         #region Belge Silme 
         /// <summary>
         /// Belge Silme
@@ -75,6 +90,8 @@ namespace Api.Controllers
         )]
         [Route("delete")]
         [HttpDelete]
+        [SwaggerResponse(201, "Success, endorsement document is deleted successfully", typeof(List<DeleteDocumentCommandDto>))]
+        [SwaggerResponse(400, "Document is not found", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteDocumentAsync([FromBody] DeleteDocumentCommand command)

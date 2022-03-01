@@ -7,20 +7,36 @@
         /// </summary>
         public string ApprovalName { get; set; }
         /// <summary>
-        /// Belge Onaylı Mı
+        /// Onay Başlık
+        /// </summary>
+        public string ApprovalTitle { get; set; }
+
+        /// <summary>
+        /// Belge Onaylandı Mı
         /// </summary>
         public bool IsDocumentApproved { get; set; }
         /// <summary>
         /// Belge Icon
         /// </summary>
-        public string ApprovalIcon { get; set; }
+        public string DocumentIcon { get; set; }
+        public List<GetMyApprovalDetailHistoryDto> GetMyApprovalDetailHistory { get; set; }
+
+    }
+
+    public class GetMyApprovalDetailHistoryDto
+    {
         /// <summary>
-        /// Onaylayan
-        /// </summary>
-        public string Approver { get; set; }
+       ///İşlem Ad 
+       /// </summary>
+        public string Name { get; set; }
         /// <summary>
-        /// Onaylama Tarihi
+        /// Belge
         /// </summary>
-        public string ApproverDate { get; set; }
+        public string DocumentName { get; set; }
+        /// <summary>
+        /// İşlem Tarihi
+        /// </summary>
+        public string CreatedDate { get; set; }
+
     }
 }
