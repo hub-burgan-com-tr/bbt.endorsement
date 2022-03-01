@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: endorsement-workerapp
+  namespace: bbt-endorsement
+  labels:
+    app: endorsement-workerapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: endorsement-workerapp
+  template:
+    metadata:
+      labels:
+        app: endorsement-workerapp
+    spec:
+      containers:
+      - name: endorsement-workerapp
+        image: burganbank/bbt-endorsement-workerapp:latest
+        ports:
+        - containerPort: 5071
