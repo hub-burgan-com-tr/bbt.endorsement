@@ -24,6 +24,7 @@
     <Folder Include="Approvals\Commands\DeleteApprovalCommands\" />
     <Folder Include="ApproverForms\Queries\" />
     <Folder Include="Endorsements\EventHandlers\" />
+    <Folder Include="Endorsements\Queries\" />
     <Folder Include="Documents\Commands\Queries\" />
   </ItemGroup>
 

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Approvals.Commands.CreateApprovalCommands;
 
-public class CreateApprovalCommand : IRequest<Response<List<CreateApprovalCommandDto>>>
+public class CreateApprovalCommand : IRequest<Response<CreateApprovalCommandDto>>
 {
     /// <summary>
     /// InstanceId
@@ -41,7 +41,7 @@ public class CreateApprovalCommand : IRequest<Response<List<CreateApprovalComman
     public int MaxRetryCount { get; set; }
 }
 
-public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalCommand, Response<List<CreateApprovalCommandDto>>>
+public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalCommand, Response<CreateApprovalCommandDto>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -55,10 +55,10 @@ public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalComman
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Response<List<CreateApprovalCommandDto>>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
+    public async Task<Response<CreateApprovalCommandDto>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
     {
-        var list = new List<CreateApprovalCommandDto>();
-        return Response<List<CreateApprovalCommandDto>>.Success(list, 200);
+        var result = new CreateApprovalCommandDto();
+        return Response<CreateApprovalCommandDto>.Success(result, 200);
     }
     //public async Task<Response<bool>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
     //{

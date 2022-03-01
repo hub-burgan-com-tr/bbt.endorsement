@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Approvals.Queries.GetWatchApprovalsDetails
 {
-    public class GetWatchApprovalDetailsQuery : IRequest<Response<List<GetWatchApprovalDetailsDto>>>
+    public class GetWatchApprovalDetailsQuery : IRequest<Response<GetWatchApprovalDetailsDto>>
     {
     /// <summary>
     /// Onay Id
@@ -14,12 +14,12 @@ namespace Application.Approvals.Queries.GetWatchApprovalsDetails
     /// <summary>
     /// İzleme Detay Sayfasi
     /// </summary>
-    public class GetWatchApprovalDetailsQueryHandler : IRequestHandler<GetWatchApprovalDetailsQuery, Response<List<GetWatchApprovalDetailsDto>>>
+    public class GetWatchApprovalDetailsQueryHandler : IRequestHandler<GetWatchApprovalDetailsQuery, Response<GetWatchApprovalDetailsDto>>
     {
-        public async Task<Response<List<GetWatchApprovalDetailsDto>>> Handle(GetWatchApprovalDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetWatchApprovalDetailsDto>> Handle(GetWatchApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var list = new List<GetWatchApprovalDetailsDto>();
-            return Response<List<GetWatchApprovalDetailsDto>>.Success(list, 200);
+            var result = new GetWatchApprovalDetailsDto();
+            return Response<GetWatchApprovalDetailsDto>.Success(result, 200);
         }
     }
 }

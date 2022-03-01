@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Approvals.Queries.GetApprovals
 {
-    public class GetApprovalDto : IMapFrom<Approval>
+    public class GetApprovalDto 
     {
         /// <summary>
        /// Onay Id
