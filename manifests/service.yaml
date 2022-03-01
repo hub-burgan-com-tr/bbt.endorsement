@@ -6,7 +6,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 5070
+  - port: 80
     targetPort: 5070
   selector:
     app: endorsement

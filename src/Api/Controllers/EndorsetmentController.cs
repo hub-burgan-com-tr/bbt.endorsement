@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Application.Endorsements.Queries.GetOrderDetails;
 using Application.Endorsements.Queries.GetOrders;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -28,6 +29,7 @@ namespace Api.Controllers
             return await Mediator.Send(new NewOrderCommand { StartRequest = request });
         }
 
+
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
         [SwaggerOperation(
@@ -37,8 +39,7 @@ namespace Api.Controllers
         [Route("Orders")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried orders are returned successfully.", typeof(OrderItem[]))]
-        [SwaggerResponse(204, "Success but there is no order available for the query.", typeof(void))]
-
+        [SwaggerResponse(204, "Success but there is no order available for the query.", typeof(void))]    
         public async Task<Response<OrderItem[]>> GetOrders(
            [FromQuery] long approver,
            [FromQuery] long customer,
@@ -50,7 +51,7 @@ namespace Api.Controllers
            [FromQuery] int page = 0
            )
         {
-            var response = await Mediator.Send(new GetOrdersCommand
+            var response = await Mediator.Send(new GetOrdersQuery
             {
                 Approver = approver,
                 Customer = customer,
@@ -64,91 +65,31 @@ namespace Api.Controllers
             return response;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+          Summary = "Query endorsement orderDetail.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{id}")]
         [HttpGet]
         [SwaggerResponse(200, "Success, order is returned successfully.", typeof(OrderDetail))]
         [SwaggerResponse(404, "Order is not found.", typeof(void))]
-        public IActionResult GetOrder(
+        public async Task<Response<OrderDetail>> GetOrderDetail(
             [FromRoute] Guid id
             )
         {
-            throw new NotImplementedException();
+            var response = await Mediator.Send(new GetOrderDetailQuery {  Id = id  });
+            return response;
         }
 
-        public class OrderDetail
-        {
-            /// <summary>
-            /// Unique Id of order. Id is corrolation key of workflow also. 
-            /// </summary>
-            public Guid Id { get; set; }
-
-            public long Customer { get; set; }
-            public long Approver { get; set; }
-
-            public OrderConfig Config { get; set; }
-
-            public NotificationLog[] NotificationLogs { get; set; }
-            public class NotificationLog
-            {
-                public Guid Id { get; set; }
-                public DateTime At { get; set; }
-                public string Message { get; set; }
-                public string Channel { get; set; }
-                public string Trigger { get; set; }
-            }
-
-            public DocumentClass[] Documents { get; set; }
-            public class DocumentClass
-            {
-                public Guid Id { get; set; }
-                public string Name { get; set; }
-                public ContentType Type { get; set; }
-                public enum ContentType { HTML, PDF, PlainText }
-                public ActionClass[] Actions { get; set; }
-                public class ActionClass
-                {
-                    public bool IsDefault { get; set; }
-                    public string Title { get; set; }
-                    public ActionType State { get; set; }
-                    public enum ActionType { Approved, Rejected }
-                }
-                public Log[] Logs { get; set; }
-                public class Log
-                {
-                    public Guid Id { get; set; }
-                    public DateTime At { get; set; }
-                    public string Device { get; set; }
-                    public enum LogType { Displayed, Approved, Rejected }
-                }
-            }
-
-            public ReferenceClass Reference { get; set; }
-            public class ReferenceClass
-            {
-                public string Process { get; set; }
-                public string State { get; set; }
-                public Guid Id { get; set; }
-                public CallbackClass Callback { get; set; }
-                public class CallbackClass
-                {
-                    public CalbackMode Mode { get; set; }
-                    public string URL { get; set; }
-                    public enum CalbackMode { Completed, Verbose }
-
-                    public Log[] Logs { get; set; }
-                    public class Log
-                    {
-                        public Guid Id { get; set; }
-                        public DateTime At { get; set; }
-                        public int ResponseCode { get; set; }
-                        public string Response { get; set; }
-                    }
-                }
-
-            }
-        }
-
+        [SwaggerOperation(
+          Summary = "Query endorsement order status.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{id}/Status")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -161,6 +102,10 @@ namespace Api.Controllers
         }
 
 
+        [SwaggerOperation(
+          Summary = "Cancel endorsement order.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{id}")]
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -173,6 +118,10 @@ namespace Api.Controllers
         }
 
 
+        [SwaggerOperation(
+          Summary = "Query endorsement order documents.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{orderId}/Documents")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -185,6 +134,10 @@ namespace Api.Controllers
         }
 
 
+        [SwaggerOperation(
+          Summary = "Query the Confirmation order documents that you want to approve",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{orderId}/Documents/{documentId}/Approve")]
         [HttpPatch]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -196,19 +149,5 @@ namespace Api.Controllers
         {
             throw new NotImplementedException();
         }
-
-
-
-        public class OrderConfig
-        {
-            public int MaxRetryCount { get; set; }
-            public string RetryFrequence { get; set; }
-            public int ExpireInMinutes { get; set; }
-            public string NotifyMessageSMS { get; set; }
-            public string NotifyMessagePush { get; set; }
-            public string RenotifyMessageSMS { get; set; }
-            public string RenotifyMessagePush { get; set; }
-        }
-
     }
 }
