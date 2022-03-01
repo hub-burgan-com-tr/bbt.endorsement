@@ -2,6 +2,7 @@
 using Application.Endorsements.Commands.NewOrders;
 using Application.Endorsements.Queries.GetOrderDetails;
 using Application.Endorsements.Queries.GetOrders;
+using Application.Endorsements.Queries.GetOrderStatuses;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
@@ -94,11 +95,13 @@ namespace Api.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetOrderStatus(
+        public async Task<Response<string>> GetOrderStatus(
             [FromRoute] Guid id
             )
         {
-            throw new NotImplementedException();
+            var status = await Mediator.Send(new GetOrderStatusQuery { Id = id });
+
+            return status;
         }
 
 
