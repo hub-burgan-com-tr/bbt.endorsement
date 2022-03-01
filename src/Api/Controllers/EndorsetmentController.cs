@@ -65,12 +65,20 @@ namespace Api.Controllers
             return response;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+          Summary = "Query endorsement orderDetail.",
+          Tags = new[] { "Endorsement" }
+        )]
         [Route("Orders/{id}")]
         [HttpGet]
         [SwaggerResponse(200, "Success, order is returned successfully.", typeof(OrderDetail))]
         [SwaggerResponse(404, "Order is not found.", typeof(void))]
-        public async Task<Response<OrderDetail>> GetOrder(
+        public async Task<Response<OrderDetail>> GetOrderDetail(
             [FromRoute] Guid id
             )
         {
