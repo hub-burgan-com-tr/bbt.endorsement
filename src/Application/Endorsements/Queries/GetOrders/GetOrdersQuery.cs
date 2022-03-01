@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Endorsements.Queries.GetOrders
 {
-    public class GetOrdersCommand : IRequest<Response<OrderItem[]>>
+    public class GetOrdersQuery : IRequest<Response<OrderItem[]>>
     {
         public long Approver { get; set; }
         public long Customer { get; set; }
@@ -15,9 +15,9 @@ namespace Application.Endorsements.Queries.GetOrders
         public int Page { get; set; }
     }
 
-    public class GetOrdersCommandHandler : IRequestHandler<GetOrdersCommand, Response<OrderItem[]>>
+    public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, Response<OrderItem[]>>
     {
-        public async Task<Response<OrderItem[]>> Handle(GetOrdersCommand request, CancellationToken cancellationToken)
+        public async Task<Response<OrderItem[]>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
         {
             var orderItems = new List<OrderItem>();
             return Response<OrderItem[]>.Success(orderItems.ToArray(), 200);
