@@ -1,21 +1,25 @@
-name: CI
+name: CI-CD-UI
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'src/Ui/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'src/Ui/**'
   workflow_dispatch:
 
 env:
-  APP_NAME: bbt.endorsement
+  APP_NAME: bbt-endorsement-ui
   NAMESPACE: bbt-endorsement
   CLUSTER_NAME: Endorsement
   CLUSTER_RESOURCE_GROUP: Endorsement_group
   SECRET: docker-hub
 
 jobs:
-  ci-cd:
+  ci-cd-ui:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,11 +30,11 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push Api
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./src/Api/Dockerfile
+          file: ./Dockerfile.Worker.App
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
 
@@ -59,9 +63,8 @@ jobs:
       - uses: azure/k8s-deploy@v1
         with:
           manifests: |
-            ${{ github.workspace }}/manifests/deployment.yaml
-            ${{ github.workspace }}/manifests/service.yaml
-          # ${{ github.workspace }}/manifests/ingress.yaml
+            ${{ github.workspace }}/manifests/Ui/deployment.yaml
+            ${{ github.workspace }}/manifests/Ui/service.yaml
           images: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
           imagepullsecrets: |
