@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Application.Approvals.Queries.GetWantApprovalsDetails
 {
-    public class GetWantApprovalDetailsQuery : IRequest<Response<List<GetWantApprovalDetailsDto>>>
+    public class GetWantApprovalDetailsQuery : IRequest<Response<GetWantApprovalDetailsDto>>
     {
         /// <summary>
         /// Onay Id
@@ -19,12 +19,12 @@ namespace Application.Approvals.Queries.GetWantApprovalsDetails
     /// <summary>
     /// İstedigim Onaylar Detay Sayfası
     /// </summary>
-    public class GetWantApprovalDetailQueryHandler : IRequestHandler<GetWantApprovalDetailsQuery, Response<List<GetWantApprovalDetailsDto>>>
+    public class GetWantApprovalDetailQueryHandler : IRequestHandler<GetWantApprovalDetailsQuery, Response<GetWantApprovalDetailsDto>>
     {
-        public async Task<Response<List<GetWantApprovalDetailsDto>>> Handle(GetWantApprovalDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetWantApprovalDetailsDto>> Handle(GetWantApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var list = new List<GetWantApprovalDetailsDto>();
-            return Response<List<GetWantApprovalDetailsDto>>.Success(list, 200);
+            var result = new GetWantApprovalDetailsDto();
+            return Response<GetWantApprovalDetailsDto>.Success(result, 200);
         }
     }
 }

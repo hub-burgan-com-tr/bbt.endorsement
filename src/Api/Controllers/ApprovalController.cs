@@ -4,6 +4,7 @@ using System.Net;
 using Application.Approvals.Commands.CreateApprovalCommands;
 using Application.Approvals.Commands.UpdateApprovalCommands;
 using Application.Approvals.Queries.GetApprovalsDetails;
+using Application.Approvals.Queries.GetApprovalsDocumentDetails;
 using Application.Approvals.Queries.GetMyApprovals;
 using Application.Approvals.Queries.GetMyApprovalsDetails;
 using Application.Approvals.Queries.GetWantApprovals;
@@ -36,7 +37,7 @@ namespace Api.Controllers
         )]
         [Route("create")]
         [HttpPost]
-        [SwaggerResponse(201, "Success, endorsement order is created successfully", typeof(List<CreateApprovalCommandDto>))]
+        [SwaggerResponse(201, "Success, endorsement order is created successfully", typeof(CreateApprovalCommandDto))]
         [SwaggerResponse(400, "Approval is not found", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -107,7 +108,7 @@ namespace Api.Controllers
         )]
         [Route("approval-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, approval detail is returned successfully.", typeof(List<GetApprovalDetailsDto>))]
+        [SwaggerResponse(200, "Success, approval detail is returned successfully.", typeof(GetApprovalDetailsDto))]
         [SwaggerResponse(404, "Approval detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -116,6 +117,29 @@ namespace Api.Controllers
             await Mediator.Send(new GetApprovalDetailsQuery() { ApprovalId = approvalId });
             return Ok();
         }
+
+        /// <summary>
+        ///  Onayımdakiler Belge Detay sayfası
+        /// </summary>
+        /// <param name="approvalId"></param>
+        /// <returns></returns>
+        /// <response code="404">If the item is null</response>
+        [SwaggerOperation(
+            Summary = "Query endorsement approval document detail.",
+            Tags = new[] { "Endorsement" }
+        )]
+        [Route("approval-document-detail")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, approval document detail is returned successfully.", typeof(GetApprovalDocumentDetailsDto))]
+        [SwaggerResponse(404, "Approval document detail is not found.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetApprovalDocumentDetailAsync([FromBody] int approvalId)
+        {
+            await Mediator.Send(new GetApprovalDocumentDetailsQuery() { ApprovalId = approvalId });
+            return Ok();
+        }
+
         #endregion
         #endregion
         #region Onayladıklarım Listesi ve Detay Sayfası
@@ -205,7 +229,7 @@ namespace Api.Controllers
         )]
         [Route("want-approval-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried want approval detail are returned successfully.", typeof(List<GetWantApprovalDetailsDto>))]
+        [SwaggerResponse(200, "Success, queried want approval detail are returned successfully.", typeof(GetWantApprovalDetailsDto))]
         [SwaggerResponse(404, "Success but there is no want approval detail available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -254,7 +278,7 @@ namespace Api.Controllers
         )]
         [Route("watch-approval-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried watch approval detail are returned successfully.", typeof(List<GetWatchApprovalDetailsDto>))]
+        [SwaggerResponse(200, "Success, queried watch approval detail are returned successfully.", typeof(GetWatchApprovalDetailsDto))]
         [SwaggerResponse(404, "Success but there is no watch approval detail  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
