@@ -19,4 +19,4 @@ spec:
       - name: endorsement-ui
         image: burganbank/bbt-endorsement-ui:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 80
