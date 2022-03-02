@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using Application.Endorsements.Commands.CancelOrders;
+using Application.Endorsements.Queries.GetOrderDocuments;
 
 namespace Api.Controllers
 {
@@ -133,11 +134,14 @@ namespace Api.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetOrderDocument(
+        public async Task<Response<OrderDocumentResponse>> GetOrderDocument(
             [FromRoute] Guid orderId
             )
         {
-            throw new NotImplementedException();
+            return await Mediator.Send(new GetOrderDocumentQuery
+            {
+                OrderId = orderId
+            })
         }
 
 

@@ -18,6 +18,7 @@ namespace Api.Controllers
     {
         #region Belge Ekleme Güncelleme Ve Silme
         #region Belge Ekleme
+
         /// <summary>
         ///  Belge Ekleme
         /// </summary>
@@ -39,7 +40,9 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+
         #endregion
+
         /// <summary>
         /// Belge Güncelleme
         /// </summary>
@@ -62,6 +65,7 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
+
         #endregion
 
         #region Belge Detay
