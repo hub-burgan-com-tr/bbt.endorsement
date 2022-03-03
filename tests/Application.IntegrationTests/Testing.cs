@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Infrastructure.Persistence;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -25,6 +27,16 @@ public class Testing
             .AddEnvironmentVariables();
 
         _configuration = builder.Build();
+
+        _checkpoint = new Checkpoint();
+    }
+    private static void EnsureDatabase()
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        context.Database.Migrate();
     }
 
     public static async Task ResetState()
