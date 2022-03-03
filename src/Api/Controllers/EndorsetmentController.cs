@@ -11,6 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using Application.Endorsements.Commands.CancelOrders;
 using Application.Endorsements.Queries.GetOrderDocuments;
+using Application.Endorsements.Commands.ApproveOrderDocuments;
 
 namespace Api.Controllers
 {
@@ -153,12 +154,12 @@ namespace Api.Controllers
         [HttpPatch]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult ApproveOrderDocument(
+        public async Task<Response<ApproveOrderDocumentResponse>> ApproveOrderDocument(
             [FromRoute] Guid orderId,
             [FromRoute] Guid documentId
             )
         {
-            throw new NotImplementedException();
+            return await Mediator.Send(new ApproveOrderDocumentCommand { OrderId = orderId, DocumentId = documentId });
         }
     }
 }
