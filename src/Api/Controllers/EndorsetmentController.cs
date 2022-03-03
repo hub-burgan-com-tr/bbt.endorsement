@@ -141,7 +141,7 @@ namespace Api.Controllers
             return await Mediator.Send(new GetOrderDocumentQuery
             {
                 OrderId = orderId
-            })
+            });
         }
 
 
