@@ -1,4 +1,5 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using MediatR;
 
 namespace Application.Endorsements.Queries.GetOrders
@@ -17,6 +18,13 @@ namespace Application.Endorsements.Queries.GetOrders
 
     public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, Response<OrderItem[]>>
     {
+        private IApplicationDbContext _context;
+
+        public GetOrdersQueryHandler(IApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<Response<OrderItem[]>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
         {
             var orderItems = new List<OrderItem>();
