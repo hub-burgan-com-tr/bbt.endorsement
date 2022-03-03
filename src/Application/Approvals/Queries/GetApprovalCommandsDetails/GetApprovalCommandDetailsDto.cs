@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Documents.Commands.CreateDocumentCommands;
 
-namespace Application.Approvals.Commands.CreateApprovalCommands
+namespace Application.Approvals.Queries.GetApprovalCommandsDetails
 {
-    public class CreateApprovalCommandDto
+    public class GetApprovalCommandDetailsDto
     {
         /// <summary>
-        /// InstanceId
+        /// Onay Id
         /// </summary>
-        public string InstanceId { get; set; }
+        public int ApprovalId { get; set; }
         /// <summary>
         ///Baslik
         /// </summary>
@@ -41,17 +40,9 @@ namespace Application.Approvals.Commands.CreateApprovalCommands
         /// Hatırlatma Sayısı
         /// </summary>
         public int MaxRetryCount { get; set; }
-   
-        /// <summary>
-        /// Onay Id
-        /// </summary>
-        public int ApprovalId { get; set; }
         /// <summary>
         /// Onaylar
         /// </summary>
         public string Approver { get; set; }
-      
     }
-
-   
 }

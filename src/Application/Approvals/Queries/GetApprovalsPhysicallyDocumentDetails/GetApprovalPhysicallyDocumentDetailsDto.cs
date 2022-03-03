@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Approvals.Queries.GetApprovalsDocumentDetails
+﻿namespace Application.Approvals.Queries.GetApprovalsPhysicallyDocumentDetails
 {
-    public class GetApprovalDocumentDetailsDto
+    public class GetApprovalPhysicallyDocumentDetailsDto
     {
         /// <summary>
         /// Onay Ad

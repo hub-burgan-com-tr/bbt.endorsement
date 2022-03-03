@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Application.Approvals.Commands.CreateApprovalCommands;
 using Application.Approvals.Commands.UpdateApprovalCommands;
+using Application.Approvals.Queries.GetApprovalCommandsDetails;
 using Application.Approvals.Queries.GetApprovalsDetails;
-using Application.Approvals.Queries.GetApprovalsDocumentDetails;
+using Application.Approvals.Queries.GetApprovalsDocumentList;
+using Application.Approvals.Queries.GetApprovalsFormDocumentDetail;
+using Application.Approvals.Queries.GetApprovalsPhysicallyDocumentDetails;
 using Application.Approvals.Queries.GetMyApprovals;
 using Application.Approvals.Queries.GetMyApprovalsDetails;
 using Application.Approvals.Queries.GetWantApprovals;
@@ -23,10 +26,8 @@ namespace Api.Controllers
     [ApiController]
     public class ApprovalController : ApiControllerBase
     {
-        #region Onay Ekleme ve Güncelleme
-        #region OnayEkleme
         /// <summary>
-        ///  Onay Ekleme
+        ///  Yeni Onay Emri
         /// </summary>
         /// <param name="command"></param>
         /// <returns>Response</returns>
@@ -37,7 +38,7 @@ namespace Api.Controllers
         )]
         [Route("create")]
         [HttpPost]
-        [SwaggerResponse(201, "Success, endorsement order is created successfully", typeof(CreateApprovalCommandDto))]
+        [SwaggerResponse(201, "Success, endorsement order is created successfully", typeof(int))]
         [SwaggerResponse(400, "Approval is not found", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -46,10 +47,31 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
-        #endregion
-        #region Onay Guncelleme
+
         /// <summary>
-        ///  Onay Guncelle
+        ///  Yeni Onay Emri  Detay sayfası
+        /// </summary>
+        /// <param name="approvalId"></param>
+        /// <returns></returns>
+        /// <response code="404">If the item is null</response>
+        [SwaggerOperation(
+            Summary = "Query endorsement approval command detail.",
+            Tags = new[] { "Endorsement" }
+        )]
+        [Route("detail")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, approval command detail is returned successfully.", typeof(GetApprovalCommandDetailsDto))]
+        [SwaggerResponse(404, "Approval command detail is not found.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetApprovalCommandDetailAsync([FromBody] int approvalId)
+        {
+            await Mediator.Send(new GetApprovalCommandDetailsDto(){ ApprovalId = approvalId });
+            return Ok();
+        }
+
+        /// <summary>
+        ///  Yeni Onay Emri Guncelle
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -60,7 +82,7 @@ namespace Api.Controllers
         )]
         [Route("update")]
         [HttpPut]
-        [SwaggerResponse(201, "Success, endorsement order is updated successfully", typeof(bool))]
+        [SwaggerResponse(201, "Success, endorsement order is updated successfully", typeof(int))]
         [SwaggerResponse(400, "Approval is not found", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -69,10 +91,8 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
-        #endregion
-        #endregion
-        #region Onayimdakiler Listesi ve Detay Sayfası
-        #region Onayimdakiler Listesi
+
+        
         /// <summary>
         ///  Onayımdakiler Listesi
         /// </summary>
@@ -94,8 +114,6 @@ namespace Api.Controllers
             await Mediator.Send(new GetApprovalQuery { InstanceId = instanceId });
             return Ok();
         }
-        #endregion
-        #region Onayimdakiler Detay Sayfası
         /// <summary>
         ///  Onayımdakiler Detay sayfası
         /// </summary>
@@ -108,7 +126,7 @@ namespace Api.Controllers
         )]
         [Route("approval-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, approval detail is returned successfully.", typeof(GetApprovalDetailsDto))]
+        [SwaggerResponse(200, "Success, approval detail is returned successfully.", typeof(List<GetApprovalDetailsDto>))]
         [SwaggerResponse(404, "Approval detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -119,29 +137,72 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        ///  Onayımdakiler Belge Detay sayfası
+        ///  Onayımdakiler Fiziksel Belge Detay sayfası
         /// </summary>
         /// <param name="approvalId"></param>
         /// <returns></returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
-            Summary = "Query endorsement approval document detail.",
+            Summary = "Query endorsement approval physically document detail.",
             Tags = new[] { "Endorsement" }
         )]
-        [Route("approval-document-detail")]
+        [Route("approval-physically-document-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, approval document detail is returned successfully.", typeof(GetApprovalDocumentDetailsDto))]
-        [SwaggerResponse(404, "Approval document detail is not found.", typeof(void))]
+        [SwaggerResponse(200, "Success, approval physically document detail is returned successfully.", typeof(List<GetApprovalPhysicallyDocumentDetailsDto>))]
+        [SwaggerResponse(404, "Approval physically document detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalDocumentDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetApprovalPhysicallyDocumentDetailAsync([FromBody] int approvalId)
         {
-            await Mediator.Send(new GetApprovalDocumentDetailsQuery() { ApprovalId = approvalId });
+            await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { ApprovalId = approvalId });
             return Ok();
         }
 
-        #endregion
-        #endregion
+        /// <summary>
+        ///  Onayımdakiler form Belge Detay sayfası
+        /// </summary>
+        /// <param name="approvalId"></param>
+        /// <returns></returns>
+        /// <response code="404">If the item is null</response>
+        [SwaggerOperation(
+            Summary = "Query endorsement approval form document detail.",
+            Tags = new[] { "Endorsement" }
+        )]
+        [Route("approval-form-document-detail")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, approval form document detail is returned successfully.", typeof(List<GetApprovalPhysicallyDocumentDetailsDto>))]
+        [SwaggerResponse(404, "Approval form document detail is not found.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromBody] int approvalId)
+        {
+            await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { ApprovalId = approvalId });
+            return Ok();
+        }
+
+
+        /// <summary>
+        ///  Onayımdakiler  Belge Listesi
+        /// </summary>
+        /// <param name="approvalId"></param>
+        /// <returns></returns>
+        /// <response code="404">If the item is null</response>
+        [SwaggerOperation(
+            Summary = "Query endorsement approval  document list.",
+            Tags = new[] { "Endorsement" }
+        )]
+        [Route("approval-document-list")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, approval  document list is returned successfully.", typeof(List<GetApprovalsDocumentListDto>))]
+        [SwaggerResponse(404, "Approval  document list is not found.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetApprovalDocumentListAsync([FromBody] int approvalId)
+        {
+            await Mediator.Send(new GetApprovalsDocumentListQuery() { ApprovalId = approvalId });
+            return Ok();
+        }
+
         #region Onayladıklarım Listesi ve Detay Sayfası
         #region Onayladıklarım Listesi
         /// <summary>

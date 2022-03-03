@@ -16,10 +16,7 @@ namespace Application.Approvals.Queries.GetWatchApprovals
     /// Onay Isteyen
     /// </summary>
         public string SeekingApproval { get; set; }
-        /// <summary>
-        /// AdSoyad
-        /// </summary>
-    public string FirstAndSurname { get; set; }
+     
 
     }
 

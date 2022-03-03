@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Approvals.Commands.CreateApprovalCommands;
 
-public class CreateApprovalCommand : IRequest<Response<CreateApprovalCommandDto>>
+public class CreateApprovalCommand : IRequest<Response<int>>
 {
     /// <summary>
     /// InstanceId
@@ -41,7 +41,7 @@ public class CreateApprovalCommand : IRequest<Response<CreateApprovalCommandDto>
     public int MaxRetryCount { get; set; }
 }
 
-public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalCommand, Response<CreateApprovalCommandDto>>
+public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalCommand, Response<int>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -55,10 +55,9 @@ public class CreateApprovalCommandHandler : IRequestHandler<CreateApprovalComman
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Response<CreateApprovalCommandDto>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
+    public async Task<Response<int>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
     {
-        var result = new CreateApprovalCommandDto();
-        return Response<CreateApprovalCommandDto>.Success(result, 200);
+        return Response<int>.Success(1, 200);
     }
     //public async Task<Response<bool>> Handle(CreateApprovalCommand request, CancellationToken cancellationToken)
     //{

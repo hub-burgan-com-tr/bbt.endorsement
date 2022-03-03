@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Application.ApproverForms.Queries.GetApproverForm;
 using Application.OrderForms.Commands.CreateOrderFormCommands;
 using Application.OrderForms.Queries.GetForms;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,10 @@ namespace Api.Controllers
     [ApiController]
     public class OrderFormController : ApiControllerBase
     {
-        #region Form Listese Ve Ekleme 
-        #region Form Listesi
+        
         /// <summary>
         ///  Form Listesi
         /// </summary>
-        /// <param name="instanceId"></param>
         /// <returns>Response</returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
@@ -36,12 +35,9 @@ namespace Api.Controllers
             await Mediator.Send(new GetFormQuery { InstanceId = instanceId });
             return Ok();
         }
-        #endregion
-        #region Form ile Emir Ekle
         /// <summary>
         ///  Form ile Emir Ekle
         /// </summary>
-        /// <param name="instanceId"></param>
         /// <returns>Response</returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
@@ -58,9 +54,27 @@ namespace Api.Controllers
         {
             await Mediator.Send(command);
             return Ok();
-        }  
-        #endregion
-        #endregion
+        }
 
+        /// <summary>
+        ///  Form ve Onaycı Listesi
+        /// </summary>
+        /// <returns>Response</returns>
+        /// <response code="404">If the item is null</response>
+        [SwaggerOperation(
+            Summary = "Query endorsement form and  approver commands.",
+            Tags = new[] { "Endorsement  Form and approver Command" }
+        )]
+        [Route("form")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, queried form and  approver commands are returned successfully.", typeof(List<GetApproverFormDto>))]
+        [SwaggerResponse(404, "Success but there is no form and approver commands available for the query.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetFormApproverCommandAsync([FromBody] int FormId)
+        {
+            await Mediator.Send(new GetApproverFormQuery() { FormId = FormId });
+            return Ok();
+        }
     }
 }

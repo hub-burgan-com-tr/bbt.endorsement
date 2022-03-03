@@ -2,6 +2,7 @@
 using Application.Documents.Commands.CreateDocumentCommands;
 using Application.Documents.Commands.DeleteDocumentCommands;
 using Application.Documents.Commands.Queries.GetDocumentDetails;
+using Application.Documents.Commands.Queries.GetDocuments;
 using Application.Documents.Commands.UpdateDocumentCommands;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -16,8 +17,28 @@ namespace Api.Controllers
     [ApiController]
     public class DocumentController : ApiControllerBase
     {
-        #region Belge Ekleme Güncelleme Ve Silme
-        #region Belge Ekleme
+
+        /// <summary>
+        ///  Belge Listeleme
+        /// </summary>
+        /// <param name="approvalId"></param>
+        /// <returns></returns>
+        /// <response code="404">If the item is null</response>
+        [SwaggerOperation(
+            Summary = "Query endorsement approval document list.",
+            Tags = new[] { "Endorsement" }
+        )]
+        [Route("list")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, approval document list is returned successfully.", typeof(List<GetDocumentsDto>))]
+        [SwaggerResponse(404, "Approval document list is not found.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetDocumentAsync([FromBody] int approvalId)
+        {
+            await Mediator.Send(new GetDocumentsQueryDto() { ApprovalId = approvalId });
+            return Ok();
+        }
 
         /// <summary>
         ///  Belge Ekleme
@@ -31,7 +52,7 @@ namespace Api.Controllers
         )]
         [Route("create")]
         [HttpPost]
-        [SwaggerResponse(201, "Success, endorsement document is created successfully", typeof(List<CreateDocumentCommandDto>))]
+        [SwaggerResponse(201, "Success, endorsement document is created successfully", typeof(int))]
         [SwaggerResponse(400, "Document is not found", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -41,7 +62,6 @@ namespace Api.Controllers
             return Ok();
         }
 
-        #endregion
 
         /// <summary>
         /// Belge Güncelleme
@@ -56,7 +76,7 @@ namespace Api.Controllers
         )]
         [Route("update")]
         [HttpPut]
-        [SwaggerResponse(201, "Success, endorsement document is updated successfully", typeof(List<UpdateDocumentCommandDto>))]
+        [SwaggerResponse(201, "Success, endorsement document is updated successfully", typeof(int))]
         [SwaggerResponse(400, "Document is not found", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -68,7 +88,6 @@ namespace Api.Controllers
 
         #endregion
 
-        #region Belge Detay
         [Route("detail")]
         [HttpGet]
         [SwaggerResponse(200, "Success, document detail is returned successfully.", typeof(GetDocumentDetailsDto))]
@@ -80,8 +99,7 @@ namespace Api.Controllers
             await Mediator.Send(new GetDocumentDetailsQuery() { Id = Id });
             return Ok();
         }
-        #endregion
-        #region Belge Silme 
+        
         /// <summary>
         /// Belge Silme
         /// </summary>
@@ -94,7 +112,7 @@ namespace Api.Controllers
         )]
         [Route("delete")]
         [HttpDelete]
-        [SwaggerResponse(201, "Success, endorsement document is deleted successfully", typeof(List<DeleteDocumentCommandDto>))]
+        [SwaggerResponse(201, "Success, endorsement document is deleted successfully", typeof(int))]
         [SwaggerResponse(400, "Document is not found", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -103,8 +121,7 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }  
-        #endregion
-        #endregion
+       
     }
 
 

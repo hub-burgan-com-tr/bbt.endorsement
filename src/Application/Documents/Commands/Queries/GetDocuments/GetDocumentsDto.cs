@@ -1,6 +1,12 @@
-﻿namespace Application.Documents.Commands.CreateDocumentCommands
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Documents.Commands.Queries.GetDocuments
 {
-    public class CreateDocumentCommandDto
+    public class GetDocumentsDto
     {
         /// <summary>
         /// Id
@@ -26,10 +32,5 @@
         /// Belge Onay Ad
         /// </summary>
         public string DocumentApproved { get; set; }
-
-
     }
-
-  
-
 }

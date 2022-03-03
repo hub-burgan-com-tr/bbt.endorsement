@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 namespace Application.Documents.Commands.CreateDocumentCommands
 {
-    public class CreateDocumentCommand : IRequest<Response<List<CreateDocumentCommandDto>>>
+    public class CreateDocumentCommand : IRequest<Response<int>>
     {
         /// <summary>
         /// Dosya
@@ -54,17 +54,16 @@ namespace Application.Documents.Commands.CreateDocumentCommands
     /// <summary>
     /// Belge Ekleme Servisi
     /// </summary>
-    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, Response<List<CreateDocumentCommandDto>>>
+    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, Response<int>>
     {
         private readonly IApplicationDbContext _context;
         public CreateDocumentCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task<Response<List<CreateDocumentCommandDto>>> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<Response<int>> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
-            var list = new List<CreateDocumentCommandDto>();
-            return Response<List<CreateDocumentCommandDto>>.Success(list, 200);
+            return Response<int>.Success(1, 200);
         }
        
     }
