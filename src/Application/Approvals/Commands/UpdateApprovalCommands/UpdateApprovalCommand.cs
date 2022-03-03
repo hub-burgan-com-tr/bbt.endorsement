@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Approvals.Commands.UpdateApprovalCommands;
 
-public class UpdateApprovalCommand : IRequest<Response<bool>>
+public class UpdateApprovalCommand : IRequest<Response<int>>
 {
     /// <summary>
     /// Onay Id
@@ -44,7 +44,7 @@ public class UpdateApprovalCommand : IRequest<Response<bool>>
     public int MaxRetryCount { get; set; }
 }
 
-public class UpdateApprovalCommandHandler : IRequestHandler<UpdateApprovalCommand, Response<bool>>
+public class UpdateApprovalCommandHandler : IRequestHandler<UpdateApprovalCommand, Response<int>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -58,9 +58,9 @@ public class UpdateApprovalCommandHandler : IRequestHandler<UpdateApprovalComman
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Response<bool>> Handle(UpdateApprovalCommand request, CancellationToken cancellationToken)
+    public async Task<Response<int>> Handle(UpdateApprovalCommand request, CancellationToken cancellationToken)
     {
-        return Response<bool>.Success(data:true, 200);
+        return Response<int>.Success(data:1, 200);
     }
 
 }

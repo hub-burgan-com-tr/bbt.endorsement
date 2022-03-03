@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Application.Documents.Commands.DeleteDocumentCommands
 {
-    public class DeleteDocumentCommand : IRequest<Response<List<DeleteDocumentCommandDto>>>
+    public class DeleteDocumentCommand : IRequest<Response<int>>
     { 
         /// <summary>
         /// Id
@@ -18,7 +18,7 @@ namespace Application.Documents.Commands.DeleteDocumentCommands
         public int Id { get; set; }
     }
 
-    public class DeleteDocumentCommandHandler : IRequestHandler<DeleteDocumentCommand, Response<List<DeleteDocumentCommandDto>>>
+    public class DeleteDocumentCommandHandler : IRequestHandler<DeleteDocumentCommand, Response<int>>
     {
         private readonly IApplicationDbContext _context;
         public DeleteDocumentCommandHandler(IApplicationDbContext context)
@@ -31,10 +31,9 @@ namespace Application.Documents.Commands.DeleteDocumentCommands
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<Response<List<DeleteDocumentCommandDto>>> Handle(DeleteDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<Response<int>> Handle(DeleteDocumentCommand request, CancellationToken cancellationToken)
         {
-            var list = new List<DeleteDocumentCommandDto>();
-            return Response<List<DeleteDocumentCommandDto>>.Success(list, 200);
+            return Response<int>.Success(1, 200);
         }
 
     }

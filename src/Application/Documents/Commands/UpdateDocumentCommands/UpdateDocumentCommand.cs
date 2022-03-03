@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Documents.Commands.UpdateDocumentCommands
 {
-    public class UpdateDocumentCommand :CreateDocumentCommand, IRequest<Response<List<UpdateDocumentCommandDto>>>
+    public class UpdateDocumentCommand :CreateDocumentCommand, IRequest<Response<int>>
     {
         /// <summary>
         /// Id
@@ -22,17 +22,16 @@ namespace Application.Documents.Commands.UpdateDocumentCommands
     /// <summary>
     /// Belge Guncelleme
     /// </summary>
-    public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentCommand, Response<List<UpdateDocumentCommandDto>>>
+    public class UpdateDocumentCommandHandler : IRequestHandler<UpdateDocumentCommand, Response<int>>
     {
         private readonly IApplicationDbContext _context;
         public UpdateDocumentCommandHandler(IApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task<Response<List<UpdateDocumentCommandDto>>> Handle(UpdateDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<Response<int>> Handle(UpdateDocumentCommand request, CancellationToken cancellationToken)
         {
-            var list = new List<UpdateDocumentCommandDto>();
-            return Response<List<UpdateDocumentCommandDto>>.Success(list, 200);
+            return Response<int>.Success(1, 200);
         }
 
     }

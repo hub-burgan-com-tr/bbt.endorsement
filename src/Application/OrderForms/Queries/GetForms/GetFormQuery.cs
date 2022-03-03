@@ -14,7 +14,7 @@ namespace Application.OrderForms.Queries.GetForms
     /// <summary>
     /// Form Listesi
     /// </summary>
-    public class GetFormApprovalQueryHandler : IRequestHandler<GetFormQuery, Response<List<GetFormDto>>>
+    public class GetFormQueryHandler : IRequestHandler<GetFormQuery, Response<List<GetFormDto>>>
     {
         public async Task<Response<List<GetFormDto>>> Handle(GetFormQuery request, CancellationToken cancellationToken)
         {

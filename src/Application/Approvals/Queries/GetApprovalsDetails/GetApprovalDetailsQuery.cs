@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Approvals.Queries.GetApprovalsDetails
 {
-    public class GetApprovalDetailsQuery : IRequest<Response<GetApprovalDetailsDto>>
+    public class GetApprovalDetailsQuery : IRequest<Response<List<GetApprovalDetailsDto>>>
     {
         /// <summary>
         /// Onay Id
@@ -13,12 +13,12 @@ namespace Application.Approvals.Queries.GetApprovalsDetails
     /// <summary>
     /// Onayimdakiler Detay Sayfasi
     /// </summary>
-    public class GetApprovalDetailQueryHandler : IRequestHandler<GetApprovalDetailsQuery, Response<GetApprovalDetailsDto>>
+    public class GetApprovalDetailQueryHandler : IRequestHandler<GetApprovalDetailsQuery, Response<List<GetApprovalDetailsDto>>>
     {
-        public async Task<Response<GetApprovalDetailsDto>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<GetApprovalDetailsDto>>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var result = new GetApprovalDetailsDto();
-            return Response<GetApprovalDetailsDto>.Success(result, 200);
+            var list = new List<GetApprovalDetailsDto>();
+            return Response<List<GetApprovalDetailsDto>>.Success(list, 200);
         }
     }
 }
