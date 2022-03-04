@@ -10,29 +10,45 @@ namespace Api.Controllers
     /// <summary>
     /// Form İşlemleri 
     /// </summary>
-    [Route("api/v1/[controller]")]
+    [Route("Forms")]
     [ApiController]
-    public class OrderFormController : ApiControllerBase
+    public class FormController : ApiControllerBase
     {
-        
-        /// <summary>
-        ///  Form Listesi
-        /// </summary>
-        /// <returns>Response</returns>
-        /// <response code="404">If the item is null</response>
         [SwaggerOperation(
-            Summary = "Query endorsement form commands.",
-            Tags = new[] { "Endorsement Form Command" }
+            Summary = "Creates or updates form definition",
+            Description = "Form definitons are stored as a form.io schema. All forms stored with tag data. Tags are primary query elements of form"
         )]
-        [Route("form")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, queried form commands are returned successfully.", typeof(List<GetFormDto>))]
-        [SwaggerResponse(404, "Success but there is no form commands available for the query.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetFormCommandAsync([FromBody] string instanceId)
+        [Route("")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
+        public async Task<IActionResult> CreateOrUpdateFormAsync([FromBody] FormDefinition data)
         {
-            await Mediator.Send(new GetFormQuery { InstanceId = instanceId });
+            //await Mediator.Send(new GetFormQuery { InstanceId = instanceId });
+            return Ok();
+        }
+
+        public class FormDefinition
+        {
+            public string Name { get; set; }
+            public string Label { get; set; }
+            public string[] Tags { get; set; }
+            /// <summary>
+            /// If form data is used for rendering a document, render data with dedicated template in template engine.
+            /// </summary>
+            public string TemplateName { get; set; }
+        }
+
+        [SwaggerOperation(
+           Summary = "Get forms by tag",
+           Description = "Get forms by tag"
+       )]
+        [Route("")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, forms are returned successfully.", typeof(FormDefinition[]))]
+        [SwaggerResponse(204, "There is not available any form.", typeof(void))]
+        public async Task<IActionResult> GetByTagFormAsync([FromQuery] string[] tags)
+        {
             return Ok();
         }
         /// <summary>
@@ -41,18 +57,15 @@ namespace Api.Controllers
         /// <returns>Response</returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
-            Summary = "Create new endorsement form commands. After endorsement is created, process is started immediately.",
-            Tags = new[] { "Endorsement Form Command" }
-        )]
-        [Route("create")]
-        [HttpPost]
-        [SwaggerResponse(201, "Success, endorsement form command is created successfully", typeof(bool))]
-        [SwaggerResponse(400, "Form command is not found", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateFormCommandAsync([FromBody] CreateOrderFormCommand command)
+           Summary = "Get form by name",
+           Description = "Returns form by name"
+       )]
+        [Route("{name}")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(FormDefinition))]
+        [SwaggerResponse(404, "Form not found.", typeof(void))]
+        public async Task<IActionResult> GetFormAsync([FromRoute] string  name)
         {
-            await Mediator.Send(command);
             return Ok();
         }
 
