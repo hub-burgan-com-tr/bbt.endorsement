@@ -26,7 +26,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement approval document list.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Document" }
         )]
         [Route("list")]
         [HttpGet]
@@ -48,7 +48,7 @@ namespace Api.Controllers
         /// <response code="400">If the item is null</response>
         [SwaggerOperation(
             Summary = "Create new endorsement document. After endorsement document is created, process is started immediately.",
-            Tags = new[] { "Endorsement Document" }
+            Tags = new[] { "Document" }
         )]
         [Route("create")]
         [HttpPost]
@@ -72,7 +72,7 @@ namespace Api.Controllers
         #region Belge Guncelleme
         [SwaggerOperation(
             Summary = "Update new endorsement document. After endorsement document is updated, process is started immediately.",
-            Tags = new[] { "Endorsement Document" }
+            Tags = new[] { "Document" }
         )]
         [Route("update")]
         [HttpPut]
@@ -87,7 +87,10 @@ namespace Api.Controllers
         }
 
         #endregion
-
+        [SwaggerOperation(
+            Summary = "Query endorsement approval document detail.",
+            Tags = new[] { "Document" }
+        )]
         [Route("detail")]
         [HttpGet]
         [SwaggerResponse(200, "Success, document detail is returned successfully.", typeof(GetDocumentDetailsDto))]
@@ -108,7 +111,7 @@ namespace Api.Controllers
         /// <response code="400">If the item is null</response>
         [SwaggerOperation(
             Summary = "Delete new endorsement document. After endorsement document is deleted, process is started immediately.",
-            Tags = new[] { "Endorsement Document" }
+            Tags = new[] { "Document" }
         )]
         [Route("delete")]
         [HttpDelete]

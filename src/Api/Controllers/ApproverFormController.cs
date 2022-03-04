@@ -26,7 +26,7 @@ namespace Api.Controllers
 
         [SwaggerOperation(
             Summary = "Create new endorsement approver form. After endorsement is created, process is started immediately.",
-            Tags = new[] { "Endorsement Approver Form" }
+            Tags = new[] { "Approver Form" }
         )]
         [Route("create")]
         [HttpPost]
@@ -50,7 +50,7 @@ namespace Api.Controllers
 
         [SwaggerOperation(
             Summary = "Create new endorsement approver form. After endorsement is created, process is started immediately.",
-            Tags = new[] { "Endorsement Approver Form" }
+            Tags = new[] { "Approver Form" }
         )]
         [Route("update")]
         [HttpPost]
@@ -72,7 +72,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement approver form detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approver Form" }
         )]
         [Route("detail")]
         [HttpGet]

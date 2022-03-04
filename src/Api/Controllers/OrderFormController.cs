@@ -75,8 +75,8 @@ namespace Api.Controllers
         /// <returns>Response</returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
-            Summary = "Query endorsement form and  approver commands.",
-            Tags = new[] { "Endorsement  Form and approver Command" }
+            Summary = "Get form and approver by name",
+            Description = "Returns form and approver by name"
         )]
         [Route("form-approver")]
         [HttpGet]
