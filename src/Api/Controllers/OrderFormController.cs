@@ -65,7 +65,7 @@ namespace Api.Controllers
             Summary = "Query endorsement form and  approver commands.",
             Tags = new[] { "Endorsement  Form and approver Command" }
         )]
-        [Route("form")]
+        [Route("form-approver")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried form and  approver commands are returned successfully.", typeof(List<GetApproverFormDto>))]
         [SwaggerResponse(404, "Success but there is no form and approver commands available for the query.", typeof(void))]

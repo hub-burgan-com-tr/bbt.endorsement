@@ -80,7 +80,7 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Approver form detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApproverFormCommandDetailAsync([FromBody] int AprrovalId,[FromBody]int FormId)
+        public async Task<IActionResult> GetApproverFormCommandDetailAsync([FromQuery] int AprrovalId,[FromQuery]int FormId)
         {
             await Mediator.Send(new GetApproverFormQuery() { ApprovalIdId = AprrovalId,FormId = FormId});
             return Ok();
