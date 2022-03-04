@@ -34,7 +34,7 @@ namespace Api.Controllers
         /// <response code="400">If the item is null</response>
         [SwaggerOperation(
             Summary = "Create new endorsement order. After endorsement is created, process is started immediately.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("create")]
         [HttpPost]
@@ -56,7 +56,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement approval command detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("detail")]
         [HttpGet]
@@ -78,7 +78,7 @@ namespace Api.Controllers
         /// <response code="400">If the item is null</response>
         [SwaggerOperation(
             Summary = "update new endorsement order. After endorsement is updated, process is started immediately.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("update")]
         [HttpPut]
@@ -101,7 +101,7 @@ namespace Api.Controllers
         /// <param name="instanceId">Approval of endorsement order. Type as instanceId.</param>
         [SwaggerOperation(
             Summary = "Query endorsement approvals.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("approval")]
         [HttpGet]
@@ -122,7 +122,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement approval detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("approval-detail")]
         [HttpGet]
@@ -144,7 +144,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement approval physically document detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("approval-physically-document-detail")]
         [HttpGet]
@@ -166,7 +166,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement approval form document detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("approval-form-document-detail")]
         [HttpGet]
@@ -189,7 +189,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement approval  document list.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("approval-document-list")]
         [HttpGet]
@@ -203,8 +203,7 @@ namespace Api.Controllers
             return Ok();
         }
 
-        #region Onayladıklarım Listesi ve Detay Sayfası
-        #region Onayladıklarım Listesi
+        
         /// <summary>
         ///  Onayladıklarım Listesi
         /// </summary>
@@ -213,7 +212,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement my approvals.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("my-approval")]
         [HttpGet]
@@ -226,8 +225,6 @@ namespace Api.Controllers
             await Mediator.Send(new GetMyApprovalQuery { InstanceId = instanceId });
             return Ok();
         }
-        #endregion
-        #region Onayladıklarım Detay Sayfası
         /// <summary>
         ///  Onayladıklarım detay sayfası
         /// </summary>
@@ -236,7 +233,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement my approval detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("my-approval-detail")]
         [HttpGet]
@@ -250,10 +247,8 @@ namespace Api.Controllers
             await Mediator.Send(new GetMyApprovalDetailsQuery { ApprovalId = approvalId });
             return Ok();
         }
-        #endregion
-        #endregion
-        #region İstedigim Onaylar Listesi Ve Detay Sayfası
-        #region İstedigim Onaylar
+       
+      
         /// <summary>
         ///  İstediğim Onaylar Listesi
         /// </summary>
@@ -262,7 +257,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement  want approvals.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("want-approval")]
         [HttpGet]
@@ -276,8 +271,7 @@ namespace Api.Controllers
             await Mediator.Send(new GetWantApprovalQuery { InstanceId = instanceId });
             return Ok();
         }
-        #endregion
-        #region İstedigim Onaylar Detay Sayfası
+       
         /// <summary>
         ///  İstediğim Onaylar detay sayfası
         /// </summary>
@@ -286,7 +280,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement want approval detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("want-approval-detail")]
         [HttpGet]
@@ -299,10 +293,7 @@ namespace Api.Controllers
             await Mediator.Send(new GetWantApprovalDetailsQuery() { ApprovalId = approvalId });
             return Ok();
         }
-        #endregion
-        #endregion
-        #region İzleme Listesi Ve Detay Sayfası
-        #region İzleme Listesi
+       
         /// <summary>
         ///  İzleme Listesi
         /// </summary>
@@ -311,7 +302,7 @@ namespace Api.Controllers
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
             Summary = "Query endorsement watch approvals.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("watch-approval")]
         [HttpGet]
@@ -324,8 +315,7 @@ namespace Api.Controllers
             await Mediator.Send(command);
             return Ok();
         }
-        #endregion
-        #region İzleme Detay Sayfası
+        
         /// <summary>
         ///  İzleme Detay Sayfası
         /// </summary>
@@ -335,7 +325,7 @@ namespace Api.Controllers
 
         [SwaggerOperation(
             Summary = "Query endorsement watch approval detail.",
-            Tags = new[] { "Endorsement" }
+            Tags = new[] { "Approval" }
         )]
         [Route("watch-approval-detail")]
         [HttpGet]
@@ -348,7 +338,6 @@ namespace Api.Controllers
             await Mediator.Send(new GetWatchApprovalDetailsQuery() { ApprovalId = approvalId });
             return Ok();
         }  
-        #endregion
-        #endregion
+       
     }
 }
