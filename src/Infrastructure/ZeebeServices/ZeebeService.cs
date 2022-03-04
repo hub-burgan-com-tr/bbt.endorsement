@@ -9,17 +9,6 @@ using Zeebe.Client.Api.Responses;
 
 namespace Infrastructure.ZeebeServices
 {
-    //public interface IZeebeService
-    //{
-    //    public Task<ITopology> Status();
-    //    public Task<IDeployResponse> Deploy(string modelFilename);
-    //    public Task<string> SendMessage(string instanceId, string messageName, string payload);
-    //    public void StartWorkers(string url);
-    //    public IZeebeClient Client();
-
-    //}
-
-
     public class ZeebeService : IZeebeService
     {
         private readonly IZeebeClient client;
@@ -27,13 +16,15 @@ namespace Infrastructure.ZeebeServices
         private readonly IClientEventService _clientEventService;
         private readonly IServerEventService _serverEventService;
 
-        private readonly string ZeebeUrl = "127.0.0.1:26500";
+        private string ZeebeUrl = "127.0.0.1:26500";
 
         public ZeebeService(ILogger<ZeebeService> logger, IClientEventService clientEventService, IServerEventService eventService, IConfiguration configuration)
         {
             _logger = logger;
             _clientEventService = clientEventService;
             _serverEventService = eventService;
+            var settings = configuration.Get<Configuration.Options.AppSettings>();
+            ZeebeUrl = settings.Zeebe.ZeebeGateway.ToString();
 
             client = ZeebeClient.Builder()
                                 .UseLoggerFactory(new LoggerFactory())

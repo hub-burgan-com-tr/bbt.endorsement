@@ -19,7 +19,7 @@ var app = builder.Build();
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", false, true)
-    .AddJsonFile($"appsettings.{environment}.json", true, true)
+    //.AddJsonFile($"appsettings.{environment}.json", true, true)
     .AddEnvironmentVariables()
     .AddCommandLine(args)
     .AddUserSecrets<Program>()
@@ -33,7 +33,7 @@ using (var scope = app.Services.CreateScope())
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
     if (zeebeService != null)
     {
-        zeebeService.Deploy(settings.ModelFileName);
+        zeebeService.Deploy(settings.Zeebe.ModelFilename);
     }
 
     while (true)
