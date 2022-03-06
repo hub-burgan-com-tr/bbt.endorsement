@@ -73,8 +73,8 @@ jobs:
       - uses: azure/k8s-deploy@v1
         with:
           manifests: |
-            ${{ github.workspace }}/manifests/worker.app/deployment.yaml
-            ${{ github.workspace }}/manifests/worker.app/service.yaml
+            ${{ github.workspace }}/manifests/Worker-app/deployment.yaml
+            ${{ github.workspace }}/manifests/Worker-app/service.yaml
           images: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
           imagepullsecrets: |
