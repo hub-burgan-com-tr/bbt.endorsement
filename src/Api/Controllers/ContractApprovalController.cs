@@ -7,6 +7,7 @@ namespace Api.Controllers
     [ApiController]
     public class ContractApprovalController : ApiControllerBase
     {
+
         [HttpPost("contracts")]
         public async Task<object> Contracts(CreateApprovalRequest request)
         {
