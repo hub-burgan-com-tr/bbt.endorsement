@@ -5,11 +5,14 @@ using Infrastructure;
 using Infrastructure.Configuration.Options;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Worker.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
 
@@ -17,15 +20,14 @@ builder.Services.AddHostedService<ZeebeWorkService>();
 
 var app = builder.Build();
 
-var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+IWebHostEnvironment environment = builder.Environment;
 var configuration = builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
-    .AddJsonFile($"appsettings.{environment}.json", true, true)
+    .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", true, true)
     .AddEnvironmentVariables()
     .AddCommandLine(args)
     .AddUserSecrets<Program>()
     .Build();
-
 var settings = configuration.Get<AppSettings>();
 
 using (var scope = app.Services.CreateScope())
