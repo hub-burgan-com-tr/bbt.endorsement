@@ -4,6 +4,7 @@ using Application.Common.Interfaces;
 using Infrastructure;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Worker.App.Services;
 
@@ -15,13 +16,24 @@ builder.Services.AddHostedService<ZeebeWorkService>();
 
 var app = builder.Build();
 
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", false, true)
+    //.AddJsonFile($"appsettings.{environment}.json", true, true)
+    .AddEnvironmentVariables()
+    .AddCommandLine(args)
+    .AddUserSecrets<Program>()
+    .Build();
+
+var settings = configuration.Get<Infrastructure.Configuration.Options.AppSettings>();
+
 using (var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
     if (zeebeService != null)
     {
-        zeebeService.Deploy("ContractApproval.bpmn");
+        zeebeService.Deploy(settings.Zeebe.ModelFilename);
     }
 
     while (true)

@@ -1,0 +1,6 @@
+﻿{
+  "environmentVariables": {
+    "Test": "Test",
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  }
+}
