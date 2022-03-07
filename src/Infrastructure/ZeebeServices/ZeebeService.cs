@@ -16,7 +16,7 @@ namespace Infrastructure.ZeebeServices
         private readonly IClientEventService _clientEventService;
         private readonly IServerEventService _serverEventService;
 
-        private string ZeebeUrl = "127.0.0.1:26500";
+        private string ZeebeUrl;
 
         public ZeebeService(ILogger<ZeebeService> logger, IClientEventService clientEventService, IServerEventService eventService, IConfiguration configuration)
         {
