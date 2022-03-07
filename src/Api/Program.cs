@@ -45,6 +45,15 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile($"appsettings.{environment}.json", true, true)
+    .AddEnvironmentVariables()
+    .AddCommandLine(args)
+    .AddUserSecrets<Program>()
+    .Build();
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
 
