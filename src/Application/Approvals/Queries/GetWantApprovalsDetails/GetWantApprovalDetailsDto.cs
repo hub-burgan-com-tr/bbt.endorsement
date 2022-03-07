@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Approvals.Commands.CreateApprovalCommands;
-using Application.Documents.Commands.CreateDocumentCommands;
 
 namespace Application.Approvals.Queries.GetWantApprovalsDetails
 {
