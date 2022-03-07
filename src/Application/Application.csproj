@@ -21,10 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Approvals\Commands\DeleteApprovalCommands\" />
-    <Folder Include="ApproverForms\Queries\" />
     <Folder Include="Endorsements\EventHandlers\" />
-    <Folder Include="Documents\Commands\Queries\" />
   </ItemGroup>
 
 </Project>
