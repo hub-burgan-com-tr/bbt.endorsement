@@ -35,11 +35,11 @@ jobs:
           
       - name: Replace DB Secret
         run: |
-          sed -i -e "s/ABCABC/${{DefaultConnection}}/g" ./src/Api/appsettings.json
+          sed -i -e "s/ABCABC/${{ secrets.DefaultConnection }}/g" ./src/Api/appsettings.json
       
       - name: Replace Zeebe Gateway Secret
         run: |
-          sed -i -e "s/ABCABC/${{ZeebeGateway}}/g" ./src/Api/appsettings.json
+          sed -i -e "s/ABCABC/${{ secrets.ZeebeGateway }}/g" ./src/Api/appsettings.json
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
