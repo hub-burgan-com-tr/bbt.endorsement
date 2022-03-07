@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
+using Infrastructure.Configuration.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,17 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(x => x.FullName);
     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
+
+IWebHostEnvironment environment = builder.Environment;
+var configuration = builder.Configuration
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", true, true)
+    .AddEnvironmentVariables()
+    .AddCommandLine(args)
+    .AddUserSecrets<Program>()
+    .Build();
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
