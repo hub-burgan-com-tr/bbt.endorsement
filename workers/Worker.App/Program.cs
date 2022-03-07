@@ -18,7 +18,7 @@ builder.Services.AddHostedService<ZeebeWorkService>();
 var app = builder.Build();
 
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-var configuration = new ConfigurationBuilder()
+var configuration = builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{environment}.json", true, true)
     .AddEnvironmentVariables()
