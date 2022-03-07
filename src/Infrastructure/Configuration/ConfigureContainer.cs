@@ -16,7 +16,7 @@ public static class ConfigureContainer
 
     public static void ConfigureLog(this WebApplicationBuilder builder)
     {
-        builder.WebHost.UseClassifiedAdsLogger(configuration =>
+        builder.WebHost.UseMsLogger(configuration =>
         {
             var appSettings = new AppSettings();
             configuration.Bind(appSettings);

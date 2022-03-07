@@ -16,7 +16,7 @@ using FileOptions = Infrastructure.Logging.Options.FileOptions;
 namespace Infrastructure.Logging;
 public static class LoggingExtensions
 {
-    public static IWebHostBuilder UseClassifiedAdsLogger(this IWebHostBuilder builder, Func<IConfiguration, LoggingOptions> logOptions)
+    public static IWebHostBuilder UseMsLogger(this IWebHostBuilder builder, Func<IConfiguration, LoggingOptions> logOptions)
     {
         builder.ConfigureLogging((context, logging) =>
         {
@@ -38,13 +38,13 @@ public static class LoggingExtensions
                 });
             }
 
-            context.HostingEnvironment.UseClassifiedAdsLogger(options);
+            context.HostingEnvironment.UseMsLogger(options);
         });
 
         return builder;
     }
 
-    private static void UseClassifiedAdsLogger(this IWebHostEnvironment env, LoggingOptions options)
+    private static void UseMsLogger(this IWebHostEnvironment env, LoggingOptions options)
     {
         var assemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
 
