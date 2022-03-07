@@ -1,8 +1,4 @@
-﻿using System.Net;
-using Application.ApproverForms.Queries.GetApproverForm;
-using Application.OrderForms.Commands.CreateOrderFormCommands;
-using Application.OrderForms.Queries.GetForms;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
@@ -69,25 +65,6 @@ namespace Api.Controllers
             return Ok();
         }
 
-        /// <summary>
-        ///  Form ve Onaycı Listesi
-        /// </summary>
-        /// <returns>Response</returns>
-        /// <response code="404">If the item is null</response>
-        [SwaggerOperation(
-            Summary = "Get form and approver by name",
-            Description = "Returns form and approver by name"
-        )]
-        [Route("form-approver")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, queried form and  approver commands are returned successfully.", typeof(List<GetApproverFormDto>))]
-        [SwaggerResponse(404, "Success but there is no form and approver commands available for the query.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetFormApproverCommandAsync([FromBody] int FormId)
-        {
-            await Mediator.Send(new GetApproverFormQuery() { FormId = FormId });
-            return Ok();
-        }
+       
     }
 }
