@@ -41,8 +41,7 @@
             <td>{{getType(i.documentType)}}</td>
             <td>{{getDocumentName(i.documentType, i)}}</td>
             <td><span
-              *ngFor="let o of i.options; let isLast=last">({{getState(o.choice)}}
-              ) {{o.title}}{{isLast ? '' : ' - '}}</span>
+              *ngFor="let o of i.options; let isLast=last">({{getState(o.choice)}}) {{o.title}}{{isLast ? '' : ' - '}}</span>
             </td>
             <td class="no-wrap pr-15px">
               <img src="/assets/img/trash.png" class="c-pointer" (click)="deleteDocumentModal($index)">
