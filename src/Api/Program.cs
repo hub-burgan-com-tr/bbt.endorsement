@@ -55,6 +55,7 @@ var configuration = builder.Configuration
     .AddUserSecrets<Program>()
     .Build();
 
+
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.AddApplication();
