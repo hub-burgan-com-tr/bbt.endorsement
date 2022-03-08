@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <UserSecretsId>574a7eed-88ce-46c2-aa32-bd27abaacff0</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

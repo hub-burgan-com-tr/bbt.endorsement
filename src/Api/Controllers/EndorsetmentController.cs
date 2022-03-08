@@ -253,7 +253,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromBody] int approvalId)
         {
-            await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { ApprovalId = approvalId });
+          var result=  await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { ApprovalId = approvalId });
             return Ok();
         }
 
