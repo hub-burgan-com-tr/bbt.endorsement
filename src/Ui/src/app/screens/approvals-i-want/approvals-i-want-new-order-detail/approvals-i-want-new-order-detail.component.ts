@@ -63,7 +63,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
 
   initModel() {
     this.model = this.newOrderService.getModel();
-    this.model.documents = [];
+    this.model.documents = this.model.documents.filter(i => i.documentType != 1);
+    this.approvalButtonText = this.model.approver && this.model.approver.nameSurname ? 'Güncelle' : 'Kaydet';
     this.newOrderService.setModel(this.model);
   }
 
@@ -200,6 +201,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
         nameSurname: 'Uğur Karataş'
       }
       this.approvalButtonText = 'Güncelle';
+      this.newOrderService.setModel(this.model);
       this.closeApproverPanel();
     }
   }
