@@ -36,15 +36,16 @@ jobs:
       - name: Replace DB Secret
         run: |
           sed -i -e "s/DEFAULT_CONNECTION/${{ secrets.DEFAULT_CONNECTION }}/g" ./src/Api/appsettings.json
+          cat ./src/Api/appsettings.json
       
       - name: Replace Zeebe Gateway Secret
         run: |
           sed -i -e "s/ZEEBE_GATEWAY/${{ secrets.ZEEBE_GATEWAY }}/g" ./src/Api/appsettings.json
-      
+          cat ./src/Api/appsettings.json
       - name: Replace Elasticsearch Secret
         run: |
           sed -i -e "s/ELASTIC_SEARCH/${{ secrets.ELASTIC_SEARCH }}/g" ./src/Api/appsettings.json
-
+          cat ./src/Api/appsettings.json
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
