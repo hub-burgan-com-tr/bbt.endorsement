@@ -25,6 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Replace Zeebe Gateway Secret
+        run: |
+          sed -i -e "s/ZEEBE_GATEWAY/${{ secrets.ZEEBE_GATEWAY }}/g" ./src/Api/appsettings.json
+          cat ./src/Api/appsettings.json
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/dotnet@master
