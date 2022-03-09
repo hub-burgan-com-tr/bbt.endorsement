@@ -1,12 +1,13 @@
 ﻿using Domain.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
     public class Callback : AuditableEntity
     {
-        public string CallbackId { get; set; } = null!;
-        public string ReferenceId { get; set; } = null!;
-        public string InstanceId { get; set; } = null!;
+        public string CallbackId { get; set; }
+        [Key]
+        public string ReferenceId { get; set; }
 
         public string Mode { get; set; } = null!;
         public string Url { get; set; } = null!;

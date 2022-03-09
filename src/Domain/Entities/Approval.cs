@@ -1,14 +1,20 @@
 ﻿using Domain.Common;
 using Domain.Events.Approvals;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
     public class Approval : AuditableEntity, IHasDomainEvent
     {
         public string ApprovalId { get; set; }
+        [Key]
+        public string ReferenceId { get; set; }
+        [Key]
+        public string ConfigId { get; set; }
         public string Title { get; set; }
         public long Customer { get; set; }
         public long Approver { get; set; }
+
 
         private bool _done;
         public bool Done

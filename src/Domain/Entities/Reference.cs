@@ -9,10 +9,10 @@ namespace Domain.Entities
         {
             Callbacks = new HashSet<Callback>();
         }
+        public string ReferenceId { get; set; }
 
         [Key]
-        public string ApprovalId { get; set; } = null!;
-        public string InstanceId { get; set; } = null!;
+        public string ApprovalId { get; set; }
 
         /// <summary>
         /// Süreç
