@@ -58,5 +58,4 @@ namespace Application.Endorsements.Commands.NewApprovelOrder
         public string Title { get; set; }
         public string Choice { get; set; }
     }
-
 }
