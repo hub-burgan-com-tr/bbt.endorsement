@@ -2,16 +2,16 @@
 using Application.Common.Models;
 using MediatR;
 
-namespace Application.Endorsements.Commands.ApproveOrderDocuments
+namespace Application.Endorsements.Commands.ApproverOrderDocuments
 {
-    public class ApproveOrderDocumentCommand : IRequest<Response<ApproveOrderDocumentResponse>>
+    public class ApproverOrderDocumentCommand : IRequest<Response<ApproverOrderDocumentResponse>>
     {
         public Guid OrderId { get; set; }
 
         public Guid DocumentId { get; set; }
     }
 
-    public class ApproveOrderDocumentCommandHandler : IRequestHandler<ApproveOrderDocumentCommand, Response<ApproveOrderDocumentResponse>>
+    public class ApproveOrderDocumentCommandHandler : IRequestHandler<ApproverOrderDocumentCommand, Response<ApproverOrderDocumentResponse>>
     {
         private IApplicationDbContext _context;
 
@@ -20,7 +20,7 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
             _context = context;
         }
 
-        public Task<Response<ApproveOrderDocumentResponse>> Handle(ApproveOrderDocumentCommand request, CancellationToken cancellationToken)
+        public Task<Response<ApproverOrderDocumentResponse>> Handle(ApproverOrderDocumentCommand request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Endorsements.Commands.NewApprovelOrder;
+using Application.Endorsements.Commands.NewApprovalOrder;
 
 namespace Application.IntegrationTests.Endorsements.Commands.NewOrders;
 using static Testing;

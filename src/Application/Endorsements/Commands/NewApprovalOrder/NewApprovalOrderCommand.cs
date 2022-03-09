@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Common.Models;
-using Domain.Enum;
+﻿using Application.Common.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Endorsements.Commands.NewApprovelOrder
+namespace Application.Endorsements.Commands.NewApprovalOrder
 {
     public  class NewApprovalOrderCommand:IRequest<Response<Guid>>
     {

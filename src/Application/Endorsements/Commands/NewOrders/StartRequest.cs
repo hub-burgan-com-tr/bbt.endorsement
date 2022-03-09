@@ -22,7 +22,7 @@ public class StartRequest
     public class DocumentClass
     {
         public int DocumentType { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Content { get; set; }
         public string FormId { get; set; }
         public Dictionary<string, string> FormParameters { get; set; }
@@ -39,11 +39,11 @@ public class StartRequest
             public ActionType Type { get; set; }
         }
 
-        public class Option
-        {
-            public string Title { get; set; }
-            public string Choice { get; set; }
-        }
+        //public class Option
+        //{
+        //    public string Title { get; set; }
+        //    public string Choice { get; set; }
+        //}
     }
 
     public class ApproverClass
@@ -60,16 +60,14 @@ public class StartRequest
         public string Process { get; set; }
         public string State { get; set; }
         public string ProcessNo { get; set; }
-
-        public Guid Id { get; set; }
         public CallbackClass Callback { get; set; }
-        public class CallbackClass
-        {
-            public CalbackMode Mode { get; set; }
-            public string URL { get; set; }
-        }
+        
     }
-
+    public class CallbackClass
+    {
+        public CalbackMode Mode { get; set; }
+        public string URL { get; set; }
+    }
     public class OrderConfig
     {
         public int MaxRetryCount { get; set; }

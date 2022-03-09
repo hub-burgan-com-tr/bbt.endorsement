@@ -8,7 +8,7 @@ using Application.Endorsements.Queries.GetOrders;
 using Application.Endorsements.Queries.GetOrderStatuses;
 using Application.Endorsements.Commands.CancelOrders;
 using Application.Endorsements.Queries.GetOrderDocuments;
-using Application.Endorsements.Commands.ApproveOrderDocuments;
+using Application.Endorsements.Commands.ApproverOrderDocuments;
 using Application.Endorsements.Queries.GetApprovals;
 using Application.Endorsements.Queries.GetApprovalsDetails;
 using Application.Endorsements.Queries.GetApprovalsDocumentList;
@@ -162,12 +162,12 @@ namespace Api.Controllers
         [HttpPatch]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Response<ApproveOrderDocumentResponse>> ApproveOrderDocument(
+        public async Task<Response<ApproverOrderDocumentResponse>> ApproveOrderDocument(
             [FromRoute] Guid orderId,
             [FromRoute] Guid documentId
             )
         {
-            return await Mediator.Send(new ApproveOrderDocumentCommand { OrderId = orderId, DocumentId = documentId });
+            return await Mediator.Send(new ApproverOrderDocumentCommand { OrderId = orderId, DocumentId = documentId });
         }
 
         /// <summary>

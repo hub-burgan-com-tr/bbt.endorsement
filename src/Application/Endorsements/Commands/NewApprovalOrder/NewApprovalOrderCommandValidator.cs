@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Enum;
+﻿using Domain.Enum;
 using FluentValidation;
 
-namespace Application.Endorsements.Commands.NewApprovelOrder
+namespace Application.Endorsements.Commands.NewApprovalOrder
 {
     public class NewApprovalOrderCommandValidator : AbstractValidator<NewApprovalOrderCommand>
     {
