@@ -9,7 +9,6 @@ namespace Domain.Entities
         {
             Callbacks = new HashSet<Callback>();
         }
-        public string ReferenceId { get; set; }
 
         [Key]
         public string ApprovalId { get; set; }

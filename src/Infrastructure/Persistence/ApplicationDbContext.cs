@@ -21,8 +21,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<Reference> References { get; set; }
     public virtual DbSet<Callback> Callbacks { get; set; }
     public virtual DbSet<Config> Configs { get; set; }
+    public virtual DbSet<Document> Documents { get; set; }
 
-    
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
