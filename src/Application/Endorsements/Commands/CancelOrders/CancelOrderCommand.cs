@@ -20,7 +20,7 @@ namespace Application.Endorsements.Commands.CancelOrders
 
         public async Task<Response<bool>> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
-            var response = await _zeebe.SendMessage(request.Id.ToString(), "contact_approval_delete", "");
+            var response = await _zeebe.SendMessage(request.Id.ToString(), "contract_approval_delete", "");
             return Response<bool>.Success(true, 200);
         }
     }

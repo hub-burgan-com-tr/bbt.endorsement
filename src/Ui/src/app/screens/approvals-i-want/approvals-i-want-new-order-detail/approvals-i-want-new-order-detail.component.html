@@ -3,7 +3,7 @@
   <p>Seçilen belge silinecektir. Emin misiniz?</p>
 
   <div class="button-container">
-    <button class="btn btn-primary" (click)="documentDelete.close()">Sil</button>
+    <button class="btn btn-primary" (click)="deleteDocument()">Sil</button>
     <button class="btn btn-outline-primary" (click)="documentDelete.close()">İptal</button>
   </div>
 </ngx-smart-modal>
@@ -24,47 +24,27 @@
         </div>
         <div class="col-auto">
           <button class="btn btn-outline-primary px-5"
-                  (click)="showDocumentAddPanel=true;showDocumentUpdatePanel=false">Yeni Belge Ekle
+                  (click)="showDocumentAddPanel=true;">Yeni Belge Ekle
           </button>
         </div>
       </div>
     </div>
-    <div class="document-list-panel" *ngIf="!showDocumentAddPanel&&!showDocumentUpdatePanel">
+    <div class="document-list-panel" *ngIf="!showDocumentAddPanel">
       <hr class="blue">
       <div class="table-responsive">
         <table class="table">
           <tbody>
-          <tr>
+          <tr *ngFor="let i of model.documents; let $index=index">
             <td class="pl-15px no-wrap">
-              <img src="/assets/img/eye.png" class="c-pointer" (click)="showDocumentUpdatePanel=true">
+              <img src="/assets/img/eye.png" class="c-pointer" (click)="editDocument(i,$index)">
             </td>
-            <td>Belge</td>
-            <td>Maaş Ödeme Talimatı</td>
-            <td>(ONAY) Okudum, anladım</td>
+            <td>{{getType(i.documentType)}}</td>
+            <td>{{getDocumentName(i.documentType, i)}}</td>
+            <td><span
+              *ngFor="let o of i.options; let isLast=last">({{getState(o.choice)}}) {{o.title}}{{isLast ? '' : ' - '}}</span>
+            </td>
             <td class="no-wrap pr-15px">
-              <img src="/assets/img/trash.png" class="c-pointer" (click)="documentDelete.open()">
-            </td>
-          </tr>
-          <tr>
-            <td class="pl-15px no-wrap">
-              <img src="/assets/img/eye.png" class="c-pointer" (click)="showDocumentUpdatePanel=true">
-            </td>
-            <td>Metin</td>
-            <td>Maaş Ödeme Talimatı</td>
-            <td>(ONAY) Okudum, anladım</td>
-            <td class="no-wrap pr-15px">
-              <img src="/assets/img/trash.png" class="c-pointer" (click)="documentDelete.open()">
-            </td>
-          </tr>
-          <tr>
-            <td class="pl-15px no-wrap">
-              <img src="/assets/img/eye.png" class="c-pointer" (click)="showDocumentUpdatePanel=true">
-            </td>
-            <td>Form</td>
-            <td>Maaş Ödeme Talimatı</td>
-            <td>(ONAY) Okudum, anladım</td>
-            <td class="no-wrap pr-15px">
-              <img src="/assets/img/trash.png" class="c-pointer" (click)="documentDelete.open()">
+              <img src="/assets/img/trash.png" class="c-pointer" (click)="deleteDocumentModal($index)">
             </td>
           </tr>
           </tbody>
@@ -74,49 +54,49 @@
     <div class="document-add-panel" [hidden]="!showDocumentAddPanel">
       <hr class="blue">
       <div class="content">
-        <div class="title">Yeni Belge Ekle</div>
+        <div class="title">{{panelTitle}}</div>
         <form [formGroup]="formNewDocument" (ngSubmit)="onSubmitAddDocument()">
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio"
                    id="rdo1"
-                   name="choice"
-                   formControlName="choice"
+                   name="documentType"
+                   formControlName="documentType"
                    [value]="1"
                    (ngModelChange)="choose($event)"
-                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.choice.invalid }"
+                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.documentType.invalid }"
             >
             <label class="form-check-label fw-600" for="rdo1">Fiziksel Belge</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio"
                    id="rdo2"
-                   name="choice"
-                   formControlName="choice"
+                   name="documentType"
+                   formControlName="documentType"
                    [value]="2"
                    (ngModelChange)="choose($event)"
-                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.choice.invalid }"
+                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.documentType.invalid }"
             >
             <label class="form-check-label fw-600" for="rdo2">Metin İçerik</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio"
                    id="rdo3"
-                   name="choice"
-                   formControlName="choice"
+                   name="documentType"
+                   formControlName="documentType"
                    [value]="3"
                    (ngModelChange)="choose($event)"
-                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.choice.invalid }"
+                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.documentType.invalid }"
             >
             <label class="form-check-label fw-600" for="rdo3">Form</label>
           </div>
-          <div *ngIf="newDocumentSubmitted && fnd.choice.errors" class="text-danger">
-            <small *ngIf="fnd.choice.errors.required">Lütfen seçim yapınız</small>
+          <div *ngIf="newDocumentSubmitted && fnd.documentType.errors" class="text-danger">
+            <small *ngIf="fnd.documentType.errors.required">Lütfen seçim yapınız</small>
           </div>
-          <div id="document" *ngIf="formNewDocument.controls.choice?.value===1">
+          <div id="document" *ngIf="formNewDocument.controls.documentType?.value===1">
             <div class="my-4">
               <div class="row align-items-center">
                 <div class="col-auto">
-                  <button class="btn btn-white px-5" (click)="file.click()">Bilgisayarıma Gözat</button>
+                  <button class="btn btn-white px-5" type="button" (click)="file.click()">Bilgisayarıma Gözat</button>
                   <input type="file" [multiple]="true" #file [hidden]="true" formControlName="files"
                          (change)="onClickUploadDocument($event)">
                 </div>
@@ -131,7 +111,7 @@
               </a>
             </div>
           </div>
-          <div id="textContent" *ngIf="formNewDocument.controls.choice?.value===2">
+          <div id="textContent" *ngIf="formNewDocument.controls.documentType?.value===2">
             <div class="my-4">
               <div id="content">
                 <div class="content-header">
@@ -159,18 +139,18 @@
               </div>
             </div>
           </div>
-          <div id="form" *ngIf="formNewDocument.controls.choice?.value===3">
+          <div id="form" *ngIf="formNewDocument.controls.documentType?.value===3">
             <div class="my-4">
               <div class="row">
                 <div class="col-12 col-md-3">
                   <div class="form-group">
-                    <select class="form-select" formControlName="formDd"
-                            [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.formDd.invalid }">
-                      <option [value]="null">Seçiniz</option>
+                    <select class="form-select" formControlName="formId"
+                            [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.formId.invalid }">
+                      <option value="">Seçiniz</option>
                       <option value="1">Sigorta Onay Formu</option>
                     </select>
-                    <div *ngIf="newDocumentSubmitted && fnd.formDd.errors" class="invalid-feedback">
-                      <div *ngIf="fnd.formDd.errors.required">Lütfen seçim yapınız</div>
+                    <div *ngIf="newDocumentSubmitted && fnd.formId.errors" class="invalid-feedback">
+                      <div *ngIf="fnd.formId.errors.required">Lütfen seçim yapınız</div>
                     </div>
                   </div>
                 </div>
@@ -224,21 +204,26 @@
                 </div>
               </div>
             </div>
-            <div *ngFor="let i of choices" class="choices-item">
-              <div class="row">
-                <div class="col-md-3 col-6 d-flex align-items-center">
-                  <img src="/assets/img/minus.png" class="minus">
-                  {{i}}
-                </div>
-                <div class="col-md col-6">
-                  <div class="form-group">
-                    <select class="form-select custom w-125px">
-                      <option value="1">Onay</option>
-                      <option value="2">Ret</option>
-                    </select>
+            <div formArrayName="options">
+              <div *ngFor="let i of getOptions(); let $index=index" class="choices-item" [formGroupName]="$index">
+                <div class="row">
+                  <div class="col-md-3 col-6 d-flex align-items-center">
+                    <img src="/assets/img/minus.png" class="minus c-pointer" (click)="deleteChoice($index)">
+                    {{i.get('title').value}}
+                  </div>
+                  <div class="col-md col-6">
+                    <div class="form-group">
+                      <select class="form-select custom w-125px" formControlName="choice">
+                        <option value="1">Onay</option>
+                        <option value="2">Ret</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+            <div *ngIf="newDocumentSubmitted && optionsHasError" class="text-danger">
+              <small>Lütfen seçenek ekleyiniz.</small>
             </div>
             <!--<div class="choices-item">
               <div class="row">
@@ -264,7 +249,7 @@
         </form>
       </div>
     </div>
-    <div class="document-update-panel" *ngIf="showDocumentUpdatePanel&&!showDocumentAddPanel">
+    <!--<div class="document-update-panel" *ngIf="showDocumentUpdatePanel&&!showDocumentAddPanel">
       <hr class="blue">
       <div class="content">
         <div class="title">Belgeyi Düzenle</div>
@@ -321,7 +306,7 @@
           <button class="btn btn-primary px-5" (click)="showDocumentUpdatePanel=false">Kaydet</button>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" id="ngForm">
     <div class="box p-15px mb-4">
@@ -404,11 +389,12 @@
         </div>
       </div>
       <div class="col-auto">
-        <button class="btn btn-outline-primary px-5" *ngIf="!showUpdatePanel" (click)="showUpdatePanel=true">Güncelle
+        <button class="btn btn-outline-primary px-5" *ngIf="!showUpdatePanel"
+                (click)="showUpdatePanel=true">{{approvalButtonText}}
         </button>
       </div>
     </div>
-    <p class="fs-18 fw-600">Uğur Karataş</p>
+    <p class="fs-18 fw-600">{{model.approver.nameSurname}}</p>
     <div class="approval-update-panel" *ngIf="showUpdatePanel">
       <!--<div class="mb-3">
         <div class="row">
@@ -454,43 +440,43 @@
                   <div class="row mb-3">
                     <div class="col form-group pl-20px">
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input scale-2x" type="radio" id="radio2" name="choice"
-                               formControlName="choice"
-                               [ngClass]="{ 'is-invalid': approvalSubmitted && fa.choice.invalid }"
+                        <input class="form-check-input scale-2x" type="radio" id="radio2" name="type"
+                               formControlName="type"
+                               [ngClass]="{ 'is-invalid': approvalSubmitted && fa.type.invalid }"
                                (change)="rdoChanged()" [value]="1">
                         <label class="form-check-label ms-2" for="radio2">TCKN ile</label>
                       </div>
                     </div>
                     <div class="col form-group pl-20px">
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input scale-2x" type="radio" id="radio1" name="choice"
-                               formControlName="choice"
-                               [ngClass]="{ 'is-invalid': approvalSubmitted && fa.choice.invalid }"
+                        <input class="form-check-input scale-2x" type="radio" id="radio1" name="type"
+                               formControlName="type"
+                               [ngClass]="{ 'is-invalid': approvalSubmitted && fa.type.invalid }"
                                (change)="rdoChanged()" [value]="2">
                         <label class="form-check-label ms-2" for="radio1">Müşteri No ile</label>
                       </div>
                     </div>
                   </div>
-                  <input type="text" class="form-control" id="with" name="with"
-                         formControlName="with" maxlength="11"
-                         [ngClass]="{ 'is-invalid': approvalSubmitted && fa.with.invalid }">
-                  <div *ngIf="approvalSubmitted && fa.with.errors" class="invalid-feedback">
-                    <div *ngIf="fa.with.errors.required">{{approvalFormValidationMessage}}</div>
-                    <div *ngIf="fa.with.errors.minlength">TCKN 11 haneli olmalıdır.</div>
+                  <input type="text" class="form-control" id="value" name="value"
+                         formControlName="value" maxlength="11"
+                         [ngClass]="{ 'is-invalid': approvalSubmitted && fa.value.invalid }">
+                  <div *ngIf="approvalSubmitted && !fa.type.errors&&fa.value.errors" class="invalid-feedback">
+                    <div *ngIf="fa.value.errors.required">{{approvalFormValidationMessage}}</div>
+                    <div *ngIf="fa.value.errors.minlength">TCKN 11 haneli olmalıdır.</div>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <div *ngIf="approvalSubmitted && fa.choice.errors" class="text-danger">
-                    <small *ngIf="fa.choice.errors.required">Lütfen seçim yapınız.</small>
+                  <div *ngIf="approvalSubmitted && fa.type.errors" class="text-danger">
+                    <small *ngIf="fa.type.errors.required">Lütfen seçim yapınız.</small>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="button-group d-flex justify-content-end">
-            <button class="btn btn-outline-primary px-5 me-3" (click)="showUpdatePanel=false">İptal</button>
+            <button class="btn btn-outline-primary px-5 me-3" (click)="closeApproverPanel()">İptal</button>
             <button class="btn btn-primary px-5" type="submit">Kaydet</button>
           </div>
         </div>

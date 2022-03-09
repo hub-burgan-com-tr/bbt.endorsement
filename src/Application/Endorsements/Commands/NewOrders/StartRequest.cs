@@ -4,6 +4,11 @@ namespace Application.Endorsements.Commands.NewOrders;
 
 public class StartRequest
 {
+    public StartRequest()
+    {
+        this.Id = Guid.NewGuid();
+    }
+
     /// <summary>
     /// Unique Id of order. Id is corrolation key of workflow also. 
     /// </summary>

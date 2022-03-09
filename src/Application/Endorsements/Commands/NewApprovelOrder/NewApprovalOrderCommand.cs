@@ -3,33 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Common.Models;
 using Domain.Enum;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace Application.Endorsements.Commands.NewApprovelOrder
 {
-    public class NewApprovalOrderCommand
     {
-        /// <summary>
-        /// InstanceId
-        /// </summary>
-        public string InstanceId { get; set; }
-        /// <summary>
-        /// Başlık
-        /// </summary>
         public string Title { get; set; }
-        /// <summary>
-        /// İşlem
-        /// </summary>
         public string Process { get; set; }
-        /// <summary>
-        /// Aşama
-        /// </summary>
         public string Step { get; set; }
-        /// <summary>
-        /// işlem No
-        /// </summary>
-
         public string ProcessNo { get; set; }
         /// <summary>
         /// Geçerlilik
@@ -40,26 +24,29 @@ namespace Application.Endorsements.Commands.NewApprovelOrder
         /// hatırlatma Frekansı
         /// </summary>
         public string ReminderFrequency { get; set; }
-        /// <summary>
-        /// HatırlatmaSayısı
-        /// </summary>
-        public int ReminderCount { get; set; }
-
-        public Document[] Document { get; set; }
-        public Approver Approver { get; set; }
+        public string ReminderCount { get; set; }
 
 
     }
-
+    public class NewApprovalOrderCommandHandler : IRequestHandler<NewApprovalOrderCommand, Response<Guid>>
+    {
+        public async Task<Response<Guid>> Handle(NewApprovalOrderCommand request, CancellationToken cancellationToken)
+        {
+            var quid = new Guid();
+            return Response<Guid>.Success(quid, 200);
+        }
+    }
     public class Document
     {
-        
-        public string DocumentType { get; set; }
-        public IFormFile[] File { get; set; }
+        public int DocumentType { get; set; }
+        public List<Option> Options { get; set; }
+        public List<IFormFile> Files { get; set; }
+        public string Title { get; set; }
         public string Content { get; set; }
-        public int FormId { get; set; }
-        public string CitizenShipNumber { get; set; }
+        public string FormId { get; set; }
+        public string IdentityNo { get; set; }
         public string NameSurname { get; set; }
+        public string ChoiceText { get; set; }
     }
 
  
@@ -68,6 +55,12 @@ namespace Application.Endorsements.Commands.NewApprovelOrder
         public int Type { get; set; }
         public string Value { get; set; }
         public string NameSurname { get; set; }
+    }
+
+    public class Option
+    {
+        public string Title { get; set; }
+        public string Choice { get; set; }
     }
 
 }
