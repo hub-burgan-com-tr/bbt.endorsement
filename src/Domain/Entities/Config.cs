@@ -5,9 +5,9 @@ namespace Domain.Entities
 {
     public class Config : AuditableEntity
     {
+        public string ConfigId { get; set; }
         [Key]
         public string ApprovalId { get; set; }
-        public string InstanceId { get; set; }
 
         /// <summary>
         ///  emrin geçerlilik süresi dakika olarak tanımlanır. 
