@@ -67,7 +67,7 @@ app.AddUseMiddleware();
 // Configure the HTTP request pipeline.
 //if (!app.Environment.IsDevelopment())
 {
-    app.ConfigureSwagger();
+    //app.ConfigureSwagger();
     app.UseSwagger(options =>
     {
         options.SerializeAsV2 = true;
