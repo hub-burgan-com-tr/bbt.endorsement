@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Endorsements.Commands.NewApprovelOrder;
+using Application.OrderForms.Queries.GetApproverInformation;
+using Application.OrderForms.Queries.GetFormApprovar;
+using Application.OrderForms.Queries.GetForms;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
@@ -47,11 +51,7 @@ namespace Api.Controllers
         {
             return Ok();
         }
-        /// <summary>
-        ///  Form ile Emir Ekle
-        /// </summary>
-        /// <returns>Response</returns>
-        /// <response code="404">If the item is null</response>
+       
         [SwaggerOperation(
            Summary = "Get form by name",
            Description = "Returns form by name"
@@ -65,6 +65,37 @@ namespace Api.Controllers
             return Ok();
         }
 
-       
+
+        [SwaggerOperation(
+            Summary = "Get approver by name and surname",
+            Description = "Returns form by name"
+        )]
+        [Route("approval-information")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(string))]
+        [SwaggerResponse(404, "Approver not found.", typeof(void))]
+        public async Task<IActionResult> GetApproverInformationAsync([FromQuery] int type,[FromQuery]string value)
+        {
+            await Mediator.Send(new GetApproverInformationQuery { Type = type,Value = value});
+            return Ok();
+        }
+        /// <summary>
+        /// Form ile Emir Ekleme
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Summary = "Creates order form definition",
+            Description = "Create new  order form. After endorsement is created, process is started immediately."
+        )]
+        [Route("order-form")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
+        public async Task<IActionResult> CreateNewOrderFormAsync([FromBody] NewApprovalOrderCommand data)
+        {
+            await Mediator.Send(data);
+            return Ok();
+        }
     }
 }

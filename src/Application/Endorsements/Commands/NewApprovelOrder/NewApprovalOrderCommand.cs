@@ -10,17 +10,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Endorsements.Commands.NewApprovelOrder
 {
-    public class NewApprovalOrderCommand:IRequest<Response<Guid>>
+    public  class NewApprovalOrderCommand:IRequest<Response<Guid>>
     {
         public Approver Approver { get; set; }
         public List<Document> Documents { get; set; }
-        public string Title { get; set; }
         public string Process { get; set; }
-        public string Step { get; set; }
         public string ProcessNo { get; set; }
-        public string Validity { get; set; }
-        public string ReminderFrequency { get; set; }
         public string ReminderCount { get; set; }
+        public string ReminderFrequency { get; set; }
+        public string Step { get; set; }
+        public string Title { get; set; }
+        public string Validity { get; set; }
 
 
     }
@@ -44,6 +44,8 @@ namespace Application.Endorsements.Commands.NewApprovelOrder
         public string NameSurname { get; set; }
         public string ChoiceText { get; set; }
     }
+
+ 
     public class Approver
     {
         public int Type { get; set; }
