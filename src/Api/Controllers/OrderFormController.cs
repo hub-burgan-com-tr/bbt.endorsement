@@ -1,5 +1,7 @@
-﻿using Application.OrderForms.Queries.GetApproverInformation;
+﻿using Application.Endorsements.Commands.NewApprovelOrder;
+using Application.OrderForms.Queries.GetApproverInformation;
 using Application.OrderForms.Queries.GetFormApprovar;
+using Application.OrderForms.Queries.GetForms;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -77,7 +79,23 @@ namespace Api.Controllers
             await Mediator.Send(new GetApproverInformationQuery { Type = type,Value = value});
             return Ok();
         }
-
-
+        /// <summary>
+        /// Form ile Emir Ekleme
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [SwaggerOperation(
+            Summary = "Creates order form definition",
+            Description = "Create new  order form. After endorsement is created, process is started immediately."
+        )]
+        [Route("order-form")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
+        public async Task<IActionResult> CreateNewOrderFormAsync([FromBody] NewApprovalOrderCommand data)
+        {
+            await Mediator.Send(data);
+            return Ok();
+        }
     }
 }
