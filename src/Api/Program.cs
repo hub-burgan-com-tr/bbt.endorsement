@@ -75,7 +75,7 @@ app.AddUseMiddleware();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "bbt.endorsement.api v1");
-        c.RoutePrefix = "";
+        c.RoutePrefix = "swagger";
     });
 }
 
