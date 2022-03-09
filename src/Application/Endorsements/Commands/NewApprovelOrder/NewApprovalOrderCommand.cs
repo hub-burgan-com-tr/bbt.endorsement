@@ -10,21 +10,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.Endorsements.Commands.NewApprovelOrder
 {
+    public  class NewApprovalOrderCommand:IRequest<Response<Guid>>
     {
-        public string Title { get; set; }
+        public Approver Approver { get; set; }
+        public List<Document> Documents { get; set; }
         public string Process { get; set; }
-        public string Step { get; set; }
         public string ProcessNo { get; set; }
-        /// <summary>
-        /// Geçerlilik
-        /// </summary>
-
-        public string Validity { get; set; }
-        /// <summary>
-        /// hatırlatma Frekansı
-        /// </summary>
-        public string ReminderFrequency { get; set; }
         public string ReminderCount { get; set; }
+        public string ReminderFrequency { get; set; }
+        public string Step { get; set; }
+        public string Title { get; set; }
+        public string Validity { get; set; }
 
 
     }
