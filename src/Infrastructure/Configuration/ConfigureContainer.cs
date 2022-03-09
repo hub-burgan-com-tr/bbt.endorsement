@@ -8,12 +8,6 @@ namespace Infrastructure.Configuration;
 
 public static class ConfigureContainer
 {
-    public static void ConfigureSwagger(this IApplicationBuilder app)
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
     public static void ConfigureLog(this WebApplicationBuilder builder)
     {
         builder.WebHost.UseMsLogger(configuration =>
