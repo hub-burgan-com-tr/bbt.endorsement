@@ -13,9 +13,10 @@ namespace Infrastructure.Configuration
     {
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
+            var settings = configuration.Get<Options.AppSettings>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
+                    settings.ConnectionStrings.DefaultConnection,
                     configure =>
                     {
                         configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
