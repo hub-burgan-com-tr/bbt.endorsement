@@ -24,14 +24,12 @@ namespace Application.Endorsements.Commands.NewOrders
             public IFormFile Files { get; set; }
             public ContentType Type { get; set; }
             public ActionClass[] Actions { get; set; } // Options
-            public enum ContentType { HTML, PDF, PlainText }
 
             public class ActionClass
             {
                 public bool IsDefault { get; set; }
                 public string Title { get; set; }
                 public ActionType Type { get; set; }
-                public enum ActionType { Approve, Reject }
             }
         }
         public class ApproverClass
@@ -54,7 +52,6 @@ namespace Application.Endorsements.Commands.NewOrders
         {
             public CalbackMode Mode { get; set; }
             public string URL { get; set; }
-            public enum CalbackMode { Completed, Verbose }
         }
         public class OrderConfig
         {
@@ -67,5 +64,8 @@ namespace Application.Endorsements.Commands.NewOrders
             public string RenotifyMessagePush { get; set; }
         }
     }
+    public enum ContentType { HTML, PDF, PlainText }
+    public enum CalbackMode { Completed, Verbose }
+    public enum ActionType { Approve, Reject }
 
 }
