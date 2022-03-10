@@ -1,4 +1,6 @@
-﻿namespace Application.Endorsements.Commands.NewOrders
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Application.Endorsements.Commands.NewOrders
 {
     public class StartRequest
     {
@@ -19,7 +21,7 @@
             public string Content { get; set; }
             //public Dictionary<string, string> FormParameters { get; set; }
 
-            //public IFormFile Files { get; set; }
+            public IFormFile Files { get; set; }
             public ContentType Type { get; set; }
             public ActionClass[] Actions { get; set; } // Options
             public enum ContentType { HTML, PDF, PlainText }
