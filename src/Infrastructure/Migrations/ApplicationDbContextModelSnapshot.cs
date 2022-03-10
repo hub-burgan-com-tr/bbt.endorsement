@@ -17,56 +17,23 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Domain.Entities.Approval", b =>
-                {
-                    b.Property<string>("ApprovalId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Done")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("InstanceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("ApprovalId");
-
-                    b.ToTable("Approvals");
-                });
-
             modelBuilder.Entity("Domain.Entities.Callback", b =>
                 {
-                    b.Property<string>("CallbackId")
+                    b.Property<string>("ReferenceId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CallbackId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstanceId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -78,15 +45,15 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Mode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReferenceId")
+                    b.Property<string>("ReferenceApprovalId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CallbackId");
+                    b.HasKey("ReferenceId");
 
-                    b.HasIndex("ReferenceId");
+                    b.HasIndex("ReferenceApprovalId");
 
                     b.ToTable("Callbacks");
                 });
@@ -100,9 +67,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstanceId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -125,6 +89,69 @@ namespace Infrastructure.Migrations
                     b.ToTable("Configs");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Document", b =>
+                {
+                    b.Property<string>("ApprovalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApprovalOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApprovalId");
+
+                    b.HasIndex("ApprovalOrderId");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("Approver")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Customer")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("Domain.Entities.Reference", b =>
                 {
                     b.Property<string>("ApprovalId")
@@ -134,9 +161,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstanceId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -163,14 +187,14 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Reference", "Reference")
                         .WithMany("Callbacks")
-                        .HasForeignKey("ReferenceId");
+                        .HasForeignKey("ReferenceApprovalId");
 
                     b.Navigation("Reference");
                 });
 
             modelBuilder.Entity("Domain.Entities.Config", b =>
                 {
-                    b.HasOne("Domain.Entities.Approval", "Approval")
+                    b.HasOne("Domain.Entities.Order", "Approval")
                         .WithOne("Config")
                         .HasForeignKey("Domain.Entities.Config", "ApprovalId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -179,9 +203,18 @@ namespace Infrastructure.Migrations
                     b.Navigation("Approval");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Document", b =>
+                {
+                    b.HasOne("Domain.Entities.Order", "Approval")
+                        .WithMany("Documents")
+                        .HasForeignKey("ApprovalOrderId");
+
+                    b.Navigation("Approval");
+                });
+
             modelBuilder.Entity("Domain.Entities.Reference", b =>
                 {
-                    b.HasOne("Domain.Entities.Approval", "Approval")
+                    b.HasOne("Domain.Entities.Order", "Approval")
                         .WithOne("Reference")
                         .HasForeignKey("Domain.Entities.Reference", "ApprovalId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -190,9 +223,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Approval");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Approval", b =>
+            modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Navigation("Config");
+
+                    b.Navigation("Documents");
 
                     b.Navigation("Reference");
                 });
