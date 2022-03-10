@@ -1,7 +1,5 @@
-﻿using Application.Endorsements.Commands.NewApprovalOrder;
+﻿using Application.OrderForms.Commands.CreateOrderFormCommands;
 using Application.OrderForms.Queries.GetApproverInformation;
-using Application.OrderForms.Queries.GetFormApprovar;
-using Application.OrderForms.Queries.GetForms;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -92,7 +90,7 @@ namespace Api.Controllers
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
-        public async Task<IActionResult> CreateNewOrderFormAsync([FromBody] NewApprovalOrderCommand data)
+        public async Task<IActionResult> CreateNewOrderFormAsync([FromBody] CreateOrderFormCommand data)
         {
             await Mediator.Send(data);
             return Ok();
