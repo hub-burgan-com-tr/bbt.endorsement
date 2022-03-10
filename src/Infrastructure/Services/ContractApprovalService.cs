@@ -1,5 +1,7 @@
 ﻿using Application.Common.Interfaces;
+using Application.Endorsements.Commands.NewOrders;
 using Application.Models;
+using Application.Workers.Commands.SaveEntities;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -66,10 +68,6 @@ public class ContractApprovalService : IContractApprovalService
     private void SaveEntity()
     {
         _logger.LogInformation("SaveEntity Worker registered ");
-        //var response = await _mediator.Send(new CreateApplyContractCommand
-        //{
-        //    InstanceId = "928a9fd5-1549-4342-8bc0-a154e8692928"
-        //});
 
         CreateWorker("SaveEntity", async (jobClient, job) =>
         {
@@ -81,12 +79,11 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             if (variables != null)
             {
-                //var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
-                //var response = await _mediator.Send(new CreateApprovalCommand
-                //{
-                //    InstanceId = variables.InstanceId,
-                //    Title = ""
-                //});
+                var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
+                var response = await _mediator.Send(new SaveEntityCommand
+                {
+                    Model = variables
+                });
                 variables.IsProcess = true;
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
