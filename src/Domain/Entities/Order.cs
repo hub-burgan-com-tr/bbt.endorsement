@@ -1,6 +1,5 @@
 ﻿using Domain.Common;
 using Domain.Events.Approvals;
-using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {

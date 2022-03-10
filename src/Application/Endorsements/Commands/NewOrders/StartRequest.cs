@@ -19,7 +19,8 @@ public class StartRequest
     public OrderConfig Config { get; set; }
     public ReferenceClass Reference { get; set; }
     public DocumentClass[] Documents { get; set; }
-    public ApproverClass Approver { get; set; }
+    //public ApproverClass Approver { get; set; }
+
     public class DocumentClass
     {
         public int DocumentType { get; set; }
@@ -49,7 +50,6 @@ public class StartRequest
         //    public string Choice { get; set; }
         //}
     }
-
     public class ApproverClass
     {
         //public long Customer { get; set; }
@@ -58,7 +58,6 @@ public class StartRequest
         public string Value { get; set; }
         public string NameSurname { get; set; }
     }
-
     public class ReferenceClass
     {
         public string Process { get; set; }
