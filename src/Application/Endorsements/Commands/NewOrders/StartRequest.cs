@@ -1,16 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Converters;
-using System.Text.Json.Serialization;
 
 namespace Application.Endorsements.Commands.NewOrders;
 
 public class StartRequest
 {
-    public StartRequest()
-    {
-        this.Id = Guid.NewGuid();
-    }
-
     /// <summary>
     /// Unique Id of order. Id is corrolation key of workflow also. 
     /// </summary>
@@ -28,27 +21,18 @@ public class StartRequest
         public string Content { get; set; }
         //public Dictionary<string, string> FormParameters { get; set; }
 
-        //public List<Option> Options { get; set; }
-        public IFormFile Files { get; set; }
-        //[JsonConverter(typeof(StringEnumConverter))]
+        //public IFormFile Files { get; set; }
         public ContentType Type { get; set; }
-        public List<ActionClass> Actions { get; set; } // Options
+        public ActionClass[] Actions { get; set; } // Options
         public enum ContentType { HTML, PDF, PlainText }
 
         public class ActionClass
         {
             public bool IsDefault { get; set; }
             public string Title { get; set; }
-           // [JsonConverter(typeof(StringEnumConverter))]
             public ActionType Type { get; set; }
             public enum ActionType { Approve, Reject }
         }
-
-        //public class Option
-        //{
-        //    public string Title { get; set; }
-        //    public string Choice { get; set; }
-        //}
     }
     public class ApproverClass
     {
@@ -68,7 +52,6 @@ public class StartRequest
     }
     public class CallbackClass
     {
-        //[JsonConverter(typeof(StringEnumConverter))]
         public CalbackMode Mode { get; set; }
         public string URL { get; set; }
         public enum CalbackMode { Completed, Verbose }
