@@ -20,6 +20,7 @@ public class StartRequest
     public ReferenceClass Reference { get; set; }
     public List<DocumentClass> Documents { get; set; }
     public ApproverClass Approver { get; set; }
+
     public class DocumentClass
     {
         public int DocumentType { get; set; }
@@ -29,7 +30,7 @@ public class StartRequest
 
         //public List<Option> Options { get; set; }
         public IFormFile Files { get; set; }
-        [JsonConverter(typeof(StringEnumConverter))]
+        //[JsonConverter(typeof(StringEnumConverter))]
         public ContentType Type { get; set; }
         public List<ActionClass> Actions { get; set; } // Options
         public enum ContentType { HTML, PDF, PlainText }
@@ -38,7 +39,7 @@ public class StartRequest
         {
             public bool IsDefault { get; set; }
             public string Title { get; set; }
-            [JsonConverter(typeof(StringEnumConverter))]
+           // [JsonConverter(typeof(StringEnumConverter))]
             public ActionType Type { get; set; }
             public enum ActionType { Approve, Reject }
         }
@@ -49,7 +50,6 @@ public class StartRequest
         //    public string Choice { get; set; }
         //}
     }
-
     public class ApproverClass
     {
         //public long Customer { get; set; }
@@ -58,7 +58,6 @@ public class StartRequest
         public string Value { get; set; }
         public string NameSurname { get; set; }
     }
-
     public class ReferenceClass
     {
         public string Process { get; set; }
@@ -69,7 +68,7 @@ public class StartRequest
     }
     public class CallbackClass
     {
-        [JsonConverter(typeof(StringEnumConverter))]
+        //[JsonConverter(typeof(StringEnumConverter))]
         public CalbackMode Mode { get; set; }
         public string URL { get; set; }
         public enum CalbackMode { Completed, Verbose }
