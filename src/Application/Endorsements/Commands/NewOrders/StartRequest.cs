@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Application.Endorsements.Commands.NewOrders;
 
@@ -28,6 +30,7 @@ public class StartRequest
 
         //public List<Option> Options { get; set; }
         public List<IFormFile> Files { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public ContentType Type { get; set; }
         public List<ActionClass> Actions { get; set; } // Options
         public enum ContentType { HTML, PDF, PlainText }
@@ -36,6 +39,7 @@ public class StartRequest
         {
             public bool IsDefault { get; set; }
             public string Title { get; set; }
+            [JsonConverter(typeof(StringEnumConverter))]
             public ActionType Type { get; set; }
             public enum ActionType { Approve, Reject }
         }
@@ -66,6 +70,7 @@ public class StartRequest
     }
     public class CallbackClass
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public CalbackMode Mode { get; set; }
         public string URL { get; set; }
         public enum CalbackMode { Completed, Verbose }
