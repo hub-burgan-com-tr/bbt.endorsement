@@ -28,7 +28,7 @@ namespace Domain.Entities
         /// </summary>
         public string Number { get; set; }
 
-        public virtual Approval Approval { get; set; }
+        public virtual Order Approval { get; set; }
         public virtual ICollection<Callback> Callbacks { get; set; }
     }
 }

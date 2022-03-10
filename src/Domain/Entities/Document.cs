@@ -12,6 +12,6 @@ namespace Domain.Entities
         public string Content { get; set; }
         public int Type { get; set; }
 
-        public virtual Approval Approval { get; set; }
+        public virtual Order Approval { get; set; }
     }
 }

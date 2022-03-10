@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
-    public class Approval : AuditableEntity, IHasDomainEvent
+    public class Order : AuditableEntity, IHasDomainEvent
     {
-        public string ApprovalId { get; set; }
+        public string OrderId { get; set; }
         public string Title { get; set; }
         public long Customer { get; set; }
         public long Approver { get; set; }
@@ -20,7 +20,7 @@ namespace Domain.Entities
             {
                 if (value == true && _done == false)
                 {
-                    DomainEvents.Add(new ApprovalCreateEvent(this));
+                    DomainEvents.Add(new OrderCreateEvent(this));
                 }
 
                 _done = value;
