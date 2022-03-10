@@ -25,11 +25,10 @@ public class StartRequest
         public int DocumentType { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public string FormId { get; set; }
-        public Dictionary<string, string> FormParameters { get; set; }
+        //public Dictionary<string, string> FormParameters { get; set; }
 
         //public List<Option> Options { get; set; }
-        public List<IFormFile> Files { get; set; }
+        public IFormFile Files { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public ContentType Type { get; set; }
         public List<ActionClass> Actions { get; set; } // Options
@@ -80,7 +79,6 @@ public class StartRequest
         public int MaxRetryCount { get; set; }
         public string RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
-
         public string NotifyMessageSMS { get; set; }
         public string NotifyMessagePush { get; set; }
         public string RenotifyMessageSMS { get; set; }
