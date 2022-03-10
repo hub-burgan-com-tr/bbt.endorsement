@@ -1,5 +1,4 @@
-﻿using Domain.Enum;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Application.Endorsements.Commands.NewOrders;
 
@@ -31,12 +30,14 @@ public class StartRequest
         public List<IFormFile> Files { get; set; }
         public ContentType Type { get; set; }
         public List<ActionClass> Actions { get; set; } // Options
+        public enum ContentType { HTML, PDF, PlainText }
 
         public class ActionClass
         {
             public bool IsDefault { get; set; }
             public string Title { get; set; }
             public ActionType Type { get; set; }
+            public enum ActionType { Approve, Reject }
         }
 
         //public class Option
@@ -67,6 +68,7 @@ public class StartRequest
     {
         public CalbackMode Mode { get; set; }
         public string URL { get; set; }
+        public enum CalbackMode { Completed, Verbose }
     }
     public class OrderConfig
     {
