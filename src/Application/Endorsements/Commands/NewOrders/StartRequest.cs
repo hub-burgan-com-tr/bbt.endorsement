@@ -11,7 +11,7 @@ public class StartRequest
     public string Title { get; set; }
     public OrderConfig Config { get; set; }
     public ReferenceClass Reference { get; set; }
-    public DocumentClass[] Documents { get; set; }
+    public List<DocumentClass> Documents { get; set; }
     public ApproverClass Approver { get; set; }
 
     public class DocumentClass
