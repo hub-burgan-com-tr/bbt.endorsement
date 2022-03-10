@@ -24,6 +24,6 @@ namespace Domain.Entities
         public int MaxRetryCount { get; set; }
 
 
-        public virtual Approval Approval { get; set; }
+        public virtual Order Approval { get; set; }
     }
 }

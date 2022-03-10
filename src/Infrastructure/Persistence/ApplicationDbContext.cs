@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _domainEventService = domainEventService;
     }
 
-    public virtual DbSet<Approval> Approvals { get; set; }
+    public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<Reference> References { get; set; }
     public virtual DbSet<Callback> Callbacks { get; set; }
     public virtual DbSet<Config> Configs { get; set; }
@@ -94,12 +94,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Approval>()
+        builder.Entity<Order>()
                .HasOne(s => s.Config)
                .WithOne(ad => ad.Approval)
                .HasForeignKey<Config>(ad => ad.ApprovalId);
 
-        builder.Entity<Approval>()
+        builder.Entity<Order>()
                 .HasOne(s => s.Reference)
                 .WithOne(ad => ad.Approval)
                 .HasForeignKey<Reference>(ad => ad.ApprovalId);

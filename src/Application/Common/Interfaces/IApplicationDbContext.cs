@@ -5,7 +5,7 @@ namespace Application.Common.Interfaces
 {
     public interface IApplicationDbContext
     {
-        DbSet<Approval> Approvals { get;}
+        DbSet<Order> Orders { get;}
         DbSet<Reference> References { get;  }
         DbSet<Callback> Callbacks { get; }
         DbSet<Config> Configs { get; }

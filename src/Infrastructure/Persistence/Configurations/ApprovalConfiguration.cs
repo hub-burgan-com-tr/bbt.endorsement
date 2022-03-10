@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Configurations
 {
-    public class ApprovalConfiguration : IEntityTypeConfiguration<Approval>
+    public class ApprovalConfiguration : IEntityTypeConfiguration<Order>
     {
-        public void Configure(EntityTypeBuilder<Approval> builder)
+        public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.Ignore(e => e.DomainEvents);
 
