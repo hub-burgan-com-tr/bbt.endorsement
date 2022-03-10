@@ -31,13 +31,13 @@ namespace Application.Endorsements.Commands.NewApprovalOrder
                 RuleFor(v => v.Documents.Any(x => x.Content == null)).Empty().WithMessage("Metin girilmelidir.");
                 RuleFor(v => v.Documents.Any(x => x.Title == null)).Empty().WithMessage("Başlık girilmelidir.");
             });
-            RuleFor(x => x.Documents.Any(x => x.DocumentType == (int)DocumentTypeEnum.Form)).NotNull().DependentRules(() => {
-                RuleFor(v => v.Documents.Any(x=>x.IdentityNo==null)).Empty().WithMessage("TCKN girilmelidir.");
-                RuleFor(v => v.Documents.Any(x => x.IdentityNo.Length !=11)).Empty().WithMessage("TCKN 11 haneli olmalıdır.");
-                RuleFor(v => v.Documents.Any(x => x.FormId == null)).Empty().WithMessage("Lütfen seçim yapınız");
-                RuleFor(v => v.Documents.Any(x => x.NameSurname == null)).Empty().WithMessage("Ad Soyad girilmelidir.");
+            //RuleFor(x => x.Documents.Any(x => x.DocumentType == (int)DocumentTypeEnum.Form)).NotNull().DependentRules(() => {
+            //    RuleFor(v => v.Documents.Any(x=>x.IdentityNo==null)).Empty().WithMessage("TCKN girilmelidir.");
+            //    RuleFor(v => v.Documents.Any(x => x.IdentityNo.Length !=11)).Empty().WithMessage("TCKN 11 haneli olmalıdır.");
+            //    RuleFor(v => v.Documents.Any(x => x.FormId == null)).Empty().WithMessage("Lütfen seçim yapınız");
+            //    RuleFor(v => v.Documents.Any(x => x.NameSurname == null)).Empty().WithMessage("Ad Soyad girilmelidir.");
 
-            });
+            //});
         }
     }
 }
