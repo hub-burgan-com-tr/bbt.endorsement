@@ -1,55 +1,64 @@
-﻿
-using Application;
-using Application.Common.Interfaces;
-using Infrastructure;
-using Infrastructure.Configuration.Options;
-using Infrastructure.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Worker.App.Application;
+using Worker.App.Application.Common.Interfaces;
+using Worker.App.Infrastructure;
+using Worker.App.Infrastructure.Configuration.Options;
+using Worker.App.Infrastructure.Services;
 using Worker.App.Services;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+var builder = new ConfigurationBuilder()
+            .SetBasePath(Path.Combine(AppContext.BaseDirectory))
+            .AddJsonFile("appsettings.json", optional: true);
+if (environment == "Development")
+    builder.AddJsonFile($"appsettings.{environment}.json", true, true);
+else
+    builder.AddJsonFile("appsettings.json", false, true);
 
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder);
-
-builder.Services.AddHostedService<ZeebeWorkService>();
-
-var app = builder.Build();
-
-IWebHostEnvironment environment = builder.Environment;
-var configuration = builder.Configuration
-    .AddJsonFile("appsettings.json", false, true)
-    .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", true, true)
+var Configuration = builder
     .AddEnvironmentVariables()
     .AddCommandLine(args)
     .AddUserSecrets<Program>()
     .Build();
-var settings = configuration.Get<AppSettings>();
 
-using (var scope = app.Services.CreateScope())
+
+var services = new ServiceCollection();
+
+services.AddLogging(config =>
 {
-    var serviceProvider = scope.ServiceProvider;
-    var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
-    if (zeebeService != null)
-    {
-        zeebeService.Deploy(settings.Zeebe.ModelFilename);
-    }
+    config.AddDebug();
+    config.AddConsole();
+});
+services.AddSingleton<IConfiguration>(Configuration);
 
-    while (true)
-    {
-        // open job worker
-        using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
-        {
-            var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
-            if (contractApprovalService != null)
-                contractApprovalService.StartWorkers();
 
-            // blocks main thread, so that worker can run
-            signal.WaitOne();
-        }
+services.AddApplication();
+services.AddInfrastructure(Configuration, builder);
+
+services.AddHostedService<ZeebeWorkService>();
+services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+var settings = Configuration.Get<AppSettings>();
+
+var serviceProvider = services.BuildServiceProvider();
+
+var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
+if (zeebeService != null)
+{
+    zeebeService.Deploy(settings.Zeebe.ModelFilename);
+}
+
+while (true)
+{
+    // open job worker
+    using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
+    {
+        var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
+        if (contractApprovalService != null)
+            contractApprovalService.StartWorkers();
+
+        // blocks main thread, so that worker can run
+        signal.WaitOne();
     }
 }

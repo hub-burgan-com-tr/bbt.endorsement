@@ -1,0 +1,7 @@
+﻿namespace Worker.App.Workers.Commands.SaveEntities
+{
+    public class SaveEntityResponse
+    {
+        public Guid InstanceId { get; set; }
+    }
+}
