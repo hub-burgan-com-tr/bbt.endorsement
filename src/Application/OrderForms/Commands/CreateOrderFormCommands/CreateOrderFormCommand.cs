@@ -9,14 +9,10 @@ namespace Application.OrderForms.Commands.CreateOrderFormCommands
         /// FormId
         /// </summary>
         public int FormId { get; set; }
-        /// <summary>
-        /// TCKN
-        /// </summary>
-        public string CitizenShipNumber { get; set; }
-        /// <summary>
-        /// Ad Soyad
-        /// </summary>
-        public string NameAndSurname { get; set; }
+        public string Process { get; set; }
+        public string State { get; set; }
+        public string ProcessNo { get; set; }
+        public Dictionary<string, string> FormParameters { get; set; }
         public int Type { get; set; }
         public string Value { get; set; }
         public string NameSurname { get; set; }

@@ -7,10 +7,9 @@ namespace Application.OrderForms.Commands.CreateOrderFormCommands
     {
         public CreateOrderFormCommandValidator()
         {
-            RuleFor(v => v.CitizenShipNumber).Empty().WithMessage("TCKN girilmelidir.");
-
-            RuleFor(v => v.CitizenShipNumber).MaximumLength(11).MinimumLength(11).WithMessage("TCKN 11 haneli olmalıdır.");
-            RuleFor(v => v.NameAndSurname).Empty().WithMessage("TCKN 11 haneli olmalıdır.");
+            RuleFor(v => v.Process).Empty().WithMessage("İşlem bilgisi girilmelidir.");
+            RuleFor(v => v.State).Empty().WithMessage("Aşama bilgisi girilmelidir.");
+            RuleFor(v => v.ProcessNo).Empty().WithMessage("İşlem no bilgisi girilmelidir.");
             RuleFor(v => v.Type).Empty().WithMessage("Lütfen seçim yapınız.");
 
               RuleFor(x => x.Type==(int)ApproverTypeEnum.CitizenShipNumber).Empty().DependentRules(() => {
