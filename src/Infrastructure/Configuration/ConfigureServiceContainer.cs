@@ -40,7 +40,6 @@ namespace Infrastructure.Configuration
             services.AddSingleton<IServerEventService, ServerEventService>();
             services.AddSingleton<IClientEventService, ClientEventService>();
             services.AddSingleton<IZeebeService, ZeebeService>();
-            services.AddSingleton<IContractApprovalService, ContractApprovalService>();
         }
 
         public static void AddServices(this IServiceCollection services)
