@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Worker.App.Services
+namespace Worker.App.Infrastructure.Services
 {
     public class ZeebeWorkService : BackgroundService
     {
