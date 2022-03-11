@@ -1,7 +1,7 @@
 ﻿using Domain.Enum;
 using FluentValidation;
 
-namespace Application.OrderForms.Commands.CreateOrderFormCommands
+namespace Application.OrderForms.Commands.CreateOrderForm
 {
     public class CreateOrderFormCommandValidator : AbstractValidator<CreateOrderFormCommand>
     {

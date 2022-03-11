@@ -1,4 +1,4 @@
-﻿using Application.OrderForms.Commands.CreateOrderFormCommands;
+﻿using Application.OrderForms.Commands.CreateOrderForm;
 using Application.OrderForms.Queries.GetApproverInformation;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -63,7 +63,12 @@ namespace Api.Controllers
             return Ok();
         }
 
-
+        /// <summary>
+        /// Onaycı Bilgileri Getir
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [SwaggerOperation(
             Summary = "Get approver by name and surname",
             Description = "Returns form by name"

@@ -8,7 +8,6 @@ using Application.Endorsements.Queries.GetOrders;
 using Application.Endorsements.Queries.GetOrderStatuses;
 using Application.Endorsements.Commands.CancelOrders;
 using Application.Endorsements.Queries.GetOrderDocuments;
-using Application.Endorsements.Commands.ApproverOrderDocuments;
 using Application.Endorsements.Queries.GetApprovals;
 using Application.Endorsements.Queries.GetApprovalsDetails;
 using Application.Endorsements.Queries.GetApprovalsDocumentList;
@@ -20,6 +19,7 @@ using Application.Endorsements.Queries.GetWantApprovals;
 using Application.Endorsements.Queries.GetWantApprovalsDetails;
 using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
+using Application.Endorsements.Commands.ApproverOrderDocuments;
 
 namespace Api.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
 using MediatR;
 
-namespace Application.OrderForms.Commands.CreateOrderFormCommands
+namespace Application.OrderForms.Commands.CreateOrderForm
 {
     public class CreateOrderFormCommand : IRequest<Response<bool>>
     {
