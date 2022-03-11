@@ -12,7 +12,7 @@ namespace Application.Endorsements.Commands.NewOrders
         public OrderConfig Config { get; set; }
         public ReferenceClass Reference { get; set; }
         public List<Document> Documents { get; set; }
-        public ApproverClas Approver { get; set; }
+        public ApproverClass Approver { get; set; }
 
         public class Document
         {
@@ -32,7 +32,7 @@ namespace Application.Endorsements.Commands.NewOrders
                 public ActionType Type { get; set; }
             }
         }
-        public class ApproverClas
+        public class ApproverClass
         {
             //public long Customer { get; set; }
             //public long Approver { get; set; }

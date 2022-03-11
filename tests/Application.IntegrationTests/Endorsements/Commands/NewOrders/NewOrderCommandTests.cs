@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Application.IntegrationTests.Endorsements.Commands.NewOrders;
+
+using static Application.Endorsements.Commands.NewOrders.StartRequest;
 using static Testing;
 
 public class NewOrderCommandTests : TestBase
@@ -14,12 +16,12 @@ public class NewOrderCommandTests : TestBase
     [TestCase("1beecf76-5529-4309-97fe-39df9e917bd3")]
     public async Task NewOrderTestAsync(Guid id)
     {
-        var documents = new List<StartRequest.DocumentClass>();
+        var documents = new List<Document>();
         var command = new NewOrderCommand()
         {
           StartRequest =new StartRequest
           {
-              Approver = new StartRequest.ApproverClass()
+              Approver = new ApproverClass()
               {
                   NameSurname = "Uğur Karataş",
                   Type = 1,
