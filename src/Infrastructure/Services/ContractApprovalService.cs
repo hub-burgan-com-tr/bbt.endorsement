@@ -77,6 +77,8 @@ public class ContractApprovalService : IContractApprovalService
             // var state = customHeaders["State"].ToString();
 
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            _logger.LogInformation($"SaveEntity data: '{variables.InstanceId}'");
+
             if (variables != null)
             {
                 var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
@@ -88,7 +90,6 @@ public class ContractApprovalService : IContractApprovalService
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            _logger.LogInformation($"SaveEntity data: '{variables.InstanceId}'");
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
