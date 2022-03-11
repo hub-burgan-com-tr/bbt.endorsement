@@ -16,7 +16,7 @@ public class NewOrderCommandTests : TestBase
     [TestCase("1beecf76-5529-4309-97fe-39df9e917bd3")]
     public async Task NewOrderTestAsync(Guid id)
     {
-        var documents = new List<Document>();
+        var documents = new List<DocumentClass>();
         var command = new NewOrderCommand()
         {
           StartRequest =new StartRequest
@@ -27,10 +27,10 @@ public class NewOrderCommandTests : TestBase
                   Type = 1,
                   Value = "123456789101"
               },
-              Reference = new StartRequest.ReferenceClass { Callback = null, Process = "1", ProcessNo = "2", State = "3" },
+              Reference = new ReferenceClass { Callback = null, Process = "1", ProcessNo = "2", State = "3" },
               Title = "Deneme",
               Id = id,
-              Config = new StartRequest.OrderConfig { ExpireInMinutes = 4, MaxRetryCount = 5, RetryFrequence = "6" },
+              Config = new OrderConfig { ExpireInMinutes = 4, MaxRetryCount = 5, RetryFrequence = "6" },
               Documents = documents
           }
 
