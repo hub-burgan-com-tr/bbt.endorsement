@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-12" [ngClass]="ref.innerHTML.trim()?'col-md':'col-md-12'">
       <div class="title text-white">{{blockTitle}}</div>
-      <div class="sub-title text-white">{{subTitle}}</div>
+      <div class="sub-title text-white mt-4">{{subTitle}}</div>
     </div>
     <div class="col-md col-sm-12" #ref [ngClass]="ref.innerHTML.trim()?'col-md':'d-none'">
       <ng-content select="[right]"></ng-content>
