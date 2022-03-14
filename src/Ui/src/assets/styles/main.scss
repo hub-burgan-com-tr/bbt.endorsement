@@ -6,6 +6,13 @@
 app-root {
   color: #464646;
 
+  .table-custom {
+    th, td {
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
+    }
+  }
+
   .cursor-none {
     cursor: inherit;
   }
@@ -594,7 +601,15 @@ app-root {
         &:not(:last-child) {
           border-bottom: 1px solid #e1e1e1;
         }
+      }
 
+      table tbody tr {
+        &:hover {
+          background: #bde5f5;
+        }
+      }
+
+      app-list-item, table {
         .name {
           text-align: center;
         }
