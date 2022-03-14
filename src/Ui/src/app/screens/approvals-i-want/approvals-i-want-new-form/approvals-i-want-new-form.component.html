@@ -100,29 +100,47 @@
         </div>
       </div>
     </div>
-    <div class="box p-15px" *ngIf="step>=2">
+
+    <div class="box" *ngIf="step>=2">
+      <div class="title ps-5">Belgeler</div>
+      <table class="table table-padding">
+        <tbody>
+        <tr>
+          <td class="pl-15px no-wrap">
+            <img src="/assets/img/eye.png" class="c-pointer">
+          </td>
+          <td>Form</td>
+          <td>Sigorta Onay Formu</td>
+          <td>(ONAY) Okudum, anladım</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box approval-form" *ngIf="step>=2">
       <div class="row">
-        <div class="col-md-10 m-auto">
-          <div class="row align-items-center">
-            <div class="col-md col-sm-12">
-              <div class="form-group">
-                <label class="text-blue">Form</label>
-                <div>Sigorta Onay Formu</div>
-              </div>
-            </div>
-            <div class="col-md col-sm-12">
-              <div class="form-group">
-                <label class="text-blue">Onaycı</label>
-                <div>Uğur Karataş</div>
-              </div>
-            </div>
-            <div class="col-md col-sm-12">
-              <img src="/assets/img/attachment.png" class="me-2"> <b>Sigorta Onay Formu.pdf</b>
-            </div>
-          </div>
+        <div class="col-4">
+          <div>Onaycı</div>
+          <p class="fs-18 fw-600">Merve Aydın</p>
+        </div>
+      </div>
+      <div class="title no-border ps-0">Referans</div>
+      <div class="row">
+        <div class="col">
+          <div>İşlem</div>
+          <p class="fs-18 fw-600">Şube Operasyon</p>
+        </div>
+        <div class="col">
+          <div>Aşama</div>
+          <p class="fs-18 fw-600">Acil Ödeme</p>
+        </div>
+        <div class="col">
+          <div>İşlem No</div>
+          <p class="fs-18 fw-600">84545415</p>
         </div>
       </div>
     </div>
+
     <div class="button-group d-flex align-items-center justify-content-center mt-5">
       <button class="btn btn-outline-primary px-5 me-3" *ngIf="step>1" (click)="cancel()">İptal</button>
       <button class="btn btn-primary px-5" (click)="next()">{{buttonText}}</button>
