@@ -4,6 +4,7 @@ using Infrastructure;
 using Infrastructure.Services;
 using Infrastructure.ZeebeServices;
 using Worker.Api.Hubs;
+using Worker.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

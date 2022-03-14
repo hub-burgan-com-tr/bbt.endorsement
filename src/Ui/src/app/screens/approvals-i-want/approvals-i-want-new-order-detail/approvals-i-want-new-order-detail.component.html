@@ -38,10 +38,11 @@
             <td class="pl-15px no-wrap">
               <img src="/assets/img/eye.png" class="c-pointer" (click)="editDocument(i,$index)">
             </td>
-            <td>{{getType(i.documentType)}}</td>
-            <td>{{getDocumentName(i.documentType, i)}}</td>
+            <td>{{getType(i.type)}}</td>
+            <td>{{getDocumentName(i.type, i)}}</td>
             <td><span
-              *ngFor="let o of i.options; let isLast=last">({{getState(o.choice)}}) {{o.title}}{{isLast ? '' : ' - '}}</span>
+              *ngFor="let o of i.actions; let isLast=last">({{getState(o.choice)}}
+              ) {{o.title}}{{isLast ? '' : ' - '}}</span>
             </td>
             <td class="no-wrap pr-15px">
               <img src="/assets/img/trash.png" class="c-pointer" (click)="deleteDocumentModal($index)">
@@ -59,46 +60,45 @@
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio"
                    id="rdo1"
-                   name="documentType"
-                   formControlName="documentType"
+                   name="type"
+                   formControlName="type"
                    [value]="1"
                    (ngModelChange)="choose($event)"
-                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.documentType.invalid }"
+                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.type.invalid }"
             >
             <label class="form-check-label fw-600" for="rdo1">Fiziksel Belge</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio"
                    id="rdo2"
-                   name="documentType"
-                   formControlName="documentType"
+                   name="type"
+                   formControlName="type"
                    [value]="2"
                    (ngModelChange)="choose($event)"
-                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.documentType.invalid }"
+                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.type.invalid }"
             >
             <label class="form-check-label fw-600" for="rdo2">Metin İçerik</label>
           </div>
-          <div class="form-check form-check-inline">
+          <!--<div class="form-check form-check-inline">
             <input class="form-check-input" type="radio"
                    id="rdo3"
-                   name="documentType"
-                   formControlName="documentType"
+                   name="type"
+                   formControlName="type"
                    [value]="3"
                    (ngModelChange)="choose($event)"
-                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.documentType.invalid }"
+                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.type.invalid }"
             >
             <label class="form-check-label fw-600" for="rdo3">Form</label>
+          </div>-->
+          <div *ngIf="newDocumentSubmitted && fnd.type.errors" class="text-danger">
+            <small *ngIf="fnd.type.errors.required">Lütfen seçim yapınız</small>
           </div>
-          <div *ngIf="newDocumentSubmitted && fnd.documentType.errors" class="text-danger">
-            <small *ngIf="fnd.documentType.errors.required">Lütfen seçim yapınız</small>
-          </div>
-          <div id="document" *ngIf="formNewDocument.controls.documentType?.value===1">
+          <div id="document" *ngIf="formNewDocument.controls.type?.value===1">
             <div class="my-4">
               <div class="row align-items-center">
                 <div class="col-auto">
                   <button class="btn btn-white px-5" type="button" (click)="file.click()">Bilgisayarıma Gözat</button>
-                  <input type="file" [multiple]="true" #file [hidden]="true" formControlName="files"
-                         (change)="onClickUploadDocument($event)">
+                  <input type="file" #file [hidden]="true" (change)="onClickUploadDocument($event)">
                 </div>
                 <div class="col">PNG, JPG or DOCSX, yüklenebilir en fazla 20MB gibi bir yazı vs.</div>
               </div>
@@ -106,12 +106,12 @@
               <div *ngIf="newDocumentSubmitted && fnd.files.errors" class="text-danger">
                 <small *ngIf="fnd.files.errors.required">Lütfen dosya seçiniz</small>
               </div>
-              <a class="d-flex align-items-center mt-3" *ngFor="let file of files">
-                <img src="/assets/img/attachment.png" class="me-2"> <b>{{file.name}}</b>
+              <a class="d-flex align-items-center mt-3" *ngIf="selectedFileName">
+                <img src="/assets/img/attachment.png" class="me-2"> <b>{{selectedFileName}}</b>
               </a>
             </div>
           </div>
-          <div id="textContent" *ngIf="formNewDocument.controls.documentType?.value===2">
+          <div id="textContent" *ngIf="formNewDocument.controls.type?.value===2">
             <div class="my-4">
               <div id="content">
                 <div class="content-header">
@@ -139,7 +139,7 @@
               </div>
             </div>
           </div>
-          <div id="form" *ngIf="formNewDocument.controls.documentType?.value===3">
+          <!--<div id="form" *ngIf="formNewDocument.controls.type?.value===3">
             <div class="my-4">
               <div class="row">
                 <div class="col-12 col-md-3">
@@ -180,7 +180,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
           <div class="choices">
             <div class="title d-flex align-items-center">
               <div class="d-inline-block c-pointer" (click)="showChoiceAddPanel=true">
@@ -204,8 +204,8 @@
                 </div>
               </div>
             </div>
-            <div formArrayName="options">
-              <div *ngFor="let i of getOptions(); let $index=index" class="choices-item" [formGroupName]="$index">
+            <div formArrayName="actions">
+              <div *ngFor="let i of getActions(); let $index=index" class="choices-item" [formGroupName]="$index">
                 <div class="row">
                   <div class="col-md-3 col-6 d-flex align-items-center">
                     <img src="/assets/img/minus.png" class="minus c-pointer" (click)="deleteChoice($index)">
@@ -222,7 +222,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="newDocumentSubmitted && optionsHasError" class="text-danger">
+            <div *ngIf="newDocumentSubmitted && actionsHasError" class="text-danger">
               <small>Lütfen seçenek ekleyiniz.</small>
             </div>
             <!--<div class="choices-item">
@@ -319,63 +319,68 @@
           <div *ngIf="f.title.errors.required">Başlık girilmelidir.</div>
         </div>
       </div>
-      <div class="title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Referans</div>
-      <div class="row">
-        <div class="col-md col-sm-12">
-          <div class="form-group">
-            <label for="process">İşlem</label>
-            <input type="text" class="form-control" id="process" name="process" formControlName="process"
-                   [ngClass]="{ 'is-invalid': submitted && f.process.invalid }">
-            <div *ngIf="submitted && f.process.errors" class="invalid-feedback">
-              <div *ngIf="f.process.errors.required">İşlem bilgisi girilmelidir.</div>
+      <div formGroupName="reference">
+        <div class="title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Referans</div>
+        <div class="row">
+          <div class="col-md col-sm-12">
+            <div class="form-group">
+              <label for="process">İşlem</label>
+              <input type="text" class="form-control" id="process" name="process" formControlName="process"
+                     [ngClass]="{ 'is-invalid': submitted && fr.process.invalid }">
+              <div *ngIf="submitted && fr.process.errors" class="invalid-feedback">
+                <div *ngIf="fr.process.errors.required">İşlem bilgisi girilmelidir.</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md col-sm-12">
-          <div class="form-group">
-            <label for="step">Aşama</label>
-            <input type="text" class="form-control" id="step" name="step" formControlName="step"
-                   [ngClass]="{ 'is-invalid': submitted && f.step.invalid }">
-            <div *ngIf="submitted && f.step.errors" class="invalid-feedback">
-              <div *ngIf="f.step.errors.required">Aşama bilgisi girilmelidir.</div>
+          <div class="col-md col-sm-12">
+            <div class="form-group">
+              <label for="state">Aşama</label>
+              <input type="text" class="form-control" id="state" name="state" formControlName="state"
+                     [ngClass]="{ 'is-invalid': submitted && fr.state.invalid }">
+              <div *ngIf="submitted && fr.state.errors" class="invalid-feedback">
+                <div *ngIf="fr.state.errors.required">Aşama bilgisi girilmelidir.</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md col-sm-12">
-          <div class="form-group">
-            <label for="processNo">İşlem No</label>
-            <input type="text" class="form-control" id="processNo" name="processNo" formControlName="processNo"
-                   [ngClass]="{ 'is-invalid': submitted && f.processNo.invalid }">
-            <div *ngIf="submitted && f.processNo.errors" class="invalid-feedback">
-              <div *ngIf="f.processNo.errors.required">İşlem no bilgisi girilmelidir.</div>
+          <div class="col-md col-sm-12">
+            <div class="form-group">
+              <label for="processNo">İşlem No</label>
+              <input type="text" class="form-control" id="processNo" name="processNo" formControlName="processNo"
+                     [ngClass]="{ 'is-invalid': submitted && fr.processNo.invalid }">
+              <div *ngIf="submitted && fr.processNo.errors" class="invalid-feedback">
+                <div *ngIf="fr.processNo.errors.required">İşlem no bilgisi girilmelidir.</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Ayarlar</div>
-      <div class="row">
-        <div class="col-md col-sm-12">
-          <div class="form-group">
-            <label for="validity">Geçerlilik</label>
-            <input type="text" class="form-control" id="validity" name="validity" formControlName="validity">
-          </div>
-        </div>
-        <div class="col-md col-sm-12">
-          <div class="form-group">
-            <label for="reminderFrequency">Hatırlatma Frekansı</label>
-            <input type="text" class="form-control" id="reminderFrequency" name="reminderFrequency"
-                   formControlName="reminderFrequency"
-                   [ngClass]="{ 'is-invalid': submitted && f.reminderFrequency.invalid }">
-            <div *ngIf="submitted && f.reminderFrequency.errors" class="invalid-feedback">
-              <div *ngIf="f.reminderFrequency.errors.required">Hatırlatma frekansı girilmelidir.</div>
+      <div formGroupName="config">
+        <div class="title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Ayarlar</div>
+        <div class="row">
+          <div class="col-md col-sm-12">
+            <div class="form-group">
+              <label for="expireInMinutes">Geçerlilik</label>
+              <input type="text" class="form-control" id="expireInMinutes" name="expireInMinutes"
+                     formControlName="expireInMinutes">
             </div>
           </div>
-        </div>
-        <div class="col-md col-sm-12">
-          <div class="form-group">
-            <label for="reminderCount">Hatırlatma Sayısı</label>
-            <input type="text" class="form-control" id="reminderCount" name="reminderCount" onlyNumber
-                   formControlName="reminderCount">
+          <div class="col-md col-sm-12">
+            <div class="form-group">
+              <label for="retryFrequence">Hatırlatma Frekansı</label>
+              <input type="text" class="form-control" id="retryFrequence" name="retryFrequence"
+                     formControlName="retryFrequence"
+                     [ngClass]="{ 'is-invalid': submitted && fc.retryFrequence.invalid }">
+              <div *ngIf="submitted && fc.retryFrequence.errors" class="invalid-feedback">
+                <div *ngIf="fc.retryFrequence.errors.required">Hatırlatma frekansı girilmelidir.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md col-sm-12">
+            <div class="form-group">
+              <label for="maxRetryCount">Hatırlatma Sayısı</label>
+              <input type="text" class="form-control" id="maxRetryCount" name="maxRetryCount" onlyNumber
+                     formControlName="maxRetryCount">
+            </div>
           </div>
         </div>
       </div>
