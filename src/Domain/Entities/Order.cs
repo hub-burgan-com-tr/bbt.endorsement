@@ -7,7 +7,7 @@ namespace Domain.Entities
     public class Order : AuditableEntity, IHasDomainEvent
     {
         [MaxLength(36)]
-       
+       [Key]
         public string Id { get; set; }
         [Required]
         [MaxLength(250)]
