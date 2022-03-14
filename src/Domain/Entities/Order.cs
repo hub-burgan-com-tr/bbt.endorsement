@@ -1,14 +1,17 @@
 ﻿using Domain.Common;
 using Domain.Events.Approvals;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
     public class Order : AuditableEntity, IHasDomainEvent
     {
+        [Key]
+        [MaxLength(36)]
         public string OrderId { get; set; }
+        [Required]
+        [MaxLength(100)]
         public string Title { get; set; }
-        public long Customer { get; set; }
-        public long Approver { get; set; }
 
 
         private bool _done;

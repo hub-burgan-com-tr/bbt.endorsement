@@ -18,12 +18,12 @@ namespace Application.Endorsements.Commands.NewOrders
     }
     public class DocumentClass
     {
-        public int DocumentType { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         //public Dictionary<string, string> FormParameters { get; set; }
 
-        public IFormFile Files { get; set; }
+        public string File { get; set; }
+        public string FileName { get; set; }
         public ContentType Type { get; set; }
         public List<ActionClass> Actions { get; set; } // Options
 

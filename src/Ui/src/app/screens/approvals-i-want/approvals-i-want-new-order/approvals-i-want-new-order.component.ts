@@ -18,12 +18,16 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
     this.model = new NewApprovalOrder();
     this.formGroup = this.fb.group({
       title: ['', Validators.required],
-      process: ['', Validators.required],
-      step: ['', Validators.required],
-      processNo: ['', Validators.required],
-      validity: [''],
-      reminderFrequency: ['', Validators.required],
-      reminderCount: [''],
+      reference: this.fb.group({
+        process: ['', Validators.required],
+        state: ['', Validators.required],
+        processNo: ['', Validators.required],
+      }),
+      config: this.fb.group({
+        expireInMinutes: [''],
+        retryFrequence: ['', Validators.required],
+        maxRetryCount: [''],
+      })
     })
   }
 
@@ -32,6 +36,14 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
 
   get f() {
     return this.formGroup.controls;
+  }
+
+  get fr() {
+    return (<FormGroup>this.formGroup.controls.reference).controls;
+  }
+
+  get fc() {
+    return (<FormGroup>this.formGroup.controls.config).controls;
   }
 
   onSubmit() {
