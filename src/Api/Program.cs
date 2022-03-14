@@ -44,14 +44,23 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 IWebHostEnvironment environment = builder.Environment;
-var configuration = builder.Configuration
-    .AddJsonFile("appsettings.json", false, true)
-    .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", true, true)
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
-    .AddUserSecrets<Program>()
-    .Build();
 
+if (environment.EnvironmentName == "Development")
+    builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment}.json", true, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+else
+    builder
+        .Configuration
+        .AddJsonFile("appsettings.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 

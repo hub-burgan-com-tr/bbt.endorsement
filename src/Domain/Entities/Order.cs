@@ -7,8 +7,6 @@ namespace Domain.Entities
     {
         public string OrderId { get; set; }
         public string Title { get; set; }
-        public long Customer { get; set; }
-        public long Approver { get; set; }
 
 
         private bool _done;
