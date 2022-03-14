@@ -121,17 +121,11 @@ namespace Infrastructure.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<long>("Approver")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Customer")
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
