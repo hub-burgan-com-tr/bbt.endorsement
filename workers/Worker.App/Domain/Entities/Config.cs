@@ -6,7 +6,7 @@ namespace Worker.App.Domain.Entities
     public class Config : AuditableEntity
     {
         [Key]
-        public string ApprovalId { get; set; }
+        public string OrderId { get; set; }
 
         /// <summary>
         ///  emrin geçerlilik süresi dakika olarak tanımlanır. 

@@ -11,7 +11,7 @@ namespace Worker.App.Domain.Entities
         }
 
         [Key]
-        public string ApprovalId { get; set; }
+        public string OrderId { get; set; }
 
         /// <summary>
         /// Süreç
