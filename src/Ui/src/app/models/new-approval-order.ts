@@ -1,19 +1,20 @@
-interface ApproverInterface {
+interface IApprover {
   type: string;
   value: string;
   nameSurname: string;
 }
 
-class Approver implements ApproverInterface {
+class Approver implements IApprover {
   nameSurname: string;
   type: string;
   value: string;
 }
 
-interface DocumentInterface {
-  documentType: number;
-  options: [];
-  files: File[];
+interface IDocument {
+  type: number;
+  actions: [];
+  file: string;
+  fileName: string;
   title: string;
   content: string;
   formId: string;
@@ -21,39 +22,70 @@ interface DocumentInterface {
   nameSurname: string;
 }
 
-class Document implements DocumentInterface {
+class Document implements IDocument {
   content: string;
-  documentType: number;
-  files: File[];
+  type: number;
+  file: string;
+  fileName: string;
   formId: string;
   identityNo: number;
   nameSurname: string;
-  options: any;
+  actions: any;
   title: string;
 }
 
-export interface NewApprovalOrderInterface {
-  title: string;
+interface IConfig {
+  maxRetryCount: number;
+  retryFrequence: string;
+  expireInMinutes: number;
+  notifyMessageSMS: string;
+  notifyMessagePush: string;
+  renotifyMessageSMS: string;
+  renotifyMessagePush: string;
+}
+
+class Config implements IConfig {
+  expireInMinutes: number;
+  maxRetryCount: number;
+  notifyMessagePush: string;
+  notifyMessageSMS: string;
+  renotifyMessagePush: string;
+  renotifyMessageSMS: string;
+  retryFrequence: string;
+}
+
+interface IReference {
   process: string;
-  step: string;
+  state: string;
   processNo: string;
-  validity: string;
-  reminderFrequency: string;
-  reminderCount: number;
+  callback: {
+    mode: string,
+    url: string
+  }
+}
+
+class Reference implements IReference {
+  callback: { mode: string; url: string };
+  process: string;
+  processNo: string;
+  state: string;
+
+}
+
+interface INewApprovalOrder {
+  title: string;
+  reference: Reference;
+  config: Config;
   documents: Document[];
   approver: Approver;
 }
 
-export class NewApprovalOrder implements NewApprovalOrderInterface {
+export class NewApprovalOrder implements INewApprovalOrder {
   approver: Approver;
+  config: Config;
   documents: Document[];
-  process: string;
-  processNo: string;
-  reminderCount: number;
-  reminderFrequency: string;
-  step: string;
+  reference: Reference;
   title: string;
-  validity: string;
 
   constructor() {
     this.approver = new Approver();

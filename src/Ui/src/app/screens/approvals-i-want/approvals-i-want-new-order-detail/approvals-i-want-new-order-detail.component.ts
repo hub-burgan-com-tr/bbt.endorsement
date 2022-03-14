@@ -1,29 +1,31 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSmartModalService} from "ngx-smart-modal";
 import "../../../extensions/ng-form.extensions";
 import {NewOrderService} from "../../../services/new-order.service";
 import {NewApprovalOrder} from "../../../models/new-approval-order";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-approvals-i-want-new-order-detail',
   templateUrl: './approvals-i-want-new-order-detail.component.html',
   styleUrls: ['./approvals-i-want-new-order-detail.component.scss']
 })
-export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
+export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject();
   showUpdatePanel: boolean = false;
   showDocumentAddPanel: boolean = false;
   panelTitle: string = 'Yeni Belge Ekle';
   isEditing: boolean = false;
   submitted = false;
+  selectedFileName;
   approvalSubmitted = false;
   newDocumentSubmitted = false;
-  optionsHasError = false;
+  actionsHasError = false;
   formGroup: FormGroup;
   formGroupApproval: FormGroup;
   formNewDocument: FormGroup;
-  files: File[] = [];
   approvalFormValidationMessage = '';
   showChoiceAddPanel: boolean = false;
   model: NewApprovalOrder;
@@ -33,9 +35,10 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private modal: NgxSmartModalService) {
     this.initModel();
     this.formNewDocument = this.fb.group({
-      documentType: ['', Validators.required],
-      options: this.fb.array([]),
-      files: [],
+      type: ['', Validators.required],
+      actions: this.fb.array([]),
+      file: '',
+      fileName: '',
       title: '',
       content: '',
       formId: '',
@@ -45,12 +48,16 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
     });
     this.formGroup = this.fb.group({
       title: [this.model.title, Validators.required],
-      process: [this.model.process, Validators.required],
-      step: [this.model.step, Validators.required],
-      processNo: [this.model.processNo, Validators.required],
-      validity: [this.model.validity],
-      reminderFrequency: [this.model.reminderFrequency, Validators.required],
-      reminderCount: [this.model.reminderCount],
+      reference: this.fb.group({
+        process: [this.model.reference.process, Validators.required],
+        state: [this.model.reference.state, Validators.required],
+        processNo: [this.model.reference.processNo, Validators.required],
+      }),
+      config: this.fb.group({
+        expireInMinutes: [this.model.config.expireInMinutes],
+        retryFrequence: [this.model.config.retryFrequence, Validators.required],
+        maxRetryCount: [this.model.config.maxRetryCount],
+      })
     });
     this.formGroupApproval = this.fb.group({
       type: ['', Validators.required],
@@ -61,17 +68,22 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
   initModel() {
     this.model = this.newOrderService.getModel();
-    this.model.documents = this.model.documents.filter(i => i.documentType != 1);
+    this.model.documents = this.model.documents.filter(i => i.type != 1);
     this.approvalButtonText = this.model.approver && this.model.approver.nameSurname ? 'Güncelle' : 'Kaydet';
     this.newOrderService.setModel(this.model);
   }
 
-  getDocumentName(documentType: number, i: any) {
-    switch (documentType) {
+  getDocumentName(type: number, i: any) {
+    switch (type) {
       case 1:
-        return i.files.map(item => item.name).join(', ');
+        return i.fileName;
       case 2:
         return i.title;
       case 3:
@@ -103,40 +115,40 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   addChoice() {
     if (!this.formNewDocument.get('choiceText')?.value)
       return;
-    (<FormArray>this.formNewDocument.get('options')).push(this.fb.group({
+    (<FormArray>this.formNewDocument.get('actions')).push(this.fb.group({
       title: this.formNewDocument.get('choiceText')?.value,
       choice: '1'
     }));
     this.formNewDocument.get('choiceText')?.setValue('');
-    this.optionsHasError = false;
+    this.actionsHasError = false;
   }
 
   deleteChoice(i: number) {
-    (<FormArray>this.formNewDocument.get('options')).controls.splice(i, 1);
+    (<FormArray>this.formNewDocument.get('actions')).controls.splice(i, 1);
   }
 
   editDocument(document: any, index: number) {
     this.isEditing = true;
     this.selectedDocumentIndex = index;
     this.formNewDocument.patchValue({
-      documentType: document.documentType,
+      type: document.type,
       title: document.title,
       content: document.content,
       formId: document.formId,
       identityNo: document.identityNo,
-      nameSurname: document.nameSurname
+      nameSurname: document.nameSurname,
+      fileName: document.fileName
     });
-    document.options.forEach(k => {
-      (<FormArray>this.formNewDocument.get('options')).push(this.fb.group({
+    document.actions.forEach(k => {
+      (<FormArray>this.formNewDocument.get('actions')).push(this.fb.group({
         title: k.title,
         choice: k.choice
       }))
     });
-    this.formNewDocument.get('options').updateValueAndValidity();
-    this.files = document.files;
+    this.formNewDocument.get('actions').updateValueAndValidity();
     this.panelTitle = 'Belgeyi Düzenle';
-    this.formNewDocument.controls.files.setValidators(null);
-    this.formNewDocument.controls.files.updateValueAndValidity();
+    this.formNewDocument.controls.file.setValidators(null);
+    this.formNewDocument.controls.file.updateValueAndValidity();
     this.showDocumentAddPanel = true;
   }
 
@@ -147,13 +159,12 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
     this.panelTitle = 'Yeni Belge Ekle';
     Object.keys(this.formNewDocument.controls).forEach((key, index) => {
       this.formNewDocument.controls[key].setErrors(null);
-      if (key != 'options')
+      if (key != 'actions')
         this.formNewDocument.controls[key].setValue('');
       else {
         (<FormArray>this.formNewDocument.controls[key]) = this.fb.array([]);
       }
     });
-    this.files = [];
     this.showDocumentAddPanel = false;
   }
 
@@ -173,6 +184,14 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
     return this.formGroup.controls;
   }
 
+  get fr() {
+    return (<FormGroup>this.formGroup.controls.reference).controls;
+  }
+
+  get fc() {
+    return (<FormGroup>this.formGroup.controls.config).controls;
+  }
+
   get fa() {
     return this.formGroupApproval.controls;
   }
@@ -181,13 +200,16 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
     return this.formNewDocument.controls;
   }
 
-  getOptions() {
-    return (<FormArray>this.formNewDocument.controls.options).controls;
+  getActions() {
+    return (<FormArray>this.formNewDocument.controls.actions).controls;
   }
 
   onSubmit() {
     this.submitted = true;
     if (this.formGroup.valid) {
+      this.newOrderService.save(this.model).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        console.log(res);
+      });
       this.modal.open('success');
     }
   }
@@ -218,8 +240,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
 
   onSubmitAddDocument() {
     this.newDocumentSubmitted = true;
-    if (!(<FormArray>this.formNewDocument.get('options')).length) {
-      this.optionsHasError = true;
+    if (!(<FormArray>this.formNewDocument.get('actions')).length) {
+      this.actionsHasError = true;
       return;
     }
     if (this.formNewDocument.invalid)
@@ -227,13 +249,11 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
 
     if (this.isEditing) {
       this.model.documents[this.selectedDocumentIndex] = Object.assign({}, {
-        ...this.formNewDocument.getRawValue(),
-        files: [...this.files]
+        ...this.formNewDocument.getRawValue()
       })
     } else {
       this.model.documents.push({
-        ...this.formNewDocument.getRawValue(),
-        files: [...this.files]
+        ...this.formNewDocument.getRawValue()
       });
     }
     this.newOrderService.setModel(this.model);
@@ -242,8 +262,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
 
   choose(e: any) {
     if (!this.isEditing) {
-      this.formNewDocument.controls.files.setValidators(e === 1 ? [Validators.required] : null);
-      this.formNewDocument.controls.files.updateValueAndValidity();
+      this.formNewDocument.controls.file.setValidators(e === 1 ? [Validators.required] : null);
+      this.formNewDocument.controls.file.updateValueAndValidity();
     }
     this.formNewDocument.controls.title.setValidators(e === 2 ? [Validators.required] : null);
     this.formNewDocument.controls.title.updateValueAndValidity();
@@ -258,9 +278,17 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit {
   }
 
   onClickUploadDocument(event: any) {
-    const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-      this.files.push(files[i]);
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      this.selectedFileName = file.name;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.formNewDocument.patchValue({
+          file: reader.result,
+          fileName: this.selectedFileName
+        });
+      };
     }
   }
 
