@@ -35,7 +35,7 @@ namespace Domain.Entities
         [MaxLength(250)]
         public string Number { get; set; }
 
-        public virtual Order Approval { get; set; }
+        public virtual Order Order { get; set; }
         public virtual ICollection<Callback> Callbacks { get; set; }
     }
 }

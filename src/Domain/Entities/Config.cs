@@ -6,9 +6,8 @@ namespace Domain.Entities
     public class Config : AuditableEntity
     {
         [Key]
-        [MaxLength(36)]
+        [MaxLength(36)] 
         public string OrderId { get; set; }
-
         /// <summary>
         ///  emrin geçerlilik süresi dakika olarak tanımlanır. 
         /// </summary>
@@ -28,6 +27,6 @@ namespace Domain.Entities
         public int MaxRetryCount { get; set; }
 
 
-        public virtual Order Approval { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

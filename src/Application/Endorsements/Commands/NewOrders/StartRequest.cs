@@ -23,7 +23,7 @@ namespace Application.Endorsements.Commands.NewOrders
         public string Content { get; set; }
         //public Dictionary<string, string> FormParameters { get; set; }
 
-        public IFormFile Files { get; set; }
+        public string Files { get; set; }
         public ContentType Type { get; set; }
         public List<ActionClass> Actions { get; set; } // Options
 

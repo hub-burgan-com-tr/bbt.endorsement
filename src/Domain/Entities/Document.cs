@@ -4,10 +4,10 @@ namespace Domain.Entities
 {
     public class Document
     {
-        public string DocumentId { get; set; }
-
         [Key]
+        [MaxLength(36)]
         public string OrderId { get; set; }
+        public string DocumentId { get; set; }
         public string Name { get; set; }
         public string Content { get; set; }
         public int Type { get; set; }

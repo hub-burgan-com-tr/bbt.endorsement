@@ -24,78 +24,82 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Callback", b =>
                 {
-                    b.Property<string>("ReferenceId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CallbackId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Mode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReferenceApprovalId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("ReferenceOrderId")
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ReferenceId");
+                    b.HasKey("OrderId");
 
-                    b.HasIndex("ReferenceApprovalId");
+                    b.HasIndex("ReferenceOrderId");
 
                     b.ToTable("Callbacks");
                 });
 
             modelBuilder.Entity("Domain.Entities.Config", b =>
                 {
-                    b.Property<string>("ApprovalId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<int>("MaxRetryCount")
                         .HasColumnType("int");
 
                     b.Property<string>("RetryFrequence")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("TimeoutMinutes")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.HasKey("ApprovalId");
+                    b.HasKey("OrderId");
 
                     b.ToTable("Configs");
                 });
 
             modelBuilder.Entity("Domain.Entities.Document", b =>
                 {
-                    b.Property<string>("ApprovalId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApprovalOrderId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -106,12 +110,16 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OrderId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("ApprovalId");
+                    b.HasKey("OrderId");
 
-                    b.HasIndex("ApprovalOrderId");
+                    b.HasIndex("OrderId1");
 
                     b.ToTable("Documents");
                 });
@@ -119,13 +127,15 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
@@ -134,7 +144,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -148,31 +159,40 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
                 {
-                    b.Property<string>("ApprovalId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Number")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.HasKey("ApprovalId");
+                    b.HasKey("OrderId");
 
                     b.ToTable("References");
                 });
@@ -181,40 +201,42 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Reference", "Reference")
                         .WithMany("Callbacks")
-                        .HasForeignKey("ReferenceApprovalId");
+                        .HasForeignKey("ReferenceOrderId");
 
                     b.Navigation("Reference");
                 });
 
             modelBuilder.Entity("Domain.Entities.Config", b =>
                 {
-                    b.HasOne("Domain.Entities.Order", "Approval")
+                    b.HasOne("Domain.Entities.Order", "Order")
                         .WithOne("Config")
-                        .HasForeignKey("Domain.Entities.Config", "ApprovalId")
+                        .HasForeignKey("Domain.Entities.Config", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Approval");
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Document", b =>
                 {
-                    b.HasOne("Domain.Entities.Order", "Approval")
+                    b.HasOne("Domain.Entities.Order", "Order")
                         .WithMany("Documents")
-                        .HasForeignKey("ApprovalOrderId");
+                        .HasForeignKey("OrderId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Approval");
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
                 {
-                    b.HasOne("Domain.Entities.Order", "Approval")
+                    b.HasOne("Domain.Entities.Order", "Order")
                         .WithOne("Reference")
-                        .HasForeignKey("Domain.Entities.Reference", "ApprovalId")
+                        .HasForeignKey("Domain.Entities.Reference", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Approval");
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
