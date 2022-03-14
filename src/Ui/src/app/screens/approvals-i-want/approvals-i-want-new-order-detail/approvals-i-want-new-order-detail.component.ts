@@ -147,6 +147,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
         choice: k.choice
       }))
     });
+
     this.formNewDocument.get('actions').updateValueAndValidity();
     this.panelTitle = 'Belgeyi Düzenle';
     this.formNewDocument.controls.file.setValidators(null);
