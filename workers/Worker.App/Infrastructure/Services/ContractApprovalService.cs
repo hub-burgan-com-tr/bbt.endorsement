@@ -48,7 +48,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void ErrorHandler()
     {
-        _logger.LogInformation("ErrorHandler Worker registered ");
+        _logger.LogInformation("ErrorHandler Worker registered");
 
         CreateWorker("ErrorHandler", async (jobClient, job) =>
         {
