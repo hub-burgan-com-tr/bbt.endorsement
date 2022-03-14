@@ -10,10 +10,10 @@ namespace Domain.Entities
             Callbacks = new HashSet<Callback>();
         }
 
+
         [Key]
         [MaxLength(36)]
         public string OrderId { get; set; }
-
         /// <summary>
         /// Süreç
         /// </summary>

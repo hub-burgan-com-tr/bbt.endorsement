@@ -18,7 +18,6 @@ namespace Application.Endorsements.Commands.NewOrders
     }
     public class DocumentClass
     {
-        public int DocumentType { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         //public Dictionary<string, string> FormParameters { get; set; }

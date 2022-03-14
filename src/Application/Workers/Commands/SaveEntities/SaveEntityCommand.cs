@@ -25,7 +25,7 @@ namespace Application.Workers.Commands.SaveEntities
             var data = request.Model.StartRequest;
             var order = new Order
             {
-                Id = data.Id.ToString(),
+                OrderId = data.Id.ToString(),
                 Title = data.Title
             };
             _context.Orders.Add(order);
