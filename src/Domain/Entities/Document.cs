@@ -7,11 +7,11 @@ namespace Domain.Entities
         public string DocumentId { get; set; }
 
         [Key]
-        public string ApprovalId { get; set; }
+        public string OrderId { get; set; }
         public string Name { get; set; }
         public string Content { get; set; }
         public int Type { get; set; }
 
-        public virtual Order Approval { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

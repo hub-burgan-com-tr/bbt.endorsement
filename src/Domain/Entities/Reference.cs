@@ -11,21 +11,28 @@ namespace Domain.Entities
         }
 
         [Key]
-        public string ApprovalId { get; set; }
+        [MaxLength(36)]
+        public string OrderId { get; set; }
 
         /// <summary>
         /// Süreç
         /// </summary>
+        [Required]
+        [MaxLength(250)]
         public string Name { get; set; }
 
         /// <summary>
         /// Aşama
         /// </summary>
+        [Required]
+        [MaxLength(250)]
         public string State { get; set; }
 
         /// <summary>
         /// İşlem No
         /// </summary>
+        [Required]
+        [MaxLength(250)]
         public string Number { get; set; }
 
         public virtual Order Approval { get; set; }
