@@ -14,38 +14,26 @@ using Worker.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 IWebHostEnvironment environment = builder.Environment;
 
-if (environment.EnvironmentName == "Development")
-    builder
-        .Configuration
-        .AddJsonFile($"appsettings.{environment}.json", true, true)
-        .AddEnvironmentVariables()
-        .AddCommandLine(args)
-        .AddUserSecrets<Program>()
-        .Build();
-else
-    builder
-        .Configuration
-        .AddJsonFile("appsettings.json", false, true)
-        .AddEnvironmentVariables()
-        .AddCommandLine(args)
-        .AddUserSecrets<Program>()
-        .Build();
-
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{environment}.json", true, true)
+    .AddUserSecrets<Program>(optional: true)
+    .AddEnvironmentVariables()
+    .Build();
 
 var services = new ServiceCollection();
-services.AddLogging(config =>
-{
-    config.AddSerilog();
-});
 services.AddSingleton<IConfiguration>(builder.Configuration);
 
-
-
 Log.Logger = new LoggerConfiguration()
-   .ReadFrom.Configuration(builder.Configuration)
+   .ReadFrom.Configuration(configuration)
    .CreateLogger();
+builder.Host.UseSerilog(); 
+
+var app = builder.Build();
+
 Log.Information("Getting the motors running...");
 
 

@@ -14,15 +14,15 @@ namespace Worker.App.Infrastructure.Services.ZeebeServices
     public class ZeebeService : IZeebeService
     {
         private readonly IZeebeClient client;
-        private readonly ILogger<ZeebeService> _logger;
+       // private readonly ILogger<ZeebeService> _logger;
         //private readonly IClientEventService _clientEventService;
         //private readonly IServerEventService _serverEventService;
 
         private string ZeebeUrl;
 
-        public ZeebeService(ILogger<ZeebeService> logger, IConfiguration configuration)
+        public ZeebeService( IConfiguration configuration)
         {
-            _logger = logger;
+           // _logger = logger;
             var settings = configuration.Get<AppSettings>();
             ZeebeUrl = settings.Zeebe.ZeebeGateway.ToString();
 
@@ -35,7 +35,7 @@ namespace Worker.App.Infrastructure.Services.ZeebeServices
 
         public async Task<string> SendMessage(string instanceId, string messageName, string payload)
         {
-            _logger.LogInformation("instanceId: " + instanceId);
+           // _logger.LogInformation("instanceId: " + instanceId);
             await client.NewPublishMessageCommand()
                 .MessageName(messageName)
                 .CorrelationKey(instanceId)
