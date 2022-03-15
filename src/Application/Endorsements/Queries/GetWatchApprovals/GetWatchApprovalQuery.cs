@@ -16,7 +16,10 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
     /// Onay Isteyen
     /// </summary>
         public string SeekingApproval { get; set; }
-     
+        public string Process { get; set; }
+        public string State { get; set; }
+        public string ProcessNo { get; set; }
+
 
     }
 
