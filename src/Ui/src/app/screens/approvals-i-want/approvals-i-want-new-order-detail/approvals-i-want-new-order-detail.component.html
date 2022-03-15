@@ -103,8 +103,8 @@
                 <div class="col">PNG, JPG or DOCSX, yüklenebilir en fazla 20MB gibi bir yazı vs.</div>
               </div>
 
-              <div *ngIf="newDocumentSubmitted && fnd.files.errors" class="text-danger">
-                <small *ngIf="fnd.files.errors.required">Lütfen dosya seçiniz</small>
+              <div *ngIf="newDocumentSubmitted && fnd.file.errors" class="text-danger">
+                <small *ngIf="fnd.file.errors.required">Lütfen dosya seçiniz</small>
               </div>
               <a class="d-flex align-items-center mt-3" *ngIf="selectedFileName">
                 <img src="/assets/img/attachment.png" class="me-2"> <b>{{selectedFileName}}</b>

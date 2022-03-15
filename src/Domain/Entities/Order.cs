@@ -6,11 +6,11 @@ namespace Domain.Entities
 {
     public class Order : AuditableEntity, IHasDomainEvent
     {
+        [Key]
         [MaxLength(36)]
-       [Key]
-        public string Id { get; set; }
+        public string OrderId { get; set; }
         [Required]
-        [MaxLength(250)]
+        [MaxLength(100)]
         public string Title { get; set; }
 
 
@@ -32,6 +32,8 @@ namespace Domain.Entities
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
         public virtual Reference Reference { get; set; }
         public virtual Config Config { get; set; }
+
+
         public virtual ICollection<Document> Documents { get; set; }
 
     }

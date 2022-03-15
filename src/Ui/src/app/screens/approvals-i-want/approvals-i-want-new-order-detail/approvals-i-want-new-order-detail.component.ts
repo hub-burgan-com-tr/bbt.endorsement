@@ -137,14 +137,17 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       formId: document.formId,
       identityNo: document.identityNo,
       nameSurname: document.nameSurname,
+      file:document.file,
       fileName: document.fileName
     });
+    this.selectedFileName = document.fileName;
     document.actions.forEach(k => {
       (<FormArray>this.formNewDocument.get('actions')).push(this.fb.group({
         title: k.title,
         choice: k.choice
       }))
     });
+
     this.formNewDocument.get('actions').updateValueAndValidity();
     this.panelTitle = 'Belgeyi Düzenle';
     this.formNewDocument.controls.file.setValidators(null);
@@ -157,6 +160,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
     this.newDocumentSubmitted = false;
     this.isEditing = false;
     this.panelTitle = 'Yeni Belge Ekle';
+    this.selectedFileName = '';
     Object.keys(this.formNewDocument.controls).forEach((key, index) => {
       this.formNewDocument.controls[key].setErrors(null);
       if (key != 'actions')
