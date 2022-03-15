@@ -76,7 +76,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   initModel() {
     this.model = this.newOrderService.getModel();
     this.model.documents = this.model.documents.filter(i => i.type != 1);
-    this.approvalButtonText = this.model.approver && this.model.approver.nameSurname ? 'Güncelle' : 'Kaydet';
+    this.approvalButtonText = this.model.approver && this.model.approver.nameSurname ? 'Güncelle' : 'Onaycı Ekle';
     this.newOrderService.setModel(this.model);
   }
 

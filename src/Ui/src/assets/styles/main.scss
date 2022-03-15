@@ -544,7 +544,6 @@ app-root {
       .document-add-panel, .document-update-panel {
         & > .content {
           background-color: #bde5f5;
-          margin: 15px 15px 0 15px;
           padding: 15px;
 
           & > .title {
@@ -578,6 +577,7 @@ app-root {
         & > .content {
           background-color: #bde5f5;
           margin-top: 15px;
+          margin-bottom: 15px;
           padding: 15px;
 
           .title {

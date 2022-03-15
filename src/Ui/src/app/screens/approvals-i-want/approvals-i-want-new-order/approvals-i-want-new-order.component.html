@@ -1,6 +1,6 @@
 <app-main-content blockTitle="Yeni Onaylama Emri" subTitle="Lütfen aşağıdaki alanları doldurunuz">
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-    <div class="box p-15px">
+    <div class="box p-5">
       <div class="form-group">
         <label for="title">Başlık</label>
         <input type="text" class="form-control" id="title" name="title" formControlName="title"
@@ -10,7 +10,7 @@
         </div>
       </div>
       <div formGroupName="reference">
-        <div class="title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Referans</div>
+        <div class="box-title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Referans</div>
         <div class="row">
           <div class="col-md col-sm-12">
             <div class="form-group">
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div formGroupName="config">
-        <div class="title no-border p-0  mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Ayarlar</div>
+        <div class="box-title no-border p-0  mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Ayarlar</div>
         <div class="row">
           <div class="col-md col-sm-12">
             <div class="form-group">
