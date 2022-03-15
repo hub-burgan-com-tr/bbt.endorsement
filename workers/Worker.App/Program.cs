@@ -15,19 +15,46 @@ var builder = WebApplication.CreateBuilder(args);
 
 IWebHostEnvironment environment = builder.Environment;
 
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.{environment}.json", true, true)
-    .AddUserSecrets<Program>(optional: true)
-    .AddEnvironmentVariables()
-    .Build();
+
+if (environment.EnvironmentName == "Development")
+{
+    var configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(configuration)
+       .CreateLogger();
+}
+else
+{
+    var configuration = builder
+        .Configuration
+        .AddJsonFile("appsettings.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(configuration)
+       .CreateLogger();
+}
+
+//var configuration = new ConfigurationBuilder()
+//    .AddJsonFile("appsettings.json")
+//    .AddJsonFile($"appsettings.{environment}.json", true, true)
+//    .AddUserSecrets<Program>(optional: true)
+//    .AddEnvironmentVariables()
+//    .Build();
 
 var services = new ServiceCollection();
 services.AddSingleton<IConfiguration>(builder.Configuration);
 
-Log.Logger = new LoggerConfiguration()
-   .ReadFrom.Configuration(configuration)
-   .CreateLogger();
 builder.Host.UseSerilog(); 
 
 var app = builder.Build();

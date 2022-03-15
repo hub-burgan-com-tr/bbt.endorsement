@@ -51,7 +51,7 @@ IWebHostEnvironment environment = builder.Environment;
 if (environment.EnvironmentName == "Development")
     builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment}.json", true, true)
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
