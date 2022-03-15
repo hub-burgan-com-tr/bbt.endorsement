@@ -21,10 +21,10 @@ namespace Application.Endorsements.Commands.NewOrders
             //{
             //    RuleFor(v => v.Documents.Any(x => x.Files == null)).Empty().WithMessage("Lütfen dosya seçiniz");
             //});
-            RuleFor(x => x.Documents.Any(x => x.DocumentType == (int)DocumentTypeEnum.Text)).NotNull().DependentRules(() => {
-                RuleFor(v => v.Documents.Any(x => x.Content == null)).Empty().WithMessage("Metin girilmelidir.");
-                RuleFor(v => v.Documents.Any(x => x.Title == null)).Empty().WithMessage("Başlık girilmelidir.");
-            });
+            //RuleFor(x => x.Documents.Any(x => x.DocumentType == (int)DocumentTypeEnum.Text)).NotNull().DependentRules(() => {
+            //    RuleFor(v => v.Documents.Any(x => x.Content == null)).Empty().WithMessage("Metin girilmelidir.");
+            //    RuleFor(v => v.Documents.Any(x => x.Title == null)).Empty().WithMessage("Başlık girilmelidir.");
+            //});
         }
     }
 }

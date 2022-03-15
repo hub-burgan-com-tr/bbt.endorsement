@@ -1,14 +1,17 @@
-﻿using Worker.App.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using Worker.App.Domain.Common;
 using Worker.App.Domain.Events.Approvals;
 
 namespace Worker.App.Domain.Entities
 {
     public class Order : AuditableEntity, IHasDomainEvent
     {
+        [Key]
+        [MaxLength(36)]
         public string OrderId { get; set; }
+        [Required]
+        [MaxLength(100)]
         public string Title { get; set; }
-        public long Customer { get; set; }
-        public long Approver { get; set; }
 
 
         private bool _done;
