@@ -45,12 +45,7 @@ else
        .CreateLogger();
 }
 
-//var configuration = new ConfigurationBuilder()
-//    .AddJsonFile("appsettings.json")
-//    .AddJsonFile($"appsettings.{environment}.json", true, true)
-//    .AddUserSecrets<Program>(optional: true)
-//    .AddEnvironmentVariables()
-//    .Build();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 var services = new ServiceCollection();
 services.AddSingleton<IConfiguration>(builder.Configuration);
