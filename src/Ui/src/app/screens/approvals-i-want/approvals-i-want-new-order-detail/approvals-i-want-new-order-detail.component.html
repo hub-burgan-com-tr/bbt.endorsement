@@ -16,17 +16,15 @@
   </div>
 </ngx-smart-modal>
 <app-main-content blockTitle="Yeni Onaylama Emri" subTitle="Yeni Onay Emri | Emir Detay">
-  <div class="box mb-4 pb-15px">
-    <div class="p-15px">
-      <div class="row align-items-center">
-        <div class="col">
-          <div class="box-title no-border p-0">Belgeler</div>
-        </div>
-        <div class="col-auto">
-          <button class="btn btn-outline-primary px-5"
-                  (click)="showDocumentAddPanel=true;">Yeni Belge Ekle
-          </button>
-        </div>
+  <div class="box custom-padding mb-4">
+    <div class="row align-items-center">
+      <div class="col">
+        <div class="box-title no-border p-0">Belgeler</div>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-outline-primary px-5"
+                (click)="showDocumentAddPanel=true;">Yeni Belge Ekle
+        </button>
       </div>
     </div>
     <div class="document-list-panel" *ngIf="!showDocumentAddPanel">
@@ -79,17 +77,6 @@
             >
             <label class="form-check-label fw-600" for="rdo2">Metin İçerik</label>
           </div>
-          <!--<div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio"
-                   id="rdo3"
-                   name="type"
-                   formControlName="type"
-                   [value]="3"
-                   (ngModelChange)="choose($event)"
-                   [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.type.invalid }"
-            >
-            <label class="form-check-label fw-600" for="rdo3">Form</label>
-          </div>-->
           <div *ngIf="newDocumentSubmitted && fnd.type.errors" class="text-danger">
             <small *ngIf="fnd.type.errors.required">Lütfen seçim yapınız</small>
           </div>
@@ -139,48 +126,6 @@
               </div>
             </div>
           </div>
-          <!--<div id="form" *ngIf="formNewDocument.controls.type?.value===3">
-            <div class="my-4">
-              <div class="row">
-                <div class="col-12 col-md-3">
-                  <div class="form-group">
-                    <select class="form-select" formControlName="formId"
-                            [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.formId.invalid }">
-                      <option value="">Seçiniz</option>
-                      <option value="1">Sigorta Onay Formu</option>
-                    </select>
-                    <div *ngIf="newDocumentSubmitted && fnd.formId.errors" class="invalid-feedback">
-                      <div *ngIf="fnd.formId.errors.required">Lütfen seçim yapınız</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row mt-3">
-                <div class="col-6 col-md-3">
-                  <div class="form-group">
-                    <label for="identityNo">TCKN</label>
-                    <input type="text" class="form-control" id="identityNo" name="identityNo"
-                           formControlName="identityNo"
-                           [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.identityNo.invalid }">
-                    <div *ngIf="newDocumentSubmitted && fnd.identityNo.errors" class="invalid-feedback">
-                      <div *ngIf="fnd.identityNo.errors.required">TCKN girilmelidir.</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6 col-md-3">
-                  <div class="form-group">
-                    <label for="nameSurname">Ad Soyad</label>
-                    <input type="text" class="form-control" id="nameSurname" name="nameSurname"
-                           formControlName="nameSurname"
-                           [ngClass]="{ 'is-invalid': newDocumentSubmitted && fnd.nameSurname.invalid }">
-                    <div *ngIf="newDocumentSubmitted && fnd.nameSurname.errors" class="invalid-feedback">
-                      <div *ngIf="fnd.nameSurname.errors.required">Ad Soyad girilmelidir.</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>-->
           <div class="choices">
             <div class="title d-flex align-items-center">
               <div class="d-inline-block c-pointer" (click)="showChoiceAddPanel=true">
@@ -225,21 +170,6 @@
             <div *ngIf="newDocumentSubmitted && actionsHasError" class="text-danger">
               <small>Lütfen seçenek ekleyiniz.</small>
             </div>
-            <!--<div class="choices-item">
-              <div class="row">
-                <div class="col-md-3 col-6 d-flex align-items-center">
-                  <img src="/assets/img/minus.png" class="minus">
-                  Okudum, anlamadım
-                </div>
-                <div class="col-md col-6">
-                  <div class="form-group">
-                    <select class="form-select custom w-125px">
-                      <option value="1">Ret</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>-->
           </div>
 
           <div class="button-group d-flex align-items-center justify-content-end">
@@ -249,67 +179,9 @@
         </form>
       </div>
     </div>
-    <!--<div class="document-update-panel" *ngIf="showDocumentUpdatePanel&&!showDocumentAddPanel">
-      <hr class="blue">
-      <div class="content">
-        <div class="title">Belgeyi Düzenle</div>
-        <div class="my-4">
-          <div class="row align-items-center">
-            <div class="col-auto">
-              <button class="btn btn-white px-5">Bilgisayarıma Gözat</button>
-            </div>
-            <div class="col">PNG, JPG or DOCSX, yüklenebilir en fazla 20MB gibi bir yazı vs.</div>
-          </div>
-          <a href="#" class="d-flex align-items-center mt-3">
-            <img src="/assets/img/attachment.png" class="me-2"> <b>Maaş Ödeme Talimatı.docx</b>
-          </a>
-        </div>
-        <div class="choices">
-          <div class="title d-flex align-items-center">
-            <img src="/assets/img/plus.png" class="me-2">
-            Seçenekler
-          </div>
-          <div class="choices-item">
-            <div class="row">
-              <div class="col-md col-6 d-flex align-items-center">
-                <img src="/assets/img/minus.png" class="minus">
-                Okudum, anladım
-              </div>
-              <div class="col-md col-6">
-                <div class="form-group">
-                  <select class="form-select custom w-125px">
-                    <option value="1">Onay</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="choices-item">
-            <div class="row">
-              <div class="col-md col-6 d-flex align-items-center">
-                <img src="/assets/img/minus.png" class="minus">
-                Okudum, anlamadım
-              </div>
-              <div class="col-md col-6">
-                <div class="form-group">
-                  <select class="form-select custom w-125px">
-                    <option value="1">Ret</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="button-group d-flex align-items-center justify-content-end">
-          <button class="btn btn-outline-primary px-5 me-3" (click)="showDocumentUpdatePanel=false">İptal</button>
-          <button class="btn btn-primary px-5" (click)="showDocumentUpdatePanel=false">Kaydet</button>
-        </div>
-      </div>
-    </div>-->
   </div>
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" id="ngForm">
-    <div class="box p-15px mb-4">
+    <div class="box p-5 mb-4">
       <div class="form-group">
         <label for="title">Başlık</label>
         <input type="text" class="form-control" id="title" name="title"
@@ -320,7 +192,7 @@
         </div>
       </div>
       <div formGroupName="reference">
-        <div class="title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Referans</div>
+        <div class="box-title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Referans</div>
         <div class="row">
           <div class="col-md col-sm-12">
             <div class="form-group">
@@ -355,7 +227,7 @@
         </div>
       </div>
       <div formGroupName="config">
-        <div class="title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Ayarlar</div>
+        <div class="box-title no-border p-0 mt-md-5 mb-md-3 mt-sm-0 mb-sm-0">Ayarlar</div>
         <div class="row">
           <div class="col-md col-sm-12">
             <div class="form-group">
@@ -386,7 +258,7 @@
       </div>
     </div>
   </form>
-  <div class="box p-15px">
+  <div class="box custom-padding">
     <div class="row align-items-center">
       <div class="col">
         <div class="box-title no-border p-0">
@@ -399,42 +271,8 @@
         </button>
       </div>
     </div>
-    <p class="fs-18 fw-600">{{model.approver.nameSurname}}</p>
-    <div class="approval-update-panel" *ngIf="showUpdatePanel">
-      <!--<div class="mb-3">
-        <div class="row">
-          <div class="col-auto">
-            <div class="circle"></div>
-          </div>
-          <div class="col">
-            <span class="text-grey fs-14">11 Aralık 2021</span>
-            <div>
-              <div class="row">
-                <div class="col-auto">
-                  <img src="/assets/img/letter.png">
-                </div>
-                <div class="col ps-0">
-                  <ul class="list-none text-grey fs-14">
-                    <li>1 - 11 Aralık 2021</li>
-                    <li>2 - 12 Aralık 2021</li>
-                    <li>3 - 13 Aralık 2021</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="row align-items-center">
-          <div class="col-auto">
-            <div class="circle-filled"></div>
-          </div>
-          <div class="col">
-            <span class="text-grey fs-14">15 Aralık 2021</span>
-          </div>
-        </div>
-      </div>-->
+    <p class="fs-18 fw-600 mt-3">{{model.approver.nameSurname}}</p>
+    <div class="approval-update-panel " *ngIf="showUpdatePanel">
       <form [formGroup]="formGroupApproval" (ngSubmit)="onSubmitApproval()" class="approval-add-panel">
         <div class="content">
           <div class="row my-4">
@@ -489,7 +327,6 @@
     </div>
   </div>
   <div class="d-flex justify-content-center">
-    <button class="btn btn-primary px-5 mt-5" type="submit" form="ngForm">Gönder
-    </button>
+    <button class="btn btn-primary px-5 mt-5" type="submit" form="ngForm">Onaya Gönder</button>
   </div>
 </app-main-content>
