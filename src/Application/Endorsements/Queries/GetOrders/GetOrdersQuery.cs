@@ -27,7 +27,10 @@ namespace Application.Endorsements.Queries.GetOrders
 
         public async Task<Response<OrderItem[]>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
         {
-            var orderItems = new List<OrderItem>();
+            var orderItems = _context.Orders.Select(x => new OrderItem
+            {
+                Id = Guid.Parse(x.OrderId)
+            });
             return Response<OrderItem[]>.Success(orderItems.ToArray(), 200);
         }
     }
