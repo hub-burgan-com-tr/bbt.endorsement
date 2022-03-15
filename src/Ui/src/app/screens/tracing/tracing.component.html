@@ -10,9 +10,9 @@
       <div class="row">
         <div class="col">
           <div class="form-group">
-            <label for="approving">Onaylayan</label>
+            <label for="approving">Onaycı</label>
             <input type="text" class="form-control" id="approving" name="approving" formControlName="approving"
-                   >
+            >
           </div>
         </div>
         <div class="col">
@@ -28,8 +28,41 @@
       </div>
     </form>
   </div>
-
   <div class="box" *ngIf="show">
-    <app-list-item *ngFor="let d of data" [data]="d" [routerLink]="['./detail']"></app-list-item>
+    <table class="table table-custom">
+      <thead>
+      <tr>
+        <th class="col-auto">Sözleşme Adı</th>
+        <th class="col-auto">Onaycı</th>
+        <th class="col-auto">Onay İsteyen</th>
+        <th class="col-auto">Oluşturulma Tarihi</th>
+        <th class="col-auto text-end">Durumu</th>
+        <th class="col-auto"></th>
+        <th class="col-auto"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="c-pointer"
+          *ngFor="let row of data"
+          [routerLink]="['./detail']">
+        <td class="col-3">{{row.contractName}}</td>
+        <td class="col-auto">{{row.approver}}</td>
+        <td class="col-auto">{{row.personSeekingApproval}}</td>
+        <td class="col-auto">{{row.createdDate}}</td>
+        <td class="status" [ngClass]="{'danger':row.status===0,'warning':row.status===1,'success':row.status===2}">
+          {{row.statusText}}
+          <span class="status-box"></span>
+        </td>
+        <td class="col-auto">
+          <img src="/assets/img/attachment.png" *ngIf="row.file">
+        </td>
+        <td class="col-auto">
+          <div class="icon">
+            <img src="/assets/img/right-arrow.png">
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </app-main-content>

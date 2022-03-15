@@ -13,12 +13,10 @@ export class ApprovalsIWantNewFormComponent implements OnInit {
   subTitle: string = 'Sigorta Onay Belgesi';
   titles = [
     'Sigorta Onay Belgesi',
-    'Sigorta Onay Belgesi | Onaycı Ekle',
-    'Sigorta Onay Belgesi | Onaycı Ekle | Onay'
+    'Sigorta Onay Belgesi | Onay'
   ];
   buttonTexts = [
     'Kaydet',
-    'Devam',
     'Onaya Gönder'
   ];
   formGroup: FormGroup;
@@ -26,6 +24,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private modal: NgxSmartModalService) {
     this.formGroup = this.fb.group({
+      process: '',
+      stage: '',
+      processNo: '',
       identityNo: '',
       name: '',
       choice: '',
@@ -58,34 +59,26 @@ export class ApprovalsIWantNewFormComponent implements OnInit {
 
   next() {
     this.submitted = true;
+
     let isInvalid = false;
-    switch (this.step) {
-      case 1:
-        this.formGroup.controls['identityNo'].addValidators([Validators.required, Validators.minLength(11)]);
-        this.formGroup.controls['identityNo'].updateValueAndValidity();
-        this.formGroup.controls['name'].addValidators(Validators.required);
-        this.formGroup.controls['name'].updateValueAndValidity();
-        isInvalid = this.formGroup.invalid;
-        break;
-      case 2:
-        this.formGroup.controls['choice'].addValidators(Validators.required);
-        this.formGroup.controls['choice'].updateValueAndValidity();
-        isInvalid = this.formGroup.invalid;
-        break;
-    }
+    this.formGroup.controls['identityNo'].addValidators([Validators.required, Validators.minLength(11)]);
+    this.formGroup.controls['identityNo'].updateValueAndValidity();
+    this.formGroup.controls['name'].addValidators(Validators.required);
+    this.formGroup.controls['name'].updateValueAndValidity();
+    this.formGroup.controls['choice'].addValidators(Validators.required);
+    this.formGroup.controls['choice'].updateValueAndValidity();
+    isInvalid = this.formGroup.invalid;
     if (isInvalid)
       return;
+
     this.step++;
-    if (this.step == 4) {
+
+    if (this.step == 3) {
       this.modal.open('success');
-    }
-    if (this.step >= 3) {
-      this.step = 3;
       return;
     } else {
       this.subTitle = this.titles[this.step - 1];
       this.buttonText = this.buttonTexts[this.step - 1];
     }
-
   }
 }
