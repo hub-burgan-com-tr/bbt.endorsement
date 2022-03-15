@@ -22,6 +22,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<Callback> Callbacks { get; set; }
     public virtual DbSet<Config> Configs { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
+    public virtual DbSet<Form> Forms { get; set; }
+    public virtual DbSet<Domain.Entities.Action> Actions { get; set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

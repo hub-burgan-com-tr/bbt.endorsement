@@ -22,6 +22,46 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Domain.Entities.Action", b =>
+                {
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("DocumentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("Actions");
+                });
+
             modelBuilder.Entity("Domain.Entities.Callback", b =>
                 {
                     b.Property<string>("OrderId")
@@ -103,6 +143,20 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<string>("Name")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
@@ -118,6 +172,35 @@ namespace Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Form", b =>
+                {
+                    b.Property<string>("FormId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("FormId");
+
+                    b.ToTable("Forms");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -136,6 +219,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FormId")
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -149,6 +235,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("FormId");
 
                     b.ToTable("Orders");
                 });
@@ -193,6 +281,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("References");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Action", b =>
+                {
+                    b.HasOne("Domain.Entities.Document", "Document")
+                        .WithMany("Actions")
+                        .HasForeignKey("DocumentId");
+
+                    b.Navigation("Document");
+                });
+
             modelBuilder.Entity("Domain.Entities.Callback", b =>
                 {
                     b.HasOne("Domain.Entities.Reference", "Reference")
@@ -222,6 +319,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.HasOne("Domain.Entities.Form", "Form")
+                        .WithMany("Orders")
+                        .HasForeignKey("FormId");
+
+                    b.Navigation("Form");
+                });
+
             modelBuilder.Entity("Domain.Entities.Reference", b =>
                 {
                     b.HasOne("Domain.Entities.Order", "Order")
@@ -231,6 +337,16 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Document", b =>
+                {
+                    b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Form", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>

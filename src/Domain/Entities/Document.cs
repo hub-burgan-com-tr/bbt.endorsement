@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities
 {
-    public class Document
+    public class Document:AuditableEntity
     {
        
         public string DocumentId { get; set; }
@@ -10,6 +11,7 @@ namespace Domain.Entities
         public string Name { get; set; }
         public string Content { get; set; }
         public int Type { get; set; }
+        public virtual ICollection<Action> Actions { get; set; }
 
         public virtual Order Order { get; set; }
     }

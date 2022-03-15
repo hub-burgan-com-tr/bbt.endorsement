@@ -9,6 +9,7 @@ namespace Worker.App.Domain.Entities
         public string Name { get; set; }
         public string Content { get; set; }
         public int Type { get; set; }
+        public virtual ICollection<Action> Actions { get; set; }
 
         public virtual Order Order { get; set; }
     }

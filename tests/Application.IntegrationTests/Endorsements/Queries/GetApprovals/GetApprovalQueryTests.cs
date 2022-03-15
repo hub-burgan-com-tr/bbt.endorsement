@@ -10,10 +10,10 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetApprovals
 
         [Test]
         [TestCase("1beecf76-5529-4309-97fe-39df9e917bd3")]
-        public async Task GetApprovalQueryTestAsync(string instanceId)
+        public async Task GetApprovalQueryTestAsync(string orderId)
         {
-            var response = await SendAsync(new GetApprovalQuery { InstanceId = instanceId });
-            Assert.IsNotNull(instanceId);
+            var response = await SendAsync(new GetApprovalQuery { OrderId = orderId });
+            Assert.IsNotNull(orderId);
         }
        
     }
