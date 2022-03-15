@@ -37,5 +37,6 @@
         public string Process { get; set; }
         public string State { get; set; }
         public string ProcessNo { get; set; }
+
     }
 }
