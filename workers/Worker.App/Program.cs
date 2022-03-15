@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -10,20 +12,26 @@ using Worker.App.Infrastructure.Configuration.Options;
 using Worker.App.Infrastructure.Services;
 using Worker.App.Services;
 
-string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-var builder = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(AppContext.BaseDirectory))
-            .AddJsonFile("appsettings.json", optional: true);
-if (environment == "Development")
-    builder.AddJsonFile($"appsettings.{environment}.json", true, true);
-else
-    builder.AddJsonFile("appsettings.json", false, true);
+var builder = WebApplication.CreateBuilder(args);
 
-var Configuration = builder
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
-    .AddUserSecrets<Program>()
-    .Build();
+IWebHostEnvironment environment = builder.Environment;
+
+if (environment.EnvironmentName == "Development")
+    builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment}.json", true, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+else
+    builder
+        .Configuration
+        .AddJsonFile("appsettings.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
 
 
 var services = new ServiceCollection();
@@ -31,22 +39,22 @@ services.AddLogging(config =>
 {
     config.AddSerilog();
 });
-services.AddSingleton<IConfiguration>(Configuration);
+services.AddSingleton<IConfiguration>(builder.Configuration);
 
 
 
 Log.Logger = new LoggerConfiguration()
-   .ReadFrom.Configuration(Configuration)
+   .ReadFrom.Configuration(builder.Configuration)
    .CreateLogger();
 Log.Information("Getting the motors running...");
 
 
 services.AddApplication();
-services.AddInfrastructure(Configuration, builder);
+services.AddInfrastructure(builder.Configuration);
 
 services.AddHostedService<ZeebeWorkService>();
-services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-var settings = Configuration.Get<AppSettings>();
+services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+var settings = builder.Configuration.Get<AppSettings>();
 
 var serviceProvider = services.BuildServiceProvider();
 
