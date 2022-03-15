@@ -5,9 +5,9 @@ namespace Worker.App.Domain.Entities
 {
     public class Callback : AuditableEntity
     {
-        public string CallbackId { get; set; }
         [Key]
-        public string ReferenceId { get; set; }
+        [MaxLength(36)]
+        public string OrderId { get; set; }
 
         public string Mode { get; set; } = null!;
         public string Url { get; set; } = null!;

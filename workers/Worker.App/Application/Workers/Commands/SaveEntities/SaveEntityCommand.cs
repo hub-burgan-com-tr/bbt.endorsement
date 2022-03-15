@@ -4,7 +4,7 @@ using Worker.App.Domain.Entities;
 using Worker.App.Models;
 using Worker.App.Application.Common.Interfaces;
 
-namespace Worker.App.Workers.Commands.SaveEntities
+namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
     public class SaveEntityCommand : IRequest<Response<SaveEntityResponse>>
     {

@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Sinks.MSSqlServer;
 using Worker.App.Application;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Infrastructure;

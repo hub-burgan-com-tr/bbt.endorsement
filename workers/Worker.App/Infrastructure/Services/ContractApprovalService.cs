@@ -5,8 +5,8 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Models;
-using Worker.App.Workers.Commands.SaveEntities;
 using Zeebe.Client.Api.Worker;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -72,7 +72,7 @@ public class ContractApprovalService : IContractApprovalService
             // var state = customHeaders["State"].ToString();
 
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-            Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity data: '{variables.InstanceId}'");
+            Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
 
             if (variables != null)
             {
