@@ -186,10 +186,10 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no order available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalAsync([FromBody] string instanceId)
+        public async Task<IActionResult> GetApprovalAsync([FromQuery] string orderId)
         {
-            await Mediator.Send(new GetApprovalQuery { InstanceId = instanceId });
-            return Ok();
+          var list=  await Mediator.Send(new GetApprovalQuery { OrderId = orderId });
+            return Ok(list);
         }
         /// <summary>
         ///  Onayımdakiler Detay sayfası
