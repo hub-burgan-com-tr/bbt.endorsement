@@ -23,10 +23,32 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
             var data = request.Model.StartRequest;
+
+            var documents = new List<Document>();
+            foreach (var item in data.Documents)
+            {
+                documents.Add(new Document
+                {
+                    Content = item.Content,
+                    Name = item.Title,
+                    //Type = item.Type
+                });
+            }
             var order = new Order
             {
                 OrderId = data.Id.ToString(),
-                Title = data.Title
+                Title = data.Title,
+                Config = new Config
+                {
+                    MaxRetryCount = data.Config.MaxRetryCount,
+                    RetryFrequence = data.Config.RetryFrequence,
+                    //TimeoutMinutes = data.Config.ExpireInMinutes
+                },
+                Reference = new Reference
+                {
+                    Number = data.Reference.Process
+                },
+                Documents = documents,
             };
             _context.Orders.Add(order);
             _context.SaveChanges();
