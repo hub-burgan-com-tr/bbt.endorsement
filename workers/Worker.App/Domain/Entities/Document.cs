@@ -8,7 +8,7 @@ namespace Worker.App.Domain.Entities
         [MaxLength(250)]
         public string Name { get; set; }
         public string Content { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public virtual ICollection<Action> Actions { get; set; }
 
         public virtual Order Order { get; set; }

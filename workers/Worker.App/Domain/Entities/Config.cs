@@ -11,8 +11,7 @@ namespace Worker.App.Domain.Entities
         /// <summary>
         ///  emrin geçerlilik süresi dakika olarak tanımlanır. 
         /// </summary>
-        [MaxLength(250)]
-        public string TimeoutMinutes { get; set; }
+        public int ExpireInMinutes { get; set; }
 
         /// <summary>
         /// hatırlatma frekansını belirlemek için kullanılır. 
