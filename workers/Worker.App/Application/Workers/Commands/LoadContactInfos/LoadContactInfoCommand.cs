@@ -13,7 +13,6 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
         public async Task<Response<LoadContactInfoResponse>> Handle(LoadContactInfoCommand request, CancellationToken cancellationToken)
         {
             return Response<LoadContactInfoResponse>.Success(200);
-
         }
     }
 }
