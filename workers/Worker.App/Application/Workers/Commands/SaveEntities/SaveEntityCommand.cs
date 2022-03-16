@@ -31,7 +31,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 {
                     Content = item.Content,
                     Name = item.Title,
-                    //Type = item.Type
+                    Type = item.Type.ToString(),
                 });
             }
             var order = new Order
@@ -42,11 +42,11 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 {
                     MaxRetryCount = data.Config.MaxRetryCount,
                     RetryFrequence = data.Config.RetryFrequence,
-                    //TimeoutMinutes = data.Config.ExpireInMinutes
+                    ExpireInMinutes = data.Config.ExpireInMinutes
                 },
                 Reference = new Reference
                 {
-                    Number = data.Reference.Process
+                    ProcessNo = data.Reference.Process
                 },
                 Documents = documents,
             };
