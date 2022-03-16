@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-tracing',
@@ -14,7 +14,10 @@ export class TracingComponent implements OnInit {
       contractName: 'Sigorta Teklif Talimatı',
       approver: 'Merve Aydın',
       personSeekingApproval: 'Uğur Karataş',
-      createdDate: '12 Ocak 2022',
+      process: 'Şube Operasyon',
+      stage: 'Acil Ödeme',
+      stageNo: '1234',
+      createdDate: '12 Ocak 2022 12:00',
       statusText: 'Bekliyor',
       status: 1,
       file: true
@@ -24,7 +27,10 @@ export class TracingComponent implements OnInit {
       contractName: '3. Para Birim Talimatı',
       approver: 'Merve Aydın',
       personSeekingApproval: 'Uğur Karataş',
-      createdDate: '12 Ocak 2022',
+      process: 'Şube Operasyon',
+      stage: 'Acil Ödeme',
+      stageNo: '1234',
+      createdDate: '12 Ocak 2022 12:00',
       statusText: 'Onaylandı',
       status: 2,
       file: false
@@ -34,7 +40,10 @@ export class TracingComponent implements OnInit {
       contractName: 'Maaş Ödeme Talimatı',
       approver: 'Merve Aydın',
       personSeekingApproval: 'Uğur Karataş',
-      createdDate: '12 Ocak 2022',
+      process: 'Şube Operasyon',
+      stage: 'Acil Ödeme',
+      stageNo: '1234',
+      createdDate: '12 Ocak 2022 12:00',
       statusText: 'Ret',
       status: 0,
       file: true
@@ -44,7 +53,10 @@ export class TracingComponent implements OnInit {
       contractName: '1021 İşlem Onayı',
       approver: 'Merve Aydın',
       personSeekingApproval: 'Uğur Karataş',
-      createdDate: '12 Ocak 2022',
+      process: 'Şube Operasyon',
+      stage: 'Acil Ödeme',
+      stageNo: '1234',
+      createdDate: '12 Ocak 2022 12:00',
       statusText: 'Bekliyor',
       status: 1,
       file: true
@@ -54,7 +66,10 @@ export class TracingComponent implements OnInit {
       contractName: 'Avans Ödeme Talimatı',
       approver: 'Merve Aydın',
       personSeekingApproval: 'Uğur Karataş',
-      createdDate: '12 Ocak 2022',
+      process: 'Şube Operasyon',
+      stage: 'Acil Ödeme',
+      stageNo: '1234',
+      createdDate: '12 Ocak 2022 12:00',
       statusText: 'Onaylandı',
       status: 2,
       file: false
@@ -64,7 +79,10 @@ export class TracingComponent implements OnInit {
       contractName: 'Maaş Ödeme Talimatı',
       approver: 'Merve Aydın',
       personSeekingApproval: 'Uğur Karataş',
-      createdDate: '12 Ocak 2022',
+      process: 'Şube Operasyon',
+      stage: 'Acil Ödeme',
+      stageNo: '1234',
+      createdDate: '12 Ocak 2022 12:00',
       statusText: 'Ret',
       status: 0,
       file: false
@@ -77,7 +95,13 @@ export class TracingComponent implements OnInit {
     this.formGroup = this.fb.group({
       approving: '',
       seekingApproval: '',
-    }, {validators: this.atLeastOneHasValue(['approving', 'seekingApproval']), updateOn: 'submit'});
+      process: '',
+      stage: '',
+      stageNo: '',
+    }, {
+      validators: this.atLeastOneHasValue(['approving', 'seekingApproval', 'process', 'stage', 'stageNo']),
+      updateOn: 'submit'
+    });
   }
 
   ngOnInit(): void {
@@ -85,6 +109,12 @@ export class TracingComponent implements OnInit {
 
   onSubmit() {
     this.formGroup.valid ? this.show = true : this.show = false;
+  }
+
+  clear(form) {
+    this.show = false;
+    form.submitted = false;
+    this.formGroup.reset();
   }
 
   atLeastOneHasValue = (fields: Array<string>) => {
