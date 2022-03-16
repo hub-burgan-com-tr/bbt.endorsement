@@ -33,7 +33,7 @@ jobs:
           
       - name: Replace LOGDB Secret
         run: |
-          sed -i -e "s/DEFAULT_CONNECTION/${{ secrets.DEFAULT_CONNECTION_LOG }}/g" ./src/Api/appsettings.json
+          sed -i -e "s/DEFAULT_CONNECTION_LOG/${{ secrets.DEFAULT_CONNECTION_LOG }}/g" ./src/Api/appsettings.json
           cat ./src/Api/appsettings.json
       
       - name: Replace Zeebe Gateway Secret
