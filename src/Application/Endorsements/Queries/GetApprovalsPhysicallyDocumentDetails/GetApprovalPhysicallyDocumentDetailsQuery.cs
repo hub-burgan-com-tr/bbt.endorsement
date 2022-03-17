@@ -8,7 +8,7 @@ namespace Application.Endorsements.Queries.GetApprovalsPhysicallyDocumentDetails
         /// <summary>
         /// Onay Id
         /// </summary>
-        public int ApprovalId { get; set; }
+        public string OrderId { get; set; }
     }
     public class GetApprovalDocumentDetailsQueryHandler : IRequestHandler<GetApprovalPhysicallyDocumentDetailsQuery, Response<List<GetApprovalPhysicallyDocumentDetailsDto>>>
     {

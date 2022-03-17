@@ -15,7 +15,7 @@ namespace Worker.App.Domain.Entities
         public string OrderId { get; set; }
         [MaxLength(250)]
         public string Title { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public bool IsDefault { get; set; }
         public virtual Document Document { get; set; }
 

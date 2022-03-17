@@ -207,9 +207,9 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Approval detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetApprovalDetailAsync([FromQuery] string orderId)
         {
-            await Mediator.Send(new GetApprovalDetailsQuery() { ApprovalId = approvalId });
+            await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
             return Ok();
         }
 
@@ -229,9 +229,9 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Approval physically document detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalPhysicallyDocumentDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetApprovalPhysicallyDocumentDetailAsync([FromQuery] string orderId)
         {
-            await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { ApprovalId = approvalId });
+            await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { OrderId = orderId });
             return Ok();
         }
 

@@ -1,24 +1,33 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces;
+using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
+using Domain.Enum;
 using MediatR;
 
 namespace Application.Endorsements.Queries.GetApprovalsDetails
 {
-    public class GetApprovalDetailsQuery : IRequest<Response<List<GetApprovalDetailsDto>>>
+    public class GetApprovalDetailsQuery : IRequest<Response<GetApprovalDetailsDto>>
     {
         /// <summary>
         /// Onay Id
         /// </summary>
-        public int ApprovalId { get; set; }
+        public string OrderId { get; set; }
     }
     /// <summary>
     /// Onayimdakiler Detay Sayfasi
     /// </summary>
-    public class GetApprovalDetailQueryHandler : IRequestHandler<GetApprovalDetailsQuery, Response<List<GetApprovalDetailsDto>>>
+    public class GetApprovalDetailQueryHandler : IRequestHandler<GetApprovalDetailsQuery, Response<GetApprovalDetailsDto>>
     {
-        public async Task<Response<List<GetApprovalDetailsDto>>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
+        private IApplicationDbContext _context;
+        public GetApprovalDetailQueryHandler(IApplicationDbContext context)
         {
-            var list = new List<GetApprovalDetailsDto>();
-            return Response<List<GetApprovalDetailsDto>>.Success(list, 200);
+            _context = context;
+        }
+
+        public async Task<Response<GetApprovalDetailsDto>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
+        {
+            var response = _context.Documents.Where(x => x.Order.OrderId == request.OrderId && x.Type == DocumentTypeEnum.Text.ToString()).Select(x => new GetApprovalDetailsDto {Name=x.Name,Content=x.Content,Actions=x.Actions.Where(x=>x.Type==ContentType.PlainText.ToString()).Select(x=>new Action { IsDefault=x.IsDefault,Title=x.Title}).ToList() }).FirstOrDefault();
+            return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
     }
 }

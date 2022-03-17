@@ -1,27 +1,23 @@
-﻿namespace Application.Endorsements.Queries.GetApprovalsDetails
+﻿using Application.Endorsements.Commands.NewOrders;
+
+namespace Application.Endorsements.Queries.GetApprovalsDetails
 {
     public class GetApprovalDetailsDto
     {
+       
+        public string Name { get; set; }
+        public string Content { get; set; }
         /// <summary>
-        /// Onay Ad
+        /// Belge Onay
         /// </summary>
-        public string ApprovalName { get; set; }
-
-        /// <summary>
-        /// Onay Başlık
-        /// </summary>
-        public string ApprovalTitle { get; set; }
-
-        /// <summary>
-        /// Onay Aciklamasi
-        /// </summary>
-        public string ApprovalDescription { get; set; }
-        /// <summary>
-        /// Belge Onaylandı Mı
-        /// </summary>
-        public bool IsDocumentApproved { get; set; }
+        public List<Action> Actions { get; set; }
 
     }
+    public class Action
+    {
+        public bool IsDefault { get; set; }
+        public string Title { get; set; }
 
+    }
    
 }

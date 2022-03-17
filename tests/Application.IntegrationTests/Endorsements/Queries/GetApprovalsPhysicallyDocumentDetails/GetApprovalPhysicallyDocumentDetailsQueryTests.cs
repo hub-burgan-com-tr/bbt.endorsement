@@ -9,10 +9,10 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetApprovalsPhysical
     {
         [Test]
         [TestCase("1")]
-        public async Task GetApprovalPhysicallyDocumentDetailsQueryTestAsync(int approvalId)
+        public async Task GetApprovalPhysicallyDocumentDetailsQueryTestAsync(string orderId)
         {
-            var response = await SendAsync(new GetApprovalPhysicallyDocumentDetailsQuery { ApprovalId = approvalId });
-            Assert.IsNotNull(approvalId);
+            var response = await SendAsync(new GetApprovalPhysicallyDocumentDetailsQuery { OrderId = orderId });
+            Assert.IsNotNull(orderId);
         }
     }
 }
