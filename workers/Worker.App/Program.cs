@@ -27,20 +27,20 @@ if (environment.EnvironmentName == "Development")
        .ReadFrom.Configuration(configuration)
        .CreateLogger();
 }
-else
-{
-    var configuration = builder
-        .Configuration
-        .AddJsonFile("appsettings.json", false, true)
-        .AddEnvironmentVariables()
-        .AddCommandLine(args)
-        .AddUserSecrets<Program>()
-        .Build();
+//else
+//{
+//    var configuration = builder
+//        .Configuration
+//        .AddJsonFile("appsettings.json", true, true)
+//        .AddEnvironmentVariables()
+//        .AddCommandLine(args)
+//        .AddUserSecrets<Program>()
+//        .Build();
 
-    Log.Logger = new LoggerConfiguration()
-       .ReadFrom.Configuration(configuration)
-       .CreateLogger();
-}
+//    Log.Logger = new LoggerConfiguration()
+//       .ReadFrom.Configuration(configuration)
+//       .CreateLogger();
+//}
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
