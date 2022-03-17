@@ -27,20 +27,20 @@ if (environment.EnvironmentName == "Development")
        .ReadFrom.Configuration(configuration)
        .CreateLogger();
 }
-//else
-//{
-//    var configuration = builder
-//        .Configuration
-//        .AddJsonFile("appsettings.json", true, true)
-//        .AddEnvironmentVariables()
-//        .AddCommandLine(args)
-//        .AddUserSecrets<Program>()
-//        .Build();
+else
+{
+    var configuration = builder
+        .Configuration
+        .AddJsonFile("appsettings.json", true, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
 
-//    Log.Logger = new LoggerConfiguration()
-//       .ReadFrom.Configuration(configuration)
-//       .CreateLogger();
-//}
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(configuration)
+       .CreateLogger();
+}
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
@@ -48,20 +48,18 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 builder.Host.UseSerilog();
 
-
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
 
 builder.Services.AddHostedService<ZeebeWorkService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
-
 var app = builder.Build();
-
-Log.Information("Worker.App running... - " + environment.EnvironmentName);
 
 using (var scope = app.Services.CreateScope())
 {
+    Log.Information("Worker.App running... - " + environment.EnvironmentName);
     var serviceProvider = scope.ServiceProvider;
 
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
