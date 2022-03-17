@@ -9,11 +9,11 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetApprovals
     {
 
         [Test]
-        [TestCase("1beecf76-5529-4309-97fe-39df9e917bd3")]
+        [TestCase("fa5bac5d-4f61-4637-a8cf-40e51d5de75c")]
         public async Task GetApprovalQueryTestAsync(string orderId)
         {
             var response = await SendAsync(new GetApprovalQuery { OrderId = orderId });
-            Assert.IsNotNull(orderId);
+            Assert.IsNotNull(response);
         }
        
     }

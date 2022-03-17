@@ -8,11 +8,11 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetApprovalsDocument
     public class GetApprovalDocumentListQueryTests:TestBase
     {
         [Test]
-        [TestCase("1")]
+        [TestCase("fa5bac5d-4f61-4637-a8cf-40e51d5de75c")]
         public async Task GetApprovalDocumentListQueryTestAsync(int approvalId)
         {
             var response = await SendAsync(new GetApprovalsDocumentListQuery { ApprovalId = approvalId });
-            Assert.IsNotNull(approvalId);
+            Assert.IsNotNull(response);
         }
     }
 }
