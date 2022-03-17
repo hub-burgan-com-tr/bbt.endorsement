@@ -20,6 +20,6 @@
     {
         public bool IsDefault { get; set; }
         public string Title { get; set; }
-
+        public string Type { get; internal set; }
     }
 }
