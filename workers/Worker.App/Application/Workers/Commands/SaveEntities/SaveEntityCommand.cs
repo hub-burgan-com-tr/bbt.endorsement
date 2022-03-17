@@ -29,15 +29,18 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             {
                 documents.Add(new Document
                 {
+                    DocumentId = Guid.NewGuid().ToString(),
                     Content = item.Content,
                     Name = item.Title,
                     Type = item.Type.ToString(),
+                    Created = DateTime.Now
                 });
             }
             var order = new Order
             {
                 OrderId = data.Id.ToString(),
                 Title = data.Title,
+                Created = DateTime.Now,
                 Config = new Config
                 {
                     MaxRetryCount = data.Config.MaxRetryCount,
@@ -46,7 +49,10 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 },
                 Reference = new Reference
                 {
-                    ProcessNo = data.Reference.Process
+                    ProcessNo = data.Reference.ProcessNo,
+                    Created = DateTime.Now,
+                    Process = data.Reference.Process,
+                    State = data.Reference.State,
                 },
                 Documents = documents,
             };

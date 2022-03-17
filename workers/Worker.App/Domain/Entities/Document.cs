@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Worker.App.Domain.Common;
 
 namespace Worker.App.Domain.Entities
 {
-    public class Document
+    public class Document : AuditableEntity
     {
         [Key]
         [MaxLength(36)]
