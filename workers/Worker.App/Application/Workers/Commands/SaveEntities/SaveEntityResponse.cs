@@ -2,6 +2,6 @@
 {
     public class SaveEntityResponse
     {
-        public Guid InstanceId { get; set; }
+        public string OrderId { get; set; }
     }
 }
