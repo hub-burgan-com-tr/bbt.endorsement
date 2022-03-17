@@ -9,7 +9,7 @@
         /// <summary>
         /// BelgeAd
         /// </summary>
-        public string DocumentName { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// TCKN
         /// </summary>
@@ -21,6 +21,12 @@
         /// <summary>
         /// Belge Onaylandımı
         /// </summary>
-        public bool IsDocumentApproved { get; set; }
+        public List<Action> Actions { get; set; }
+    }
+    public class Action
+    {
+        public bool IsDefault { get; set; }
+        public string Title { get; set; }
+
     }
 }

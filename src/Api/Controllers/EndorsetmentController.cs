@@ -204,7 +204,7 @@ namespace Api.Controllers
         )]
         [Route("approval-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, approval detail is returned successfully.", typeof(List<GetApprovalDetailsDto>))]
+        [SwaggerResponse(200, "Success, approval detail is returned successfully.", typeof(GetApprovalDetailsDto))]
         [SwaggerResponse(404, "Approval detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -226,7 +226,7 @@ namespace Api.Controllers
         )]
         [Route("approval-physically-document-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, approval physically document detail is returned successfully.", typeof(List<GetApprovalPhysicallyDocumentDetailsDto>))]
+        [SwaggerResponse(200, "Success, approval physically document detail is returned successfully.", typeof(GetApprovalPhysicallyDocumentDetailsDto))]
         [SwaggerResponse(404, "Approval physically document detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -248,13 +248,13 @@ namespace Api.Controllers
         )]
         [Route("approval-form-document-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, approval form document detail is returned successfully.", typeof(List<GetApprovalPhysicallyDocumentDetailsDto>))]
+        [SwaggerResponse(200, "Success, approval form document detail is returned successfully.", typeof(GetApprovalFormDocumentDetailDto))]
         [SwaggerResponse(404, "Approval form document detail is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromQuery] string orderId)
         {
-          var result=  await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { ApprovalId = approvalId });
+          var result=  await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { OrderId = orderId });
             return Ok();
         }
 

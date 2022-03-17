@@ -9,10 +9,10 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetApprovalsFormDocu
     {
         [Test]
         [TestCase("1")]
-        public async Task GetApprovalFormDocumentDetailQueryTestAsync(int approvalId)
+        public async Task GetApprovalFormDocumentDetailQueryTestAsync(string OrderId)
         {
-            var response = await SendAsync(new GetApprovalFormDocumentDetailQuery { ApprovalId = approvalId });
-            Assert.IsNotNull(approvalId);
+            var response = await SendAsync(new GetApprovalFormDocumentDetailQuery { OrderId = OrderId });
+            Assert.IsNotNull(OrderId);
         }
     }
 }
