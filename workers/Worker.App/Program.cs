@@ -52,10 +52,6 @@ services.AddSingleton<IConfiguration>(builder.Configuration);
 
 builder.Host.UseSerilog(); 
 
-var app = builder.Build();
-
-Log.Information("Worker.App running... - " + environment.EnvironmentName);
-
 
 services.AddApplication();
 services.AddInfrastructure(builder.Configuration);
@@ -63,6 +59,11 @@ services.AddInfrastructure(builder.Configuration);
 services.AddHostedService<ZeebeWorkService>();
 services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
+
+var app = builder.Build();
+
+Log.Information("Worker.App running... - " + environment.EnvironmentName);
+
 
 var serviceProvider = services.BuildServiceProvider();
 
