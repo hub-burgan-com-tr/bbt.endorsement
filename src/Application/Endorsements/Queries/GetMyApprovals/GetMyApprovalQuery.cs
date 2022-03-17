@@ -1,24 +1,40 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces;
+using Application.Common.Mappings;
+using Application.Common.Models;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 
 namespace Application.Endorsements.Queries.GetMyApprovals
 {
-    public class GetMyApprovalQuery : IRequest<Response<List<GetMyApprovalDto>>>
+    public class GetMyApprovalQuery : IRequest<Response<PaginatedList<GetMyApprovalDto>>>
     {
-        /// <summary>
-        /// InstanceId
-        /// </summary>
-        public string InstanceId { get; set; }
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
+
     /// <summary>
     /// Onayladıklarım Listesi
     /// </summary>
-    public class GetMyApprovalQueryHandler : IRequestHandler<GetMyApprovalQuery, Response<List<GetMyApprovalDto>>>
+    public class GetMyApprovalQueryHandler : IRequestHandler<GetMyApprovalQuery, Response<PaginatedList<GetMyApprovalDto>>>
     {
-        public async Task<Response<List<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
+        private readonly IApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public GetMyApprovalQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
-            var list = new List<GetMyApprovalDto>();
-            return Response<List<GetMyApprovalDto>>.Success(list, 200);
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
+        {
+            var response = await _context.Orders
+                .OrderBy(x => x.OrderId)
+                .ProjectTo<GetMyApprovalDto>(_mapper.ConfigurationProvider)
+                .PaginatedListAsync(request.PageNumber, request.PageSize);
+
+            return Response<PaginatedList<GetMyApprovalDto>>.Success(response, 200);
         }
     }
 
