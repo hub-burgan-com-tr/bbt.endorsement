@@ -3,20 +3,26 @@
     public class GetApprovalsDocumentListDto
     {
         /// <summary>
-        /// OnayAd
-        /// </summary>
-        public int ApprovalName { get; set; }
-        /// <summary>
         /// Belge Ad
         /// </summary>
-        public string DocumentName { get; set; }
         /// <summary>
-        /// Belge Icon
-        /// </summary>
-        public string DocumentIcon { get; set; }
+        public string Name { get; set; }
+        
         /// <summary>
         /// Belge Onaylandımı
         /// </summary>
-        public bool IsDocumentApproved { get; set; }
+        public List<Action> HTMLActions { get; set; }
+        public List<Action> PlainTextActions { get; set; }
+        public List<Action> PDFActions { get; set; }
+
+
+    }
+
+    public class Action
+    {
+        public bool IsDefault { get; set; }
+        public string Title { get; set; }
+        public string Type { get; set; }
+
     }
 }

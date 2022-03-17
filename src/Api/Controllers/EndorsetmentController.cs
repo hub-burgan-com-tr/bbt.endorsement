@@ -275,9 +275,9 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Approval  document list is not found.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalDocumentListAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetApprovalDocumentListAsync([FromQuery] string orderId)
         {
-          var result=  await Mediator.Send(new GetApprovalsDocumentListQuery() { ApprovalId = approvalId });
+          var result=  await Mediator.Send(new GetApprovalsDocumentListQuery() { OrderId = orderId });
             return Ok(result);
         }
 
