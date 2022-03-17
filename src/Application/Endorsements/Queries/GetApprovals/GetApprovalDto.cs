@@ -9,7 +9,7 @@
         /// <summary>
         /// Onay Ad
         /// </summary>
-        public string OrderName { get; set; }
+        public string Title { get; set; }
         /// <summary>
         /// Belge Var Mı
         /// </summary>

@@ -4,11 +4,13 @@ using Application.Common.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Endorsements.Queries.GetMyApprovals
 {
     public class GetMyApprovalQuery : IRequest<Response<PaginatedList<GetMyApprovalDto>>>
     {
+        public string OrderId { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
@@ -29,12 +31,9 @@ namespace Application.Endorsements.Queries.GetMyApprovals
 
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
         {
-            var response = await _context.Orders
-                .OrderBy(x => x.OrderId)
-                .ProjectTo<GetMyApprovalDto>(_mapper.ConfigurationProvider)
-                .PaginatedListAsync(request.PageNumber, request.PageSize);
+            var list = await _context.Orders.Where(x => x.OrderId == request.OrderId).Include(x => x.Documents).OrderBy(x => x.Title).ThenByDescending(x => x.Created).Select(x => new GetMyApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any(),OrderIcon="" }).PaginatedListAsync(request.PageNumber, request.PageSize);
+            return Response<PaginatedList<GetMyApprovalDto>>.Success(list, 200);
 
-            return Response<PaginatedList<GetMyApprovalDto>>.Success(response, 200);
         }
     }
 

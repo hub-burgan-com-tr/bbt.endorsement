@@ -17,8 +17,8 @@ namespace Application.Endorsements.Queries.GetMyApprovals
     /// </summary>
         public bool IsDocument { get; set; }
     /// <summary>
-    /// Belge Icon
+    /// Onay Icon
     /// </summary>
-        public string ApprovalIcon { get; set; }
+        public string OrderIcon { get; set; }
     }   
 }

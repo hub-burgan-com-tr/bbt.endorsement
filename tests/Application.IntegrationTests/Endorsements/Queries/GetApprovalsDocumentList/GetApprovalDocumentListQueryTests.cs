@@ -11,7 +11,7 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetApprovalsDocument
         [TestCase("fa5bac5d-4f61-4637-a8cf-40e51d5de75c")]
         public async Task GetApprovalDocumentListQueryTestAsync(string orderId)
         {
-            var response = await SendAsync(new GetApprovalsDocumentListQuery { OrderId = orderId });
+            var response = await SendAsync(new GetApprovalDocumentListQuery { OrderId = orderId });
             Assert.IsNotNull(response);
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace Application.Endorsements.Queries.GetApprovalsDocumentList
 {
-    public class GetApprovalsDocumentListDto
+    public class GetApprovalDocumentListDto
     {
         /// <summary>
         /// Belge Ad

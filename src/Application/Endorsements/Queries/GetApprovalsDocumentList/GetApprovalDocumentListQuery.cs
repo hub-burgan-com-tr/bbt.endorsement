@@ -5,12 +5,12 @@ using MediatR;
 
 namespace Application.Endorsements.Queries.GetApprovalsDocumentList
 {
-    public class GetApprovalsDocumentListQuery:IRequest<Response<List<GetApprovalsDocumentListDto>>>
+    public class GetApprovalDocumentListQuery:IRequest<Response<List<GetApprovalDocumentListDto>>>
     {
         public string OrderId { get; set; }
     }
 
-    public class GetApprovalsDocumentListQueryHandler : IRequestHandler<GetApprovalsDocumentListQuery, Response<List<GetApprovalsDocumentListDto>>>
+    public class GetApprovalsDocumentListQueryHandler : IRequestHandler<GetApprovalDocumentListQuery, Response<List<GetApprovalDocumentListDto>>>
     {
         private IApplicationDbContext _context;
 
@@ -18,9 +18,9 @@ namespace Application.Endorsements.Queries.GetApprovalsDocumentList
         {
             _context = context;
         }
-        public async Task<Response<List<GetApprovalsDocumentListDto>>> Handle(GetApprovalsDocumentListQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<GetApprovalDocumentListDto>>> Handle(GetApprovalDocumentListQuery request, CancellationToken cancellationToken)
         {
-            var list = _context.Documents.Where(x => x.Order.OrderId == request.OrderId).Select(x => new GetApprovalsDocumentListDto
+            var list = _context.Documents.Where(x => x.OrderId == request.OrderId).Select(x => new GetApprovalDocumentListDto
             { Name = x.Name, 
                 PlainTextActions = x.Actions.Where(x => x.Document.Type== ContentType.PlainText.ToString())
                 .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type }).ToList() ,
@@ -29,7 +29,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDocumentList
                 PDFActions = x.Actions.Where(x => x.Document.Type == ContentType.PDF.ToString())
                 .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type }).ToList()
             }).ToList();
-            return Response<List<GetApprovalsDocumentListDto>>.Success(list, 200);
+            return Response<List<GetApprovalDocumentListDto>>.Success(list, 200);
         }
     }
 }
