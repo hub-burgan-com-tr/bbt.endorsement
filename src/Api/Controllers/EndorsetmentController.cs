@@ -210,8 +210,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalDetailAsync([FromQuery] string orderId)
         {
-            await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
-            return Ok();
+           var result= await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
+            return Ok(result);
         }
 
         /// <summary>
@@ -232,8 +232,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalPhysicallyDocumentDetailAsync([FromQuery] string orderId)
         {
-            await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { OrderId = orderId });
-            return Ok();
+           var result= await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { OrderId = orderId });
+            return Ok(result);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Api.Controllers
         public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromQuery] string orderId)
         {
           var result=  await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { OrderId = orderId });
-            return Ok();
+            return Ok(result);
         }
 
 
@@ -277,8 +277,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalDocumentListAsync([FromBody] int approvalId)
         {
-            await Mediator.Send(new GetApprovalsDocumentListQuery() { ApprovalId = approvalId });
-            return Ok();
+          var result=  await Mediator.Send(new GetApprovalsDocumentListQuery() { ApprovalId = approvalId });
+            return Ok(result);
         }
 
 

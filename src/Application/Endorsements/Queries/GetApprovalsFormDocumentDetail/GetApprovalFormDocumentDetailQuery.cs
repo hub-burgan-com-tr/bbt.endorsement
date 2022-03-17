@@ -20,7 +20,7 @@ namespace Application.Endorsements.Queries.GetApprovalsFormDocumentDetail
         }
         public async Task<Response<GetApprovalFormDocumentDetailDto>> Handle(GetApprovalFormDocumentDetailQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Documents.Where(x => x.Order.OrderId == request.OrderId && x.Type == DocumentTypeEnum.Form.ToString()).Select(x => new GetApprovalFormDocumentDetailDto { Name = x.Name, CitizenShipNumber = "", FirstAndSurname = "", Actions = x.Actions.Where(x => x.Type == ContentType.HTML.ToString()).Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title }).ToList() }).FirstOrDefault(); return Response<GetApprovalFormDocumentDetailDto>.Success(response, 200);
+            var response = _context.Documents.Where(x => x.Order.OrderId == request.OrderId && x.Type == ContentType.HTML.ToString()).Select(x => new GetApprovalFormDocumentDetailDto { Name = x.Name, CitizenShipNumber = "", FirstAndSurname = "", Actions = x.Actions.Where(x => x.Type == x.Type).Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title }).ToList() }).FirstOrDefault(); return Response<GetApprovalFormDocumentDetailDto>.Success(response, 200);
         }
     }
 }
