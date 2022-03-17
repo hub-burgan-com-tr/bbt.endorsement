@@ -285,7 +285,8 @@ namespace Api.Controllers
         /// <summary>
         ///  Onayladıklarım Listesi
         /// </summary>
-        /// <param name="instanceId"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
@@ -298,10 +299,10 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no my approvals available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetMyApprovalAsync([FromBody] string instanceId)
+        public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            await Mediator.Send(new GetMyApprovalQuery { InstanceId = instanceId });
-            return Ok();
+            var data = await Mediator.Send(new GetMyApprovalQuery { PageNumber = pageNumber, PageSize = pageSize });
+            return Ok(data);
         }
         /// <summary>
         ///  Onayladıklarım detay sayfası
