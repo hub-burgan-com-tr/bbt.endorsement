@@ -24,7 +24,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Action", b =>
                 {
-                    b.Property<string>("OrderId")
+                    b.Property<string>("ActionId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
@@ -56,7 +56,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("ActionId");
 
                     b.HasIndex("DocumentId");
 

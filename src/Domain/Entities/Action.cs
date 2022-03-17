@@ -7,7 +7,7 @@ namespace Domain.Entities
     {
         [Key]
         [MaxLength(36)]
-        public string OrderId { get; set; }
+        public string ActionId { get; set; }
         [MaxLength(250)]
         public string Title { get; set; }
         public string Type { get; set; }
