@@ -17,7 +17,6 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
     {
         public bool IsDefault { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
 
     }
    
