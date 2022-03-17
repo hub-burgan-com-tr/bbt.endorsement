@@ -41,6 +41,7 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
+            request.Id = Guid.NewGuid();
             return await Mediator.Send(new NewOrderCommand { StartRequest = request });
         }
 

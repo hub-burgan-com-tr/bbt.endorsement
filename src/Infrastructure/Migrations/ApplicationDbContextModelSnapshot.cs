@@ -24,7 +24,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Action", b =>
                 {
-                    b.Property<string>("OrderId")
+                    b.Property<string>("ActionId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
@@ -36,7 +36,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("DocumentId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
@@ -55,7 +56,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("ActionId");
 
                     b.HasIndex("DocumentId");
 
@@ -137,7 +138,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Document", b =>
                 {
                     b.Property<string>("DocumentId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -161,6 +163,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("OrderId")
+                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Type")
