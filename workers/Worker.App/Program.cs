@@ -54,7 +54,7 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
-Log.Information("Worker.App running...");
+Log.Information("Worker.App running... - " + environment.EnvironmentName);
 
 
 services.AddApplication();
