@@ -25,7 +25,7 @@ namespace Application.Endorsements.Queries.GetApprovals
         }
         public async Task<Response<List<GetApprovalDto>>> Handle(GetApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = _context.Orders.Where(x => x.OrderId == request.OrderId).Include(x => x.Documents).Select(x => new GetApprovalDto { OrderId = x.OrderId, OrderName = x.Title, IsDocument = x.Documents.Any() }).ToList();
+            var list = _context.Orders.Where(x => x.OrderId == request.OrderId).Include(x => x.Documents).OrderBy(x=>x.Title).ThenByDescending(x=>x.Created).Select(x => new GetApprovalDto { OrderId = x.OrderId, OrderName = x.Title, IsDocument = x.Documents.Any() }).ToList();
             return Response<List<GetApprovalDto>>.Success(list, 200);
         }
     }

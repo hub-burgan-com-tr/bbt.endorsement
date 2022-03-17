@@ -9,6 +9,7 @@ namespace Domain.Enum
     public enum DocumentTypeEnum
     {
         Physically = 1,
-        Text = 2
+        Text = 2,
+        Form=3,
     }
 }

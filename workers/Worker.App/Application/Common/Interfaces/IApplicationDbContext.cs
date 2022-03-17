@@ -12,6 +12,7 @@ namespace Worker.App.Application.Common.Interfaces
         DbSet<Config> Configs { get; }
         DbSet<Form> Forms { get; }
         DbSet<Action> Actions { get; }
+        DbSet<Document> Documents { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         int SaveChanges();
