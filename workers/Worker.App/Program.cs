@@ -12,10 +12,7 @@ using Worker.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 IWebHostEnvironment environment = builder.Environment;
-
-
 if (environment.EnvironmentName == "Development")
 {
     var configuration = builder
@@ -47,42 +44,43 @@ else
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-var services = new ServiceCollection();
-services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
-builder.Host.UseSerilog(); 
+builder.Host.UseSerilog();
 
 
-services.AddApplication();
-services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
-services.AddHostedService<ZeebeWorkService>();
-services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.AddHostedService<ZeebeWorkService>();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
 
 var app = builder.Build();
 
 Log.Information("Worker.App running... - " + environment.EnvironmentName);
 
-
-var serviceProvider = services.BuildServiceProvider();
-
-var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
-if (zeebeService != null)
+using (var scope = app.Services.CreateScope())
 {
-    zeebeService.Deploy(settings.Zeebe.ModelFilename);
-}
+    var serviceProvider = scope.ServiceProvider;
 
-while (true)
-{
-    // open job worker
-    using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
+    var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
+    if (zeebeService != null)
     {
-        var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
-        if (contractApprovalService != null)
-            contractApprovalService.StartWorkers();
+        zeebeService.Deploy(settings.Zeebe.ModelFilename);
+    }
 
-        // blocks main thread, so that worker can run
-        signal.WaitOne();
+    while (true)
+    {
+        // open job worker
+        using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
+        {
+            var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
+            if (contractApprovalService != null)
+                contractApprovalService.StartWorkers();
+
+            // blocks main thread, so that worker can run
+            signal.WaitOne();
+        }
     }
 }
