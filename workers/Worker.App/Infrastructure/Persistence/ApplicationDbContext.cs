@@ -16,7 +16,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _dateTime = dateTime;
         _domainEventService = domainEventService;
     }
-
     public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<Reference> References { get; set; }
     public virtual DbSet<Callback> Callbacks { get; set; }

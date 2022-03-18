@@ -11,7 +11,6 @@ namespace Application.Common.Interfaces
         DbSet<Config> Configs { get; }
         DbSet<FormDefinition> FormDefinitions { get; }
         DbSet<FormDefinitionTag> FormDefinitionTags { get; }
-
         DbSet<Domain.Entities.Action> Actions { get; }
         DbSet<Document> Documents { get; }
 
