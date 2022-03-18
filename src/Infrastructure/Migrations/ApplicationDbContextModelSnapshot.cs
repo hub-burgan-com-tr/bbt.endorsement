@@ -151,6 +151,10 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<string>("FormDefinitionId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -171,14 +175,16 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("DocumentId");
 
+                    b.HasIndex("FormDefinitionId");
+
                     b.HasIndex("OrderId");
 
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Form", b =>
+            modelBuilder.Entity("Domain.Entities.FormDefinition", b =>
                 {
-                    b.Property<string>("FormId")
+                    b.Property<string>("FormDefinitionId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
@@ -189,6 +195,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -196,13 +205,52 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.HasKey("FormId");
+                    b.Property<string>("Tags")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TemplateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FormDefinitionId");
 
                     b.ToTable("Forms");
+                });
+
+            modelBuilder.Entity("Domain.Entities.FormDefinitionTag", b =>
+                {
+                    b.Property<string>("FormDefinitionTagId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("FormDefinitionId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Tag")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FormDefinitionTagId");
+
+                    b.HasIndex("FormDefinitionId");
+
+                    b.ToTable("FormDefinitionTag");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -221,9 +269,6 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FormId")
-                        .HasColumnType("nvarchar(36)");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -237,8 +282,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("OrderId");
-
-                    b.HasIndex("FormId");
 
                     b.ToTable("Orders");
                 });
@@ -314,20 +357,26 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Document", b =>
                 {
+                    b.HasOne("Domain.Entities.FormDefinition", "FormDefinition")
+                        .WithMany("Documents")
+                        .HasForeignKey("FormDefinitionId");
+
                     b.HasOne("Domain.Entities.Order", "Order")
                         .WithMany("Documents")
                         .HasForeignKey("OrderId");
 
+                    b.Navigation("FormDefinition");
+
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Order", b =>
+            modelBuilder.Entity("Domain.Entities.FormDefinitionTag", b =>
                 {
-                    b.HasOne("Domain.Entities.Form", "Form")
-                        .WithMany("Orders")
-                        .HasForeignKey("FormId");
+                    b.HasOne("Domain.Entities.FormDefinition", "FormDefinition")
+                        .WithMany("FormDefinitionTags")
+                        .HasForeignKey("FormDefinitionId");
 
-                    b.Navigation("Form");
+                    b.Navigation("FormDefinition");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
@@ -346,9 +395,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Actions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Form", b =>
+            modelBuilder.Entity("Domain.Entities.FormDefinition", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Documents");
+
+                    b.Navigation("FormDefinitionTags");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
