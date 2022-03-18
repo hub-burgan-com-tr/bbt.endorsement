@@ -22,7 +22,7 @@
         /// <summary>
         /// Geçerlilik
         /// </summary>
-        public string TimeoutMinutes { get; set; }
+        public int ExpireInMinutes { get; set; }
         /// <summary>
         /// Hatırlatma Frekansı
         /// </summary>

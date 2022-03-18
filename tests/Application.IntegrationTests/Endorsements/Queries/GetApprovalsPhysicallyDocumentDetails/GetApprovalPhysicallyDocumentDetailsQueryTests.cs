@@ -8,11 +8,11 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetApprovalsPhysical
     public class GetApprovalPhysicallyDocumentDetailsQueryTests:TestBase
     {
         [Test]
-        [TestCase("1")]
-        public async Task GetApprovalPhysicallyDocumentDetailsQueryTestAsync(int approvalId)
+        [TestCase("fa5bac5d-4f61-4637-a8cf-40e51d5de75c")]
+        public async Task GetApprovalPhysicallyDocumentDetailsQueryTestAsync(string orderId)
         {
-            var response = await SendAsync(new GetApprovalPhysicallyDocumentDetailsQuery { ApprovalId = approvalId });
-            Assert.IsNotNull(approvalId);
+            var response = await SendAsync(new GetApprovalPhysicallyDocumentDetailsQuery { OrderId = orderId });
+            Assert.IsNotNull(response);
         }
     }
 }

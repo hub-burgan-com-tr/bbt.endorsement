@@ -6,6 +6,14 @@
 app-root {
   color: #464646;
 
+  .table-custom {
+    th, td {
+      &:first-child {
+        padding-left: 1.5rem !important;
+      }
+    }
+  }
+
   .cursor-none {
     cursor: inherit;
   }
@@ -464,7 +472,7 @@ app-root {
     top: -120px;
 
     & > .row {
-      margin-bottom: 40px;
+      margin-bottom: 25px;
 
       & > [class*=col] > .title {
         font-size: 32px;
@@ -537,7 +545,6 @@ app-root {
       .document-add-panel, .document-update-panel {
         & > .content {
           background-color: #bde5f5;
-          margin: 15px 15px 0 15px;
           padding: 15px;
 
           & > .title {
@@ -571,6 +578,7 @@ app-root {
         & > .content {
           background-color: #bde5f5;
           margin-top: 15px;
+          margin-bottom: 15px;
           padding: 15px;
 
           .title {
@@ -594,7 +602,15 @@ app-root {
         &:not(:last-child) {
           border-bottom: 1px solid #e1e1e1;
         }
+      }
 
+      table tbody tr {
+        &:hover {
+          background: #bde5f5;
+        }
+      }
+
+      app-list-item, table {
         .name {
           text-align: center;
         }

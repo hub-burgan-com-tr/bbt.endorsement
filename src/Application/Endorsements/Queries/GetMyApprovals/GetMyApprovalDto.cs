@@ -1,21 +1,24 @@
-﻿namespace Application.Endorsements.Queries.GetMyApprovals
+﻿using Application.Common.Mappings;
+using Domain.Entities;
+
+namespace Application.Endorsements.Queries.GetMyApprovals
 {
-    public class GetMyApprovalDto
+    public class GetMyApprovalDto : IMapFrom<Order>
     {/// <summary>
-    /// Onay Id
-    /// </summary>
-        public int ApprovalId { get; set; }
+     /// Onay Id
+     /// </summary>
+        public string OrderId { get; set; }
     /// <summary>
     /// Onay Ad
     /// </summary>
-        public string ApprovalName { get; set; }
+        public string Title { get; set; }
     /// <summary>
     /// Belge Var Mi
     /// </summary>
         public bool IsDocument { get; set; }
     /// <summary>
-    /// Belge Icon
+    /// Onay Icon
     /// </summary>
-        public string ApprovalIcon { get; set; }
+        public string OrderIcon { get; set; }
     }   
 }

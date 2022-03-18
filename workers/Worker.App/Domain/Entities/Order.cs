@@ -1,14 +1,17 @@
-﻿using Worker.App.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using Worker.App.Domain.Common;
 using Worker.App.Domain.Events.Approvals;
 
 namespace Worker.App.Domain.Entities
 {
     public class Order : AuditableEntity, IHasDomainEvent
     {
+        [Key]
+        [MaxLength(36)]
         public string OrderId { get; set; }
+        [Required]
+        [MaxLength(100)]
         public string Title { get; set; }
-        public long Customer { get; set; }
-        public long Approver { get; set; }
 
 
         private bool _done;
@@ -29,6 +32,7 @@ namespace Worker.App.Domain.Entities
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
         public virtual Reference Reference { get; set; }
         public virtual Config Config { get; set; }
+        public virtual Form Form { get; set; }
 
 
         public virtual ICollection<Document> Documents { get; set; }

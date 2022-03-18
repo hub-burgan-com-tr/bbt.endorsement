@@ -1,17 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Worker.App.Domain.Common;
 
 namespace Worker.App.Domain.Entities
 {
-    public class Document
+    public class Document : AuditableEntity
     {
-        public string DocumentId { get; set; }
-
         [Key]
-        public string ApprovalId { get; set; }
+        [MaxLength(36)]
+        public string DocumentId { get; set; }
+        [MaxLength(250)]
         public string Name { get; set; }
         public string Content { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
+        public virtual ICollection<Action> Actions { get; set; }
 
-        public virtual Order Approval { get; set; }
+        [MaxLength(36)]
+        public string OrderId { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

@@ -10,25 +10,32 @@ namespace Worker.App.Domain.Entities
             Callbacks = new HashSet<Callback>();
         }
 
-        [Key]
-        public string OrderId { get; set; }
 
+        [Key]
+        [MaxLength(36)]
+        public string OrderId { get; set; }
         /// <summary>
         /// Süreç
         /// </summary>
-        public string Name { get; set; }
+        [Required]
+        [MaxLength(250)]
+        public string Process { get; set; }
 
         /// <summary>
         /// Aşama
         /// </summary>
+        [Required]
+        [MaxLength(250)]
         public string State { get; set; }
 
         /// <summary>
         /// İşlem No
         /// </summary>
-        public string Number { get; set; }
+        [Required]
+        [MaxLength(250)]
+        public string ProcessNo { get; set; }
 
-        public virtual Order Approval { get; set; }
+        public virtual Order Order { get; set; }
         public virtual ICollection<Callback> Callbacks { get; set; }
     }
 }

@@ -1,7 +1,7 @@
-﻿namespace Worker.App.Workers.Commands.SaveEntities
+﻿namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
     public class SaveEntityResponse
     {
-        public Guid InstanceId { get; set; }
+        public string OrderId { get; set; }
     }
 }

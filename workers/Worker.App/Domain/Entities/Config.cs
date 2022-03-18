@@ -6,16 +6,18 @@ namespace Worker.App.Domain.Entities
     public class Config : AuditableEntity
     {
         [Key]
+        [MaxLength(36)]
         public string OrderId { get; set; }
-
         /// <summary>
         ///  emrin geçerlilik süresi dakika olarak tanımlanır. 
         /// </summary>
-        public string TimeoutMinutes { get; set; }
+        public int ExpireInMinutes { get; set; }
 
         /// <summary>
         /// hatırlatma frekansını belirlemek için kullanılır. 
         /// </summary>
+        [Required]
+        [MaxLength(250)]
         public string RetryFrequence { get; set; }
 
         /// <summary>
@@ -24,6 +26,6 @@ namespace Worker.App.Domain.Entities
         public int MaxRetryCount { get; set; }
 
 
-        public virtual Order Approval { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

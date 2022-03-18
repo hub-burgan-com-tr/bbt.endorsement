@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using Worker.App.Application;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Infrastructure;
@@ -8,57 +10,75 @@ using Worker.App.Infrastructure.Configuration.Options;
 using Worker.App.Infrastructure.Services;
 using Worker.App.Services;
 
-string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-var builder = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(AppContext.BaseDirectory))
-            .AddJsonFile("appsettings.json", optional: true);
-if (environment == "Development")
-    builder.AddJsonFile($"appsettings.{environment}.json", true, true);
+var builder = WebApplication.CreateBuilder(args);
+
+IWebHostEnvironment environment = builder.Environment;
+if (environment.EnvironmentName == "Development")
+{
+    var configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(configuration)
+       .CreateLogger();
+}
 else
-    builder.AddJsonFile("appsettings.json", false, true);
-
-var Configuration = builder
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
-    .AddUserSecrets<Program>()
-    .Build();
-
-
-var services = new ServiceCollection();
-
-services.AddLogging(config =>
 {
-    config.AddDebug();
-    config.AddConsole();
-});
-services.AddSingleton<IConfiguration>(Configuration);
+    var configuration = builder
+        .Configuration
+        .AddJsonFile("appsettings.json", true, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
 
-
-services.AddApplication();
-services.AddInfrastructure(Configuration, builder);
-
-services.AddHostedService<ZeebeWorkService>();
-services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-var settings = Configuration.Get<AppSettings>();
-
-var serviceProvider = services.BuildServiceProvider();
-
-var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
-if (zeebeService != null)
-{
-    zeebeService.Deploy(settings.Zeebe.ModelFilename);
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(configuration)
+       .CreateLogger();
 }
 
-while (true)
-{
-    // open job worker
-    using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
-    {
-        var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
-        if (contractApprovalService != null)
-            contractApprovalService.StartWorkers();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-        // blocks main thread, so that worker can run
-        signal.WaitOne();
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+builder.Host.UseSerilog();
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+
+builder.Services.AddHostedService<ZeebeWorkService>();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+var settings = builder.Configuration.Get<AppSettings>();
+var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    Log.Information("Worker.App running... - " + environment.EnvironmentName);
+    var serviceProvider = scope.ServiceProvider;
+
+    var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
+    if (zeebeService != null)
+    {
+        zeebeService.Deploy(settings.Zeebe.ModelFilename);
+    }
+
+    while (true)
+    {
+        // open job worker
+        using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
+        {
+            var contractApprovalService = serviceProvider.GetRequiredService<IContractApprovalService>();
+            if (contractApprovalService != null)
+                contractApprovalService.StartWorkers();
+
+            // blocks main thread, so that worker can run
+            signal.WaitOne();
+        }
     }
 }

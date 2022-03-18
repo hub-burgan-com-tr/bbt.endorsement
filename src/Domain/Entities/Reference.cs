@@ -19,7 +19,7 @@ namespace Domain.Entities
         /// </summary>
         [Required]
         [MaxLength(250)]
-        public string Name { get; set; }
+        public string Process { get; set; }
 
         /// <summary>
         /// Aşama
@@ -33,7 +33,7 @@ namespace Domain.Entities
         /// </summary>
         [Required]
         [MaxLength(250)]
-        public string Number { get; set; }
+        public string ProcessNo { get; set; }
 
         public virtual Order Order { get; set; }
         public virtual ICollection<Callback> Callbacks { get; set; }
