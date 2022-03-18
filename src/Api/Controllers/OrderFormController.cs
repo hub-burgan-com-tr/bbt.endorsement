@@ -1,4 +1,6 @@
-﻿using Application.OrderForms.Commands.CreateOrderForm;
+﻿using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
+using Application.OrderForms.Commands.CreateOrUpdateForms;
 using Application.OrderForms.Queries.GetApproverInformation;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,21 +22,27 @@ namespace Api.Controllers
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
-        public async Task<IActionResult> CreateOrUpdateFormAsync([FromBody] FormDefinition data)
+        public async Task<Response<StartResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
-            //await Mediator.Send(new GetFormQuery { InstanceId = instanceId });
-            return Ok();
-        }
+            request.Id = Guid.NewGuid();
 
-        public class FormDefinition
-        {
-            public string Name { get; set; }
-            public string Label { get; set; }
-            public string[] Tags { get; set; }
-            /// <summary>
-            /// If form data is used for rendering a document, render data with dedicated template in template engine.
-            /// </summary>
-            public string TemplateName { get; set; }
+            var documents = new List<DocumentClass>();
+            documents.Add(new DocumentClass
+            {
+                Content = request.Content,
+                Title = request.Title,
+            });
+            var startRequest = new StartRequest
+            {
+                Approver = request.Approver,
+                Config = null, // Sabit değer
+                Reference = request.Reference,
+                Title = request.Title,
+                Id = request.Id,
+                Documents = documents
+            };
+
+            return await Mediator.Send(new NewOrderCommand { StartRequest = startRequest });
         }
 
         [SwaggerOperation(
@@ -95,7 +103,7 @@ namespace Api.Controllers
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
-        public async Task<IActionResult> CreateNewOrderFormAsync([FromBody] CreateOrderFormCommand data)
+        public async Task<IActionResult> CreateNewOrderFormAsync([FromBody] CreateOrUpdateFormCommand data)
         {
             await Mediator.Send(data);
             return Ok();

@@ -1,11 +1,11 @@
 ﻿using Domain.Enum;
 using FluentValidation;
 
-namespace Application.OrderForms.Commands.CreateOrderForm
+namespace Application.OrderForms.Commands.CreateOrUpdateForms
 {
-    public class CreateOrderFormCommandValidator : AbstractValidator<CreateOrderFormCommand>
+    public class CreateOrUpdateFormCommandValidator : AbstractValidator<CreateOrUpdateFormCommand>
     {
-        public CreateOrderFormCommandValidator()
+        public CreateOrUpdateFormCommandValidator()
         {
             RuleFor(v => v.Process).Empty().WithMessage("İşlem bilgisi girilmelidir.");
             RuleFor(v => v.State).Empty().WithMessage("Aşama bilgisi girilmelidir.");

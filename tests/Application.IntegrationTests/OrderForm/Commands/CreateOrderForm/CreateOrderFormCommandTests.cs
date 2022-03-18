@@ -12,7 +12,7 @@ using static Testing;
         [TestCase("1beecf76-5529-4309-97fe-39df9e917bd3")]
         public async Task CreateOrderFormAsync(Guid id)
         {  
-            var command = new CreateOrderFormCommand()
+            var command = new CreateOrUpdateFormCommand()
             {  
               FormId = 1,
               Process = "1",

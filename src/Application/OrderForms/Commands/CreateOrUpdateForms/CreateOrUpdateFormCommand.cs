@@ -1,9 +1,9 @@
 ﻿using Application.Common.Models;
 using MediatR;
 
-namespace Application.OrderForms.Commands.CreateOrderForm
+namespace Application.OrderForms.Commands.CreateOrUpdateForms
 {
-    public class CreateOrderFormCommand : IRequest<Response<bool>>
+    public class CreateOrUpdateFormCommand : IRequest<Response<bool>>
     {
         /// <summary>
         /// FormId
@@ -20,9 +20,9 @@ namespace Application.OrderForms.Commands.CreateOrderForm
     /// <summary>
     /// Form İle Emir Ekleme
     /// </summary>
-    public  class CreateFormApprovalQueryHandler : IRequestHandler<CreateOrderFormCommand, Response<bool>>
+    public  class CreateFormApprovalQueryHandler : IRequestHandler<CreateOrUpdateFormCommand, Response<bool>>
     {
-        public async Task<Response<bool>> Handle(CreateOrderFormCommand request, CancellationToken cancellationToken)
+        public async Task<Response<bool>> Handle(CreateOrUpdateFormCommand request, CancellationToken cancellationToken)
         {
             return Response<bool>.Success(true, 200);
         }
