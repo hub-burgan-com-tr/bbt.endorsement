@@ -10,7 +10,8 @@ namespace Worker.App.Application.Common.Interfaces
         DbSet<Reference> References { get;  }
         DbSet<Callback> Callbacks { get; }
         DbSet<Config> Configs { get; }
-        DbSet<Form> Forms { get; }
+        DbSet<FormDefinition> FormDefinitions { get; }
+        DbSet<FormDefinitionTag> FormDefinitionTags { get; }
         DbSet<Action> Actions { get; }
         DbSet<Document> Documents { get; }
 

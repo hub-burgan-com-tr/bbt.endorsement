@@ -8,14 +8,22 @@ namespace Worker.App.Domain.Entities
         [Key]
         [MaxLength(36)]
         public string DocumentId { get; set; }
+
+
+        [MaxLength(36)]
+        public string OrderId { get; set; }
+
+        [MaxLength(36)]
+        public string FormDefinitionId { get; set; }
+
+
         [MaxLength(250)]
         public string Name { get; set; }
         public string Content { get; set; }
         public string Type { get; set; }
-        public virtual ICollection<Action> Actions { get; set; }
-
-        [MaxLength(36)]
-        public string OrderId { get; set; }
+        public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
+
+        public virtual ICollection<Action> Actions { get; set; }
     }
 }

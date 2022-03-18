@@ -217,7 +217,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("FormDefinitionId");
 
-                    b.ToTable("Forms");
+                    b.ToTable("FormDefinitions");
                 });
 
             modelBuilder.Entity("Domain.Entities.FormDefinitionTag", b =>
@@ -250,7 +250,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FormDefinitionId");
 
-                    b.ToTable("FormDefinitionTag");
+                    b.ToTable("FormDefinitionTags");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>

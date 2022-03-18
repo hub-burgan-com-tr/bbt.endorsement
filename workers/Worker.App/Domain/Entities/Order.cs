@@ -32,9 +32,6 @@ namespace Worker.App.Domain.Entities
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
         public virtual Reference Reference { get; set; }
         public virtual Config Config { get; set; }
-        public virtual Form Form { get; set; }
-
-
         public virtual ICollection<Document> Documents { get; set; }
 
     }
