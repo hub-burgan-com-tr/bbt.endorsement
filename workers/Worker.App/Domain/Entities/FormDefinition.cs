@@ -5,6 +5,12 @@ namespace Worker.App.Domain.Entities
 {
     public class FormDefinition:AuditableEntity
     {
+        public FormDefinition()
+        {
+            Documents = new HashSet<Document>();
+            FormDefinitionTags = new HashSet<FormDefinitionTag>();
+        }
+
         [Key]
         [MaxLength(36)]
         public string FormDefinitionId { get; set; }
