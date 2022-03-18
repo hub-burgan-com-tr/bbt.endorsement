@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgxSmartModalService} from "ngx-smart-modal";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import data from '../../../config/formio.json';
+import {FormioComponent} from "@formio/angular";
 
 @Component({
   selector: 'app-approvals-i-want-new-form',
@@ -8,6 +10,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./approvals-i-want-new-form.component.scss']
 })
 export class ApprovalsIWantNewFormComponent implements OnInit {
+  form = data;
+  @ViewChild(FormioComponent, { static: false })  formio: FormioComponent;
   step: number = 1;
   buttonText: string = 'Kaydet'
   subTitle: string = 'Sigorta Onay Belgesi';
@@ -59,7 +63,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit {
 
   next() {
     this.submitted = true;
-
+    if (this.formio) {
+      this.formio.formio.emit('submitButton');
+    }
     let isInvalid = false;
     this.formGroup.controls['identityNo'].addValidators([Validators.required, Validators.minLength(11)]);
     this.formGroup.controls['identityNo'].updateValueAndValidity();

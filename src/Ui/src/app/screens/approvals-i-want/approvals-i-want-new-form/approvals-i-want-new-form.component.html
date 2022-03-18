@@ -99,6 +99,7 @@
           <small *ngIf="f.choice.errors.required">Lütfen seçim yapınız.</small>
         </div>
       </div>
+      <formio [form]="form"></formio>
     </div>
 
     <div class="box" *ngIf="step>=2">
