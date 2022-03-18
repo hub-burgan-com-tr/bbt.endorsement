@@ -234,6 +234,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("FormDefinitionId")
+                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime?>("LastModified")
