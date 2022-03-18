@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces
         DbSet<Reference> References { get;  }
         DbSet<Callback> Callbacks { get; }
         DbSet<Config> Configs { get; }
-        DbSet<Form> Forms { get; }
+        DbSet<FormDefinition> Forms { get; }
         DbSet<Domain.Entities.Action> Actions { get; }
         DbSet<Document> Documents { get; }
 
