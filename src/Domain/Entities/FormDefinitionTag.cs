@@ -8,6 +8,8 @@ namespace Domain.Entities
         [Key]
         [MaxLength(36)]
         public string FormDefinitionTagId { get; set; }
+
+        [MaxLength(36)]
         public string FormDefinitionId { get; set; }
         public string Tag { get; set; }
 

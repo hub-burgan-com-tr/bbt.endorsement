@@ -5,7 +5,6 @@ namespace Domain.Entities
 {
     public class Document : AuditableEntity
     {
-
         [Key]
         [MaxLength(36)]
         public string DocumentId { get; set; }
