@@ -8,10 +8,10 @@
         public string Content { get; set; }
         public ReferenceClass Reference { get; set; }
         public ApproverClass Approver { get; set; }
-        public FormDefinition FormDefinition { get; set; }
+        public FormDefinitionClass FormDefinition { get; set; }
     }
 
-    public class FormDefinition
+    public class FormDefinitionClass
     {
         public string Name { get; set; }
         public string Label { get; set; }

@@ -4,6 +4,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
+using Infrastructure.Persistence;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,6 +73,13 @@ builder.Services.AddInfrastructure(builder);
 
 var app = builder.Build();
 app.AddUseMiddleware();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    await ApplicationDbContextSeed.SeedFormDefinitionsAsync(context);
+}
 
 // Configure the HTTP request pipeline.
 //if (!app.Environment.IsDevelopment())

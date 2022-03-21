@@ -52,7 +52,7 @@ namespace Api.Controllers
        )]
         [Route("GetByTagForm")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, forms are returned successfully.", typeof(FormDefinition[]))]
+        [SwaggerResponse(200, "Success, forms are returned successfully.", typeof(FormDefinitionClass[]))]
         [SwaggerResponse(204, "There is not available any form.", typeof(void))]
         public async Task<IActionResult> GetByTagFormAsync([FromQuery] string[] tags)
         {
