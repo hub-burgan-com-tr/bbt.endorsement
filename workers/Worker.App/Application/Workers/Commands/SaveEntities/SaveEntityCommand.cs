@@ -60,7 +60,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.MaxRetryCount = data.Config.MaxRetryCount;
                 config.RetryFrequence = data.Config.RetryFrequence;
                 config.ExpireInMinutes = data.Config.ExpireInMinutes;
-            };
+            }
+            else
+            {
+                config.MaxRetryCount = 3;
+                config.RetryFrequence = "4";
+                config.ExpireInMinutes = 60;
+            }
 
             var order = new Order
             {
