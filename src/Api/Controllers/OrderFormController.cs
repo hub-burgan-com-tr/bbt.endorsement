@@ -19,7 +19,7 @@ namespace Api.Controllers
             Summary = "Creates or updates form definition",
             Description = "Form definitons are stored as a form.io schema. All forms stored with tag data. Tags are primary query elements of form"
         )]
-        [Route("CreateOrUpdateFormA")]
+        [Route("CreateOrUpdateForm")]
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
