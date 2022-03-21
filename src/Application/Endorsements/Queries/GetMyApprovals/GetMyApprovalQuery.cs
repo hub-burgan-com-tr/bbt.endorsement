@@ -10,7 +10,6 @@ namespace Application.Endorsements.Queries.GetMyApprovals
 {
     public class GetMyApprovalQuery : IRequest<Response<PaginatedList<GetMyApprovalDto>>>
     {
-        public string OrderId { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
@@ -33,7 +32,7 @@ namespace Application.Endorsements.Queries.GetMyApprovals
         {
             var list = await _context.Orders
                 .Include(x => x.Documents)
-                .Where(x => x.OrderId == request.OrderId)
+                
                 .Select(x => new GetMyApprovalDto
                 {
                     OrderId = x.OrderId,
