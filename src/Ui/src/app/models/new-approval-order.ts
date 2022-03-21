@@ -1,14 +1,5 @@
-interface IApprover {
-  type: string;
-  value: string;
-  nameSurname: string;
-}
-
-class Approver implements IApprover {
-  nameSurname: string;
-  type: string;
-  value: string;
-}
+import Approver from "./approver";
+import Reference from "./reference";
 
 interface IDocument {
   type: number;
@@ -54,23 +45,6 @@ class Config implements IConfig {
   retryFrequence: string;
 }
 
-interface IReference {
-  process: string;
-  state: string;
-  processNo: string;
-  callback: {
-    mode: string,
-    url: string
-  }
-}
-
-class Reference implements IReference {
-  callback: { mode: string; url: string };
-  process: string;
-  processNo: string;
-  state: string;
-
-}
 
 interface INewApprovalOrder {
   title: string;

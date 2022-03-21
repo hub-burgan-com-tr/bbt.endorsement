@@ -28,16 +28,19 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             foreach (var item in data.Documents)
             {
                 var actions = new List<Domain.Entities.Action>();
-                foreach (var action in item.Actions)
+                if (item.Actions != null)
                 {
-                    actions.Add(new Domain.Entities.Action
+                    foreach (var action in item.Actions)
                     {
-                        ActionId = Guid.NewGuid().ToString(),
-                        Created = DateTime.Now,
-                        IsDefault = action.IsDefault,
-                        Title = action.Title,
-                        Type = action.Type.ToString()
-                    });
+                        actions.Add(new Domain.Entities.Action
+                        {
+                            ActionId = Guid.NewGuid().ToString(),
+                            Created = DateTime.Now,
+                            IsDefault = action.IsDefault,
+                            Title = action.Title,
+                            Type = action.Type.ToString()
+                        });
+                    }
                 }
 
                 documents.Add(new Document
@@ -50,17 +53,27 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Actions = actions
                 });
             }
+
+            var config = new Config();
+            if(data.Config != null)
+            {
+                config.MaxRetryCount = data.Config.MaxRetryCount;
+                config.RetryFrequence = data.Config.RetryFrequence;
+                config.ExpireInMinutes = data.Config.ExpireInMinutes;
+            }
+            else
+            {
+                config.MaxRetryCount = 3;
+                config.RetryFrequence = "4";
+                config.ExpireInMinutes = 60;
+            }
+
             var order = new Order
             {
                 OrderId = data.Id.ToString(),
                 Title = data.Title,
                 Created = DateTime.Now,
-                Config = new Config
-                {
-                    MaxRetryCount = data.Config.MaxRetryCount,
-                    RetryFrequence = data.Config.RetryFrequence,
-                    ExpireInMinutes = data.Config.ExpireInMinutes
-                },
+                Config = config,
                 Reference = new Reference
                 {
                     ProcessNo = data.Reference.ProcessNo,

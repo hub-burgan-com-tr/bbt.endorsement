@@ -6,6 +6,26 @@
 app-root {
   color: #464646;
 
+  .formio-component {
+    .formio-error-wrapper {
+      padding: 0;
+      color: initial;
+      background-color: initial;
+      border-color: initial;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type='radio'] {
+      position: relative;
+      top: 5px;
+      left: 8px;
+      transform: scale(2);
+    }
+  }
+
   .table-custom {
     th, td {
       &:first-child {
