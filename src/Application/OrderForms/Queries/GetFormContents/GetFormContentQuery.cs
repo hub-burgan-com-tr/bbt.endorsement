@@ -18,7 +18,7 @@ namespace Application.OrderForms.Queries.GetFormContents
         }
         public async Task<Response<string>> Handle(GetFormContentQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Documents.Where(x => x.FormDefinitionId == request.FormDefinitionId).FirstOrDefault()?.Content;
+            var response = _context.FormDefinitions.Where(x => x.FormDefinitionId == request.FormDefinitionId).FirstOrDefault()?.Label;
             return Response<string>.Success(response, 200);
         }
     }
