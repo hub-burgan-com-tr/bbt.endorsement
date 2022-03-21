@@ -11,7 +11,8 @@ import {
 import {NgxSmartModalModule} from "ngx-smart-modal";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ApprovalsIWantNewFormComponent} from './approvals-i-want-new-form/approvals-i-want-new-form.component';
-import {FormioModule} from "@formio/angular";
+import {FormioAppConfig, FormioModule} from "@formio/angular";
+import {AppConfig} from "../../../../formio-config";
 
 const routes: Routes = [
   {path: '', component: ApprovalsIWantComponent},
@@ -29,15 +30,18 @@ const routes: Routes = [
     ApprovalsIWantNewOrderDetailComponent,
     ApprovalsIWantNewFormComponent
   ],
-    imports: [
-        SharedModule,
-        CommonModule,
-        RouterModule.forChild(routes),
-        NgxSmartModalModule.forRoot(),
-        FormsModule,
-        ReactiveFormsModule,
-        FormioModule
-    ]
+  imports: [
+    SharedModule,
+    CommonModule,
+    RouterModule.forChild(routes),
+    NgxSmartModalModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule,
+    FormioModule
+  ],
+  providers: [
+    {provide: FormioAppConfig, useValue: AppConfig}
+  ]
 })
 export class ApprovalsIWantModule {
 }

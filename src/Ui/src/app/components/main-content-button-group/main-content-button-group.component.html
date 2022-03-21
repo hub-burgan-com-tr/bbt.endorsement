@@ -5,12 +5,16 @@
       Form ile Emir Ekle
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-      <li><a class="dropdown-item" [routerLink]="['/approvals-i-want/new-form']">Sigorta Onay Formu 1</a></li>
-      <li><a class="dropdown-item" [routerLink]="['/approvals-i-want/new-form']">Sigorta Onay Formu 2</a></li>
-      <li><a class="dropdown-item" [routerLink]="['/approvals-i-want/new-form']">Sigorta Onay Formu 3</a></li>
+      <li>
+        <a class="dropdown-item" [routerLink]="['/approvals-i-want/new-form']"
+           [queryParams]="{formDefinitionId: i.formDefinitionId}" *ngFor="let i of data">
+          {{i.name}}
+        </a>
+      </li>
     </ul>
   </div>
-  <button class="btn btn-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0" [routerLink]="['/approvals-i-want/new-order']">Yeni Onay Emri
+  <button class="btn btn-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0" [routerLink]="['/approvals-i-want/new-order']">Yeni Onay
+    Emri
   </button>
 
 </div>
