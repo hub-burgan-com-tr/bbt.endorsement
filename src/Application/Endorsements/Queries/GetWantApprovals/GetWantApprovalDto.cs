@@ -31,6 +31,5 @@
         /// Onay Durumu
         /// </summary>
         public string State { get; set; }
-
     }
 }

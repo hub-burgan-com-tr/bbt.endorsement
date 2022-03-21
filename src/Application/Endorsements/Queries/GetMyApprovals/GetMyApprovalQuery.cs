@@ -31,15 +31,15 @@ namespace Application.Endorsements.Queries.GetMyApprovals
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
         {
             var list = await _context.Orders
-                .Include(x => x.Documents)
-                
+                .Include(x => x.Documents).OrderBy(x => x.Title).ThenByDescending(x => x.Created)
+
                 .Select(x => new GetMyApprovalDto
                 {
                     OrderId = x.OrderId,
                     Title = x.Title,
                     IsDocument = x.Documents.Any(y => y.Type == "PDF"),
-                    OrderIcon = x.State
-                }).OrderBy(x=>x.Title)
+                    OrderIcon = x.State,
+                })
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
             return Response<PaginatedList<GetMyApprovalDto>>.Success(list, 200);
 
