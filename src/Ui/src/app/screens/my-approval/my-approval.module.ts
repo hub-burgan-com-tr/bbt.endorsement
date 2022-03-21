@@ -10,6 +10,7 @@ import {MyApprovalCompletedComponent} from "./my-approval-completed/my-approval-
 const routes: Routes = [
   {path: '', component: MyApprovalComponent},
   {path: 'detail', component: MyApprovalDetailComponent},
+  {path: 'detail/:orderId', component: MyApprovalDetailComponent},
   {path: 'completed', component: MyApprovalCompletedComponent},
 ]
 
