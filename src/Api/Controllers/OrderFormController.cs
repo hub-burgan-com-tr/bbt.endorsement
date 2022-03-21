@@ -91,7 +91,7 @@ namespace Api.Controllers
       )]
         [Route("GetFormContent")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(string))]
+        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(GetFormContentDto))]
         [SwaggerResponse(404, "Form not found.", typeof(void))]
         public async Task<IActionResult> GetFormContentAsync([FromQuery] string formDefinitionId)
         {

@@ -8,7 +8,6 @@
         public string Content { get; set; }
         public ReferenceClass Reference { get; set; }
         public ApproverClass Approver { get; set; }
-        public FormDefinitionClass FormDefinition { get; set; }
     }
 
     public class FormDefinitionClass
