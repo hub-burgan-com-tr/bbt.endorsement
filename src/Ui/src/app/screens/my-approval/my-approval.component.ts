@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {MyApprovalService} from "../../services/my-approval.service";
+import {GetEndorsementListRequestModel} from "../../models/my-approval";
 
 @Component({
   selector: 'app-my-approval',
@@ -6,16 +8,27 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./my-approval.component.scss']
 })
 export class MyApprovalComponent implements OnInit {
-  data = [
-    {id: 1, title: 'Sigorta Teklif Talimatı', file: true, icon: null},
-    {id: 2, title: '3. Para Birim Talimatı', file: false, icon: null},
-    {id: 2, title: 'Maaş Ödeme Talimatı', file: true, icon: null},
-  ]
+  data: any[];
 
-  constructor() {
+  constructor(private myApprovalService: MyApprovalService) {
   }
 
   ngOnInit(): void {
+    let requestModel: GetEndorsementListRequestModel = {
+      pageNumber: 1,
+      pageSize: 10
+    };
+    this.myApprovalService.getEndorsementList(requestModel).subscribe({
+      next: res => {
+        if (res.data)
+          this.data = res.data.items;
+        else
+          console.error("Kayıt bulunamadı");
+      },
+      error: err => {
+        console.error(err.message);
+      }
+    });
   }
 
 }
