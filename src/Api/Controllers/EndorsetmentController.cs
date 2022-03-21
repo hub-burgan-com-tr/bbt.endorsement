@@ -360,7 +360,7 @@ namespace Api.Controllers
         /// <summary>
         ///  İstediğim Onaylar detay sayfası
         /// </summary>
-        /// <param name="approvalId"></param>
+        /// <param name="orderId"></param>
         /// <returns></returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
@@ -373,10 +373,10 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no want approval detail available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetWantApprovalDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
-            await Mediator.Send(new GetWantApprovalDetailsQuery() { ApprovalId = approvalId });
-            return Ok();
+          var result=  await Mediator.Send(new GetWantApprovalDetailsQuery() { OrderId = orderId });
+            return Ok(result);
         }
 
         /// <summary>

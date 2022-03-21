@@ -2,6 +2,7 @@
 {
     public class GetWantApprovalDetailsDto
     {
+        public string OrderId { get; set; }
 
         /// <summary>
         ///Baslik
@@ -10,36 +11,17 @@
         /// <summary>
         /// İşlem
         /// </summary>
+        public string NameAndSurname { get; set; }
         public string Process { get; set; }
-        /// <summary>
-        /// Aşama
-        /// </summary>
-        public string Stage { get; set; }
-        /// <summary>
-        /// İşlem No
-        /// </summary>
-        public string TransactionNumber { get; set; }
+        public string State { get; set; }
+        public string ProcessNo { get; set; }
         /// <summary>
         /// Geçerlilik
         /// </summary>
-        public int ExpireInMinutes { get; set; }
-        /// <summary>
-        /// Hatırlatma Frekansı
-        /// </summary>
-        public string RetryFrequence { get; set; }
-        /// <summary>
-        /// Hatırlatma Sayısı
-        /// </summary>
         public int MaxRetryCount { get; set; }
+        public string RetryFrequence { get; set; }
+        public int ExpireInMinutes { get; set; }
 
-        /// <summary>
-        /// Onay Id
-        /// </summary>
-        public int ApprovalId { get; set; }
-        /// <summary>
-        /// Onaycı
-        /// </summary>
-        public string Approver { get; set; }
         /// <summary>
         /// Belgeler
         /// </summary>
@@ -47,7 +29,7 @@
         /// <summary>
         /// Tarihce
         /// </summary>
-        public List<GetWantApprovalDetailsHistoryDto> GetWantApprovalDetailsHistory { get; set; }
+        public List<GetWantApprovalDetailsHistoryDto> History { get; set; }
     }
 
     public class GetWantApprovalDocumentDetailsDto
@@ -55,7 +37,7 @@
         /// <summary>
         /// Id
         /// </summary>
-        public int Id { get; set; }
+        public string DocumentId { get; set; }
         /// <summary>
         /// Belge Tipi
         /// </summary>
@@ -67,7 +49,7 @@
         /// <summary>
         /// Belge Onay Ad
         /// </summary>
-        public string DocumentApproved { get; set; }
+        public string Title { get; set; }
 
     }
     public class GetWantApprovalDetailsHistoryDto
