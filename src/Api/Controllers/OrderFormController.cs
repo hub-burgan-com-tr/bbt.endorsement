@@ -93,9 +93,9 @@ namespace Api.Controllers
         [HttpGet]
         [SwaggerResponse(200, "Success, form is returned successfully.", typeof(string))]
         [SwaggerResponse(404, "Form not found.", typeof(void))]
-        public async Task<IActionResult> GetFormContentAsync([FromQuery] string formdefinitionId)
+        public async Task<IActionResult> GetFormContentAsync([FromQuery] string formDefinitionId)
         {
-            var list = await Mediator.Send(new GetFormContentQuery { FormDefinitionId = formdefinitionId });
+            var list = await Mediator.Send(new GetFormContentQuery { FormDefinitionId = formDefinitionId });
             return Ok(list);
         }
 
