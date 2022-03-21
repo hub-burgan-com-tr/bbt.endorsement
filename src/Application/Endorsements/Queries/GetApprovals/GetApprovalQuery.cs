@@ -28,7 +28,7 @@ namespace Application.Endorsements.Queries.GetApprovals
         }
         public async Task<Response<PaginatedList<GetApprovalDto>>> Handle(GetApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = await _context.Orders.Where(x => x.OrderId == request.OrderId).Include(x => x.Documents).OrderBy(x=>x.Title).ThenByDescending(x=>x.Created).Select(x => new GetApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any() }).PaginatedListAsync(request.PageNumber, request.PageSize);
+            var list = await _context.Orders.Include(x => x.Documents).Where(x => x.OrderId == request.OrderId).Select(x => new GetApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any() }).OrderBy(x => x.Title).PaginatedListAsync(request.PageNumber, request.PageSize);
             return Response<PaginatedList<GetApprovalDto>>.Success(list, 200);
         }
     }
