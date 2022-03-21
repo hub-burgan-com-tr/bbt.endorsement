@@ -12,6 +12,7 @@ namespace Domain.Entities
         [Required]
         [MaxLength(100)]
         public string Title { get; set; }
+        public string State { get; set; }
 
 
         private bool _done;

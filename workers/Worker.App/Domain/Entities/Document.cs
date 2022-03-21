@@ -21,6 +21,7 @@ namespace Worker.App.Domain.Entities
         public string Name { get; set; }
         public string Content { get; set; }
         public string Type { get; set; }
+        public string State { get; set; }
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
 
