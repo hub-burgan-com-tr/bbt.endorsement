@@ -11,6 +11,7 @@ namespace Domain.Entities
         [MaxLength(250)]
         public string Title { get; set; }
         public string Type { get; set; }
+        public string State { get; set; }
         public bool IsDefault { get; set; }
         [MaxLength(36)]
         public string DocumentId { get; set; }

@@ -16,13 +16,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _dateTime = dateTime;
         _domainEventService = domainEventService;
     }
-
     public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<Reference> References { get; set; }
     public virtual DbSet<Callback> Callbacks { get; set; }
     public virtual DbSet<Config> Configs { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
-    public virtual DbSet<FormDefinition> Forms { get; set; }
+    public virtual DbSet<FormDefinition> FormDefinitions { get; set; }
+    public virtual DbSet<FormDefinitionTag> FormDefinitionTags { get; set; }
     public virtual DbSet<Domain.Entities.Action> Actions { get; set; }
 
 

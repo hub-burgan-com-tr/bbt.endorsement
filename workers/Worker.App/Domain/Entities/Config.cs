@@ -13,6 +13,7 @@ namespace Worker.App.Domain.Entities
         /// </summary>
         public int ExpireInMinutes { get; set; }
 
+
         /// <summary>
         /// hatırlatma frekansını belirlemek için kullanılır. 
         /// </summary>

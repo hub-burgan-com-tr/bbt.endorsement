@@ -49,6 +49,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
@@ -170,6 +173,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
@@ -217,7 +223,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("FormDefinitionId");
 
-                    b.ToTable("Forms");
+                    b.ToTable("FormDefinitions");
                 });
 
             modelBuilder.Entity("Domain.Entities.FormDefinitionTag", b =>
@@ -234,6 +240,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("FormDefinitionId")
+                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<DateTime?>("LastModified")
@@ -250,7 +257,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FormDefinitionId");
 
-                    b.ToTable("FormDefinitionTag");
+                    b.ToTable("FormDefinitionTags");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -275,6 +282,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()

@@ -1,25 +1,26 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using MediatR;
+
 
 namespace Application.OrderForms.Queries.GetForms
 {
     public class GetFormQuery : IRequest<Response<List<GetFormDto>>>
     {
-        /// <summary>
-        /// Instance Id
-        /// </summary>
-        public string InstanceId { get; set; }
-
     }
-    /// <summary>
-    /// Form Listesi
-    /// </summary>
     public class GetFormQueryHandler : IRequestHandler<GetFormQuery, Response<List<GetFormDto>>>
     {
+        private IApplicationDbContext _context;
+
+        public GetFormQueryHandler(IApplicationDbContext context)
+        {
+            _context = context;
+        }
         public async Task<Response<List<GetFormDto>>> Handle(GetFormQuery request, CancellationToken cancellationToken)
         {
-            var list = new List<GetFormDto>();
-            return Response<List<GetFormDto>>.Success(list, 200);
+            var response = _context.FormDefinitions.Select(x=>new GetFormDto { FormDefinitionId=x.FormDefinitionId,Name=x.Name}).OrderBy(x=>x.Name).ToList();
+            return Response<List<GetFormDto>>.Success(response, 200);
         }
     }
+
 }

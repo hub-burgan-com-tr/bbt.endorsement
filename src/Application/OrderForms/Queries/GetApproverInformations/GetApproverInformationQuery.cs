@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Application.Common.Models;
 using MediatR;
 
-namespace Application.OrderForms.Queries.GetApproverInformation
+namespace Application.OrderForms.Queries.GetApproverInformations
 {
     public class GetApproverInformationQuery:IRequest<Response<string>>
     {

@@ -1,7 +1,8 @@
 ﻿using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
-using Application.OrderForms.Commands.CreateOrUpdateForms;
-using Application.OrderForms.Queries.GetApproverInformation;
+using Application.OrderForms.Queries.GetApproverInformations;
+using Application.OrderForms.Queries.GetFormContents;
+using Application.OrderForms.Queries.GetForms;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -18,7 +19,7 @@ namespace Api.Controllers
             Summary = "Creates or updates form definition",
             Description = "Form definitons are stored as a form.io schema. All forms stored with tag data. Tags are primary query elements of form"
         )]
-        [Route("")]
+        [Route("CreateOrUpdateForm")]
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
@@ -49,27 +50,56 @@ namespace Api.Controllers
            Summary = "Get forms by tag",
            Description = "Get forms by tag"
        )]
-        [Route("")]
+        [Route("GetByTagForm")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, forms are returned successfully.", typeof(FormDefinition[]))]
+        [SwaggerResponse(200, "Success, forms are returned successfully.", typeof(FormDefinitionClass[]))]
         [SwaggerResponse(204, "There is not available any form.", typeof(void))]
         public async Task<IActionResult> GetByTagFormAsync([FromQuery] string[] tags)
         {
             return Ok();
         }
-       
+
+    //    [SwaggerOperation(
+    //Summary = "Get form by name",
+    //Description = "Returns form by name"
+    //     )]
+    //    [Route("{GetForm}")]
+    //    [HttpGet]
+    //    [SwaggerResponse(200, "Success, form is returned successfully.", typeof(FormDefinition))]
+    //    [SwaggerResponse(404, "Form not found.", typeof(void))]
+    //    public async Task<IActionResult> GetFormAsync([FromRoute] string name)
+    //    {
+    //        return Ok();
+    //    }
+
         [SwaggerOperation(
            Summary = "Get form by name",
            Description = "Returns form by name"
        )]
-        [Route("{name}")]
+        [Route("GetForm")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(FormDefinition))]
+        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(List<GetFormDto>))]
         [SwaggerResponse(404, "Form not found.", typeof(void))]
-        public async Task<IActionResult> GetFormAsync([FromRoute] string  name)
+        public async Task<IActionResult> GetFormAsync()
         {
-            return Ok();
+            var list = await Mediator.Send(new GetFormQuery());
+            return Ok(list);
         }
+        [SwaggerOperation(
+          Summary = "Get form by content",
+          Description = "Returns form by content"
+      )]
+        [Route("GetFormContent")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(GetFormContentDto))]
+        [SwaggerResponse(404, "Form not found.", typeof(void))]
+        public async Task<IActionResult> GetFormContentAsync([FromQuery] string formDefinitionId)
+        {
+            var list = await Mediator.Send(new GetFormContentQuery { FormDefinitionId = formDefinitionId });
+            return Ok(list);
+        }
+
+
 
         /// <summary>
         /// Onaycı Bilgileri Getir
@@ -85,28 +115,11 @@ namespace Api.Controllers
         [HttpGet]
         [SwaggerResponse(200, "Success, form is returned successfully.", typeof(string))]
         [SwaggerResponse(404, "Approver not found.", typeof(void))]
-        public async Task<IActionResult> GetApproverInformationAsync([FromQuery] int type,[FromQuery]string value)
+        public async Task<IActionResult> GetApproverInformationAsync([FromQuery] int type, [FromQuery] string value)
         {
-            await Mediator.Send(new GetApproverInformationQuery { Type = type,Value = value});
+            await Mediator.Send(new GetApproverInformationQuery { Type = type, Value = value });
             return Ok();
         }
-        /// <summary>
-        /// Form ile Emir Ekleme
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        [SwaggerOperation(
-            Summary = "Creates order form definition",
-            Description = "Create new  order form. After endorsement is created, process is started immediately."
-        )]
-        [Route("order-form")]
-        [HttpPost]
-        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
-        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
-        public async Task<IActionResult> CreateNewOrderFormAsync([FromBody] CreateOrUpdateFormCommand data)
-        {
-            await Mediator.Send(data);
-            return Ok();
-        }
+
     }
 }

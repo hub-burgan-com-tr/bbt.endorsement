@@ -23,11 +23,11 @@ namespace Application.Endorsements.Queries.GetApprovalsDocumentList
             var list = _context.Documents.Where(x => x.OrderId == request.OrderId).Select(x => new GetApprovalDocumentListDto
             { Name = x.Name, 
                 PlainTextActions = x.Actions.Where(x => x.Document.Type== ContentType.PlainText.ToString())
-                .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type }).ToList() ,
+                .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type,State=x.State }).ToList() ,
                 HTMLActions = x.Actions.Where(x => x.Document.Type == ContentType.HTML.ToString())
-                .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type }).ToList(),
+                .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type, State = x.State }).ToList(),
                 PDFActions = x.Actions.Where(x => x.Document.Type == ContentType.PDF.ToString())
-                .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type }).ToList()
+                .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type, State = x.State }).ToList()
             }).ToList();
             return Response<List<GetApprovalDocumentListDto>>.Success(list, 200);
         }

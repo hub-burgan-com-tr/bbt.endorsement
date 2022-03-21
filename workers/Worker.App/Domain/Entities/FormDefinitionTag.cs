@@ -1,15 +1,13 @@
-﻿using Domain.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Worker.App.Domain.Common;
 
-namespace Domain.Entities
+namespace Worker.App.Domain.Entities
 {
-    public class FormDefinitionTag : AuditableEntity
+    public class FormDefinitionTag:AuditableEntity
     {
         [Key]
         [MaxLength(36)]
         public string FormDefinitionTagId { get; set; }
-
-        [MaxLength(36)]
         public string FormDefinitionId { get; set; }
         public string Tag { get; set; }
 

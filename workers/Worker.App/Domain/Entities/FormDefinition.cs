@@ -1,14 +1,14 @@
-﻿using Domain.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Worker.App.Domain.Common;
 
-namespace Domain.Entities
+namespace Worker.App.Domain.Entities
 {
-    public class FormDefinition : AuditableEntity
+    public class FormDefinition:AuditableEntity
     {
         public FormDefinition()
         {
             Documents = new HashSet<Document>();
-            FormDefinitionTags=new HashSet<FormDefinitionTag>();
+            FormDefinitionTags = new HashSet<FormDefinitionTag>();
         }
 
         [Key]

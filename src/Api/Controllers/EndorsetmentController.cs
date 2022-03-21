@@ -189,9 +189,9 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no order available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalAsync([FromQuery] string orderId, int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-          var list=  await Mediator.Send(new GetApprovalQuery { OrderId = orderId,PageNumber=pageNumber,PageSize=pageSize });
+          var list=  await Mediator.Send(new GetApprovalQuery { PageNumber=pageNumber,PageSize=pageSize });
             return Ok(list);
         }
         /// <summary>
@@ -302,9 +302,9 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no my approvals available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetMyApprovalAsync([FromQuery] string orderId, int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var data = await Mediator.Send(new GetMyApprovalQuery { OrderId = orderId , PageNumber = pageNumber, PageSize = pageSize});
+            var data = await Mediator.Send(new GetMyApprovalQuery {  PageNumber = pageNumber, PageSize = pageSize});
             return Ok(data);
         }
         /// <summary>
@@ -334,6 +334,9 @@ namespace Api.Controllers
         /// <summary>
         ///  İstediğim Onaylar Listesi
         /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
         /// <param name="instanceId"></param>
         /// <returns></returns>
         /// <response code="404">If the item is null</response>
@@ -343,15 +346,15 @@ namespace Api.Controllers
         )]
         [Route("want-approval")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried want approvals are returned successfully.", typeof(List<GetWantApprovalDto>))]
+        [SwaggerResponse(200, "Success, queried want approvals are returned successfully.", typeof(PaginatedList<GetWantApprovalDto>))]
         [SwaggerResponse(404, "Success but there is no want approvals available for the query.", typeof(void))]
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetWantApprovalAsync([FromBody] string instanceId)
+        public async Task<IActionResult> GetWantApprovalAsync( int pageNumber = 1, int pageSize = 10)
         {
-            await Mediator.Send(new GetWantApprovalQuery { InstanceId = instanceId });
-            return Ok();
+          var result=  await Mediator.Send(new GetWantApprovalQuery { PageNumber=pageNumber,PageSize=pageSize });
+            return Ok(result);
         }
 
         /// <summary>

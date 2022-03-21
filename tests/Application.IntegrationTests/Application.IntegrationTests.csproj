@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\src\Api\Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OrderForm\Commands\" />
+  </ItemGroup>
+
 </Project>
