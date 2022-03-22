@@ -2,6 +2,7 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import "~bootstrap/scss/mixins";
+@import "bootstrap-icons/font/bootstrap-icons";
 
 app-root {
   color: #464646;
@@ -32,6 +33,19 @@ app-root {
         padding-left: 1.5rem !important;
       }
     }
+  }
+
+  .bi-chevron-left, .bi-chevron-right{
+    background-color: gray;
+    color: white;
+    width: 31px;
+    height: 31px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .disable-paging-button{
+    background-color: lightgray !important;
   }
 
   .cursor-none {
