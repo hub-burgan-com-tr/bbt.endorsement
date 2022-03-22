@@ -37,12 +37,16 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
         public async Task<Response<PaginatedList<GetWatchApprovalDto>>> Handle(GetWatchApprovalQuery request, CancellationToken cancellationToken)
         {
             IQueryable<Order> orders = _context.Orders.OrderByDescending(x=>x.Created).Include(x=>x.Documents);
+            //if (!string.IsNullOrEmpty(request.Approval))
+            //    orders = orders.Where(x =>);
+            //if (!string.IsNullOrEmpty(request.Approver))
+            //    orders = orders.Where(x =>x);
             if (!string.IsNullOrEmpty(request.Process))
-                orders.Where(x => x.Reference.Process.Contains(request.Process));
+               orders= orders.Where(x => x.Reference.Process.Contains(request.Process));
             if (!string.IsNullOrEmpty(request.State))
-                orders.Where(x => x.Reference.State.Contains(request.State));
+              orders = orders.Where(x => x.Reference.State.Contains(request.State));
             if (!string.IsNullOrEmpty(request.ProcessNo))
-                orders.Where(x => x.Reference.ProcessNo==request.ProcessNo);
+                orders=orders.Where(x => x.Reference.ProcessNo==request.ProcessNo);
             var list = await orders
               .Select(x => new GetWatchApprovalDto
               {

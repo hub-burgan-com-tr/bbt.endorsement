@@ -429,10 +429,10 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no watch approval detail  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetWatchApprovalDetailAsync([FromBody] int approvalId)
+        public async Task<IActionResult> GetWatchApprovalDetailAsync([FromQuery] string orderId)
         {
-            await Mediator.Send(new GetWatchApprovalDetailsQuery() { ApprovalId = approvalId });
-            return Ok();
+           var response= await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
+            return Ok(response);
         }
 
     }
