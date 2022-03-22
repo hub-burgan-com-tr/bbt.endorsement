@@ -32,7 +32,7 @@ namespace Application.Endorsements.Queries.GetMyApprovals
         {
             var list = await _context.Orders
                 .Include(x => x.Documents)
-                .OrderBy(x => x.Created)
+                .OrderByDescending(x => x.Created)
                 .Select(x => new GetMyApprovalDto
                 {
                     OrderId = x.OrderId,
