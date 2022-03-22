@@ -26,7 +26,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 
         public async Task<Response<GetApprovalDetailsDto>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Documents.Where(x => x.OrderId == request.OrderId && x.Type == ContentType.PlainText.ToString()).Select(x => new GetApprovalDetailsDto {Name=x.Name,Content=x.Content,Actions=x.Actions.Select(x=>new Action { IsDefault=x.IsDefault,Title=x.Title}).ToList() }).FirstOrDefault();
+            var response = _context.Documents.Where(x => x.OrderId == request.OrderId && x.Type == ContentType.PlainText.ToString()).Select(x => new GetApprovalDetailsDto {Title=x.Order.Title,Name=x.Name,Content=x.Content,Actions=x.Actions.Select(x=>new Action { IsDefault=x.IsDefault,Title=x.Title}).ToList() }).FirstOrDefault();
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
     }

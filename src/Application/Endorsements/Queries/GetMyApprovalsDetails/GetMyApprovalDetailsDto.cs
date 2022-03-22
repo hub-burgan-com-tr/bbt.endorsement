@@ -15,7 +15,7 @@
         public List<Action> PlainTextActions { get; set; }
         public List<Action> PDFActions { get; set; }        
         public List<GetMyApprovalDetailHistoryDto> History { get; set; }
-
+        public string Title { get; internal set; }
     }
     public class Action
     {

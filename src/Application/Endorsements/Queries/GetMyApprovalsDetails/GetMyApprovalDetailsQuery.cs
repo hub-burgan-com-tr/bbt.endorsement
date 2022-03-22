@@ -28,6 +28,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
 
             var list = _context.Documents.Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
             {
+                Title = x.Order.Title,
                 Name = x.Name,
                 PlainTextActions = x.Actions.Where(x => x.Document.Type == ContentType.PlainText.ToString())
                  .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title, Type = x.Type,State=x.State }).ToList(),
