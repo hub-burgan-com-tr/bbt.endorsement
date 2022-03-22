@@ -31,8 +31,8 @@ namespace Application.Endorsements.Queries.GetMyApprovals
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
         {
             var list = await _context.Orders
-                .Include(x => x.Documents).OrderBy(x => x.Title).ThenByDescending(x => x.Created)
-
+                .Include(x => x.Documents)
+                .OrderBy(x => x.Created)
                 .Select(x => new GetMyApprovalDto
                 {
                     OrderId = x.OrderId,
