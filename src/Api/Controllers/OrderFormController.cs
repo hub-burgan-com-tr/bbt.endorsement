@@ -31,12 +31,11 @@ namespace Api.Controllers
             documents.Add(new DocumentClass
             {
                 Content = request.Content,
-                Title = request.Title,
+                Title = request.Title
             });
             var startRequest = new StartRequest
             {
                 Approver = request.Approver,
-                Config = null, // Sabit değer
                 Reference = request.Reference,
                 Title = request.Title,
                 Id = request.Id,
