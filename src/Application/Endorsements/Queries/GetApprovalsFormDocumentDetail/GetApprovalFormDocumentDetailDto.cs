@@ -22,6 +22,7 @@
         /// Belge Onaylandımı
         /// </summary>
         public List<Action> Actions { get; set; }
+        public string Title { get; internal set; }
     }
     public class Action
     {

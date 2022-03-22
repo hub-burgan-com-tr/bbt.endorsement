@@ -5,38 +5,24 @@
         /// <summary>
         /// Onay Id
         /// </summary>
-        public int ApprovalId { get; set; }
-        /// <summary>
-        /// Onay Ad
-        /// </summary>
-        public string ApprovalName { get; set; }
-        /// <summary>
-        /// Onaylayan
-        /// </summary>
+        public string OrderId { get; set; }
+        public string Title { get; set; }
         public string Approver { get; set; }
-        /// <summary>
-        /// İslem No
-        /// </summary>
+        public string Approval { get; set; }
+        public string Process { get; set; }
+        public string State { get; set; }
+        public string ProcessNo { get; set; }
         public string TransactionNumber { get; set; }
         /// <summary>
         /// Onay Tarihi
         /// </summary>
-        public string ApproverDate { get; set; }
+        public string Date { get; set; }
         /// <summary>
         /// Belge Var Mı
         /// </summary>
         public bool IsDocument { get; set; }
-        /// <summary>
-        /// Belge Icon
-        /// </summary>
-        public string ApprovalIcon { get; set; }
-        /// <summary>
-        /// Onay Durumu
-        /// </summary>
-        public string ApprovalState { get; set; }
-        public string Process { get; set; }
-        public string State { get; set; }
-        public string ProcessNo { get; set; }
+
+        public string OrderState { get; set; }
 
     }
 }

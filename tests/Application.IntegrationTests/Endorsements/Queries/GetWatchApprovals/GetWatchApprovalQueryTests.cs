@@ -9,18 +9,16 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetWatchApprovals
     {
         [Test]
         [TestCase("fa5bac5d-4f61-4637-a8cf-40e51d5de75c")]
-        public async Task GetWatchApprovalQueryTestAsync(string InstanceId)
+        public async Task GetWatchApprovalQueryTestAsync()
         {
             var command = new GetWatchApprovalQuery
             {
-                InstanceId = InstanceId,
-                SeekingApproval = "",
-                Approver = ""
+                Approval="Uğur Karataş",
+
 
             };
             var response = await SendAsync(command);
-            var instanceId = InstanceId;
-            Assert.IsNotNull(instanceId);
+            Assert.IsNotNull(response);
         }
     }
 }

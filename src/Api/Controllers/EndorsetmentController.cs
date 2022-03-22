@@ -55,7 +55,7 @@ namespace Api.Controllers
         [Route("Orders")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried orders are returned successfully.", typeof(OrderItem[]))]
-        [SwaggerResponse(204, "Success but there is no order available for the query.", typeof(void))]    
+        [SwaggerResponse(204, "Success but there is no order available for the query.", typeof(void))]
         public async Task<Response<OrderItem[]>> GetOrders(
            [FromQuery] long approver,
            [FromQuery] long customer,
@@ -71,12 +71,12 @@ namespace Api.Controllers
             {
                 Approver = approver,
                 Customer = customer,
-                Page = page,    
+                Page = page,
                 PageSize = pageSize,
-                ReferenceProcess = referenceProcess,    
+                ReferenceProcess = referenceProcess,
                 ReferenceId = referenceId,
                 Status = status,
-                Submitter=submitter
+                Submitter = submitter
             });
             return response;
         }
@@ -98,7 +98,7 @@ namespace Api.Controllers
             [FromRoute] Guid id
             )
         {
-            var response = await Mediator.Send(new GetOrderDetailQuery {  Id = id  });
+            var response = await Mediator.Send(new GetOrderDetailQuery { Id = id });
             return response;
         }
 
@@ -191,7 +191,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-          var list=  await Mediator.Send(new GetApprovalQuery { PageNumber=pageNumber,PageSize=pageSize });
+            var list = await Mediator.Send(new GetApprovalQuery { PageNumber = pageNumber, PageSize = pageSize });
             return Ok(list);
         }
         /// <summary>
@@ -212,7 +212,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalDetailAsync([FromQuery] string orderId)
         {
-           var result= await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
+            var result = await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
             return Ok(result);
         }
 
@@ -234,7 +234,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalPhysicallyDocumentDetailAsync([FromQuery] string orderId)
         {
-           var result= await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { OrderId = orderId });
+            var result = await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { OrderId = orderId });
             return Ok(result);
         }
 
@@ -256,7 +256,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromQuery] string orderId)
         {
-          var result=  await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { OrderId = orderId });
+            var result = await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { OrderId = orderId });
             return Ok(result);
         }
 
@@ -279,7 +279,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalDocumentListAsync([FromQuery] string orderId)
         {
-          var result=  await Mediator.Send(new GetApprovalDocumentListQuery() { OrderId = orderId });
+            var result = await Mediator.Send(new GetApprovalDocumentListQuery() { OrderId = orderId });
             return Ok(result);
         }
 
@@ -304,7 +304,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var data = await Mediator.Send(new GetMyApprovalQuery {  PageNumber = pageNumber, PageSize = pageSize});
+            var data = await Mediator.Send(new GetMyApprovalQuery { PageNumber = pageNumber, PageSize = pageSize });
             return Ok(data);
         }
         /// <summary>
@@ -326,7 +326,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalDetailAsync([FromQuery] string orderId)
         {
-           var result= await Mediator.Send(new GetMyApprovalDetailsQuery { OrderId = orderId });
+            var result = await Mediator.Send(new GetMyApprovalDetailsQuery { OrderId = orderId });
             return Ok(result);
         }
 
@@ -351,9 +351,9 @@ namespace Api.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetWantApprovalAsync( int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetWantApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-          var result=  await Mediator.Send(new GetWantApprovalQuery { PageNumber=pageNumber,PageSize=pageSize });
+            var result = await Mediator.Send(new GetWantApprovalQuery { PageNumber = pageNumber, PageSize = pageSize });
             return Ok(result);
         }
 
@@ -375,14 +375,24 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
-          var result=  await Mediator.Send(new GetWantApprovalDetailsQuery() { OrderId = orderId });
+            var result = await Mediator.Send(new GetWantApprovalDetailsQuery() { OrderId = orderId });
             return Ok(result);
         }
 
         /// <summary>
         ///  İzleme Listesi
         /// </summary>
+        /// <param name="approver"></param>
+        /// <param name="approval"></param>
+        /// <param name="process"></param>
+        /// <param name="SeekingApproval"></param>
+        /// <param name="Process"></param>
+        /// <param name="state"></param>
+        /// <param name="processNo"></param>
+        /// <param name="ProcessNo"></param>
         /// <param name="command"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         /// <response code="404">If the item is null</response>
         [SwaggerOperation(
@@ -391,14 +401,15 @@ namespace Api.Controllers
         )]
         [Route("watch-approval")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried watch approvals are returned successfully.", typeof(List<GetWatchApprovalDto>))]
+        [SwaggerResponse(200, "Success, queried watch approvals are returned successfully.", typeof(PaginatedList<GetWatchApprovalDto>))]
         [SwaggerResponse(404, "Success but there is no watch approvals available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetWatchApprovalAsync([FromBody] GetWatchApprovalQuery command)
+        public async Task<IActionResult> GetWatchApprovalAsync(string approver, string approval, string process, string state,
+         string processNo, int pageNumber = 1, int pageSize = 10)
         {
-            await Mediator.Send(command);
-            return Ok();
+            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Approval = approval, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize });
+            return Ok(result);
         }
 
         /// <summary>
