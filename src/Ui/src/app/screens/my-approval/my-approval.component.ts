@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MyApprovalService} from "../../services/my-approval.service";
 import {GetEndorsementListRequestModel} from "../../models/my-approval";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-my-approval',
@@ -9,6 +10,7 @@ import {GetEndorsementListRequestModel} from "../../models/my-approval";
 })
 
 export class MyApprovalComponent implements OnInit {
+  private destroy$ = new Subject();
   data: any[];
 
   pageSize = 10;
@@ -29,7 +31,7 @@ export class MyApprovalComponent implements OnInit {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };
-    this.myApprovalService.getEndorsementList(requestModel).subscribe({
+    this.myApprovalService.getEndorsementList(requestModel).pipe(takeUntil(this.destroy$)).subscribe({
       next: res => {
         if (res.data) {
           this.data = res.data.items;
