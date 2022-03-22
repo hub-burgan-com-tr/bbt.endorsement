@@ -1,6 +1,7 @@
 export enum ApiPaths {
   Endorsement = 'Endorsement/Endorsement',
   ApprovalDetail = 'Endorsement/approval-detail',
+  ApprovalPhysicallyDocumentDetail = 'Endorsement/approval-physically-document-detail',
   EndorsementOrders = 'Endorsement/Orders',
   GetForm = 'Forms/GetForm',
   GetFormContent = 'Forms/GetFormContent',

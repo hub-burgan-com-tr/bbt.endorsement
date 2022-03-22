@@ -15,3 +15,11 @@ interface IGetApprovalDetailRequestModel {
 export class GetApprovalDetailRequestModel implements IGetApprovalDetailRequestModel {
   orderId: any;
 }
+
+interface IGetApprovalPhysicallyDocumentDetailRequestModel {
+  orderId: any;
+}
+
+export class GetApprovalPhysicallyDocumentDetailRequestModel implements IGetApprovalPhysicallyDocumentDetailRequestModel {
+  orderId: any;
+}
