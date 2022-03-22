@@ -6,12 +6,12 @@ import {MyApprovalDetailComponent} from "./my-approval-detail/my-approval-detail
 import {NgxSmartModalModule} from 'ngx-smart-modal';
 import {SharedModule} from "../../modules/shared.module";
 import {MyApprovalCompletedComponent} from "./my-approval-completed/my-approval-completed.component";
+import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
   {path: '', component: MyApprovalComponent},
-  {path: 'detail', component: MyApprovalDetailComponent},
   {path: 'detail/:orderId', component: MyApprovalDetailComponent},
-  {path: 'completed', component: MyApprovalCompletedComponent},
+  {path: 'detail/:orderId/completed', component: MyApprovalCompletedComponent},
 ]
 
 @NgModule({
@@ -20,12 +20,13 @@ const routes: Routes = [
     MyApprovalDetailComponent,
     MyApprovalCompletedComponent
   ],
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes),
-    CommonModule,
-    NgxSmartModalModule.forRoot()
-  ]
+    imports: [
+        SharedModule,
+        RouterModule.forChild(routes),
+        CommonModule,
+        NgxSmartModalModule.forRoot(),
+        FormsModule
+    ]
 })
 export class MyApprovalModule {
 }
