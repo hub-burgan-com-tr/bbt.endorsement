@@ -35,8 +35,6 @@ namespace Application.Endorsements.Commands.NewOrders
 
     public class ApproverClass
     {
-        //public long Customer { get; set; }
-        //public long Approver { get; set; }
         public int Type { get; set; }
         public string Value { get; set; }
         public string NameSurname { get; set; }
