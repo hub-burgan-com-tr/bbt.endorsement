@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Application.Endorsements.Commands.NewOrders
+﻿namespace Application.Endorsements.Commands.NewOrders
 {
     public class StartRequest
     {
@@ -10,36 +8,36 @@ namespace Application.Endorsements.Commands.NewOrders
         public Guid Id { get; set; }
         public string Title { get; set; }
         public OrderConfig Config { get; set; }
-        public ReferenceClass Reference { get; set; }
-        public List<DocumentClass> Documents { get; set; }
-        public ApproverClass Approver { get; set; }
+        public OrderReference Reference { get; set; }
+        public List<OrderDocument> Documents { get; set; }
+        public OrderApprover Approver { get; set; }
        
         
     }
-    public class DocumentClass
+    public class OrderDocument
     {
         public string Title { get; set; }
         public string Content { get; set; }
         public string File { get; set; }
         public string FileName { get; set; }
         public ContentType Type { get; set; }
-        public List<ActionClass> Actions { get; set; }
+        public List<DocumentAction> Actions { get; set; }
 
     }
-    public class ActionClass
+    public class DocumentAction
     {
         public bool IsDefault { get; set; }
         public string Title { get; set; }
         public ActionType Type { get; set; }
     }
 
-    public class ApproverClass
+    public class OrderApprover
     {
         public int Type { get; set; }
         public string Value { get; set; }
         public string NameSurname { get; set; }
     }
-    public class ReferenceClass
+    public class OrderReference
     {
         public string Process { get; set; }
         public string State { get; set; }
