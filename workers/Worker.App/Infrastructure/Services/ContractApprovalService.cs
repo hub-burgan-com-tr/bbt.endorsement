@@ -205,6 +205,7 @@ public class ContractApprovalService : IContractApprovalService
                 variables.Approved = true;
                 variables.Completed = true;
                 variables.IsProcess = true;
+                variables.Documents.Add(variables.Document);
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 

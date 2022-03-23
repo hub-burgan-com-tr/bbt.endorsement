@@ -38,12 +38,11 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
         {
             var model = new ContractModel
             {
-                InstanceId = request.OrderId
+                InstanceId = request.OrderId,
+                Document = request.Documents               
             };
-
-            string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });          
             var response = await _zeebe.SendMessage(model.InstanceId.ToString(), "ApproveData", payload);
-
             return Response<bool>.Success(200);
         }
     }

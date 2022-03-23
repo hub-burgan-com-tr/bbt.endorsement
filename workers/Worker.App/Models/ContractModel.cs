@@ -12,6 +12,9 @@
         public bool RetryEnd { get; set; }
         public int Limit { get; set; }
 
+
+        public object Document { get; set; }
+        public List<object> Documents { get; set; }
     }
 
 
