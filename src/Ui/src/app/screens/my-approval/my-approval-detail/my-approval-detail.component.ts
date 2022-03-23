@@ -26,6 +26,7 @@ export class MyApprovalDetailComponent implements OnInit {
   physicallyDocuments = [{
     name: '',
     documentLink: '',
+    content: '',
     actions: []
   }];
 
@@ -60,7 +61,7 @@ export class MyApprovalDetailComponent implements OnInit {
         next: res => {
           if (res.data) {
             this.title = res.data.title
-            this.details = res.data.list
+            this.details = res.data.documents
           } else
             console.error("Kayıt bulunamadı");
         },
@@ -79,7 +80,7 @@ export class MyApprovalDetailComponent implements OnInit {
         next: res => {
           if (res.data) {
             this.title = res.data.title
-            this.physicallyDocuments = res.data.list
+            this.physicallyDocuments = res.data.documents
           } else
             console.error("Kayıt bulunamadı");
         },

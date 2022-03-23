@@ -60,12 +60,13 @@
       </div>
       <div *ngIf="step===2">
         <div class="box p-3 mb-4" *ngFor="let physicallyDocument of physicallyDocuments; let p = index">
-          <p class="mb-4">
+          <p class="mb-2 d-block">
             <a href="{{physicallyDocument.documentLink}}">
               <img src="/assets/img/attachment.png">
               <span class="mx-2">{{physicallyDocument.name}}</span>
             </a>
           </p>
+          <div class="mb-4">{{physicallyDocument.content}}</div>
           <div *ngIf="physicallyDocument.actions.length != 0">
             <ng-container *ngIf="physicallyDocument.actions.length > 1;then radio else check"></ng-container>
             <ng-template #check>
