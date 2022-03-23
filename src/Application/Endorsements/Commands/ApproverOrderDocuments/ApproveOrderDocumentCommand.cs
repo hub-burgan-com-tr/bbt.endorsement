@@ -1,12 +1,15 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Models;
 using MediatR;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Application.Endorsements.Commands.ApproveOrderDocuments
 {
     public class ApproveOrderDocumentCommand : IRequest<Response<bool>>
     {
-        public string OrderId { get; set; }
+        public Guid OrderId { get; set; }
 
         public List<OrderDocument> Documents { get; set; }
     }
@@ -24,16 +27,24 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
     }
     public class ApproveOrderDocumentCommandHandler : IRequestHandler<ApproveOrderDocumentCommand, Response<bool>>
     {
-        private IApplicationDbContext _context;
+        IZeebeService _zeebe;
 
-        public ApproveOrderDocumentCommandHandler(IApplicationDbContext context)
+        public ApproveOrderDocumentCommandHandler(IZeebeService zeebe)
         {
-            _context = context;
+            _zeebe = zeebe;
         }
 
-        public Task<Response<bool>> Handle(ApproveOrderDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<Response<bool>> Handle(ApproveOrderDocumentCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var model = new ContractModel
+            {
+                InstanceId = request.OrderId
+            };
+
+            string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            var response = await _zeebe.SendMessage(model.InstanceId.ToString(), "ApproveData", payload);
+
+            return Response<bool>.Success(200);
         }
     }
 }

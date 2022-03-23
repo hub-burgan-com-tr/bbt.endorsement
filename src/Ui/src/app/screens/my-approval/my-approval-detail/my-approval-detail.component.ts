@@ -17,18 +17,17 @@ export class MyApprovalDetailComponent implements OnInit {
   private destroy$ = new Subject();
   step: number = 1;
   orderId: any;
-  detail = {
-    title: '',
+  title: '';
+  details = [{
     name: '',
     content: '',
     actions: []
-  };
-  physicallyDocument = {
-    title: '',
+  }];
+  physicallyDocuments = [{
     name: '',
     documentLink: '',
     actions: []
-  };
+  }];
 
   constructor(public ngxSmartModalService: NgxSmartModalService,
               private route: ActivatedRoute,
@@ -60,7 +59,8 @@ export class MyApprovalDetailComponent implements OnInit {
       .subscribe({
         next: res => {
           if (res.data) {
-            this.detail = res.data
+            this.title = res.data.title
+            this.details = res.data.list
           } else
             console.error("Kayıt bulunamadı");
         },
@@ -78,7 +78,8 @@ export class MyApprovalDetailComponent implements OnInit {
       .subscribe({
         next: res => {
           if (res.data) {
-            this.physicallyDocument = res.data
+            this.title = res.data.title
+            this.physicallyDocuments = res.data.list
           } else
             console.error("Kayıt bulunamadı");
         },
