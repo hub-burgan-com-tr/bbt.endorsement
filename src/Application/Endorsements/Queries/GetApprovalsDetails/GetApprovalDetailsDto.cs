@@ -4,15 +4,8 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 {
     public class GetApprovalDetailsDto
     {
-       
-        public string Name { get; set; }
-        public string Content { get; set; }
-        /// <summary>
-        /// Belge Onay
-        /// </summary>
-        public List<Action> Actions { get; set; }
+        public List<OrderDocument>Documents { get; set; }
         public string Title { get; internal set; }
-        public string DocumentId { get; internal set; }
     }
     public class Action
     {
@@ -20,5 +13,14 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
         public string Title { get; set; }
         public string ActionId { get; internal set; }
     }
-   
+    public class OrderDocument
+    {
+        public string DocumentId { get; internal set; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public List<Action> Actions { get; set; }
+
+
+    }
+
 }
