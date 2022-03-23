@@ -27,8 +27,8 @@ namespace Api.Controllers
         {
             request.Id = Guid.NewGuid();
 
-            var documents = new List<DocumentClass>();
-            documents.Add(new DocumentClass
+            var documents = new List<OrderDocument>();
+            documents.Add(new OrderDocument
             {
                 Content = request.Content,
                 Title = request.Title

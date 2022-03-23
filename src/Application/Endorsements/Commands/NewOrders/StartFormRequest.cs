@@ -6,8 +6,8 @@
         public string Title { get; set; }
         public string FormId { get; set; }
         public string Content { get; set; }
-        public ReferenceClass Reference { get; set; }
-        public ApproverClass Approver { get; set; }
+        public OrderReference Reference { get; set; }
+        public OrderApprover Approver { get; set; }
     }
 
     public class FormDefinitionClass
