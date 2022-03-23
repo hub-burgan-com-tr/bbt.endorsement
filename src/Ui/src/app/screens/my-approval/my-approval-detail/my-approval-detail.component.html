@@ -30,27 +30,27 @@
     </div>
     <div class="col-md col-sm-12">
       <div *ngIf="step===1">
-        <div class="box p-3 mb-4" *ngFor="let detail of details; let i = index">
+        <div class="box p-3 mb-4" *ngFor="let detail of details; let d = index">
           <b class="mb-2 d-block">{{detail.name}}</b>
           <div class="mb-4">{{detail.content}}</div>
           <div *ngIf="detail.actions.length != 0">
             <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
             <ng-template #check>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="actionCheckedDetail"
+                <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedDetail' + d }}"
                        [checked]="detail.actions[0].isDefault">
-                <label class="form-check-label" for="actionCheckedDetail">
+                <label class="form-check-label" for="{{ 'actionCheckedDetail' + d }}">
                   {{detail.actions[0].title}}
                 </label>
               </div>
             </ng-template>
             <ng-template #radio>
-              <div class="form-check" *ngFor="let action of detail.actions; let i = index">
+              <div class="form-check" *ngFor="let action of detail.actions; let a = index">
                 <input class="form-check-input" type="radio"
-                       name="{{ 'flexRadio-detail' }}"
-                       id="{{ 'flexRadio-' + i }}"
+                       name="{{ 'flexRadio-detail' + d }}"
+                       id="{{ 'flexRadio-' + d + '-' + a }}"
                        [checked]="action.isDefault">
-                <label class="form-check-label" for="{{ 'flexRadio-' + i }}">
+                <label class="form-check-label" for="{{ 'flexRadio-' + d + '-' + a }}">
                   {{action.title}}
                 </label>
               </div>
@@ -59,7 +59,7 @@
         </div>
       </div>
       <div *ngIf="step===2">
-        <div class="box p-3 mb-4" *ngFor="let physicallyDocument of physicallyDocuments; let i = index">
+        <div class="box p-3 mb-4" *ngFor="let physicallyDocument of physicallyDocuments; let p = index">
           <p class="mb-4">
             <a href="{{physicallyDocument.documentLink}}">
               <img src="/assets/img/attachment.png">
@@ -70,20 +70,20 @@
             <ng-container *ngIf="physicallyDocument.actions.length > 1;then radio else check"></ng-container>
             <ng-template #check>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="actionCheckedPhysicallyDocument"
+                <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedPhysicallyDocument' + p }}"
                        [checked]="physicallyDocument.actions[0].isDefault">
-                <label class="form-check-label" for="actionCheckedPhysicallyDocument">
+                <label class="form-check-label" for="{{ 'actionCheckedPhysicallyDocument' + p }}">
                   {{physicallyDocument.actions[0].title}}
                 </label>
               </div>
             </ng-template>
             <ng-template #radio>
-              <div class="form-check" *ngFor="let action of physicallyDocument.actions; let i = index">
+              <div class="form-check" *ngFor="let action of physicallyDocument.actions; let a = index">
                 <input class="form-check-input" type="radio"
-                       name="{{ 'flexRadio-physicallyDocument' }}"
-                       id="{{ 'flexRadio-' + i }}"
+                       name="{{ 'flexRadio-physicallyDocument' + p }}"
+                       id="{{ 'flexRadio-' + p + '-' + a }}"
                        [checked]="action.isDefault">
-                <label class="form-check-label" for="{{ 'flexRadio-' + i }}">
+                <label class="form-check-label" for="{{ 'flexRadio-' + p + '-' + a }}">
                   {{action.title}}
                 </label>
               </div>
