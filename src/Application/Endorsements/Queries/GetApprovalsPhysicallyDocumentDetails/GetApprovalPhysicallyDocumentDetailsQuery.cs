@@ -6,24 +6,24 @@ using MediatR;
 
 namespace Application.Endorsements.Queries.GetApprovalsPhysicallyDocumentDetails
 {
-    public class GetApprovalPhysicallyDocumentDetailsQuery : IRequest<Response<GetApprovalPhysicallyDocumentDetailsDto>>
+    public class GetApprovalPhysicallyDocumentDetailsQuery : IRequest<Response<List<GetApprovalPhysicallyDocumentDetailsDto>>>
     {
         /// <summary>
         /// Onay Id
         /// </summary>
         public string OrderId { get; set; }
     }
-    public class GetApprovalDocumentDetailsQueryHandler : IRequestHandler<GetApprovalPhysicallyDocumentDetailsQuery, Response<GetApprovalPhysicallyDocumentDetailsDto>>
+    public class GetApprovalDocumentDetailsQueryHandler : IRequestHandler<GetApprovalPhysicallyDocumentDetailsQuery, Response<List<GetApprovalPhysicallyDocumentDetailsDto>>>
     {
         private IApplicationDbContext _context;
         public GetApprovalDocumentDetailsQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task<Response<GetApprovalPhysicallyDocumentDetailsDto>> Handle(GetApprovalPhysicallyDocumentDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<GetApprovalPhysicallyDocumentDetailsDto>>> Handle(GetApprovalPhysicallyDocumentDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Documents.Where(x => x.OrderId == request.OrderId && x.Type == ContentType.PDF.ToString()).Select(x => new GetApprovalPhysicallyDocumentDetailsDto {Title=x.Order.Title, Name = x.Name, Actions = x.Actions.Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title }).ToList() }).FirstOrDefault();
-            return Response<GetApprovalPhysicallyDocumentDetailsDto>.Success(response, 200);
+            var response = _context.Documents.Where(x => x.OrderId == request.OrderId && x.Type == ContentType.PDF.ToString()).Select(x => new GetApprovalPhysicallyDocumentDetailsDto { Title = x.Order.Title, Name = x.Name, Actions = x.Actions.Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title }).ToList() }).ToList();
+            return Response<List<GetApprovalPhysicallyDocumentDetailsDto>>.Success(response, 200);
         }
     }
 }
