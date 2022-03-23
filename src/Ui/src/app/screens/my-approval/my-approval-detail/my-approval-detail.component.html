@@ -15,11 +15,11 @@
     <button class="btn btn-outline-primary" (click)="myModal.close()">İptal</button>
   </div>
 </ngx-smart-modal>
-<app-main-content blockTitle="Onayımdakiler" subTitle="Onayımdakiler | {{detail.title}}">
+<app-main-content blockTitle="Onayımdakiler" subTitle="Onayımdakiler | {{title}}">
   <div class="row">
     <div class="col-md-3 col-sm-12 mb-3">
       <div class="left-box">
-        <div class="left-box-title">{{detail.title}}</div>
+        <div class="left-box-title">{{title}}</div>
         <div class="attachment">
           <img src="/assets/img/attachment.png">
         </div>
@@ -29,62 +29,66 @@
       </div>
     </div>
     <div class="col-md col-sm-12">
-      <div class="box p-3 mb-4" *ngIf="step===1">
-        <b class="mb-2 d-block">{{detail.name}}</b>
-        <div class="mb-4">{{detail.content}}</div>
-        <div *ngIf="detail.actions.length != 0">
-          <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
-          <ng-template #check>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="actionCheckedDetail"
-                     [checked]="detail.actions[0].isDefault">
-              <label class="form-check-label" for="actionCheckedDetail">
-                {{detail.actions[0].title}}
-              </label>
-            </div>
-          </ng-template>
-          <ng-template #radio>
-            <div class="form-check" *ngFor="let action of detail.actions; let i = index">
-              <input class="form-check-input" type="radio"
-                     name="{{ 'flexRadio-detail' }}"
-                     id="{{ 'flexRadio-' + i }}"
-                     [checked]="action.isDefault">
-              <label class="form-check-label" for="{{ 'flexRadio-' + i }}">
-                {{action.title}}
-              </label>
-            </div>
-          </ng-template>
+      <div *ngIf="step===1">
+        <div class="box p-3 mb-4" *ngFor="let detail of details; let i = index">
+          <b class="mb-2 d-block">{{detail.name}}</b>
+          <div class="mb-4">{{detail.content}}</div>
+          <div *ngIf="detail.actions.length != 0">
+            <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
+            <ng-template #check>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="actionCheckedDetail"
+                       [checked]="detail.actions[0].isDefault">
+                <label class="form-check-label" for="actionCheckedDetail">
+                  {{detail.actions[0].title}}
+                </label>
+              </div>
+            </ng-template>
+            <ng-template #radio>
+              <div class="form-check" *ngFor="let action of detail.actions; let i = index">
+                <input class="form-check-input" type="radio"
+                       name="{{ 'flexRadio-detail' }}"
+                       id="{{ 'flexRadio-' + i }}"
+                       [checked]="action.isDefault">
+                <label class="form-check-label" for="{{ 'flexRadio-' + i }}">
+                  {{action.title}}
+                </label>
+              </div>
+            </ng-template>
+          </div>
         </div>
       </div>
-      <div class="box p-3" *ngIf="step===2">
-        <p class="mb-4">
-          <a href="{{physicallyDocument.documentLink}}">
-            <img src="/assets/img/attachment.png">
-            <span class="mx-2">{{physicallyDocument.name}}</span>
-          </a>
-        </p>
-        <div *ngIf="physicallyDocument.actions.length != 0">
-          <ng-container *ngIf="physicallyDocument.actions.length > 1;then radio else check"></ng-container>
-          <ng-template #check>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="actionCheckedPhysicallyDocument"
-                     [checked]="physicallyDocument.actions[0].isDefault">
-              <label class="form-check-label" for="actionCheckedPhysicallyDocument">
-                {{physicallyDocument.actions[0].title}}
-              </label>
-            </div>
-          </ng-template>
-          <ng-template #radio>
-            <div class="form-check" *ngFor="let action of physicallyDocument.actions; let i = index">
-              <input class="form-check-input" type="radio"
-                     name="{{ 'flexRadio-physicallyDocument' }}"
-                     id="{{ 'flexRadio-' + i }}"
-                     [checked]="action.isDefault">
-              <label class="form-check-label" for="{{ 'flexRadio-' + i }}">
-                {{action.title}}
-              </label>
-            </div>
-          </ng-template>
+      <div *ngIf="step===2">
+        <div class="box p-3 mb-4" *ngFor="let physicallyDocument of physicallyDocuments; let i = index">
+          <p class="mb-4">
+            <a href="{{physicallyDocument.documentLink}}">
+              <img src="/assets/img/attachment.png">
+              <span class="mx-2">{{physicallyDocument.name}}</span>
+            </a>
+          </p>
+          <div *ngIf="physicallyDocument.actions.length != 0">
+            <ng-container *ngIf="physicallyDocument.actions.length > 1;then radio else check"></ng-container>
+            <ng-template #check>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="actionCheckedPhysicallyDocument"
+                       [checked]="physicallyDocument.actions[0].isDefault">
+                <label class="form-check-label" for="actionCheckedPhysicallyDocument">
+                  {{physicallyDocument.actions[0].title}}
+                </label>
+              </div>
+            </ng-template>
+            <ng-template #radio>
+              <div class="form-check" *ngFor="let action of physicallyDocument.actions; let i = index">
+                <input class="form-check-input" type="radio"
+                       name="{{ 'flexRadio-physicallyDocument' }}"
+                       id="{{ 'flexRadio-' + i }}"
+                       [checked]="action.isDefault">
+                <label class="form-check-label" for="{{ 'flexRadio-' + i }}">
+                  {{action.title}}
+                </label>
+              </div>
+            </ng-template>
+          </div>
         </div>
       </div>
       <div class="justify-content-center d-flex">
