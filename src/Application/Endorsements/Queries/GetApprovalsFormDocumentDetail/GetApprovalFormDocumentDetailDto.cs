@@ -24,11 +24,14 @@
         public List<Action> Actions { get; set; }
         public string Title { get; internal set; }
         public string DocumentId { get; internal set; }
+        public string Content { get; set; }
+
     }
     public class Action
     {
         public bool IsDefault { get; set; }
         public string Title { get; set; }
         public string ActionId { get; internal set; }
+
     }
 }
