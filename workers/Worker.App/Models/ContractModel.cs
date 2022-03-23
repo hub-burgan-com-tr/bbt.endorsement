@@ -2,6 +2,11 @@
 {
     public class ContractModel
     {
+        public ContractModel()
+        {
+            Documents = new List<object>();
+        }
+
         public StartRequest StartRequest { get; set; }
         public Guid InstanceId { get; set; }
         public bool Device { get; set; }
