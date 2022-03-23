@@ -19,7 +19,7 @@ using Application.Endorsements.Queries.GetWantApprovals;
 using Application.Endorsements.Queries.GetWantApprovalsDetails;
 using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
-using Application.Endorsements.Commands.ApproverOrderDocuments;
+using Application.Endorsements.Commands.ApproveOrderDocuments;
 
 namespace Api.Controllers
 {
@@ -121,18 +121,18 @@ namespace Api.Controllers
 
 
         [SwaggerOperation(
-          Summary = "Cancel endorsement order.",
-          Tags = new[] { "Endorsement" }
-        )]
-        [Route("Orders/{id}")]
-        [HttpDelete]
+      Summary = "cancel order",
+      Description = "canceled order")]
+        [Route("cancel-order")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, cancel order successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, cancel order successfully.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<Response<bool>> CancelOrder(
-            [FromRoute] Guid id
-            )
+            [FromQuery] string orderId)
         {
-            return await Mediator.Send(new CancelOrderCommand { Id = id });
+            return await Mediator.Send(new CancelOrderCommand { orderId = orderId });
         }
 
 
@@ -156,19 +156,18 @@ namespace Api.Controllers
 
 
         [SwaggerOperation(
-          Summary = "Query the Confirmation order documents that you want to approve",
-          Tags = new[] { "Endorsement" }
+            Summary = "approve order document",
+            Description = "order documents that you want to approve"
         )]
-        [Route("Orders/{orderId}/Documents/{documentId}/Approve")]
-        [HttpPatch]
+        [Route("approve-order-document")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Response<ApproverOrderDocumentResponse>> ApproveOrderDocument(
-            [FromRoute] Guid orderId,
-            [FromRoute] Guid documentId
-            )
+        public async Task<Response<bool>> ApproveOrderDocument(ApproveOrderDocumentCommand command)
         {
-            return await Mediator.Send(new ApproverOrderDocumentCommand { OrderId = orderId, DocumentId = documentId });
+           return await Mediator.Send(command);
         }
 
         /// <summary>
@@ -434,6 +433,11 @@ namespace Api.Controllers
            var response= await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
             return Ok(response);
         }
+
+
+
+
+
 
     }
 }

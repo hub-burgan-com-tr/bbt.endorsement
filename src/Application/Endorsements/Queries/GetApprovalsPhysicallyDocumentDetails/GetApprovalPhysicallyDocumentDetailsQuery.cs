@@ -22,7 +22,7 @@ namespace Application.Endorsements.Queries.GetApprovalsPhysicallyDocumentDetails
         }
         public async Task<Response<List<GetApprovalPhysicallyDocumentDetailsDto>>> Handle(GetApprovalPhysicallyDocumentDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Documents.Where(x => x.OrderId == request.OrderId && x.Type == ContentType.PDF.ToString()).Select(x => new GetApprovalPhysicallyDocumentDetailsDto { Title = x.Order.Title, Name = x.Name, Actions = x.Actions.Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title }).ToList() }).ToList();
+            var response = _context.Documents.Where(x => x.OrderId == request.OrderId && x.Type == ContentType.PDF.ToString()).Select(x => new GetApprovalPhysicallyDocumentDetailsDto {DocumentId=x.DocumentId, Title = x.Order.Title, Name = x.Name, Actions = x.Actions.Select(x => new Action {ActionId=x.ActionId, IsDefault = x.IsDefault, Title = x.Title }).ToList() }).ToList();
             return Response<List<GetApprovalPhysicallyDocumentDetailsDto>>.Success(response, 200);
         }
     }

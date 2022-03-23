@@ -38,7 +38,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                             Created = DateTime.Now,
                             IsDefault = action.IsDefault,
                             Title = action.Title,
-                            Type = action.Type.ToString()
+                            Type = action.IsDefault?ActionType.Approve.ToString():ActionType.Reject.ToString()
                         });
                     }
                 }
