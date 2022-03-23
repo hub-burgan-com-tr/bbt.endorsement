@@ -7,22 +7,22 @@ using System.Text.Json.Serialization;
 
 namespace Application.Endorsements.Commands.DocumentApprovals
 {
-    public class DocumentApprovalCommand : IRequest<Response<DocumentApprovalResponse>>
+    public class ApproveDataCommand : IRequest<Response<ApproveDataResponse>>
     {
         public Guid OrderId { get; set; }
         public Guid DocumentId { get; set; }
     }
 
-    public class DocumentApprovalCommandHandler : IRequestHandler<DocumentApprovalCommand, Response<DocumentApprovalResponse>>
+    public class ApproveDataCommandHandler : IRequestHandler<ApproveDataCommand, Response<ApproveDataResponse>>
     {
         IZeebeService _zeebe;
 
-        public DocumentApprovalCommandHandler(IZeebeService zeebe)
+        public ApproveDataCommandHandler(IZeebeService zeebe)
         {
             _zeebe = zeebe;
         }
 
-        public async Task<Response<DocumentApprovalResponse>> Handle(DocumentApprovalCommand request, CancellationToken cancellationToken)
+        public async Task<Response<ApproveDataResponse>> Handle(ApproveDataCommand request, CancellationToken cancellationToken)
         {
             var model = new ContractModel
             {
@@ -33,7 +33,7 @@ namespace Application.Endorsements.Commands.DocumentApprovals
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             var response = await _zeebe.SendMessage(model.InstanceId.ToString(), "ApproveData", payload);
 
-            return Response<DocumentApprovalResponse>.Success(200);
+            return Response<ApproveDataResponse>.Success(200);
         }
     }
 }

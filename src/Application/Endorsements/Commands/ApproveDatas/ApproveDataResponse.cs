@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Endorsements.Commands.DocumentApprovals
 {
-    public class DocumentApprovalResponse
+    public class ApproveDataResponse
     {
     }
 }
