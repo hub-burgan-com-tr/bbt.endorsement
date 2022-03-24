@@ -2,6 +2,7 @@
 using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Endorsements.Queries.GetApprovalsDocumentList
 {
@@ -20,11 +21,11 @@ namespace Application.Endorsements.Queries.GetApprovalsDocumentList
         }
         public async Task<Response<List<GetApprovalDocumentListDto>>> Handle(GetApprovalDocumentListQuery request, CancellationToken cancellationToken)
         {
-            var list = _context.Documents.Where(x => x.OrderId == request.OrderId).Select(x => new GetApprovalDocumentListDto
+            var list = _context.Documents.Include(x=>x.FormDefinition).ThenInclude(x=>x.FormDefinitionActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetApprovalDocumentListDto
             { Name = x.Name, 
                 PlainTextActions = x.DocumentActions.Where(x => x.Document.Type== ContentType.PlainText.ToString())
                 .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type,State=x.State }).ToList() ,
-                HTMLActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.HTML.ToString())
+                HTMLActions = x.FormDefinition.FormDefinitionActions
                 .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type, State = x.State }).ToList(),
                 PDFActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.PDF.ToString())
                 .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title,Type=x.Type, State = x.State }).ToList()
