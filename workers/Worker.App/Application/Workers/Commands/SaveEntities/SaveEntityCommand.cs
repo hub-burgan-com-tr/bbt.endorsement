@@ -3,6 +3,7 @@ using Worker.App.Application.Coomon.Models;
 using Worker.App.Domain.Entities;
 using Worker.App.Models;
 using Worker.App.Application.Common.Interfaces;
+using static Worker.App.Models.StartRequest;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
