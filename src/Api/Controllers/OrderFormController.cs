@@ -26,7 +26,7 @@ namespace Api.Controllers
         public async Task<Response<StartResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
             request.Id = Guid.NewGuid();
-            return await Mediator.Send(new NewOrderCommand { startFormRequest = request });
+            return await Mediator.Send(new NewOrderCommand { StartFormRequest = request });
         }
 
         [SwaggerOperation(
