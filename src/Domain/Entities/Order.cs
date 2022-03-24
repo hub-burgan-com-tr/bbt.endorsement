@@ -18,8 +18,9 @@ namespace Domain.Entities
         public string CustomerId { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(250)]
         public string Title { get; set; }
+        [MaxLength(50)]
         public string State { get; set; }
 
 

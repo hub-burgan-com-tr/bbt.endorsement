@@ -21,9 +21,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<Callback> Callbacks { get; set; }
     public virtual DbSet<Config> Configs { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
-   public virtual DbSet<FormDefinition> FormDefinitions { get; set; }
-   public virtual DbSet<FormDefinitionTag> FormDefinitionTags { get; set; }
-    public virtual DbSet<Domain.Entities.Action> Actions { get; set; }
+    public virtual DbSet<FormDefinition> FormDefinitions { get; set; }
+    public virtual DbSet<FormDefinitionTag> FormDefinitionTags { get; set; }
+    public virtual DbSet<DocumentAction> DocumentActions { get; set; }
+    public virtual DbSet<FormDefinitionAction> FormDefinitionActions { get; set; }
+    public virtual DbSet<Approver> Approvers { get; set; }
+    public virtual DbSet<Customer> Customers { get; set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

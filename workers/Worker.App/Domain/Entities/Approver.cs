@@ -1,12 +1,9 @@
-﻿using Domain.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Worker.App.Domain.Common;
 
-namespace Domain.Entities
+namespace Worker.App.Domain.Entities
 {
-    /// <summary>
-    /// approvers belgelere onay verecek kullanıcıların TCKN numarasını içeririr
-    /// </summary>
     [Table("Approver", Schema = "approval")]
     public class Approver : AuditableEntity
     {

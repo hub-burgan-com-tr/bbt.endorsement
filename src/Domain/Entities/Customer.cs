@@ -13,10 +13,12 @@ namespace Domain.Entities
         [Key]
         [MaxLength(36)]
         public string CustomerId { get; set; }
+        [MaxLength(250)]
         public string FirstName { get; set; }
+        [MaxLength(250)]
         public string LastName { get; set; }
+        [MaxLength(11)]
         public string CitizenshipNumber { get; set; }
-
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

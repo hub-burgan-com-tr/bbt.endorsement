@@ -22,7 +22,9 @@ namespace Domain.Entities
         [MaxLength(250)]
         public string Name { get; set; }
         public string Content { get; set; }
+        [MaxLength(50)]
         public string Type { get; set; }
+        [MaxLength(50)]
         public string State { get; set; }
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }

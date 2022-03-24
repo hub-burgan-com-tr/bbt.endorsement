@@ -1,8 +1,11 @@
 ﻿using Worker.App.Domain.Common;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Worker.App.Domain.Entities
 {
+    [Table("Reference", Schema = "order")]
+
     public class Reference : AuditableEntity
     {
         public Reference()

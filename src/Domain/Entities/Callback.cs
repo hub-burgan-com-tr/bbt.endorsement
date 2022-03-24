@@ -10,10 +10,9 @@ namespace Domain.Entities
         [Key]
         [MaxLength(36)] 
         public string OrderId { get; set; }
-        
+        [MaxLength(50)]
         public string Mode { get; set; }
         public string Url { get; set; }
-
         public virtual Reference Reference { get; set; } = null!;
     }
 }

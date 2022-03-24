@@ -29,7 +29,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("CitizenshipNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -39,7 +40,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -49,7 +51,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("ApproverId");
 
@@ -77,7 +80,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Mode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ReferenceOrderId")
                         .HasColumnType("nvarchar(36)");
@@ -135,7 +139,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("CitizenshipNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -145,7 +150,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -155,7 +161,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("CustomerId");
 
@@ -198,10 +205,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("DocumentId");
 
@@ -240,14 +249,16 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Title")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("DocumentActionId");
 
@@ -286,7 +297,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Mode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(250)
@@ -301,7 +313,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TemplateName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
@@ -325,6 +338,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("FormDefinitionId")
+                        .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<bool>("IsDefault")
@@ -338,14 +352,16 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Title")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("FormDefinitionActionId");
 
@@ -420,7 +436,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Title")
                         .IsRequired()

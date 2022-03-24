@@ -1,10 +1,11 @@
-﻿using Domain.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Worker.App.Domain.Common;
 
-namespace Domain.Entities
+namespace Worker.App.Domain.Entities
 {
     [Table("DocumentAction", Schema = "order")]
+
     public class DocumentAction : AuditableEntity
     {
         [Key]
@@ -18,7 +19,7 @@ namespace Domain.Entities
         public string Type { get; set; }
         [MaxLength(50)]
         public string State { get; set; }
-        public bool IsDefault { get; set; }  
+        public bool IsDefault { get; set; }
         public virtual Document Document { get; set; }
 
     }

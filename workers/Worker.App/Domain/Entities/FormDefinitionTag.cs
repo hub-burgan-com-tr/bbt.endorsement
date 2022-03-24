@@ -1,13 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Worker.App.Domain.Common;
 
 namespace Worker.App.Domain.Entities
 {
+    [Table("FormDefinitionTag", Schema = "form")]
+
     public class FormDefinitionTag:AuditableEntity
     {
         [Key]
         [MaxLength(36)]
         public string FormDefinitionTagId { get; set; }
+
+        [MaxLength(36)]
         public string FormDefinitionId { get; set; }
         public string Tag { get; set; }
 

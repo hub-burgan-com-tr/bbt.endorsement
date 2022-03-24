@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Endorsements.Commands.NewOrders;
+using Domain.Entities;
 
 namespace Infrastructure.Persistence
 {
@@ -11,6 +12,8 @@ namespace Infrastructure.Persistence
 
             if (!context.FormDefinitions.Any())
             {
+
+               
                 context.FormDefinitions.Add(new FormDefinition
                 {
                     FormDefinitionId=Guid.NewGuid().ToString(),
@@ -19,17 +22,29 @@ namespace Infrastructure.Persistence
                     Created =DateTime.Now,
                     Tags="",
                     TemplateName="sigorta_onayformu.pdf",
-                    RetryFrequence = "4"
+                    RetryFrequence = "10",
+                    Mode= "Completed",
+                    Url="",
+                    ExpireInMinutes=60,
+                    MaxRetryCount=4,
+                   FormDefinitionTags= null,
+                   FormDefinitionActions=null
                 });
                 context.FormDefinitions.Add(new FormDefinition
                 {
                     FormDefinitionId = Guid.NewGuid().ToString(),
                     Name = "Sigorta Teklif Formu",
-                    Label = "{\"_id\":\"62385e61aa714551a013c237\",\"type\":\"form\",\"tags\":[],\"owner\":\"62303003a89aea78a3bbe972\",\"components\":[{\"label\":\"Columns\",\"columns\":[{\"components\":[{\"label\":\"MüşteriNo\",\"tableView\":true,\"validate\":{\"required\":true},\"errors\":{\"required\":\"{{field}}girilmelidir.\"},\"key\":\"musteriNo\",\"type\":\"textfield\",\"input\":true}],\"width\":4,\"offset\":0,\"push\":0,\"pull\":0,\"size\":\"md\",\"currentWidth\":4},{\"components\":[{\"label\":\"İşlem\",\"widget\":\"html5\",\"placeholder\":\"Seçiniz\",\"tableView\":true,\"data\":{\"values\":[{\"label\":\"İşlem1\",\"value\":\"1\"},{\"label\":\"İşlem2\",\"value\":\"2\"}]},\"validate\":{\"required\":true},\"errors\":{\"required\":\"{{field}}seçilmelidir.\"},\"key\":\"islem\",\"type\":\"select\",\"input\":true}],\"width\":4,\"offset\":0,\"push\":0,\"pull\":0,\"size\":\"md\",\"currentWidth\":4}],\"key\":\"columns\",\"type\":\"columns\",\"input\":false,\"tableView\":false}],\"revisions\":\"\",\"_vid\":0,\"title\":\"test2\",\"display\":\"form\",\"access\":[{\"roles\":[\"623837a00d68984109e98e2c\",\"623837a00d68982f3fe98e31\",\"623837a00d68984dc1e98e36\"],\"type\":\"read_all\"}],\"submissionAccess\":[],\"controller\":\"\",\"properties\":{},\"settings\":{},\"name\":\"test2\",\"path\":\"test2\",\"project\":\"623837a00d68982154e98e25\",\"created\":\"2022-03-21T11:15:45.470Z\",\"modified\":\"2022-03-21T11:22:09.007Z\",\"machineName\":\"uhhtdmxwdexwqsq:test2\"}",
+                    Label = "{\"_id\":\"62385e61aa714551a013c237\",\"type\":\"form\",\"tags\":[],\"owner\":\"62303003a89aea78a3bbe972\",\"components\":[{\"label\":\"Columns\",\"columns\":[{\"components\":[{\"label\":\"MüşteriNo\",\"tableView\":true,\"validate\":{\"required\":true},\"errors\":{\"required\":\"{{field}}girilmelidir.\"},\"key\":\"musteriNo\",\"type\":\"textfield\",\"input\":true}],\"width\":4,\"offset\":0,\"push\":0,\"pull\":0,\"size\":\"md\",\"currentWidth\":4},{\"components\":[{\"label\":\"İşlem\",\"widget\":\"html5\",\"placeholder\":\"Seçiniz\",\"tableView\":true,\"data\":{\"values\":[{\"label\":\"İşlem1\",\"value\":\"1\"},{\"label\":\"İşlem2\",\"value\":\"2\"}]},\"validate\":{\"required\":true},\"errors\":{\"required\":\"{{field}}seçilmelidir.\"},\"key\":\"islem\",\"type\":\"select\",\"input\":true}],\"width\":4,\"offset\":0,\"push\":0,\"pull\":0,\"size\":\"md\",\"currentWidth\":4}],\"key\":\"columns\",\"type\":\"columns\",\"input\":false,\"tableView\":false}],\"revisions\":\"\",\"_vid\":0,\"title\":\"test2\",\"display\":\"form\",\"access\":[{\"roles\":[\"623837a00d68984109e98e2c\",\"623837a00d68982f3fe98e31\",\"623837a00d68984dc1e98e36\"],\"type\":\"read_all\"}],\"submissionAccess\":[],\"controller\":\"\",\"properties\":{},\"settings\":{},\"name\":\"test2\",\"path\":\"test2\",\"project\":\"623837a00d68982154e98e25\",\"created\":\"2022-03-21T11:15:45.470Z\",\"modified\":\"2022-03-21T11:22:09.007Z\",\"machineName\":\"uhhtdmxwdexwqsq:test2\"}",                
                     Created = DateTime.Now,
                     Tags = "",
-                    TemplateName = "sigorta_teklifformu.pdf",
-                    RetryFrequence = "4"
+                    TemplateName = "sigorta_onayformu.pdf",
+                    RetryFrequence = "10",
+                    Mode = "Completed",
+                    Url = "",
+                    ExpireInMinutes = 60,
+                    MaxRetryCount = 4,
+                    FormDefinitionTags = null,
+                    FormDefinitionActions = null
                 });
                 await context.SaveChangesAsync();
             }

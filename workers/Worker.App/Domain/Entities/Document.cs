@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Worker.App.Domain.Common;
 
 namespace Worker.App.Domain.Entities
 {
+    [Table("Document", Schema = "order")]
+
     public class Document : AuditableEntity
     {
         [Key]
@@ -20,11 +23,13 @@ namespace Worker.App.Domain.Entities
         [MaxLength(250)]
         public string Name { get; set; }
         public string Content { get; set; }
+        [MaxLength(50)]
         public string Type { get; set; }
+        [MaxLength(50)]
         public string State { get; set; }
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
 
-        public virtual ICollection<Action> Actions { get; set; }
+        public virtual ICollection<DocumentAction> DocumentActions { get; set; }
     }
 }

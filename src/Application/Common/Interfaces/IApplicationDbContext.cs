@@ -10,9 +10,12 @@ namespace Application.Common.Interfaces
         DbSet<Callback> Callbacks { get; }
         DbSet<Config> Configs { get; }
         DbSet<FormDefinition> FormDefinitions { get; }
+        DbSet<FormDefinitionAction> FormDefinitionActions { get; }
         DbSet<FormDefinitionTag> FormDefinitionTags { get; }
         DbSet<DocumentAction> DocumentActions { get; }
         DbSet<Document> Documents { get; }
+        DbSet<Approver> Approvers { get; }
+        DbSet<Customer> Customers { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         int SaveChanges();

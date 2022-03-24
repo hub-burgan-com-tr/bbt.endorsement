@@ -27,14 +27,14 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var documents = new List<Document>();
             foreach (var item in data.Documents)
             {
-                var actions = new List<Domain.Entities.Action>();
+                var actions = new List<Domain.Entities.DocumentAction>();
                 if (item.Actions != null)
                 {
                     foreach (var action in item.Actions)
                     {
-                        actions.Add(new Domain.Entities.Action
+                        actions.Add(new Domain.Entities.DocumentAction
                         {
-                            ActionId = Guid.NewGuid().ToString(),
+                            DocumentActionId = Guid.NewGuid().ToString(),
                             Created = DateTime.Now,
                             IsDefault = action.IsDefault,
                             Title = action.Title,
@@ -50,7 +50,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Name = item.Title,
                     Type = item.Type.ToString(),
                     Created = DateTime.Now,
-                    Actions = actions
+                    DocumentActions = actions
                 });
             }
 
