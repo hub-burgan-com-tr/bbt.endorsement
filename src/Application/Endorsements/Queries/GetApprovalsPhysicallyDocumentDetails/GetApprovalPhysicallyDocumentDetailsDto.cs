@@ -5,18 +5,18 @@
         public List<OrderDocument> Documents { get; set; }
         public string Title { get; internal set; }
     }
-    public class Action
+    public class DocumentAction
     {
         public bool IsDefault { get; set; }
         public string Title { get; set; }
-        public string ActionId { get; internal set; }
+        public string DocumentActionId { get; internal set; }
     }
     public class OrderDocument
     {
         public string DocumentId { get; internal set; }
         public string Name { get; set; }
         public string Content { get; set; }
-        public List<Action> Actions { get; set; }
+        public List<DocumentAction> DocumentActions { get; set; }
 
 
     }

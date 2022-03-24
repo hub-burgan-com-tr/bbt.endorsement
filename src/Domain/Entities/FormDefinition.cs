@@ -1,8 +1,10 @@
 ﻿using Domain.Common;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
+    [Table("FormDefinition", Schema = "form")]
     public class FormDefinition : AuditableEntity
     {
         public FormDefinition()
@@ -19,7 +21,18 @@ namespace Domain.Entities
         public string Label { get; set; }
         public string Tags { get; set; }
         public string TemplateName { get; set; }
+
+        public string Mode { get; set; }
+        public string Url { get; set; }
+
+        public int ExpireInMinutes { get; set; }
+        [Required]
+        [MaxLength(250)]
+        public string RetryFrequence { get; set; }
+        public int MaxRetryCount { get; set; }
+
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FormDefinitionTag> FormDefinitionTags { get; set; }
+        public virtual ICollection<FormDefinitionAction> FormDefinitionActions { get; set; }
     }
 }

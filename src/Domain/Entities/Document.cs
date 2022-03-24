@@ -1,8 +1,10 @@
 ﻿using Domain.Common;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
+    [Table("Document", Schema = "order")]
     public class Document : AuditableEntity
     {
         [Key]
@@ -25,6 +27,6 @@ namespace Domain.Entities
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
 
-        public virtual ICollection<Action> Actions { get; set; }
+        public virtual ICollection<DocumentAction> DocumentActions { get; set; }
     }
 }

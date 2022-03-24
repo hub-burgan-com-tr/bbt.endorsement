@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence
                     Created =DateTime.Now,
                     Tags="",
                     TemplateName="sigorta_onayformu.pdf",
-
+                    RetryFrequence = "4"
                 });
                 context.FormDefinitions.Add(new FormDefinition
                 {
@@ -29,7 +29,7 @@ namespace Infrastructure.Persistence
                     Created = DateTime.Now,
                     Tags = "",
                     TemplateName = "sigorta_teklifformu.pdf",
-
+                    RetryFrequence = "4"
                 });
                 await context.SaveChangesAsync();
             }

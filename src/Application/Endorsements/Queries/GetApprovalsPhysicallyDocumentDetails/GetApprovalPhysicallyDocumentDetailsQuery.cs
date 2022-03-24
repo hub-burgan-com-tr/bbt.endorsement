@@ -23,11 +23,11 @@ namespace Application.Endorsements.Queries.GetApprovalsPhysicallyDocumentDetails
         }
         public async Task<Response<GetApprovalPhysicallyDocumentDetailsDto>> Handle(GetApprovalPhysicallyDocumentDetailsQuery request, CancellationToken cancellationToken)
         {
-            var order = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.Actions).Where(x => x.OrderId == request.OrderId).FirstOrDefault();
+            var order = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).FirstOrDefault();
             var response = new GetApprovalPhysicallyDocumentDetailsDto
             {
                 Title = order.Title,
-                Documents = order.Documents.Where(y => y.Type.ToString() == ContentType.PDF.ToString()).Select(y => new OrderDocument { Name = y.Name, Content = y.Content, DocumentId = y.DocumentId, Actions = y.Actions.Select(z => new Action { ActionId = z.ActionId, IsDefault = z.IsDefault, Title = z.Title }).ToList() }).ToList()
+                Documents = order.Documents.Where(y => y.Type.ToString() == ContentType.PDF.ToString()).Select(y => new OrderDocument { Name = y.Name, Content = y.Content, DocumentId = y.DocumentId, DocumentActions = y.DocumentActions.Select(z => new DocumentAction { DocumentActionId = z.DocumentActionId, IsDefault = z.IsDefault, Title = z.Title }).ToList() }).ToList()
             };
             return Response<GetApprovalPhysicallyDocumentDetailsDto>.Success(response, 200);
         }

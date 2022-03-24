@@ -30,11 +30,11 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
             {
                 Title = x.Order.Title,
                 Name = x.Name,
-                PlainTextActions = x.Actions.Where(x => x.Document.Type == ContentType.PlainText.ToString())
+                PlainTextActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.PlainText.ToString())
                  .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title, Type = x.Type,State=x.State }).ToList(),
-                HTMLActions = x.Actions.Where(x => x.Document.Type == ContentType.HTML.ToString())
+                HTMLActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.HTML.ToString())
                  .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title, Type = x.Type, State = x.State }).ToList(),
-                PDFActions = x.Actions.Where(x => x.Document.Type == ContentType.PDF.ToString())
+                PDFActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.PDF.ToString())
                  .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title, Type = x.Type, State = x.State }).ToList(),
                 History=null
             }).ToList();

@@ -22,11 +22,14 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Domain.Entities.Action", b =>
+            modelBuilder.Entity("Domain.Entities.Approver", b =>
                 {
-                    b.Property<string>("ActionId")
+                    b.Property<string>("ApproverId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CitizenshipNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -35,12 +38,8 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("DocumentId")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -49,21 +48,12 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("State")
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                    b.HasKey("ApproverId");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ActionId");
-
-                    b.HasIndex("DocumentId");
-
-                    b.ToTable("Actions");
+                    b.ToTable("Approver", "approval");
                 });
 
             modelBuilder.Entity("Domain.Entities.Callback", b =>
@@ -99,7 +89,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ReferenceOrderId");
 
-                    b.ToTable("Callbacks");
+                    b.ToTable("Callback", "order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Config", b =>
@@ -135,7 +125,41 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Configs");
+                    b.ToTable("Config", "order");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
+                {
+                    b.Property<string>("CustomerId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CitizenshipNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CustomerId");
+
+                    b.ToTable("Customer", "approval");
                 });
 
             modelBuilder.Entity("Domain.Entities.Document", b =>
@@ -185,7 +209,51 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Documents");
+                    b.ToTable("Document", "order");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DocumentAction", b =>
+                {
+                    b.Property<string>("DocumentActionId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("DocumentId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DocumentActionId");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("DocumentAction", "order");
                 });
 
             modelBuilder.Entity("Domain.Entities.FormDefinition", b =>
@@ -201,6 +269,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<int>("ExpireInMinutes")
+                        .HasColumnType("int");
+
                     b.Property<string>("Label")
                         .HasColumnType("nvarchar(max)");
 
@@ -211,7 +282,18 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<int>("MaxRetryCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Mode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("RetryFrequence")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -221,9 +303,55 @@ namespace Infrastructure.Migrations
                     b.Property<string>("TemplateName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("FormDefinitionId");
 
-                    b.ToTable("FormDefinitions");
+                    b.ToTable("FormDefinition", "form");
+                });
+
+            modelBuilder.Entity("Domain.Entities.FormDefinitionAction", b =>
+                {
+                    b.Property<string>("FormDefinitionActionId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("FormDefinitionId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FormDefinitionActionId");
+
+                    b.HasIndex("FormDefinitionId");
+
+                    b.ToTable("FormDefinitionAction", "form");
                 });
 
             modelBuilder.Entity("Domain.Entities.FormDefinitionTag", b =>
@@ -257,7 +385,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("FormDefinitionId");
 
-                    b.ToTable("FormDefinitionTags");
+                    b.ToTable("FormDefinitionTag", "form");
                 });
 
             modelBuilder.Entity("Domain.Entities.Order", b =>
@@ -266,10 +394,18 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<string>("ApproverId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("CustomerId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
@@ -293,7 +429,11 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Orders");
+                    b.HasIndex("ApproverId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Order", "order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
@@ -333,16 +473,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("References");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Action", b =>
-                {
-                    b.HasOne("Domain.Entities.Document", "Document")
-                        .WithMany("Actions")
-                        .HasForeignKey("DocumentId");
-
-                    b.Navigation("Document");
+                    b.ToTable("Reference", "order");
                 });
 
             modelBuilder.Entity("Domain.Entities.Callback", b =>
@@ -380,6 +511,24 @@ namespace Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Domain.Entities.DocumentAction", b =>
+                {
+                    b.HasOne("Domain.Entities.Document", "Document")
+                        .WithMany("DocumentActions")
+                        .HasForeignKey("DocumentId");
+
+                    b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("Domain.Entities.FormDefinitionAction", b =>
+                {
+                    b.HasOne("Domain.Entities.FormDefinition", "FormDefinition")
+                        .WithMany("FormDefinitionActions")
+                        .HasForeignKey("FormDefinitionId");
+
+                    b.Navigation("FormDefinition");
+                });
+
             modelBuilder.Entity("Domain.Entities.FormDefinitionTag", b =>
                 {
                     b.HasOne("Domain.Entities.FormDefinition", "FormDefinition")
@@ -387,6 +536,21 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("FormDefinitionId");
 
                     b.Navigation("FormDefinition");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Order", b =>
+                {
+                    b.HasOne("Domain.Entities.Approver", "Approver")
+                        .WithMany("Orders")
+                        .HasForeignKey("ApproverId");
+
+                    b.HasOne("Domain.Entities.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Approver");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reference", b =>
@@ -400,14 +564,26 @@ namespace Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Approver", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Domain.Entities.Document", b =>
                 {
-                    b.Navigation("Actions");
+                    b.Navigation("DocumentActions");
                 });
 
             modelBuilder.Entity("Domain.Entities.FormDefinition", b =>
                 {
                     b.Navigation("Documents");
+
+                    b.Navigation("FormDefinitionActions");
 
                     b.Navigation("FormDefinitionTags");
                 });
