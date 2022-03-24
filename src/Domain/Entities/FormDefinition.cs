@@ -11,7 +11,7 @@ namespace Domain.Entities
         {
             Documents = new HashSet<Document>();
             FormDefinitionTags=new HashSet<FormDefinitionTag>();
-            FormDefinitionTags = new HashSet<FormDefinitionTag>();
+            FormDefinitionActions = new HashSet<FormDefinitionAction>();
         }
 
         [Key]
