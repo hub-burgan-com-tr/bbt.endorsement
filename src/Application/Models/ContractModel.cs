@@ -5,6 +5,8 @@ namespace Application.Models
     public class ContractModel
     {
         public StartRequest StartRequest { get; set; }
+        public StartFormRequest StartFormRequest { get; set; }
+
         public Guid InstanceId { get; set; }
         public bool Device { get; set; }
 

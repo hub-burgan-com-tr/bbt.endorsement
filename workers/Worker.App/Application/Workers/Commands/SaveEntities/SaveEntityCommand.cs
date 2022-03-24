@@ -14,11 +14,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
     public class SaveEntityCommandHandler : IRequestHandler<SaveEntityCommand, Response<SaveEntityResponse>>
     {
         private IApplicationDbContext _context;
+        private ISaveEntityService _saveEntityService;
         private IDateTime _dateTime;
 
-        public SaveEntityCommandHandler(IApplicationDbContext context, IDateTime dateTime)
+        public SaveEntityCommandHandler(IApplicationDbContext context, ISaveEntityService saveEntityService, IDateTime dateTime)
         {
             _context = context;
+            _saveEntityService = saveEntityService;
             _dateTime = dateTime;
         }
 
