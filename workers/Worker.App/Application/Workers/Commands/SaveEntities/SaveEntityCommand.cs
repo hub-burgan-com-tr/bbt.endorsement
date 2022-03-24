@@ -14,10 +14,12 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
     public class SaveEntityCommandHandler : IRequestHandler<SaveEntityCommand, Response<SaveEntityResponse>>
     {
         private IApplicationDbContext _context;
+        private IDateTime _dateTime;
 
-        public SaveEntityCommandHandler(IApplicationDbContext context)
+        public SaveEntityCommandHandler(IApplicationDbContext context, IDateTime dateTime)
         {
             _context = context;
+            _dateTime = dateTime;
         }
 
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
@@ -27,15 +29,15 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var documents = new List<Document>();
             foreach (var item in data.Documents)
             {
-                var actions = new List<Domain.Entities.DocumentAction>();
+                var actions = new List<DocumentAction>();
                 if (item.Actions != null)
                 {
                     foreach (var action in item.Actions)
                     {
-                        actions.Add(new Domain.Entities.DocumentAction
+                        actions.Add(new DocumentAction
                         {
                             DocumentActionId = Guid.NewGuid().ToString(),
-                            Created = DateTime.Now,
+                            Created = _dateTime.Now,
                             IsDefault = action.IsDefault,
                             Title = action.Title,
                             Type = action.IsDefault?ActionType.Approve.ToString():ActionType.Reject.ToString()
@@ -49,7 +51,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Content = item.Content,
                     Name = item.Title,
                     Type = item.Type.ToString(),
-                    Created = DateTime.Now,
+                    Created = _dateTime.Now,
                     DocumentActions = actions
                 });
             }
@@ -72,12 +74,12 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             {
                 OrderId = data.Id.ToString(),
                 Title = data.Title,
-                Created = DateTime.Now,
+                Created = _dateTime.Now,
                 Config = config,
                 Reference = new Reference
                 {
                     ProcessNo = data.Reference.ProcessNo,
-                    Created = DateTime.Now,
+                    Created = _dateTime.Now,
                     Process = data.Reference.Process,
                     State = data.Reference.State,
                 },
