@@ -1,4 +1,6 @@
-﻿namespace Worker.App.Models;
+﻿using Worker.App.Domain.Enums;
+
+namespace Worker.App.Models;
 
 
 public class StartRequest
@@ -59,5 +61,4 @@ public class StartRequest
     }
     public enum ContentType { HTML, PDF, PlainText }
     public enum CalbackMode { Completed, Verbose }
-    public enum ActionType { Approve, Reject }
 }

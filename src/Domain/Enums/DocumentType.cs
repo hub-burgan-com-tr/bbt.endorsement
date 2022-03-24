@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Enum
 {
-    public enum ApproverTypeEnum
+    public enum DocumentType
     {
-        CitizenShipNumber=1,
-        CustomerNumber=2
+        Physically = 1,
+        Text = 2,
+        Form=3,
     }
 }

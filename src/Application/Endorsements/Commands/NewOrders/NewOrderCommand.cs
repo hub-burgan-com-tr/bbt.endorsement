@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Models;
+using Domain.Enum;
 using MediatR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -10,7 +11,8 @@ namespace Application.Endorsements.Commands.NewOrders
     public class NewOrderCommand : IRequest<Response<StartResponse>>
     {
         public StartRequest StartRequest { get; set; }
-        public StartFormRequest StartFormRequest { get; set; }  
+        public StartFormRequest StartFormRequest { get; set; }
+        public Form FormType { get; set; }
     }
 
     public class NewOrderCommandHandler : IRequestHandler<NewOrderCommand, Response<StartResponse>>
@@ -29,6 +31,7 @@ namespace Application.Endorsements.Commands.NewOrders
             {
                 StartRequest = request.StartRequest,
                 StartFormRequest = request.StartFormRequest,
+                FormType = request.FormType,
                 Device = false,
                 InstanceId = instanceId
             };
