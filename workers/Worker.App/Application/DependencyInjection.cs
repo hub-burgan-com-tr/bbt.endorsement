@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Worker.App.Application.Common.Interfaces;
+using Worker.App.Infrastructure.Services;
 
 namespace Worker.App.Application
 {
@@ -11,6 +13,7 @@ namespace Worker.App.Application
         {
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddScoped<ISaveEntityService, SaveEntityService>();
 
             return services;
         }
