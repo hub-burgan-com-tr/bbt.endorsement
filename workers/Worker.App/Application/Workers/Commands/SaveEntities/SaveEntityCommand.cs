@@ -10,8 +10,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
     public class SaveEntityCommand : IRequest<Response<SaveEntityResponse>>
     {
         public ContractModel Model { get; set; }    
-
-        public Form FormType { get; set; }
     }
 
     public class SaveEntityCommandHandler : IRequestHandler<SaveEntityCommand, Response<SaveEntityResponse>>
@@ -30,11 +28,11 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
             var response = new SaveEntityResponse();
-            if(request.FormType == Form.Order)
+            if(request.Model.FormType == Form.Order)
             {
                 response= OrderCreate(request.Model.StartRequest);
             }
-            else if (request.FormType == Form.FormOrder)
+            else if (request.Model.FormType == Form.FormOrder)
             {
                 response = FormOrderCreate(request.Model.StartFormRequest);
             }

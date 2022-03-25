@@ -1,4 +1,6 @@
-﻿namespace Worker.App.Models
+﻿using Worker.App.Domain.Enums;
+
+namespace Worker.App.Models
 {
     public class ContractModel
     {
@@ -9,6 +11,7 @@
 
         public StartRequest StartRequest { get; set; }
         public StartFormRequest StartFormRequest { get; set; }
+        public Form FormType { get; set; }
 
         public Guid InstanceId { get; set; }
         public bool Device { get; set; }
