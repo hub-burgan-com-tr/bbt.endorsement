@@ -24,6 +24,8 @@ namespace Worker.App.Domain.Entities
         [MaxLength(250)]
         public string TemplateName { get; set; }
         [MaxLength(50)]
+        public string Type { get; set; }
+        [MaxLength(50)]
         public string Mode { get; set; }
         public string Url { get; set; }
         public int ExpireInMinutes { get; set; }

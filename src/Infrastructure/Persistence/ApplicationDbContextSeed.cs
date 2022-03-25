@@ -24,6 +24,7 @@ namespace Infrastructure.Persistence
                     RetryFrequence = "10",
                     Mode= "Completed",
                     Url="",
+                    Type=ContentType.HTML.ToString(),
                     ExpireInMinutes=60,
                     MaxRetryCount=4,
                    
@@ -46,8 +47,10 @@ namespace Infrastructure.Persistence
                     Url = "",
                     ExpireInMinutes = 60,
                     MaxRetryCount = 4,
-                    
-                });
+                    Type = ContentType.HTML.ToString(),
+
+
+             });
                 formdefinition2.Entity.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "" });
                 formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Onayla", IsDefault = true, Type = ActionType.Approve.ToString(), State = "Okudum,anladım", FormDefinitionActionId = Guid.NewGuid().ToString() });
                 formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Reddet", IsDefault = false, Type = ActionType.Reject.ToString(), State = "Okudum,Anlamadım", FormDefinitionActionId = Guid.NewGuid().ToString() });
