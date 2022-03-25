@@ -21,12 +21,7 @@ public class NewOrderCommandTests : TestBase
         {
           StartRequest =new StartRequest
           {
-              Approver = new OrderApprover()
-              {
-                  NameSurname = "Uğur Karataş",
-                  Type = 1,
-                  Value = "123456789101"
-              },
+              
               Reference = new OrderReference { Callback = null, Process = "1", ProcessNo = "2", State = "3" },
               Title = "Deneme",
               Id = id,

@@ -7,7 +7,7 @@
         public string FormId { get; set; }
         public string Content { get; set; }
         public OrderReference Reference { get; set; }
-        public OrderApprover Approver { get; set; }
+        public PersonSummary Person { get; set; }
     }
 
     public class FormDefinitionClass

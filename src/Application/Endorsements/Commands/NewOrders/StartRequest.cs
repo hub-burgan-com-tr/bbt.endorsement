@@ -10,7 +10,7 @@
         public OrderConfig Config { get; set; }
         public OrderReference Reference { get; set; }
         public List<OrderDocument> Documents { get; set; }
-        public OrderApprover Approver { get; set; }
+        public PersonSummary   Person { get; set; }
        
         
     }
@@ -30,12 +30,7 @@
         public ActionType Type { get; set; }
     }
 
-    public class OrderApprover
-    {
-        public int Type { get; set; }
-        public string Value { get; set; }
-        public string NameSurname { get; set; }
-    }
+   
     public class OrderReference
     {
         public string Process { get; set; }
@@ -62,5 +57,37 @@
     public enum ContentType { HTML, PDF, PlainText }
     public enum CalbackMode { Completed, Verbose }
     public enum ActionType { Approve, Reject }
+
+    public class PersonSummary
+    {
+        public long ClientNumber { get; set; }
+        public long CitizenshipNumber { get; set; }
+
+        public NameClass Name { get; set; }
+        public class NameClass
+        {
+            public string First { get; set; }
+            public string Last { get; set; }
+        }
+
+        public GsmPhone[] GsmPhones { get; set; }
+
+        public class GsmPhone
+        {
+            public int County { get; set; }
+            public long Prefix { get; set; }
+            public long Number { get; set; }
+        }
+
+        public string[] Emails { get; set; }
+
+        public Device[] Devices { get; set; }
+
+        public class Device
+        {
+            public string DeviceId { get; set; }
+            public string Label { get; set; }
+        }
+    }
 
 }
