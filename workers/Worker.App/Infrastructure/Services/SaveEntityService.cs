@@ -68,6 +68,7 @@ namespace Worker.App.Infrastructure.Services
                     ExpireInMinutes = x.ExpireInMinutes,
                     RetryFrequence = x.RetryFrequence,
                     MaxRetryCount = x.MaxRetryCount,
+                    Type = x.Type,
                     Actions = x.FormDefinitionActions.Select(y => new FormDefinitionActionDto
                     {
                         Title = y.Title,

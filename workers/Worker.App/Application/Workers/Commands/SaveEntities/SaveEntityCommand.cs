@@ -75,7 +75,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
                 Name = startFormRequest.Title,
-                //Type = formDefinition.Type.ToString(),
+                Type = formDefinition.Type.ToString(),
                 Created = _dateTime.Now,
                 DocumentActions = actions
             });

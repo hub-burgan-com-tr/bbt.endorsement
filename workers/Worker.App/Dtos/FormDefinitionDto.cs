@@ -5,6 +5,7 @@
         public int ExpireInMinutes { get; set; }
         public string RetryFrequence { get; set; }
         public int MaxRetryCount { get; set; }
+        public string Type { get; set; }
         public IEnumerable<FormDefinitionActionDto> Actions { get; set; }
     }
 
