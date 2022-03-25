@@ -1,4 +1,6 @@
-﻿namespace Worker.App.Application.Common.Interfaces
+﻿using Worker.App.Dtos;
+
+namespace Worker.App.Application.Common.Interfaces
 {
     public interface ISaveEntityService
     {
@@ -6,5 +8,6 @@
         Task<string> CustomerSaveAsync(string citizenshipNumber, string firstName, string lastName);
         Task<string> GetApproverAsync(string citizenshipNumber);
         Task<string> ApproverSaveAsync(string citizenshipNumber, string firstName, string lastName);
+        Task<FormDefinitionDto> GetFormDefinition(string formId);
     }
 }

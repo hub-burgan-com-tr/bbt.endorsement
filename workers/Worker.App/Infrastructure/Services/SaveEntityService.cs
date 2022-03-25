@@ -1,5 +1,6 @@
 ﻿using Worker.App.Application.Common.Interfaces;
 using Worker.App.Domain.Entities;
+using Worker.App.Dtos;
 
 namespace Worker.App.Infrastructure.Services
 {
@@ -56,6 +57,26 @@ namespace Worker.App.Infrastructure.Services
             if (response == null)
                 return null;
             return response.CustomerId;
+        }
+
+        public async Task<FormDefinitionDto> GetFormDefinition(string formId)
+        {
+            var response = _context.FormDefinitions
+                .Where(x => x.FormDefinitionId == formId)
+                .Select(x => new FormDefinitionDto
+                {
+                    ExpireInMinutes = x.ExpireInMinutes,
+                    RetryFrequence = x.RetryFrequence,
+                    MaxRetryCount = x.MaxRetryCount,
+                    Actions = x.FormDefinitionActions.Select(y => new FormDefinitionActionDto
+                    {
+                        Title = y.Title,
+                        State = y.State,
+                        IsDefault = y.IsDefault
+                    })
+                }).FirstOrDefault();
+
+            return response;
         }
     }
 }
