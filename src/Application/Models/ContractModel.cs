@@ -1,10 +1,14 @@
 ﻿using Application.Endorsements.Commands.NewOrders;
+using Domain.Enum;
 
 namespace Application.Models
 {
     public class ContractModel
     {
         public StartRequest StartRequest { get; set; }
+        public StartFormRequest StartFormRequest { get; set; }
+        public Form FormType { get; set; }
+
         public Guid InstanceId { get; set; }
         public bool Device { get; set; }
 

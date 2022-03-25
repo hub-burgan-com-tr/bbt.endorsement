@@ -3,42 +3,123 @@ using Worker.App.Application.Coomon.Models;
 using Worker.App.Domain.Entities;
 using Worker.App.Models;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Domain.Enums;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
     public class SaveEntityCommand : IRequest<Response<SaveEntityResponse>>
     {
         public ContractModel Model { get; set; }    
+
+        public Form FormType { get; set; }
     }
 
     public class SaveEntityCommandHandler : IRequestHandler<SaveEntityCommand, Response<SaveEntityResponse>>
     {
         private IApplicationDbContext _context;
+        private ISaveEntityService _saveEntityService;
+        private IDateTime _dateTime;
 
-        public SaveEntityCommandHandler(IApplicationDbContext context)
+        public SaveEntityCommandHandler(IApplicationDbContext context, ISaveEntityService saveEntityService, IDateTime dateTime)
         {
             _context = context;
+            _saveEntityService = saveEntityService;
+            _dateTime = dateTime;
         }
 
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
-            var data = request.Model.StartRequest;
+            var response = new SaveEntityResponse();
+            if(request.FormType == Form.Order)
+            {
+                response= OrderCreate(request.Model.StartRequest);
+            }
+            else if (request.FormType == Form.FormOrder)
+            {
+                response = FormOrderCreate(request.Model.StartFormRequest);
+            }
+
+            return Response<SaveEntityResponse>.Success(response, 200);
+        }
+
+        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest)
+        {
+            if (startFormRequest == null) return null;
 
             var documents = new List<Document>();
-            foreach (var item in data.Documents)
+
+            var formDefinition = _saveEntityService.GetFormDefinition(startFormRequest.FormId).Result;
+            var config = new Config
             {
-                var actions = new List<Domain.Entities.DocumentAction>();
+                ExpireInMinutes = formDefinition.ExpireInMinutes,
+                MaxRetryCount = formDefinition.MaxRetryCount,
+                RetryFrequence = formDefinition.RetryFrequence,
+            };
+
+            var actions = new List<DocumentAction>();
+
+            foreach (var action in formDefinition.Actions)
+            {
+                actions.Add(new DocumentAction
+                {
+                    DocumentActionId = Guid.NewGuid().ToString(),
+                    Created = _dateTime.Now,
+                    IsDefault = action.IsDefault,
+                    Title = action.Title,
+                    Type = action.IsDefault ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
+                });
+            }
+
+            documents.Add(new Document
+            {
+                DocumentId = Guid.NewGuid().ToString(),
+                Content = startFormRequest.Content,
+                Name = startFormRequest.Title,
+                //Type = formDefinition.Type.ToString(),
+                Created = _dateTime.Now,
+                DocumentActions = actions
+            });
+
+            var order = new Order
+            {
+                OrderId = startFormRequest.Id.ToString(),
+                Title = startFormRequest.Title,
+                Created = _dateTime.Now,
+                Config = config,
+                Reference = new Reference
+                {
+                    ProcessNo = startFormRequest.Reference.ProcessNo,
+                    Created = _dateTime.Now,
+                    Process = startFormRequest.Reference.Process,
+                    State = startFormRequest.Reference.State,
+                },
+                Documents = documents,
+            };
+            var entity = _context.Orders.Add(order).Entity;
+            _context.SaveChanges();
+
+            return new SaveEntityResponse { OrderId = entity.OrderId };
+        }
+
+        private SaveEntityResponse OrderCreate(StartRequest startRequest)
+        {
+            if (startRequest == null) return null;
+
+            var documents = new List<Document>();
+            foreach (var item in startRequest.Documents)
+            {
+                var actions = new List<DocumentAction>();
                 if (item.Actions != null)
                 {
                     foreach (var action in item.Actions)
                     {
-                        actions.Add(new Domain.Entities.DocumentAction
+                        actions.Add(new DocumentAction
                         {
                             DocumentActionId = Guid.NewGuid().ToString(),
-                            Created = DateTime.Now,
+                            Created = _dateTime.Now,
                             IsDefault = action.IsDefault,
                             Title = action.Title,
-                            Type = action.IsDefault?ActionType.Approve.ToString():ActionType.Reject.ToString()
+                            Type = action.IsDefault ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
                         });
                     }
                 }
@@ -49,44 +130,38 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Content = item.Content,
                     Name = item.Title,
                     Type = item.Type.ToString(),
-                    Created = DateTime.Now,
+                    Created = _dateTime.Now,
                     DocumentActions = actions
                 });
             }
 
             var config = new Config();
-            if(data.Config != null)
+            if (startRequest.Config != null)
             {
-                config.MaxRetryCount = data.Config.MaxRetryCount;
-                config.RetryFrequence = data.Config.RetryFrequence;
-                config.ExpireInMinutes = data.Config.ExpireInMinutes;
-            }
-            else
-            {
-                config.MaxRetryCount = 3;
-                config.RetryFrequence = "4";
-                config.ExpireInMinutes = 60;
+                config.MaxRetryCount = startRequest.Config.MaxRetryCount;
+                config.RetryFrequence = startRequest.Config.RetryFrequence;
+                config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
             var order = new Order
             {
-                OrderId = data.Id.ToString(),
-                Title = data.Title,
-                Created = DateTime.Now,
+                OrderId = startRequest.Id.ToString(),
+                Title = startRequest.Title,
+                Created = _dateTime.Now,
                 Config = config,
                 Reference = new Reference
                 {
-                    ProcessNo = data.Reference.ProcessNo,
-                    Created = DateTime.Now,
-                    Process = data.Reference.Process,
-                    State = data.Reference.State,
+                    ProcessNo = startRequest.Reference.ProcessNo,
+                    Created = _dateTime.Now,
+                    Process = startRequest.Reference.Process,
+                    State = startRequest.Reference.State,
                 },
                 Documents = documents,
             };
-            var response = _context.Orders.Add(order).Entity;
+            var entity = _context.Orders.Add(order).Entity;
             _context.SaveChanges();
 
-            return Response<SaveEntityResponse>.Success(new SaveEntityResponse { OrderId = response.OrderId }, 200);
+            return new SaveEntityResponse { OrderId = entity.OrderId };
         }
     }
 }
