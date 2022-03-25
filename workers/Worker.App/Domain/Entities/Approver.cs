@@ -15,7 +15,7 @@ namespace Worker.App.Domain.Entities
         [MaxLength(250)]
         public string LastName { get; set; }
         [MaxLength(11)]
-        public string CitizenshipNumber { get; set; }
+        public long CitizenshipNumber { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }

@@ -143,12 +143,17 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
+            //var customerId = _saveEntityService.GetCustomerAsync(startRequest.Approver.CitizenshipNumber).Result;
+            //if (customerId == null)
+            //    customerId = await _saveEntityService.CustomerSaveAsync(startRequest.Approver);
+
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
+               /// CustomerId = customerId,
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,

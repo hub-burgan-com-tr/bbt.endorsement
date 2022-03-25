@@ -1,13 +1,14 @@
 ﻿using Worker.App.Dtos;
+using Worker.App.Models;
 
 namespace Worker.App.Application.Common.Interfaces
 {
     public interface ISaveEntityService
     {
-        Task<string> GetCustomerAsync(string citizenshipNumber);
-        Task<string> CustomerSaveAsync(string citizenshipNumber, string firstName, string lastName);
-        Task<string> GetApproverAsync(string citizenshipNumber);
-        Task<string> ApproverSaveAsync(string citizenshipNumber, string firstName, string lastName);
+        Task<string> GetCustomerAsync(long citizenshipNumber);
+        Task<string> CustomerSaveAsync(OrderApprover approver);
+        Task<string> GetApproverAsync(long citizenshipNumber);
+        Task<string> ApproverSaveAsync(long citizenshipNumber, string firstName, string lastName);
         Task<FormDefinitionDto> GetFormDefinition(string formId);
     }
 }

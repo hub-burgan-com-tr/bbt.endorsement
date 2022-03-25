@@ -1,6 +1,7 @@
 ﻿using Worker.App.Application.Common.Interfaces;
 using Worker.App.Domain.Entities;
 using Worker.App.Dtos;
+using Worker.App.Models;
 
 namespace Worker.App.Infrastructure.Services
 {
@@ -15,7 +16,7 @@ namespace Worker.App.Infrastructure.Services
             _dateTime = dateTime;
         }
 
-        public async Task<string> ApproverSaveAsync(string citizenshipNumber, string firstName, string lastName)
+        public async Task<string> ApproverSaveAsync(long citizenshipNumber, string firstName, string lastName)
         {
             var entity = _context.Approvers.Add(new Approver
             {
@@ -29,13 +30,13 @@ namespace Worker.App.Infrastructure.Services
             return entity.ApproverId;
         }
 
-        public async Task<string> CustomerSaveAsync(string citizenshipNumber, string firstName, string lastName)
+        public async Task<string> CustomerSaveAsync(OrderApprover approver)
         {
             var entity = _context.Customers.Add(new Customer
             {
-                CitizenshipNumber = citizenshipNumber,
-                FirstName = firstName,
-                LastName = lastName,
+                CitizenshipNumber = approver.CitizenshipNumber,
+                FirstName = approver.Name.First,
+                LastName = approver.Name.Last,
                 Created = _dateTime.Now,
             }).Entity;
 
@@ -43,7 +44,7 @@ namespace Worker.App.Infrastructure.Services
             return entity.CustomerId;
         }
 
-        public async Task<string> GetApproverAsync(string citizenshipNumber)
+        public async Task<string> GetApproverAsync(long citizenshipNumber)
         {
             var response = _context.Approvers.FirstOrDefault(x => x.CitizenshipNumber == citizenshipNumber);
             if (response == null)   
@@ -51,7 +52,7 @@ namespace Worker.App.Infrastructure.Services
             return response.ApproverId;
         }
 
-        public async Task<string> GetCustomerAsync(string citizenshipNumber)
+        public async Task<string> GetCustomerAsync(long citizenshipNumber)
         {
             var response = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == citizenshipNumber);
             if (response == null)
