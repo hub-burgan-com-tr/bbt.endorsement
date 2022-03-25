@@ -98,7 +98,6 @@ public class ContractApprovalService : IContractApprovalService
 
         CreateWorker("LoadContactInfo", async (jobClient, job) =>
         {
-
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             if (variables != null)
                 variables.RetryEnd = true;

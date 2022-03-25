@@ -20,6 +20,7 @@ using Application.Endorsements.Queries.GetWantApprovalsDetails;
 using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
+using Domain.Enum;
 
 namespace Api.Controllers
 {
@@ -42,7 +43,7 @@ namespace Api.Controllers
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
             request.Id = Guid.NewGuid();           
-            return await Mediator.Send(new NewOrderCommand { StartRequest = request });
+            return await Mediator.Send(new NewOrderCommand { StartRequest = request, FormType = Form.Order });
         }
 
 
