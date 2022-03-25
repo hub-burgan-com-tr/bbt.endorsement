@@ -10,7 +10,7 @@
         public OrderConfig Config { get; set; }
         public OrderReference Reference { get; set; }
         public List<OrderDocument> Documents { get; set; }
-        public PersonSummary   Person { get; set; }
+        public OrderApprover Approver { get; set; }
        
         
     }
@@ -58,7 +58,7 @@
     public enum CalbackMode { Completed, Verbose }
     public enum ActionType { Approve, Reject }
 
-    public class PersonSummary
+    public class OrderApprover
     {
         public long ClientNumber { get; set; }
         public long CitizenshipNumber { get; set; }
