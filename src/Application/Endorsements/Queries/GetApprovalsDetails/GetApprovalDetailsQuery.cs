@@ -28,25 +28,14 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 
         public async Task<Response<GetApprovalDetailsDto>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Orders
-                .Where(x => x.OrderId == request.OrderId)
-                .Select(x => new GetApprovalDetailsDto
-                {
-                    Title = x.Title,
-                    Documents = x.Documents.Select(y => new OrderDocument
-                    {
-                        Content = y.Content,
-                        DocumentId = y.DocumentId,
-                        Name = y.Name,
-                        Actions = y.DocumentActions.Select(z => new Action
-                        {
-                            ActionId = z.DocumentActionId,
-                            IsDefault = z.IsDefault,
-                            Title = z.Title
-                        }).ToList()
-                    }).ToList()
-                }).FirstOrDefault();
 
+            var order = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).FirstOrDefault();
+
+            var response = new GetApprovalDetailsDto
+            {
+                Title = order.Title,
+                Documents = order.Documents.Where(y => y.Type.ToString() != ContentType.HTML.ToString()).Select(y => new OrderDocument { Name = y.Name, Content = y.Content, DocumentId = y.DocumentId,Link=y.Type.ToString()==ContentType.PDF.ToString()?y.Name:null, Actions = y.DocumentActions.Select(z => new DocumentAction { DocumentActionId = z.DocumentActionId, IsDefault = z.IsDefault, Title = z.Title }).ToList() }).ToList()
+            };
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
     }

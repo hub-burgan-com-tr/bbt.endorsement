@@ -216,27 +216,27 @@ namespace Api.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        ///  Onayımdakiler Fiziksel Belge Detay sayfası
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <response code="404">If the item is null</response>
-        [SwaggerOperation(
-            Summary = "Query endorsement approval physically document detail.",
-            Tags = new[] { "Endorsement" }
-        )]
-        [Route("approval-physically-document-detail")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, approval physically document detail is returned successfully.", typeof(GetApprovalPhysicallyDocumentDetailsDto))]
-        [SwaggerResponse(404, "Approval physically document detail is not found.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalPhysicallyDocumentDetailAsync([FromQuery] string orderId)
-        {
-            var result = await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { OrderId = orderId });
-            return Ok(result);
-        }
+        ///// <summary>
+        /////  Onayımdakiler Fiziksel Belge Detay sayfası
+        ///// </summary>
+        ///// <param name="orderId"></param>
+        ///// <returns></returns>
+        ///// <response code="404">If the item is null</response>
+        //[SwaggerOperation(
+        //    Summary = "Query endorsement approval physically document detail.",
+        //    Tags = new[] { "Endorsement" }
+        //)]
+        //[Route("approval-physically-document-detail")]
+        //[HttpGet]
+        //[SwaggerResponse(200, "Success, approval physically document detail is returned successfully.", typeof(GetApprovalPhysicallyDocumentDetailsDto))]
+        //[SwaggerResponse(404, "Approval physically document detail is not found.", typeof(void))]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
+        //public async Task<IActionResult> GetApprovalPhysicallyDocumentDetailAsync([FromQuery] string orderId)
+        //{
+        //    var result = await Mediator.Send(new GetApprovalPhysicallyDocumentDetailsQuery() { OrderId = orderId });
+        //    return Ok(result);
+        //}
 
         /// <summary>
         ///  Onayımdakiler form Belge Detay sayfası

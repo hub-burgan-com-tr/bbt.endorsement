@@ -14,5 +14,6 @@
         /// Belge Var Mı
         /// </summary>
         public bool IsDocument { get; set; }
+        public bool IsFormDetail{ get; set; }
     }
 }
