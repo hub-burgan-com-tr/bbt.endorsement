@@ -1,8 +1,18 @@
 ﻿namespace Worker.App.Models;
 
-
 public class OrderApprover
 {
+    public string NameSurname { get; set; }
+    public int Type { get; set; }
+    public string Value { get; set; }
+}
+
+    public class OrderApprover_
+{
+    public string NameSurname { get; set; }
+    public int Type { get; set; }
+    public string Value { get; set; }
+
     public long ClientNumber { get; set; }
     public long CitizenshipNumber { get; set; }
     public NameClass Name { get; set; }

@@ -11,8 +11,13 @@
         public OrderReference Reference { get; set; }
         public List<OrderDocument> Documents { get; set; }
         public OrderApprover Approver { get; set; }
-       
-        
+    }
+
+    public class OrderApprover
+    {
+        public int Type { get; set; }
+        public string Value { get; set; }
+        public string NameSurname { get; set; }
     }
     public class OrderDocument
     {
@@ -58,7 +63,7 @@
     public enum CalbackMode { Completed, Verbose }
     public enum ActionType { Approve, Reject }
 
-    public class OrderApprover
+    public class OrderApprover_
     {
         public long ClientNumber { get; set; }
         public long CitizenshipNumber { get; set; }
