@@ -78,17 +78,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 DocumentActions = actions
             });
 
-            var customerId = _saveEntityService.GetCustomerAsync(long.Parse(startFormRequest.Approver.Value)).Result;
-            if (customerId == null)
-                customerId = _saveEntityService.CustomerSaveAsync(startFormRequest.Approver).Result;
-
             var order = new Order
             {
                 OrderId = startFormRequest.Id.ToString(),
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = customerId,
+                CustomerId = GetCustomerId(startFormRequest.Approver),
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
@@ -102,6 +98,14 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             _context.SaveChanges();
 
             return new SaveEntityResponse { OrderId = entity.OrderId };
+        }
+
+        private string GetCustomerId(OrderApprover approver)
+        {
+            var customerId = _saveEntityService.GetCustomerAsync(long.Parse(approver.Value)).Result;
+            if (customerId == null)
+                customerId = _saveEntityService.CustomerSaveAsync(approver).Result;
+            return customerId;
         }
 
         private SaveEntityResponse OrderCreate(StartRequest startRequest)
@@ -146,17 +150,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
-            var customerId = _saveEntityService.GetCustomerAsync(long.Parse(startRequest.Approver.Value)).Result;
-            if (customerId == null)
-                customerId = _saveEntityService.CustomerSaveAsync(startRequest.Approver).Result;
-
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = customerId,
+                CustomerId = GetCustomerId(startRequest.Approver),
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
