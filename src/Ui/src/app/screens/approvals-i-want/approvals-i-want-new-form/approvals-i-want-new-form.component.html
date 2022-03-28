@@ -5,6 +5,7 @@
     <button class="btn btn-primary" (click)="success.close()">Tamam</button>
   </div>
 </ngx-smart-modal>
+
 <app-main-content blockTitle="Form ile Emir Ekle" [subTitle]="formTitle">
   <form [formGroup]="formGroup">
     <div class="box p-5">
@@ -13,7 +14,8 @@
         <div class="col-4">
           <div class="form-group">
             <label for="process">İşlem</label>
-            <input type="text" class="form-control" id="process" name="process" formControlName="process"
+            <input type="text" class="form-control" id="process" name="process"
+                   formControlName="process"
                    [ngClass]="{ 'is-invalid': submitted && f.process.invalid }">
             <div *ngIf="submitted && f.process.errors" class="invalid-feedback">
               <div *ngIf="f.process.errors.required">İşlem girilmelidir.</div>
@@ -23,7 +25,8 @@
         <div class="col-4">
           <div class="form-group">
             <label for="state">Aşama</label>
-            <input type="text" class="form-control" id="state" name="state" formControlName="state"
+            <input type="text" class="form-control" id="state" name="state"
+                   formControlName="state"
                    [ngClass]="{ 'is-invalid': submitted && f.state.invalid }">
             <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
               <div *ngIf="f.state.errors.required">Aşama girilmelidir.</div>
@@ -33,7 +36,8 @@
         <div class="col-4">
           <div class="form-group">
             <label for="processNo">İşlem No</label>
-            <input type="text" class="form-control" id="processNo" name="processNo" formControlName="processNo"
+            <input type="text" class="form-control" id="processNo" name="processNo"
+                   formControlName="processNo"
                    [ngClass]="{ 'is-invalid': submitted && f.processNo.invalid }">
             <div *ngIf="submitted && f.processNo.errors" class="invalid-feedback">
               <div *ngIf="f.processNo.errors.required">İşlem No girilmelidir.</div>
@@ -41,50 +45,18 @@
           </div>
         </div>
       </div>
-      <div class="box-title mt-5 mb-3 p-0 no-border">Onaycı Ekle</div>
+      <div class="box-title mt-5 p-0 no-border">Onaycı Ekle</div>
       <div class="row mt-3">
-        <div class="col-8">
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="row mb-3">
-                <div class="col form-group pl-20px">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input scale-2x" type="radio" id="radio2" name="type"
-                           formControlName="type"
-                           [ngClass]="{ 'is-invalid': submitted && f.type.invalid }"
-                           (change)="rdoChanged()" [value]="1">
-                    <label class="form-check-label ms-2" for="radio2">TCKN ile</label>
-                  </div>
-                </div>
-                <div class="col form-group pl-20px">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input scale-2x" type="radio" id="radio1" name="type"
-                           formControlName="type"
-                           [ngClass]="{ 'is-invalid': submitted && f.type.invalid }"
-                           (change)="rdoChanged()" [value]="2">
-                    <label class="form-check-label ms-2" for="radio1">Müşteri No ile</label>
-                  </div>
-                </div>
-              </div>
-              <input type="text" class="form-control" id="value" name="value"
-                     formControlName="value" maxlength="11"
-                     [ngClass]="{ 'is-invalid': submitted && f.value.invalid }">
-              <div *ngIf="submitted && !f.type.errors&&f.value.errors" class="invalid-feedback">
-                <div *ngIf="f.value.errors.required">{{approvalFormValidationMessage}}</div>
-                <div *ngIf="f.value.errors.minlength">TCKN 11 haneli olmalıdır.</div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <div *ngIf="submitted && f.type.errors" class="text-danger">
-                <small *ngIf="f.type.errors.required">Lütfen seçim yapınız.</small>
-              </div>
-            </div>
+        <div class="col-4">
+          <input type="text" class="form-control" id="approver" name="approver"
+                 formControlName="approver" maxlength="11"
+                 [ngClass]="{ 'is-invalid': submitted && f.approver.invalid }">
+          <div *ngIf="submitted && f.approver.errors" class="invalid-feedback">
+            <div *ngIf="f.approver.errors.required">Onaycı girilmelidir</div>
           </div>
         </div>
       </div>
-      <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>
+      <div class="box-title mt-5 p-0 no-border">Form</div>
       <formio [form]="form" [options]="options" (submit)="submitForm($event)"></formio>
     </div>
     <div class="button-group d-flex align-items-center justify-content-center mt-5">

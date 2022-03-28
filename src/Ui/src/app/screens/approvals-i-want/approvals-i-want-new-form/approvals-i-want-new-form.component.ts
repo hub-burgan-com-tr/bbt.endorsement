@@ -6,7 +6,6 @@ import {NewOrderFormService} from "../../../services/new-order-form.service";
 import {Subject, takeUntil} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
 import NewApprovalOrderForm from "../../../models/new-approval-order-form";
-import content = Components.components.content;
 import {IApprover} from "../../../models/approver";
 import {IReference} from "../../../models/reference";
 
@@ -15,6 +14,7 @@ import {IReference} from "../../../models/reference";
   templateUrl: './approvals-i-want-new-form.component.html',
   styleUrls: ['./approvals-i-want-new-form.component.scss']
 })
+
 export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   form;
@@ -26,15 +26,17 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   options: FormioOptions = {
     disableAlerts: true,
   }
-  approvalFormValidationMessage = '';
 
-  constructor(private fb: FormBuilder, private modal: NgxSmartModalService, private newOrderFormService: NewOrderFormService, private route: ActivatedRoute, private router: Router) {
+  constructor(private fb: FormBuilder,
+              private modal: NgxSmartModalService,
+              private newOrderFormService: NewOrderFormService,
+              private route: ActivatedRoute,
+              private router: Router) {
     this.formGroup = this.fb.group({
       process: ['', [Validators.required]],
       state: ['', [Validators.required]],
       processNo: ['', [Validators.required]],
-      type: ['', [Validators.required]],
-      value: '',
+      approver: ['', [Validators.required]]
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.formDefinitionId = params['formDefinitionId'];
@@ -56,18 +58,6 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
 
   get f() {
     return this.formGroup.controls;
-  }
-
-  rdoChanged() {
-    if (this.f.type.value === 1) {
-      this.approvalFormValidationMessage = 'TCKN girilmelidir.'
-      this.f.value.setValidators([Validators.required, Validators.minLength(11)]);
-      this.f.value.updateValueAndValidity();
-    } else {
-      this.approvalFormValidationMessage = 'Müşteri No girilmelidir.';
-      this.f.value.setValidators(Validators.required);
-      this.f.value.updateValueAndValidity();
-    }
   }
 
   redirectToList() {
