@@ -33,7 +33,7 @@
         /// <summary>
         /// Belge
         /// </summary>
-        public string Title { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// İşlem Tarihi
         /// </summary>

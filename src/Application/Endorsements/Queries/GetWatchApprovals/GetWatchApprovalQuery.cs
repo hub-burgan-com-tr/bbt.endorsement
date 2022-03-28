@@ -8,14 +8,14 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
 {
     public class GetWatchApprovalQuery : IRequest<Response<PaginatedList<GetWatchApprovalDto>>>
     {
-    /// <summary>
-    /// Onaylayan
-    /// </summary>
+        /// <summary>
+        /// Onay Isteyen
+        /// </summary>
         public string Approver { get; set; }
-    /// <summary>
-    /// Onay Isteyen
-    /// </summary>
-        public string Approval { get; set; }
+        /// <summary>
+        /// Onaycı
+        /// </summary>
+        public string Customer { get; set; }
         public string Process { get; set; }
         public string State { get; set; }
         public string ProcessNo { get; set; }
@@ -36,31 +36,35 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
         }
         public async Task<Response<PaginatedList<GetWatchApprovalDto>>> Handle(GetWatchApprovalQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<Order> orders = _context.Orders.OrderByDescending(x=>x.Created).Include(x=>x.Documents);
-            //if (!string.IsNullOrEmpty(request.Approval))
-            //    orders = orders.Where(x =>);
-            //if (!string.IsNullOrEmpty(request.Approver))
-            //    orders = orders.Where(x =>x);
+            IQueryable<Order> orders = _context.Orders.OrderByDescending(x => x.Created).Include(x => x.Documents).Include(x => x.Approver).Include(x => x.Customer);
+            if (!string.IsNullOrEmpty(request.Customer))
+                orders = orders.Where(x => x.Customer.FirstName.Contains(request.Customer.Trim())
+                                                     || x.Customer.LastName.Contains(request.Customer.Trim()) ||
+                                                     (x.Customer.FirstName + " " + x.Customer.LastName).Contains(request.Customer.Trim()));
+            if (!string.IsNullOrEmpty(request.Approver))
+                orders = orders.Where(x => x.Approver.FirstName.Contains(request.Approver.Trim())
+                                                                    || x.Approver.LastName.Contains(request.Approver.Trim()) ||
+                                                                    (x.Approver.FirstName + " " + x.Approver.LastName).Contains(request.Approver.Trim()));
             if (!string.IsNullOrEmpty(request.Process))
-               orders= orders.Where(x => x.Reference.Process.Contains(request.Process));
+                orders = orders.Where(x => x.Reference.Process.Contains(request.Process.Trim()));
             if (!string.IsNullOrEmpty(request.State))
-              orders = orders.Where(x => x.Reference.State.Contains(request.State));
+                orders = orders.Where(x => x.Reference.State.Contains(request.State.Trim()));
             if (!string.IsNullOrEmpty(request.ProcessNo))
-                orders=orders.Where(x => x.Reference.ProcessNo==request.ProcessNo);
+                orders = orders.Where(x => x.Reference.ProcessNo == request.ProcessNo.Trim());
             var list = await orders
               .Select(x => new GetWatchApprovalDto
               {
                   OrderId = x.OrderId,
                   Title = x.Title,
-                  Approval = "",
-                  Approver = "",
+                  Customer = x.Customer.FirstName+" "+x.Customer.LastName,
+                  Approver = x.Approver.FirstName+" "+x.Approver.LastName,
                   Process = x.Reference.Process,
                   State = x.State,
                   ProcessNo = x.Reference.ProcessNo,
                   Date = x.Created.ToString("dd MM yyyy HH:mm"),
-                  IsDocument = x.Documents.Any(y => y.Type == "PDF"),
+                  IsDocument = x.Documents.Any(),
                   OrderState = x.State,
-              }).PaginatedListAsync(request.PageNumber,request.PageSize);
+              }).PaginatedListAsync(request.PageNumber, request.PageSize);
 
             return Response<PaginatedList<GetWatchApprovalDto>>.Success(list, 200);
         }

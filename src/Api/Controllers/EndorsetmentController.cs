@@ -405,10 +405,10 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no watch approvals available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetWatchApprovalAsync(string approver, string approval, string process, string state,
+        public async Task<IActionResult> GetWatchApprovalAsync(string customer, string approver, string process, string state,
          string processNo, int pageNumber = 1, int pageSize = 10)
         {
-            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Approval = approval, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize });
+            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(result);
         }
 

@@ -26,7 +26,18 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
         }
         public async Task<Response<GetWantApprovalDetailsDto>> Handle(GetWantApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = await _context.Orders.Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto { OrderId = x.OrderId, Title = x.Title, NameAndSurname ="",Process=x.Reference.Process,State=x.Reference.State,ProcessNo=x.Reference.ProcessNo,MaxRetryCount=x.Config.MaxRetryCount,RetryFrequence=x.Config.RetryFrequence,ExpireInMinutes=x.Config.ExpireInMinutes,History=null,Documents=x.Documents.Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,TypeName= x.Type == "HTML" ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault().Title}).ToList() }).FirstOrDefaultAsync();
+            var response = await _context.Orders.Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto 
+            { OrderId = x.OrderId,
+                Title = x.Title,
+                NameAndSurname =x.Customer.FirstName+" "+x.Customer.LastName,
+                Process=x.Reference.Process,
+                State=x.Reference.State,
+                ProcessNo=x.Reference.ProcessNo,
+                MaxRetryCount=x.Config.MaxRetryCount,
+                RetryFrequence=x.Config.RetryFrequence,
+                ExpireInMinutes=x.Config.ExpireInMinutes,
+                 History = new List<GetWantApprovalDetailsHistoryDto> { new GetWantApprovalDetailsHistoryDto { State = "Okudum,anladım", Name = "Mng Hayat Teklif Alma İzni", CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm") } },
+                Documents =x.Documents.Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,TypeName= x.Type == "HTML" ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault().Title}).ToList() }).FirstOrDefaultAsync();
                 return Response<GetWantApprovalDetailsDto>.Success(response, 200);
         }
     }

@@ -13,7 +13,7 @@ namespace Application.IntegrationTests.Endorsements.Queries.GetWatchApprovals
         {
             var command = new GetWatchApprovalQuery
             {
-                Approval="Uğur Karataş",
+                Customer="Uğur Karataş",
 
 
             };

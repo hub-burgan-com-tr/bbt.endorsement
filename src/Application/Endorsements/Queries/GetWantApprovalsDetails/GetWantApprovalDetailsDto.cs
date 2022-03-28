@@ -54,14 +54,11 @@
     }
     public class GetWantApprovalDetailsHistoryDto
     {
-        /// <summary>
-        ///İşlem Ad 
-        /// </summary>
-        public string Name { get; set; }
+        public string State { get; set; }
         /// <summary>
         /// Belge
         /// </summary>
-        public string DocumentName { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// İşlem Tarihi
         /// </summary>

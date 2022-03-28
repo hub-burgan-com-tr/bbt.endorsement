@@ -8,7 +8,7 @@
         public string OrderId { get; set; }
         public string Title { get; set; }
         public string Approver { get; set; }
-        public string Approval { get; set; }
+        public string Customer { get; set; }
         public string Process { get; set; }
         public string State { get; set; }
         public string ProcessNo { get; set; }
