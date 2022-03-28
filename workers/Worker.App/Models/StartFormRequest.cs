@@ -9,12 +9,12 @@ public class StartFormRequest
     public OrderReference Reference { get; set; }
     public OrderApprover Approver { get; set; }
 
-    public class OrderApprover
-    {
-        public int Type { get; set; }
-        public string Value { get; set; }
-        public string NameSurname { get; set; }
-    }
+    //public class OrderApprover
+    //{
+    //    public int Type { get; set; }
+    //    public string Value { get; set; }
+    //    public string NameSurname { get; set; }
+    //}
 
     public class OrderReference
     {

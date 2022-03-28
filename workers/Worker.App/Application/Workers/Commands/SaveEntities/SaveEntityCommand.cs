@@ -78,12 +78,17 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 DocumentActions = actions
             });
 
+            var customerId = _saveEntityService.GetCustomerAsync(long.Parse(startFormRequest.Approver.Value)).Result;
+            if (customerId == null)
+                customerId = _saveEntityService.CustomerSaveAsync(startFormRequest.Approver).Result;
+
             var order = new Order
             {
                 OrderId = startFormRequest.Id.ToString(),
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
+                CustomerId = customerId,
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
