@@ -34,9 +34,9 @@ namespace Worker.App.Infrastructure.Services
         {
             var entity = _context.Customers.Add(new Customer
             {
-                CitizenshipNumber = approver.CitizenshipNumber,
-                FirstName = approver.Name.First,
-                LastName = approver.Name.Last,
+                CitizenshipNumber = Convert.ToInt32(approver.Value),
+                FirstName = approver.NameSurname,
+               // LastName = approver.Name.Last,
                 Created = _dateTime.Now,
             }).Entity;
 

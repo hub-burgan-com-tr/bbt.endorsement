@@ -141,9 +141,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
-            //var customerId = _saveEntityService.GetCustomerAsync(startRequest.Approver.CitizenshipNumber).Result;
-            //if (customerId == null)
-            //    customerId = await _saveEntityService.CustomerSaveAsync(startRequest.Approver);
+            var customerId = _saveEntityService.GetCustomerAsync(Convert.ToInt32(startRequest.Approver.Value)).Result;
+            if (customerId == null)
+                customerId = _saveEntityService.CustomerSaveAsync(startRequest.Approver).Result;
 
             var order = new Order
             {
@@ -151,7 +151,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-               /// CustomerId = customerId,
+                CustomerId = customerId,
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
