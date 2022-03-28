@@ -21,8 +21,7 @@ namespace Worker.App.Domain.Entities
         /// hatırlatma frekansını belirlemek için kullanılır. 
         /// </summary>
         [Required]
-        [MaxLength(250)]
-        public string RetryFrequence { get; set; }
+        public int RetryFrequence { get; set; }
 
         /// <summary>
         /// kullanıcıya kaç defa hatırlatma yapılacağı bilgisini içerir. 

@@ -25,7 +25,7 @@ public class NewOrderCommandTests : TestBase
               Reference = new OrderReference { Callback = null, Process = "1", ProcessNo = "2", State = "3" },
               Title = "Deneme",
               Id = id,
-              Config = new OrderConfig { ExpireInMinutes = 4, MaxRetryCount = 5, RetryFrequence = "6" },
+              Config = new OrderConfig { ExpireInMinutes = 4, MaxRetryCount = 5, RetryFrequence = 6 },
               Documents = documents
           }
 

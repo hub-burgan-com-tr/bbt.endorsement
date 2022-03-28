@@ -30,8 +30,7 @@ namespace Domain.Entities
         public string Url { get; set; }
         public int ExpireInMinutes { get; set; }
         [Required]
-        [MaxLength(250)]
-        public string RetryFrequence { get; set; }
+        public int RetryFrequence { get; set; }
         public int MaxRetryCount { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FormDefinitionTag> FormDefinitionTags { get; set; }

@@ -122,10 +122,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("MaxRetryCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("RetryFrequence")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                    b.Property<int>("RetryFrequence")
+                        .HasColumnType("int");
 
                     b.HasKey("OrderId");
 
@@ -304,10 +302,8 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("RetryFrequence")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                    b.Property<int>("RetryFrequence")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");

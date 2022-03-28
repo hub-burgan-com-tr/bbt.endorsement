@@ -19,7 +19,7 @@
         /// Geçerlilik
         /// </summary>
         public int MaxRetryCount { get; set; }
-        public string RetryFrequence { get; set; }
+        public int RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
 
         /// <summary>

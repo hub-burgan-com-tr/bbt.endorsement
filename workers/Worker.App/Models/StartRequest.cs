@@ -46,7 +46,7 @@ public class StartRequest
     public class OrderConfig
     {
         public int MaxRetryCount { get; set; }
-        public string RetryFrequence { get; set; }
+        public int RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
         public string NotifyMessageSMS { get; set; }
         public string NotifyMessagePush { get; set; }
