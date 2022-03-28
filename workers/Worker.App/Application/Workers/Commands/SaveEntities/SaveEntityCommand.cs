@@ -141,7 +141,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
-            var customerId = _saveEntityService.GetCustomerAsync(Convert.ToInt32(startRequest.Approver.Value)).Result;
+            var customerId = _saveEntityService.GetCustomerAsync(long.Parse(startRequest.Approver.Value)).Result;
             if (customerId == null)
                 customerId = _saveEntityService.CustomerSaveAsync(startRequest.Approver).Result;
 
