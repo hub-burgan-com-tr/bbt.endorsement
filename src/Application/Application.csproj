@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Endorsements\EventHandlers\" />
+    <Folder Include="OrderForms\Commands\" />
   </ItemGroup>
 
 </Project>
