@@ -20,6 +20,7 @@ namespace Worker.App.Infrastructure.Services
         {
             var entity = _context.Approvers.Add(new Approver
             {
+                ApproverId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = citizenshipNumber,
                 FirstName = firstName,
                 LastName = lastName,
@@ -32,11 +33,13 @@ namespace Worker.App.Infrastructure.Services
 
         public async Task<string> CustomerSaveAsync(OrderApprover approver)
         {
+            var citizenshipNumber = long.Parse(approver.Value);
             var entity = _context.Customers.Add(new Customer
             {
-                CitizenshipNumber = Convert.ToInt32(approver.Value),
+                CustomerId = Guid.NewGuid().ToString(),
+                CitizenshipNumber = citizenshipNumber,
                 FirstName = approver.NameSurname,
-               // LastName = approver.Name.Last,
+                // LastName = approver.Name.Last,
                 Created = _dateTime.Now,
             }).Entity;
 

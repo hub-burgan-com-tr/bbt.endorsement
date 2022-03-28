@@ -84,6 +84,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
+                CustomerId = GetCustomerId(startFormRequest.Approver),
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
@@ -97,6 +98,14 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             _context.SaveChanges();
 
             return new SaveEntityResponse { OrderId = entity.OrderId };
+        }
+
+        private string GetCustomerId(OrderApprover approver)
+        {
+            var customerId = _saveEntityService.GetCustomerAsync(long.Parse(approver.Value)).Result;
+            if (customerId == null)
+                customerId = _saveEntityService.CustomerSaveAsync(approver).Result;
+            return customerId;
         }
 
         private SaveEntityResponse OrderCreate(StartRequest startRequest)
@@ -141,17 +150,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
-            var customerId = _saveEntityService.GetCustomerAsync(Convert.ToInt32(startRequest.Approver.Value)).Result;
-            if (customerId == null)
-                customerId = _saveEntityService.CustomerSaveAsync(startRequest.Approver).Result;
-
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = customerId,
+                CustomerId = GetCustomerId(startRequest.Approver),
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
