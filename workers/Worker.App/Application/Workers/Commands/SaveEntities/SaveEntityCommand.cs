@@ -4,6 +4,7 @@ using Worker.App.Domain.Entities;
 using Worker.App.Models;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Domain.Enums;
+using static Worker.App.Models.StartRequest;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -135,7 +136,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 {
                     DocumentId = Guid.NewGuid().ToString(),
                     Content = item.Content,
-                    Name = item.Title,
+                    Name =item.Type==(ContentType.PDF)?item.FileName: item.Title,
                     Type = item.Type.ToString(),
                     Created = _dateTime.Now,
                     DocumentActions = actions
