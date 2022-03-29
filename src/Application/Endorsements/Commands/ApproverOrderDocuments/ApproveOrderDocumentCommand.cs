@@ -16,15 +16,10 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
     public class OrderDocument
     {
         public string DocumentId { get; set; }
-        public List<DocumentAction> Actions { get; set; }
-
-    }
-    public class DocumentAction
-    {
         public string ActionId { get; set; }
-        public bool IsDefault { get; set; }
 
     }
+   
     public class ApproveOrderDocumentCommandHandler : IRequestHandler<ApproveOrderDocumentCommand, Response<bool>>
     {
         IZeebeService _zeebe;
