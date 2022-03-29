@@ -60,8 +60,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       })
     });
     this.formGroupApproval = this.fb.group({
-      type: ['', Validators.required],
-      value: ''
+      citizenshipNumber: ['', Validators.required]
     });
   }
 
@@ -76,7 +75,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   initModel() {
     this.model = this.newOrderService.getModel();
     this.model.documents = this.model.documents.filter(i => i.type != 1);
-    this.approvalButtonText = this.model.approver && this.model.approver.nameSurname ? 'Güncelle' : 'Onaycı Ekle';
+    this.approvalButtonText = this.model.approver && this.model.approver.first ? 'Güncelle' : 'Onaycı Ekle';
     this.newOrderService.setModel(this.model);
   }
 
@@ -137,7 +136,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       formId: document.formId,
       identityNo: document.identityNo,
       nameSurname: document.nameSurname,
-      file:document.file,
+      file: document.file,
       fileName: document.fileName
     });
     this.selectedFileName = document.fileName;
@@ -222,9 +221,9 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
     this.approvalSubmitted = true;
     if (this.formGroupApproval.valid) {
       this.model.approver = {
-        type: this.fa.type.value,
-        value: this.fa.value.value,
-        nameSurname: 'Uğur Karataş'
+        citizenshipNumber: this.fa.citizenshipNumber.value,
+        first: '',
+        last: '',
       }
       this.approvalButtonText = 'Güncelle';
       this.newOrderService.setModel(this.model);
@@ -293,18 +292,6 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
           fileName: this.selectedFileName
         });
       };
-    }
-  }
-
-  rdoChanged() {
-    if (this.formGroupApproval.controls.type.value === 1) {
-      this.approvalFormValidationMessage = 'TCKN girilmelidir.'
-      this.formGroupApproval.controls.value.setValidators([Validators.required, Validators.minLength(11)]);
-      this.formGroupApproval.controls.value.updateValueAndValidity();
-    } else {
-      this.approvalFormValidationMessage = 'Müşteri No girilmelidir.';
-      this.formGroupApproval.controls.value.setValidators(Validators.required);
-      this.formGroupApproval.controls.value.updateValueAndValidity();
     }
   }
 }

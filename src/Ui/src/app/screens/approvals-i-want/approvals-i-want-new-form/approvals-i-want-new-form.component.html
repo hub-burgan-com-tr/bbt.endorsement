@@ -48,15 +48,15 @@
       <div class="box-title mt-5 p-0 no-border">Onaycı Ekle</div>
       <div class="row mt-3">
         <div class="col-4">
-          <input type="text" class="form-control" id="approver" name="approver"
-                 formControlName="approver" maxlength="11"
-                 [ngClass]="{ 'is-invalid': submitted && f.approver.invalid }">
-          <div *ngIf="submitted && f.approver.errors" class="invalid-feedback">
-            <div *ngIf="f.approver.errors.required">Onaycı girilmelidir</div>
+          <input type="text" class="form-control" id="citizenshipNumber" name="citizenshipNumber"
+                 formControlName="citizenshipNumber" maxlength="50"
+                 [ngClass]="{ 'is-invalid': submitted && f.citizenshipNumber.invalid }">
+          <div *ngIf="submitted && f.citizenshipNumber.errors" class="invalid-feedback">
+            <div *ngIf="f.citizenshipNumber.errors.required">Onaycı girilmelidir</div>
           </div>
         </div>
       </div>
-      <div class="box-title mt-5 p-0 no-border">Form</div>
+      <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>
       <formio [form]="form" [options]="options" (submit)="submitForm($event)"></formio>
     </div>
     <div class="button-group d-flex align-items-center justify-content-center mt-5">

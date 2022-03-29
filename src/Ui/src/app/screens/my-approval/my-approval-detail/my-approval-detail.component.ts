@@ -15,12 +15,15 @@ import {
 })
 export class MyApprovalDetailComponent implements OnInit {
   private destroy$ = new Subject();
-  step: number = 1;
+  step: number = 0;
   orderId: any;
   title: '';
+  buttonText: string = 'Devam Et';
   details = [{
+    documentId: '',
     name: '',
     content: '',
+    choice: false,
     actions: []
   }];
   physicallyDocuments = [{
@@ -48,8 +51,33 @@ export class MyApprovalDetailComponent implements OnInit {
   }
 
   continue() {
-    this.getApprovalPhysicallyDocumentDetail();
+    // this.getApprovalPhysicallyDocumentDetail();
     this.step++;
+    if (this.step >= (this.details.length - 1)) {
+      this.buttonText = 'Kaydet';
+    }
+    //Post data
+    if (this.step > (this.details.length - 1)) {
+      this.step--;
+      const model = {
+        orderId: this.orderId,
+        documents: []
+      };
+      this.details.forEach(i => {
+        const actionId = i.actions.find(f => f.value == i.choice)?.documentActionId;
+        if (actionId) {
+          model.documents.push({
+            documentId: i.documentId,
+            actionId: actionId,
+            choice: i.choice
+          });
+        }
+      });
+      this.myApprovalService.saveApproveOrderDocument(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        console.log(res);
+      });
+      return;
+    }
   }
 
   getApprovalDetail() {
