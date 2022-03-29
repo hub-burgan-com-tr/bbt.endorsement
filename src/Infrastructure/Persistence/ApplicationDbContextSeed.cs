@@ -31,8 +31,8 @@ namespace Infrastructure.Persistence
                 });
                 formdefinition.Entity.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "" });
 
-                formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Onayla", IsDefault = true, Type = ActionType.Approve.ToString(), State = "Okudum,anladım",FormDefinitionActionId=Guid.NewGuid().ToString() });
-                formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Reddet", IsDefault = false, Type = ActionType.Reject.ToString(), State = "Okudum,Anlamadım", FormDefinitionActionId = Guid.NewGuid().ToString() });
+                formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,anladım", IsDefault = true, Type = ActionType.Approve.ToString(), State = "Onay",FormDefinitionActionId=Guid.NewGuid().ToString() });
+                formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,Anlamadım", IsDefault = false, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
 
              var formdefinition2   =context.FormDefinitions.Add(new FormDefinition
                 {
@@ -52,8 +52,8 @@ namespace Infrastructure.Persistence
 
              });
                 formdefinition2.Entity.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "" });
-                formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Onayla", IsDefault = true, Type = ActionType.Approve.ToString(), State = "Okudum,anladım", FormDefinitionActionId = Guid.NewGuid().ToString() });
-                formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Reddet", IsDefault = false, Type = ActionType.Reject.ToString(), State = "Okudum,Anlamadım", FormDefinitionActionId = Guid.NewGuid().ToString() });
+                formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,anladım", IsDefault = true, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
+                formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,Anlamadım", IsDefault = false, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
                 await context.SaveChangesAsync();
             }
         }
