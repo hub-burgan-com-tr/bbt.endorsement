@@ -6,4 +6,5 @@ export enum ApiPaths {
   GetForm = 'Forms/GetForm',
   GetFormContent = 'Forms/GetFormContent',
   CreateOrUpdateForm = 'Forms/CreateOrUpdateForm',
+  ApproveOrderDocument = 'Endorsement/Approve-Order-Document',
 }

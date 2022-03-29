@@ -46,4 +46,9 @@ export class MyApprovalService {
 
     return this.httpClient.get<ApiBaseResponseModel>(url, {params: params});
   }
+
+  saveApproveOrderDocument(data: any) {
+    const url = `${this.baseUrl}/${ApiPaths.ApproveOrderDocument}`;
+    return this.httpClient.post<ApiBaseResponseModel>(url, data);
+  }
 }

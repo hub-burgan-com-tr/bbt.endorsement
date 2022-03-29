@@ -36,7 +36,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       process: ['', [Validators.required]],
       state: ['', [Validators.required]],
       processNo: ['', [Validators.required]],
-      approver: ['', [Validators.required]]
+      citizenshipNumber: ['', [Validators.required]]
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.formDefinitionId = params['formDefinitionId'];
@@ -69,9 +69,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       //@TODO
       //Ad Soyad servisten çekilip gönderilecek
       const model = new NewApprovalOrderForm(<IApprover>{
-        type: this.f.type.value,
-        value: this.f.value.value,
-        nameSurname: 'Uğur Karataş'
+        citizenshipNumber: this.f.citizenshipNumber.value,
+        first: '',
+        last: ''
       }, JSON.stringify(e.data), this.formDefinitionId, <IReference>{
         process: this.f.process.value,
         processNo: this.f.processNo.value,

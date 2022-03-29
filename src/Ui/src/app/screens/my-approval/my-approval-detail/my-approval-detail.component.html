@@ -29,8 +29,8 @@
       </div>
     </div>
     <div class="col-md col-sm-12">
-      <div *ngIf="step===1">
-        <div class="box p-3 mb-4" *ngFor="let detail of details; let d = index">
+      <div *ngFor="let detail of details; let d = index">
+        <div class="box p-3 mb-4" *ngIf="d===step">
           <b class="mb-2 d-block">{{detail.name}}</b>
           <div class="mb-4">{{detail.content}}</div>
           <div *ngIf="detail.actions.length != 0">
@@ -38,7 +38,7 @@
             <ng-template #check>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedDetail' + d }}"
-                       [checked]="detail.actions[0].isDefault">
+                       [value]="detail.actions[0].value" [(ngModel)]="detail.choice">
                 <label class="form-check-label" for="{{ 'actionCheckedDetail' + d }}">
                   {{detail.actions[0].title}}
                 </label>
@@ -49,7 +49,7 @@
                 <input class="form-check-input" type="radio"
                        name="{{ 'flexRadio-detail' + d }}"
                        id="{{ 'flexRadio-' + d + '-' + a }}"
-                       [checked]="action.isDefault">
+                       [value]="action.value" [(ngModel)]="detail.choice">
                 <label class="form-check-label" for="{{ 'flexRadio-' + d + '-' + a }}">
                   {{action.title}}
                 </label>
@@ -58,44 +58,8 @@
           </div>
         </div>
       </div>
-      <div *ngIf="step===2">
-        <div class="box p-3 mb-4" *ngFor="let physicallyDocument of physicallyDocuments; let p = index">
-          <p class="mb-2 d-block">
-            <a href="{{physicallyDocument.documentLink}}">
-              <img src="/assets/img/attachment.png">
-              <span class="mx-2">{{physicallyDocument.name}}</span>
-            </a>
-          </p>
-          <div class="mb-4">{{physicallyDocument.content}}</div>
-          <div *ngIf="physicallyDocument.actions.length != 0">
-            <ng-container *ngIf="physicallyDocument.actions.length > 1;then radio else check"></ng-container>
-            <ng-template #check>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedPhysicallyDocument' + p }}"
-                       [checked]="physicallyDocument.actions[0].isDefault">
-                <label class="form-check-label" for="{{ 'actionCheckedPhysicallyDocument' + p }}">
-                  {{physicallyDocument.actions[0].title}}
-                </label>
-              </div>
-            </ng-template>
-            <ng-template #radio>
-              <div class="form-check" *ngFor="let action of physicallyDocument.actions; let a = index">
-                <input class="form-check-input" type="radio"
-                       name="{{ 'flexRadio-physicallyDocument' + p }}"
-                       id="{{ 'flexRadio-' + p + '-' + a }}"
-                       [checked]="action.isDefault">
-                <label class="form-check-label" for="{{ 'flexRadio-' + p + '-' + a }}">
-                  {{action.title}}
-                </label>
-              </div>
-            </ng-template>
-          </div>
-        </div>
-      </div>
       <div class="justify-content-center d-flex">
-        <button class="btn btn-orange px-5 mt-5" (click)="continue()" *ngIf="step===1">Devam Et
-        </button>
-        <button class="btn btn-orange px-5 mt-5" (click)="myModal.open()" *ngIf="step===2">Kaydet
+        <button class="btn btn-orange px-5 mt-5" (click)="continue()">{{buttonText}}
         </button>
       </div>
     </div>
