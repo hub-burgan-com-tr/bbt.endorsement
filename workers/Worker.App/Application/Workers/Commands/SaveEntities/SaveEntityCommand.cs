@@ -102,7 +102,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
         private string GetCustomerId(OrderApprover approver)
         {
-            var customerId = _saveEntityService.GetCustomerAsync(long.Parse(approver.CitizenshipNumber)).Result;
+            var customerId = _saveEntityService.GetCustomerAsync(approver.CitizenshipNumber).Result;
             if (customerId == null)
                 customerId = _saveEntityService.CustomerSaveAsync(approver).Result;
             return customerId;
