@@ -38,6 +38,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                     {
                         Content=y.Content,
                         Link=y.Name,
+                        Name=y.Name,
                         DocumentId=y.DocumentId,
                         Actions=y.FormDefinitionId!=null?y.FormDefinition.FormDefinitionActions.Select(z=>new DocumentAction {IsDefault=z.IsDefault,DocumentActionId=z.FormDefinitionActionId,Title=z.Title }).ToList():y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId,IsDefault=z.IsDefault,Title=z.Title}).ToList()
                     }).ToList(),                
