@@ -11,8 +11,6 @@ using Application.Endorsements.Queries.GetOrderDocuments;
 using Application.Endorsements.Queries.GetApprovals;
 using Application.Endorsements.Queries.GetApprovalsDetails;
 using Application.Endorsements.Queries.GetApprovalsDocumentList;
-using Application.Endorsements.Queries.GetApprovalsFormDocumentDetail;
-using Application.Endorsements.Queries.GetApprovalsPhysicallyDocumentDetails;
 using Application.Endorsements.Queries.GetMyApprovals;
 using Application.Endorsements.Queries.GetMyApprovalsDetails;
 using Application.Endorsements.Queries.GetWantApprovals;
