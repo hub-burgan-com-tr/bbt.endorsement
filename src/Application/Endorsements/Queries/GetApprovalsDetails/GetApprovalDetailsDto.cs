@@ -6,6 +6,9 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
     {
         public List<OrderDocument>Documents { get; set; }
         public string Title { get; internal set; }
+        public string CitizenShipNumber { get; set; }
+      
+        public string FirstAndSurname { get; set; }
     }
     public class DocumentAction
     {
