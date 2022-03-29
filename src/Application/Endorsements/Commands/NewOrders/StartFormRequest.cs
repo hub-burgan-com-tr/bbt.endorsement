@@ -11,7 +11,7 @@
 
         public class OrderApprover
         {
-            public string CitizenshipNumber { get; set; }
+            public long CitizenshipNumber { get; set; }
             public string First { get; set; }
             public string Last { get; set; }
         }
