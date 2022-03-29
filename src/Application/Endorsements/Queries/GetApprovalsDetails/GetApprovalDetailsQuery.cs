@@ -34,15 +34,18 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                     Title = x.Title,
                     CitizenShipNumber = x.Customer.CitizenshipNumber, 
                     FirstAndSurname = x.Customer.FirstName + " " + x.Customer.LastName, 
+                    
                     Documents = x.Documents.Select(y=>new OrderDocument
                     {
                         Content=y.Content,
                         Link=y.Name,
                         Name=y.Name,
-                        DocumentId=y.DocumentId,
-                        Actions=y.FormDefinitionId!=null?y.FormDefinition.FormDefinitionActions.Select(z=>new DocumentAction {IsDefault=z.IsDefault,DocumentActionId=z.FormDefinitionActionId,Title=z.Title }).ToList():y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId,IsDefault=z.IsDefault,Title=z.Title}).ToList()
+                        Choice = y.FormDefinitionId != null ? y.FormDefinition.FormDefinitionActions.FirstOrDefault().IsDefault ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected : y.DocumentActions.Any(y=>y.IsDefault) ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected,
+                       DocumentId = y.DocumentId,
+                        Actions=y.FormDefinitionId!=null?y.FormDefinition.FormDefinitionActions.Select(z=>new DocumentAction {Value=z.IsDefault?(int)DocumentApprovedEnum.Approved:(int)DocumentApprovedEnum.Rejected,DocumentActionId=z.FormDefinitionActionId,Title=z.Title }).ToList():y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.IsDefault ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected, Title=z.Title}).ToList()
                     }).ToList(),                
                    }).FirstOrDefault();
+          
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
     }
