@@ -2,9 +2,9 @@
 
 public class OrderApprover
 {
-    public string NameSurname { get; set; }
-    public int Type { get; set; }
-    public string Value { get; set; }
+    public string CitizenshipNumber { get; set; }
+    public string First { get; set; }
+    public string Last { get; set; }
 }
 
     public class OrderApprover_
