@@ -11,8 +11,6 @@ using Application.Endorsements.Queries.GetOrderDocuments;
 using Application.Endorsements.Queries.GetApprovals;
 using Application.Endorsements.Queries.GetApprovalsDetails;
 using Application.Endorsements.Queries.GetApprovalsDocumentList;
-using Application.Endorsements.Queries.GetApprovalsFormDocumentDetail;
-using Application.Endorsements.Queries.GetApprovalsPhysicallyDocumentDetails;
 using Application.Endorsements.Queries.GetMyApprovals;
 using Application.Endorsements.Queries.GetMyApprovalsDetails;
 using Application.Endorsements.Queries.GetWantApprovals;
@@ -238,27 +236,27 @@ namespace Api.Controllers
         //    return Ok(result);
         //}
 
-        /// <summary>
-        ///  Onayımdakiler form Belge Detay sayfası
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <response code="404">If the item is null</response>
-        [SwaggerOperation(
-            Summary = "Query endorsement approval form document detail.",
-            Tags = new[] { "Endorsement" }
-        )]
-        [Route("approval-form-document-detail")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, approval form document detail is returned successfully.", typeof(GetApprovalFormDocumentDetailDto))]
-        [SwaggerResponse(404, "Approval form document detail is not found.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromQuery] string orderId)
-        {
-            var result = await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { OrderId = orderId });
-            return Ok(result);
-        }
+        ///// <summary>
+        /////  Onayımdakiler form Belge Detay sayfası
+        ///// </summary>
+        ///// <param name="orderId"></param>
+        ///// <returns></returns>
+        ///// <response code="404">If the item is null</response>
+        //[SwaggerOperation(
+        //    Summary = "Query endorsement approval form document detail.",
+        //    Tags = new[] { "Endorsement" }
+        //)]
+        //[Route("approval-form-document-detail")]
+        //[HttpGet]
+        //[SwaggerResponse(200, "Success, approval form document detail is returned successfully.", typeof(GetApprovalFormDocumentDetailDto))]
+        //[SwaggerResponse(404, "Approval form document detail is not found.", typeof(void))]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
+        //public async Task<IActionResult> GetApprovalFormDocumentDetailAsync([FromQuery] string orderId)
+        //{
+        //    var result = await Mediator.Send(new GetApprovalFormDocumentDetailQuery() { OrderId = orderId });
+        //    return Ok(result);
+        //}
 
 
         /// <summary>
