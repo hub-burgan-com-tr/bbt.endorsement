@@ -17,24 +17,47 @@ namespace Application.Endorsements.Commands.NewOrders
 
     public class NewOrderCommandHandler : IRequestHandler<NewOrderCommand, Response<StartResponse>>
     {
-        IZeebeService _zeebe;
+        private readonly IZeebeService _zeebe;
+        private readonly IApplicationDbContext _context;
 
-        public NewOrderCommandHandler(IZeebeService zeebe)
+        public NewOrderCommandHandler(IZeebeService zeebe, IApplicationDbContext context)
         {
             _zeebe = zeebe;
+            _context = context;
         }
 
         public async Task<Response<StartResponse>> Handle(NewOrderCommand request, CancellationToken cancellationToken)
         {
             var instanceId = request.StartRequest != null ? request.StartRequest.Id : request.StartFormRequest.Id;
-            var model = new ContractModel
+
+            var model = new ContractModel();
+            if (request.FormType == Form.Order)
             {
-                StartRequest = request.StartRequest,
-                StartFormRequest = request.StartFormRequest,
-                FormType = request.FormType,
-                Device = false,
-                InstanceId = instanceId
-            };
+                model = new ContractModel
+                {
+                    StartRequest = request.StartRequest,
+                    FormType = request.FormType,
+                    Device = false,
+                    InstanceId = instanceId,
+                    ExpireInMinutes = request.StartRequest.Config.ExpireInMinutes,
+                    RetryFrequence = request.StartRequest.Config.RetryFrequence,
+                    MaxRetryCount = request.StartRequest.Config.MaxRetryCount,
+                };
+            }
+            else if (request.FormType == Form.FormOrder)
+            {
+                var config = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == request.StartFormRequest.FormId);
+                model = new ContractModel
+                {
+                    StartFormRequest = request.StartFormRequest,
+                    FormType = request.FormType,
+                    Device = false,
+                    InstanceId = instanceId,
+                    ExpireInMinutes = config.ExpireInMinutes,
+                    RetryFrequence = config.RetryFrequence,
+                    MaxRetryCount = config.MaxRetryCount,
+                };
+            }
 
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             var response = await _zeebe.SendMessage(instanceId.ToString(), "contact_approval_contract_new", payload);

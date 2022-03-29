@@ -33,13 +33,13 @@ namespace Worker.App.Infrastructure.Services
 
         public async Task<string> CustomerSaveAsync(OrderApprover approver)
         {
-            var citizenshipNumber = long.Parse(approver.Value);
+            var citizenshipNumber = long.Parse(approver.CitizenshipNumber);
             var entity = _context.Customers.Add(new Customer
             {
                 CustomerId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = citizenshipNumber,
-                FirstName = approver.NameSurname,
-                // LastName = approver.Name.Last,
+                FirstName = approver.First,
+                LastName = approver.Last,
                 Created = _dateTime.Now,
             }).Entity;
 

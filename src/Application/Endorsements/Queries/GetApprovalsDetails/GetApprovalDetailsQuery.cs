@@ -28,28 +28,24 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 
         public async Task<Response<GetApprovalDetailsDto>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-
-            var order = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).FirstOrDefault();
-
-            var response = new GetApprovalDetailsDto
-            {
-                Title = order.Title,
-                Documents = order.Documents
-                                    .Where(y => y.Type.ToString() != ContentType.HTML.ToString())
-                                    .Select(y => new OrderDocument
-                                    {
-                                        Name = y.Name,
-                                        Content = y.Content,
-                                        DocumentId = y.DocumentId,
-                                        Link = y.Type.ToString() == ContentType.PDF.ToString() ? y.Name : null,
-                                        Actions = y.DocumentActions.Select(z => new DocumentAction
-                                        {
-                                            DocumentActionId = z.DocumentActionId,
-                                            IsDefault = z.IsDefault,
-                                            Title = z.Title
-                                        }).ToList()
-                                    }).ToList()
-            };
+            var response = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Customer).Include(x=>x.Documents).ThenInclude(x=>x.FormDefinition).ThenInclude(x=>x.FormDefinitionActions).Where(x => x.OrderId == request.OrderId)
+                .Select(x => new GetApprovalDetailsDto
+                { 
+                    Title = x.Title,
+                    CitizenShipNumber = x.Customer.CitizenshipNumber, 
+                    FirstAndSurname = x.Customer.FirstName + " " + x.Customer.LastName, 
+                    
+                    Documents = x.Documents.Select(y=>new OrderDocument
+                    {
+                        Content=y.Content,
+                        Link=y.Name,
+                        Name=y.Name,
+                        Choice = y.FormDefinitionId != null ? y.FormDefinition.FormDefinitionActions.FirstOrDefault().IsDefault ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected : y.DocumentActions.Any(y=>y.IsDefault) ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected,
+                       DocumentId = y.DocumentId,
+                        Actions=y.FormDefinitionId!=null?y.FormDefinition.FormDefinitionActions.Select(z=>new DocumentAction {Value=z.IsDefault?(int)DocumentApprovedEnum.Approved:(int)DocumentApprovedEnum.Rejected,DocumentActionId=z.FormDefinitionActionId,Title=z.Title }).ToList():y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.IsDefault ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected, Title=z.Title}).ToList()
+                    }).ToList(),                
+                   }).FirstOrDefault();
+          
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
     }

@@ -6,10 +6,13 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
     {
         public List<OrderDocument>Documents { get; set; }
         public string Title { get; internal set; }
+        public string CitizenShipNumber { get; set; }
+      
+        public string FirstAndSurname { get; set; }
     }
     public class DocumentAction
     {
-        public bool IsDefault { get; set; }
+        public int Value { get; set; }
         public string Title { get; set; }
         public string DocumentActionId { get; internal set; }
     }
@@ -17,12 +20,18 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
     {
         public string DocumentId { get; internal set; }
         public string Name { get; set; }
+        public int Choice { get; set; }
         public string Content { get; set; }
         public string Link { get; set; }
 
         public List<DocumentAction> Actions { get; set; }
 
 
+    }
+    public enum DocumentApprovedEnum
+    {
+        Approved=1,
+        Rejected=2,      
     }
 
 }
