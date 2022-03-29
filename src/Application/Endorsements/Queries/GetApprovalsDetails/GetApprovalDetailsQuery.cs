@@ -34,7 +34,21 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
             var response = new GetApprovalDetailsDto
             {
                 Title = order.Title,
-                Documents = order.Documents.Where(y => y.Type.ToString() != ContentType.HTML.ToString()).Select(y => new OrderDocument { Name = y.Name, Content = y.Content, DocumentId = y.DocumentId,Link=y.Type.ToString()==ContentType.PDF.ToString()?y.Name:null, Actions = y.DocumentActions.Select(z => new DocumentAction { DocumentActionId = z.DocumentActionId, IsDefault = z.IsDefault, Title = z.Title }).ToList() }).ToList()
+                Documents = order.Documents
+                                    .Where(y => y.Type.ToString() != ContentType.HTML.ToString())
+                                    .Select(y => new OrderDocument
+                                    {
+                                        Name = y.Name,
+                                        Content = y.Content,
+                                        DocumentId = y.DocumentId,
+                                        Link = y.Type.ToString() == ContentType.PDF.ToString() ? y.Name : null,
+                                        Actions = y.DocumentActions.Select(z => new DocumentAction
+                                        {
+                                            DocumentActionId = z.DocumentActionId,
+                                            IsDefault = z.IsDefault,
+                                            Title = z.Title
+                                        }).ToList()
+                                    }).ToList()
             };
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
