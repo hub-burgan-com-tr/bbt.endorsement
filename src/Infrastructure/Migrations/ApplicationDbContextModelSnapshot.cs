@@ -265,6 +265,55 @@ namespace Infrastructure.Migrations
                     b.ToTable("DocumentAction", "order");
                 });
 
+            modelBuilder.Entity("Domain.Entities.DocumentHistory", b =>
+                {
+                    b.Property<string>("DocumentHistoryId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("DocumentId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("DocumentHistoryId");
+
+                    b.HasIndex("DocumentId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("DocumentHistory", "order");
+                });
+
             modelBuilder.Entity("Domain.Entities.FormDefinition", b =>
                 {
                     b.Property<string>("FormDefinitionId")
@@ -537,6 +586,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("Document");
                 });
 
+            modelBuilder.Entity("Domain.Entities.DocumentHistory", b =>
+                {
+                    b.HasOne("Domain.Entities.Document", "Document")
+                        .WithMany("DocumentHistories")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Order", "Order")
+                        .WithMany("DocumentHistories")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Domain.Entities.FormDefinitionAction", b =>
                 {
                     b.HasOne("Domain.Entities.FormDefinition", "FormDefinition")
@@ -594,6 +662,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Document", b =>
                 {
                     b.Navigation("DocumentActions");
+
+                    b.Navigation("DocumentHistories");
                 });
 
             modelBuilder.Entity("Domain.Entities.FormDefinition", b =>
@@ -608,6 +678,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Order", b =>
                 {
                     b.Navigation("Config");
+
+                    b.Navigation("DocumentHistories");
 
                     b.Navigation("Documents");
 

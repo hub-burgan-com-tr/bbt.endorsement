@@ -210,6 +210,15 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   onSubmit() {
     this.submitted = true;
     if (this.formGroup.valid) {
+      this.model.documents.map(x => {
+        x.content = x.file != '' ? x.file : x.content;
+        x.title = x.fileName != '' ? x.fileName : x.title;
+      })
+      this.model.approver = {
+        citizenshipNumber: "83418131290",
+        first: "Uğur",
+        last: "Karataş"
+      };
       this.newOrderService.save(this.model).pipe(takeUntil(this.destroy$)).subscribe(res => {
         console.log(res);
       });

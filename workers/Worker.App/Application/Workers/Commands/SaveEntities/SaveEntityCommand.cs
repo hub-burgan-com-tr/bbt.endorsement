@@ -136,7 +136,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 {
                     DocumentId = Guid.NewGuid().ToString(),
                     Content = item.Content,
-                    Name =item.Type==(ContentType.PDF)?item.FileName: item.Title,
+                    Name =item.Title,
                     Type = item.Type.ToString(),
                     Created = _dateTime.Now,
                     DocumentActions = actions
