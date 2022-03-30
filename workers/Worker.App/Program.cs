@@ -6,6 +6,7 @@ using Serilog;
 using Worker.App.Application;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Infrastructure;
+using Worker.App.Infrastructure.Configuration;
 using Worker.App.Infrastructure.Configuration.Options;
 using Worker.App.Infrastructure.Services;
 using Worker.App.Services;
@@ -56,6 +57,8 @@ builder.Services.AddHostedService<ZeebeWorkService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
 var app = builder.Build();
+
+app.AddUseMiddleware();
 
 using (var scope = app.Services.CreateScope())
 {
