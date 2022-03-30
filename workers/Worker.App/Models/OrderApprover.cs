@@ -7,7 +7,7 @@ public class OrderApprover
     public string Last { get; set; }
 }
 
-    public class OrderApprover_
+public class OrderApprover_
 {
     public string NameSurname { get; set; }
     public int Type { get; set; }

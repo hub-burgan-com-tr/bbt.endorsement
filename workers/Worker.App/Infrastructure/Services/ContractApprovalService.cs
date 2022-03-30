@@ -52,7 +52,7 @@ public class ContractApprovalService : IContractApprovalService
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.Information($"ErrorEntity data: '{variables.InstanceId}'");
+            Log.Information($"ErrorEntity data");
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables("{\"Approve\":\"" + false + "\"}")
@@ -68,26 +68,38 @@ public class ContractApprovalService : IContractApprovalService
         {
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
-
-            // var state = customHeaders["State"].ToString();
-
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-            Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
-
-            if (variables != null)
+            try
             {
-                var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
-                var response = await _mediator.Send(new SaveEntityCommand
-                {
-                    Model = variables
-                });
-                variables.IsProcess = true;
-            }
-            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                // var state = customHeaders["State"].ToString();
 
-            await jobClient.NewCompleteJobCommand(job.Key)
-                .Variables(data)
-                .Send();
+                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
+
+                if (variables != null)
+                {
+                    var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
+                    var response = await _mediator.Send(new SaveEntityCommand
+                    {
+                        Model = variables
+                    });
+                    variables.IsProcess = true;
+                }
+                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+                await jobClient.NewCompleteJobCommand(job.Key)
+                    .Variables(data)
+                    .Send();
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                
+                await jobClient.NewCompleteJobCommand(job.Key)
+                    .Variables(data)
+                    .Send();
+            }
         });
     }
 
@@ -103,7 +115,7 @@ public class ContractApprovalService : IContractApprovalService
                 variables.RetryEnd = true;
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            Log.Information($"LoadContactInfo data: '{variables.InstanceId}'");
+            Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
@@ -128,7 +140,7 @@ public class ContractApprovalService : IContractApprovalService
 
                 string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-                Log.Information($"SendOtp data: '{variables.InstanceId}'");
+                Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
@@ -164,7 +176,7 @@ public class ContractApprovalService : IContractApprovalService
             variables.IsProcess = true;
 
             string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            //  _logger.LogInformation($"SendPush data: '{variables.InstanceId}'");
+            Log.ForContext("OrderId", variables.InstanceId).Information($"SendPush");
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -182,8 +194,8 @@ public class ContractApprovalService : IContractApprovalService
             if (variables != null)
             {
                 variables.Completed = false;
-                string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                Log.Information($"UpdateEntity data: '{variables.InstanceId}'");
+                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data) // "{\"IsTimeOut\":\"" + true + "\"}"
@@ -209,7 +221,7 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             string[] parameters = { "", "" };
-            Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract data: '{variables.InstanceId}'");
+            Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -225,7 +237,7 @@ public class ContractApprovalService : IContractApprovalService
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.Information($"DeleteEntity data: '{variables.InstanceId}'");
+            Log.ForContext("OrderId", variables.InstanceId).Information($"DeleteEntity");
             await jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
@@ -241,7 +253,7 @@ public class ContractApprovalService : IContractApprovalService
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.Information($"ConsumeCallback data: '{variables.InstanceId}'");
+            Log.ForContext("OrderId", variables.InstanceId).Information($"ConsumeCallback");
             await jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
