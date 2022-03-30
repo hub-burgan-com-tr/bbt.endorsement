@@ -69,9 +69,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       //@TODO
       //Ad Soyad servisten çekilip gönderilecek
       const model = new NewApprovalOrderForm(<IApprover>{
-        citizenshipNumber: this.f.citizenshipNumber.value,
-        first: '',
-        last: ''
+        citizenshipNumber: parseInt("83418131290"),
+        first: "Uğur",
+        last: "Karataş"
       }, JSON.stringify(e.data), this.formDefinitionId, <IReference>{
         process: this.f.process.value,
         processNo: this.f.processNo.value,
