@@ -1,4 +1,6 @@
-﻿namespace Application.Endorsements.Commands.NewOrders
+﻿using FluentValidation.Results;
+
+namespace Application.Endorsements.Commands.NewOrders
 {
     public class StartResponse
     {
@@ -6,5 +8,6 @@
         /// Unique Id of order. Id is corrolation key of workflow also. 
         /// </summary>
         public Guid InstanceId { get; set; }
+        public ValidationResult Result { get; set; }
     }
 }

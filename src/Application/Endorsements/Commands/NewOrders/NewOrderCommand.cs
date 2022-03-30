@@ -2,6 +2,8 @@
 using Application.Common.Models;
 using Application.Models;
 using Domain.Enum;
+using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -27,8 +29,11 @@ namespace Application.Endorsements.Commands.NewOrders
 
         public async Task<Response<StartResponse>> Handle(NewOrderCommand request, CancellationToken cancellationToken)
         {
-            var instanceId = request.StartRequest.Id;
+            NewOrderCommandValidator validator = new NewOrderCommandValidator();
+            ValidationResult result = validator.Validate(request);
+            validator.ValidateAndThrow(request);
 
+            var instanceId = request.StartRequest.Id;
             var model = new ContractModel
             {
                 StartRequest = request.StartRequest,

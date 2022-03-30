@@ -3,6 +3,7 @@ using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
 using Application.Models;
 using Domain.Enum;
+using FluentValidation.Results;
 using MediatR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
