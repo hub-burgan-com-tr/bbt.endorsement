@@ -215,10 +215,13 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
         x.title = x.fileName != '' ? x.fileName : x.title;
       })
       this.model.approver = {
-        citizenshipNumber: "83418131290",
+        citizenshipNumber: parseInt("83418131290"),
         first: "Uğur",
         last: "Karataş"
       };
+      this.model.config.expireInMinutes = parseInt(this.model.config.expireInMinutes);
+      this.model.config.maxRetryCount = parseInt(this.model.config.maxRetryCount);
+      this.model.config.retryFrequence = parseInt(this.model.config.retryFrequence);
       this.newOrderService.save(this.model).pipe(takeUntil(this.destroy$)).subscribe(res => {
         console.log(res);
       });

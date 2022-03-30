@@ -26,9 +26,9 @@ class Document implements IDocument {
 }
 
 interface IConfig {
-  maxRetryCount: number;
-  retryFrequence: string;
-  expireInMinutes: number;
+  maxRetryCount: any;
+  retryFrequence: any;
+  expireInMinutes: any;
   notifyMessageSMS: string;
   notifyMessagePush: string;
   renotifyMessageSMS: string;
@@ -36,13 +36,13 @@ interface IConfig {
 }
 
 class Config implements IConfig {
-  expireInMinutes: number;
-  maxRetryCount: number;
+  expireInMinutes: any
+  maxRetryCount: any;
   notifyMessagePush: string;
   notifyMessageSMS: string;
   renotifyMessagePush: string;
   renotifyMessageSMS: string;
-  retryFrequence: string;
+  retryFrequence: any;
 }
 
 
