@@ -76,7 +76,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Name = startFormRequest.Title,
                 Type = formDefinition.Type.ToString(),
                 Created = _dateTime.Now,
-                DocumentActions = actions
+                DocumentActions = actions,
+                FormDefinitionId = startFormRequest.FormId
             });
 
             var order = new Order
