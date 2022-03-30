@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrderForms;
 using Application.Endorsements.Commands.NewOrders;
 using Application.OrderForms.Queries.GetApproverInformations;
 using Application.OrderForms.Queries.GetFormContents;
@@ -24,10 +25,10 @@ namespace Api.Controllers
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(void))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
-        public async Task<Response<StartResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
+        public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
             request.Id = Guid.NewGuid();            
-            return await Mediator.Send(new NewOrderCommand { StartFormRequest = request, FormType = Form.FormOrder });
+            return await Mediator.Send(new NewOrderFormCommand { Request = request, FormType = Form.FormOrder });
         }
 
         [SwaggerOperation(

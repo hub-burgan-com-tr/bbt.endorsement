@@ -1,8 +1,6 @@
-﻿using FluentValidation.Results;
-
-namespace Application.Endorsements.Commands.NewOrders
+﻿namespace Application.Endorsements.Commands.NewOrderForms
 {
-    public class StartResponse
+    public class NewOrderFormResponse
     {
         /// <summary>
         /// Unique Id of order. Id is corrolation key of workflow also. 
