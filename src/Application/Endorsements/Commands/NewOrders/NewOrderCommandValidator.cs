@@ -11,10 +11,10 @@ namespace Application.Endorsements.Commands.NewOrders
            .Must(collection => collection.All(item => item.Type.ToString() == ContentType.PDF.ToString() && !string.IsNullOrEmpty(item.Content)))
            .WithMessage("Lütfen dosya seçiniz");
             RuleFor(model => model.StartRequest.Documents)
-           .Must(collection => collection.All(item => item.Type.ToString() == ContentType.HTML.ToString() && !string.IsNullOrEmpty(item.Content)))
+           .Must(collection => collection.All(item => item.Type.ToString() == ContentType.PlainText.ToString() && !string.IsNullOrEmpty(item.Content)))
            .WithMessage("Metin girilmelidir.");
             RuleFor(model => model.StartRequest.Documents)
-           .Must(collection => collection.All(item => item.Type.ToString() == ContentType.HTML.ToString() && !string.IsNullOrEmpty(item.Title)))
+           .Must(collection => collection.All(item => item.Type.ToString() == ((int)ContentType.PlainText).ToString() && !string.IsNullOrEmpty(item.Title)))
            .WithMessage("Başlık girilmelidir.");
             RuleFor(model => model.StartRequest.Documents)
          .Must(collection => collection.All(item => item.Actions.All(item2 => !string.IsNullOrEmpty(item2.Title))))
