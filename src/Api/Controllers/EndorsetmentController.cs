@@ -19,6 +19,7 @@ using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Enum;
+using Application.Endorsements.Commands.CreateDocumentHistory;
 
 namespace Api.Controllers
 {
@@ -40,10 +41,24 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
-            request.Id = Guid.NewGuid();           
+            request.Id = Guid.NewGuid();
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, FormType = Form.Order });
         }
 
+        [SwaggerOperation(
+           Summary = "create document history",
+          Description = "canceled order")]
+        [Route("create-document-history")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, create document history successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, endorsement order document history is created successfully", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+
+        public async Task<Response<bool>> CreateDocumentHistory([FromBody] CreateDocumentHistoryCommand request)
+        {
+            return await Mediator.Send(request);
+        }
 
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
@@ -166,7 +181,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<Response<bool>> ApproveOrderDocument(ApproveOrderDocumentCommand command)
         {
-           return await Mediator.Send(command);
+            return await Mediator.Send(command);
         }
 
         /// <summary>
@@ -214,7 +229,7 @@ namespace Api.Controllers
             return Ok(result);
         }
 
-     
+
 
 
         /// <summary>
@@ -387,7 +402,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWatchApprovalDetailAsync([FromQuery] string orderId)
         {
-           var response= await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
+            var response = await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
             return Ok(response);
         }
 

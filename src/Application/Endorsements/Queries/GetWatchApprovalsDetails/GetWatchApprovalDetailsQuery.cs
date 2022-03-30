@@ -26,7 +26,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
         }
         public async Task<Response<GetWatchApprovalDetailsDto>> Handle(GetWatchApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = await _context.Orders.Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetWatchApprovalDetailsDto 
+            var response = await _context.Orders.Include(x=>x.Customer).Include(x=>x.DocumentHistories).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetWatchApprovalDetailsDto 
             { OrderId = x.OrderId, 
                 Title = x.Title,
                 NameAndSurname = x.Customer.FirstName+" "+x.Customer.LastName,
@@ -36,7 +36,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
                 MaxRetryCount = x.Config.MaxRetryCount,
                 RetryFrequence = x.Config.RetryFrequence,
                 ExpireInMinutes = x.Config.ExpireInMinutes,
-                History = new List<GetWatchApprovalDetailsHistoryDto> { new GetWatchApprovalDetailsHistoryDto { State = "Okudum,anladım", Name = "Mng Hayat Teklif Alma İzni", CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm") } },
+                History = x.DocumentHistories.Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm"), Name = x.Name, State = x.State }).ToList(),
                 Documents = x.Documents.Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name, TypeName = x.Type == "HTML" ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault().Title }).ToList() }).FirstOrDefaultAsync();
             return Response<GetWatchApprovalDetailsDto>.Success(response, 200);
         }

@@ -27,7 +27,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
         public async Task<Response<List<GetMyApprovalDetailsDto>>> Handle(GetMyApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
 
-            var list = _context.Documents.Include(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
+            var list = _context.Documents.Include(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x=>x.DocumentHistories).Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
             {
                 Title = x.Order.Title,
                 Name = x.Name,
@@ -37,7 +37,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                 .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title, Type = x.Type, State = x.State }).ToList(),
                 PDFActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.PDF.ToString())
                  .Select(x => new Action { IsDefault = x.IsDefault, Title = x.Title, Type = x.Type, State = x.State }).ToList(),
-                History=new List<GetMyApprovalDetailHistoryDto> { new GetMyApprovalDetailHistoryDto {State="Okudum,anladım",Name="Mng Hayat Teklif Alma İzni",CreatedDate=DateTime.Now.ToString("dd MM yyyy HH:mm") } }
+                History=x.DocumentHistories.Select(x=> new GetMyApprovalDetailHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm") ,Name=x.Name,State=x.State}).ToList()
             }).ToList();
             return Response<List<GetMyApprovalDetailsDto>>.Success(list, 200);
         }
