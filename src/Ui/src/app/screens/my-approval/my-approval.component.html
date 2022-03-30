@@ -2,7 +2,7 @@
   <div class="box">
     <app-list-item *ngFor="let d of data" [data]="d" [routerLink]="['./detail', d.orderId]"></app-list-item>
   </div>
-  <div class="d-flex align-items-center justify-content-end mt-3">
+  <div class="d-flex align-items-center justify-content-end mt-3" *ngIf="data && data.length > 0">
     <span>Page:</span>
     <select class="form-control-sm ms-2 me-2" [(ngModel)]="pageNumber" (change)="getEndorsementList()">
       <option *ngFor='let i of counter(totalPages); let val = index'  [value]="val+1">{{val + 1}}</option>

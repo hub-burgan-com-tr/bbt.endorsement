@@ -1,11 +1,11 @@
 export interface IApprover {
-  citizenshipNumber: string;
+  citizenshipNumber: number;
   first: string;
   last: string;
 }
 
 export default class Approver implements IApprover {
-  citizenshipNumber: string;
+  citizenshipNumber: number;
   first: string;
   last: string;
 }
