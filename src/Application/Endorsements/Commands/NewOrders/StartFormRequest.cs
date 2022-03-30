@@ -9,12 +9,6 @@
         public OrderReference Reference { get; set; }
         public OrderApprover Approver { get; set; }
 
-        public class OrderApprover
-        {
-            public long CitizenshipNumber { get; set; }
-            public string First { get; set; }
-            public string Last { get; set; }
-        }
     }
 
     public class FormDefinitionClass
