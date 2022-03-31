@@ -40,7 +40,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                         Content=y.Content,
                         Link=y.Name,
                         Name=y.Name,
-                        Choice = y.FormDefinitionId != null ? y.FormDefinition.FormDefinitionActions.FirstOrDefault().IsDefault ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected : y.DocumentActions.Any(y=>y.IsDefault) ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected,
+                        
                        DocumentId = y.DocumentId,
                         Actions=y.FormDefinitionId!=null?y.FormDefinition.FormDefinitionActions.Select(z=>new DocumentAction {Value=z.IsDefault?(int)DocumentApprovedEnum.Approved:(int)DocumentApprovedEnum.Rejected,DocumentActionId=z.FormDefinitionActionId,Title=z.Title }).ToList():y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.IsDefault ? (int)DocumentApprovedEnum.Approved : (int)DocumentApprovedEnum.Rejected, Title=z.Title}).ToList()
                     }).ToList(),                

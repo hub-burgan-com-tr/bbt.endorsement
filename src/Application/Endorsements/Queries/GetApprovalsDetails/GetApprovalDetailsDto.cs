@@ -20,7 +20,6 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
     {
         public string DocumentId { get; internal set; }
         public string Name { get; set; }
-        public int Choice { get; set; }
         public string Content { get; set; }
         public string Link { get; set; }
 
