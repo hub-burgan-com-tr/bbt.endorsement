@@ -15,6 +15,14 @@
     <button class="btn btn-primary" [routerLink]="['../']">Tamam</button>
   </div>
 </ngx-smart-modal>
+<ngx-smart-modal #error identifier="error" customClass="error">
+  <h1>Hata!</h1>
+  <p>Belge eklemeden ilerleyemezsiniz.</p>
+
+  <div class="button-container">
+    <button class="btn btn-danger" (click)="error.close()">Tamam</button>
+  </div>
+</ngx-smart-modal>
 <app-main-content blockTitle="Yeni Onaylama Emri" subTitle="Yeni Onay Emri | Emir Detay">
   <div class="box custom-padding mb-4">
     <div class="row align-items-center">
@@ -232,14 +240,14 @@
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="expireInMinutes">Geçerlilik</label>
-              <input type="text" class="form-control" id="expireInMinutes" name="expireInMinutes"
+              <input type="text" class="form-control" id="expireInMinutes" name="expireInMinutes" onlyNumber
                      formControlName="expireInMinutes">
             </div>
           </div>
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="retryFrequence">Hatırlatma Frekansı</label>
-              <input type="text" class="form-control" id="retryFrequence" name="retryFrequence"
+              <input type="text" class="form-control" id="retryFrequence" name="retryFrequence" onlyNumber
                      formControlName="retryFrequence"
                      [ngClass]="{ 'is-invalid': submitted && fc.retryFrequence.invalid }">
               <div *ngIf="submitted && fc.retryFrequence.errors" class="invalid-feedback">

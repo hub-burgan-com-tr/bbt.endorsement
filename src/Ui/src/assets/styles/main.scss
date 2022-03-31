@@ -160,37 +160,49 @@ app-root {
   }
 
   ngx-smart-modal {
+
     .overlay {
       display: flex;
       justify-content: center;
       align-items: center;
+.nsm-dialog{
+  &.error{
+    .nsm-content{
+      .nsm-body{
+        h1{
+          color: red;
+        }
+      }
+    }
+  }
+  .nsm-content {
+    border-radius: 10px;
 
-      .nsm-content {
-        border-radius: 10px;
+    .nsm-body {
+      h1 {
+        color: #0099d8;
+        font-size: 20px;
+      }
 
-        .nsm-body {
-          h1 {
-            color: #0099d8;
-            font-size: 20px;
-          }
+      .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 20px;
 
-          .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-top: 20px;
+        button {
+          width: 100%;
 
-            button {
-              width: 100%;
-
-              &:not(:last-child) {
-                margin-bottom: 10px;
-              }
-            }
+          &:not(:last-child) {
+            margin-bottom: 10px;
           }
         }
       }
+    }
+  }
+}
+
 
     }
   }

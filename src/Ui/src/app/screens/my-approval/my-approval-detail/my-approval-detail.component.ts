@@ -90,6 +90,9 @@ export class MyApprovalDetailComponent implements OnInit {
           if (res.data) {
             this.title = res.data.title
             this.details = res.data.documents
+            if (this.details.length === 1) {
+              this.buttonText = 'Kaydet';
+            }
           } else
             console.error("Kayıt bulunamadı");
         },

@@ -208,6 +208,10 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   }
 
   onSubmit() {
+    if (this.model.documents.length === 0) {
+      this.modal.open('error');
+      return;
+    }
     this.submitted = true;
     if (this.formGroup.valid) {
       this.model.documents.map(x => {

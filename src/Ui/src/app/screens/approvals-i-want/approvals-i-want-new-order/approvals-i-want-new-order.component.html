@@ -50,13 +50,13 @@
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="expireInMinutes">Geçerlilik</label>
-              <input type="text" class="form-control" id="expireInMinutes" name="expireInMinutes" formControlName="expireInMinutes">
+              <input type="text" class="form-control" id="expireInMinutes" name="expireInMinutes" onlyNumber formControlName="expireInMinutes">
             </div>
           </div>
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="retryFrequence">Hatırlatma Frekansı</label>
-              <input type="text" class="form-control" id="retryFrequence" name="retryFrequence"
+              <input type="text" class="form-control" id="retryFrequence" name="retryFrequence" onlyNumber
                      formControlName="retryFrequence"
                      [ngClass]="{ 'is-invalid': submitted && fc.retryFrequence.invalid }">
               <div *ngIf="submitted && fc.retryFrequence.errors" class="invalid-feedback">
