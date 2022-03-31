@@ -76,7 +76,7 @@ namespace Worker.App.Infrastructure.Services
                     {
                         Title = y.Title,
                         State = y.State,
-                        IsDefault = y.IsDefault
+                        Choice = y.Choice
                     })
                 }).FirstOrDefault();
 

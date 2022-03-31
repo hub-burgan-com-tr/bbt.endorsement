@@ -19,7 +19,7 @@ namespace Worker.App.Domain.Entities
         public string Type { get; set; }
         [MaxLength(50)]
         public string State { get; set; }
-        public bool IsDefault { get; set; }
+        public int Choice { get; set; }
         public virtual Document Document { get; set; }
 
     }

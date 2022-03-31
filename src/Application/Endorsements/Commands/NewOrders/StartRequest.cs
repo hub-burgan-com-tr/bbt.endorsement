@@ -30,7 +30,7 @@
     }
     public class DocumentAction
     {
-        public bool IsDefault { get; set; }
+        public int Choice { get; set; }
         public string Title { get; set; }
         public ActionType Type { get; set; }
     }
@@ -61,7 +61,7 @@
     }
     public enum ContentType { HTML, PDF, PlainText }
     public enum CalbackMode { Completed, Verbose }
-    public enum ActionType { Approve, Reject }
+    public enum ActionType { Approve=1, Reject=2 }
 
     public class OrderApprover_
     {

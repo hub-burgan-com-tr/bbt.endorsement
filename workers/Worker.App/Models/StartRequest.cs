@@ -25,7 +25,7 @@ public class StartRequest
 
         public class DocumentAction
         {
-            public bool IsDefault { get; set; }
+            public int Choice { get; set; }
             public string Title { get; set; }
             public ActionType Type { get; set; }
         }

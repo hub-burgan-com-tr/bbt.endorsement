@@ -19,7 +19,7 @@
     }
     public class Action
     {
-        public bool IsDefault { get; set; }
+        public int Choice { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
         public string State { get; set; }

@@ -35,7 +35,7 @@ public class OrderDetail
         public ActionClass[] Actions { get; set; }
         public class ActionClass
         {
-            public bool IsDefault { get; set; }
+            public int Choice { get; set; }
             public string Title { get; set; }
             public ActionType State { get; set; }
             public enum ActionType { Approved, Rejected }

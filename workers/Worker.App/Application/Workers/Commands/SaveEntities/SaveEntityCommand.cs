@@ -63,9 +63,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 {
                     DocumentActionId = Guid.NewGuid().ToString(),
                     Created = _dateTime.Now,
-                    IsDefault = action.IsDefault,
+                    Choice = action.Choice,
                     Title = action.Title,
-                    Type = action.IsDefault ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
+                    Type = action.Choice==(int)ActionType.Approve ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
                 });
             }
 
@@ -126,9 +126,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                         {
                             DocumentActionId = Guid.NewGuid().ToString(),
                             Created = _dateTime.Now,
-                            IsDefault = action.IsDefault,
+                            Choice = action.Choice,
                             Title = action.Title,
-                            Type = action.IsDefault ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
+                            Type = action.Choice==(int)ActionType.Approve ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
                         });
                     }
                 }
