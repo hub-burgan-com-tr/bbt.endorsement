@@ -1,0 +1,562 @@
+﻿{
+  "display": "form",
+  "settings": {
+    "pdf": {
+      "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+      "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+    }
+  },
+  "components": [
+    {
+      "label": "Text Field",
+      "hideLabel": true,
+      "disabled": true,
+      "tableView": true,
+      "defaultValue": "                              SIGORTA BASVURU FORMU",
+      "clearOnHide": false,
+      "key": "textField",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "label": "Sigortalı Adı/Ünvanı",
+      "labelPosition": "left-left",
+      "labelWidth": 40,
+      "labelMargin": 1,
+      "tableView": true,
+      "key": "sigortaliAdiUnvani",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "label": "Sigortalı VKN/TCKN",
+      "labelPosition": "left-left",
+      "labelWidth": 40,
+      "labelMargin": 1,
+      "tableView": true,
+      "key": "sigortaliVknTckn",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "label": "Sigorta Ettiren Adı/Ünvanı",
+      "labelPosition": "left-left",
+      "labelWidth": 40,
+      "labelMargin": 1,
+      "tableView": true,
+      "key": "sigortaEttirenAdiUnvani",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "label": "Sigorta Ettiren VKN/TCKN",
+      "labelPosition": "left-left",
+      "labelWidth": 40,
+      "labelMargin": 1,
+      "tableView": true,
+      "key": "sigortaEttirenVknTckn",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "label": "Daini Mürtehin",
+      "labelPosition": "left-left",
+      "labelWidth": 40,
+      "labelMargin": 1,
+      "tableView": true,
+      "key": "dainiMurtehin",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "label": "Sigorta Türü",
+      "optionsLabelPosition": "right",
+      "tableView": false,
+      "defaultValue": {
+        "kasko": false,
+        "dask": false,
+        "esya": false,
+        "konut": false,
+        "trafik": false,
+        "isyeri": false,
+        "diger": false
+      },
+      "values": [
+        {
+          "label": "Konut Eşya",
+          "value": "esya",
+          "shortcut": ""
+        },
+        {
+          "label": "Konut",
+          "value": "konut",
+          "shortcut": ""
+        },
+        {
+          "label": "DASK",
+          "value": "dask",
+          "shortcut": ""
+        },
+        {
+          "label": "Kasko",
+          "value": "kasko",
+          "shortcut": ""
+        },
+        {
+          "label": "Trafik",
+          "value": "trafik",
+          "shortcut": ""
+        },
+        {
+          "label": "İşyeri",
+          "value": "isyeri",
+          "shortcut": ""
+        },
+        {
+          "label": "Diğer",
+          "value": "diger",
+          "shortcut": ""
+        }
+      ],
+      "key": "sigortaTuru",
+      "type": "selectboxes",
+      "input": true,
+      "inputType": "checkbox"
+    },
+    {
+      "label": "Diğer Sigorta Türü Bilgileri",
+      "labelPosition": "left-left",
+      "labelWidth": 40,
+      "tableView": true,
+      "key": "digerSigortaTuruBilgileri",
+      "customConditional": "show = data.sigortaTuru.diger || data.sigortaTuru.diger;",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "title": "Konut/Konut Eşya/DASK için",
+      "collapsible": false,
+      "key": "panelKonut",
+      "properties": {
+        "": "fff"
+      },
+      "customConditional": "show = data.sigortaTuru.dask ||  data.sigortaTuru.konut  || data.sigortaTuru.esya",
+      "conditional": {
+        "eq": "adres kodu"
+      },
+      "type": "panel",
+      "label": "Panel",
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "label": "Adres kodu  (UAVT kodu) ",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "adresKoduUavtKodu",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Bina m2",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "binaM2",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Bina sigorta  değeri",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "binaSigortaDegeri",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Eşya sigorta  değeri",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "esyaSigortaDegeri",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Bina yapım  yılı",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "binaYapimYili",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Toplam kat adedi",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "toplamKatAdedi",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Bulunduğu kat",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "bulunduguKat",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Riziko Adresi",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "rizikoAdresi",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": false,
+          "defaultValue": false,
+          "key": "ekteIletilenMevcutPoliceSartlarimaGoreDuzenlensin1",
+          "conditional": {
+            "show": true
+          },
+          "type": "checkbox",
+          "input": true
+        }
+      ]
+    },
+    {
+      "title": "Kasko Trafik İçin",
+      "collapsible": false,
+      "key": "panelKasko",
+      "customConditional": "show = data.sigortaTuru.kasko || data.sigortaTuru.trafik;",
+      "conditional": {
+        "show": true,
+        "eq": "Belge Seri No"
+      },
+      "type": "panel",
+      "label": "Panel",
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "label": "Plaka",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "plaka",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Belge Seri No",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "textField1",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Araç marka  model",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "aracMarkaModel",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Araç marka  kodu",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "aracMarkaKodu",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Motor / Şase no",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "motorSaseNo",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Sigortalı Adresi",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "sigortaliAdres",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": false,
+          "defaultValue": false,
+          "key": "ekteIletilenMevcutPoliceSartlarimaGoreDuzenlensin",
+          "conditional": {
+            "show": true
+          },
+          "type": "checkbox",
+          "input": true
+        }
+      ]
+    },
+    {
+      "title": "İşyeri İçin",
+      "collapsible": false,
+      "key": "panelIsyeri",
+      "conditional": {
+        "show": true,
+        "when": "sigortaTuru",
+        "eq": "isyeri"
+      },
+      "type": "panel",
+      "label": "Panel",
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "label": "Adres kodu  (UAVT kodu) ",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "adresKoduUavtKodu1",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Bina m2",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "binaM3",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Bina sigorta  değeri",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "binaSigortaDegeri1",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Eşya sigorta  değeri",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "esyaSigortaDegeri1",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Elektronik cihaz  değeri",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "esyaSigortaDegeri2",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Makine kırılması  değeri",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "esyaSigortaDegeri3",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Demirbaş  değeri",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "esyaSigortaDegeri5",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "Riziko Adresi",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "validate": {
+            "required": true
+          },
+          "key": "rizikoAdresi1",
+          "type": "textfield",
+          "input": true
+        },
+        {
+          "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": false,
+          "defaultValue": false,
+          "key": "ekteIletilenMevcutPoliceSartlarimaGoreDuzenlensin2",
+          "conditional": {
+            "show": true
+          },
+          "type": "checkbox",
+          "input": true
+        },
+        {
+          "label": "İşyeri İçin Varsa Ek Bedel ve Bilgiler :",
+          "labelPosition": "left-left",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "tableView": true,
+          "key": "rizikoAdresi2",
+          "type": "textfield",
+          "input": true
+        }
+      ]
+    },
+    {
+      "label": "Text Area",
+      "rows": 2,
+      "autoExpand": false,
+      "tabindex": "0",
+      "hideLabel": true,
+      "disabled": true,
+      "tableView": true,
+      "defaultValue": "Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i \nmürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.",
+      "protected": true,
+      "key": "textArea",
+      "type": "textarea",
+      "input": true
+    },
+    {
+      "label": "Text Area",
+      "rows": 0,
+      "autoExpand": false,
+      "hideLabel": true,
+      "showWordCount": true,
+      "showCharCount": true,
+      "autofocus": true,
+      "disabled": true,
+      "tableView": true,
+      "defaultValue": "Yukarıda beyan etmiş olduğum bilgiler çerçevesinde sigorta talebimin alınmasını ve tarafıma sigorta teklifinin yapılmasını \ntalep ederim.",
+      "key": "textArea1",
+      "type": "textarea",
+      "input": true
+    },
+    {
+      "label": "Text Area",
+      "autoExpand": false,
+      "hideLabel": true,
+      "disabled": true,
+      "tableView": true,
+      "defaultValue": "Sigorta poliçesi talebiniz kapsamında paylaştığınız kişisel verilerinize ilişkin 6698 sayılı Kişisel Verilerin Korunması Kanunu hakkındaki detaylı bilgilendirmeye \nwww.burgan.com.tr adresinden ulaşabilirsiniz.",
+      "key": "textArea2",
+      "type": "textarea",
+      "input": true
+    }
+  ]
+}
