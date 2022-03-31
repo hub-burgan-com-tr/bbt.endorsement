@@ -3,6 +3,7 @@ using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
 using Application.Models;
 using Domain.Enum;
+using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using System.Text.Json;
@@ -29,6 +30,9 @@ namespace Application.Endorsements.Commands.NewOrderForms
 
         public async Task<Response<NewOrderFormResponse>> Handle(NewOrderFormCommand request, CancellationToken cancellationToken)
         {
+            NewOrderFormCommandValidator validator = new NewOrderFormCommandValidator();
+            ValidationResult result = validator.Validate(request);
+            validator.ValidateAndThrow(request);
             var instanceId = request.Request.Id;
 
             var config = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == request.Request.FormId);
