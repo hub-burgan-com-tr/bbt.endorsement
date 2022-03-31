@@ -1,0 +1,13 @@
+{
+  "environmentVariables": {
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  },
+  "profiles": {
+    "Worker.App": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
