@@ -109,7 +109,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<int>("ExpireInMinutes")
+                    b.Property<int?>("ExpireInMinutes")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModified")
@@ -119,7 +119,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<int>("MaxRetryCount")
+                    b.Property<int?>("MaxRetryCount")
                         .HasColumnType("int");
 
                     b.Property<int>("RetryFrequence")

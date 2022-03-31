@@ -13,7 +13,7 @@ namespace Domain.Entities
         /// <summary>
         ///  emrin geçerlilik süresi dakika olarak tanımlanır. 
         /// </summary>
-        public int ExpireInMinutes { get; set; }
+        public int? ExpireInMinutes { get; set; }
 
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Domain.Entities
         /// <summary>
         /// kullanıcıya kaç defa hatırlatma yapılacağı bilgisini içerir. 
         /// </summary>
-        public int MaxRetryCount { get; set; }
+        public int? MaxRetryCount { get; set; }
 
 
         public virtual Order Order { get; set; }

@@ -18,9 +18,9 @@
         /// <summary>
         /// Geçerlilik
         /// </summary>
-        public int MaxRetryCount { get; set; }
+        public int? MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
-        public int ExpireInMinutes { get; set; }
+        public int? ExpireInMinutes { get; set; }
 
         /// <summary>
         /// Belgeler
