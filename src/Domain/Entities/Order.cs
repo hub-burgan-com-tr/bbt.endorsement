@@ -45,7 +45,7 @@ namespace Domain.Entities
         public virtual Approver Approver { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
-        public virtual ICollection<DocumentHistory> DocumentHistories { get; set; }
+        public virtual ICollection<OrderHistory> OrderHistories { get; set; }
 
 
     }

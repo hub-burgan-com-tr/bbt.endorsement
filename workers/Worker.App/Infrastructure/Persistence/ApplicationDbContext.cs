@@ -21,7 +21,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<Callback> Callbacks { get; set; }
     public virtual DbSet<Config> Configs { get; set; }
     public virtual DbSet<Document> Documents { get; set; }
-    public virtual DbSet<DocumentHistory> DocumentHistories { get; set; }
+    public virtual DbSet<OrderHistory> OrderHistories { get; set; }
     public virtual DbSet<FormDefinition> FormDefinitions { get; set; }
     public virtual DbSet<FormDefinitionTag> FormDefinitionTags { get; set; }
     public virtual DbSet<DocumentAction> DocumentActions { get; set; }

@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    [Table("DocumentHistory", Schema = "order")]
+    [Table("OrderHistory", Schema = "order")]
 
-    public class DocumentHistory : AuditableEntity
+    public class OrderHistory : AuditableEntity
     {
         [Key]
         [MaxLength(36)]
-        public string DocumentHistoryId { get; set; }
+        public string OrderHistoryId { get; set; }
         [MaxLength(36)]
         [Required]
         public string OrderId { get; set; }

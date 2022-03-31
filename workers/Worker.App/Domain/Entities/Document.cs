@@ -29,7 +29,7 @@ namespace Worker.App.Domain.Entities
         public string State { get; set; }
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
-        public virtual ICollection<DocumentHistory> DocumentHistories { get; set; }
+        public virtual ICollection<OrderHistory> OrderHistories { get; set; }
         public virtual ICollection<DocumentAction> DocumentActions { get; set; }
     }
 }

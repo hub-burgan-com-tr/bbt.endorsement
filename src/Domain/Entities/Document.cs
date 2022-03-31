@@ -30,7 +30,7 @@ namespace Domain.Entities
         public virtual Order Order { get; set; }
 
         public virtual ICollection<DocumentAction> DocumentActions { get; set; }
-        public virtual ICollection<DocumentHistory> DocumentHistories { get; set; }
+        public virtual ICollection<OrderHistory> OrderHistories { get; set; }
 
     }
 }

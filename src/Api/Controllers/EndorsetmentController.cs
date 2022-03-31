@@ -19,7 +19,7 @@ using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Enum;
-using Application.Endorsements.Commands.CreateDocumentHistory;
+using Application.Endorsements.Commands.CreateOrderHistory;
 
 namespace Api.Controllers
 {
@@ -46,16 +46,16 @@ namespace Api.Controllers
         }
 
         [SwaggerOperation(
-           Summary = "create document history",
+           Summary = "create order history",
           Description = "canceled order")]
-        [Route("create-document-history")]
+        [Route("create-order-history")]
         [HttpPost]
         [SwaggerResponse(200, "Success, create document history successfully.", typeof(bool))]
         [SwaggerResponse(201, "Success, endorsement order document history is created successfully", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
 
-        public async Task<Response<bool>> CreateDocumentHistory([FromBody] CreateDocumentHistoryCommand request)
+        public async Task<Response<bool>> CreateOrderHistory([FromBody] CreateOrderHistoryCommand request)
         {
             return await Mediator.Send(request);
         }

@@ -7,29 +7,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Endorsements.Commands.CreateDocumentHistory
+namespace Application.Endorsements.Commands.CreateOrderHistory
 {
-    public class CreateDocumentHistoryCommand : IRequest<Response<bool>>
+    public class CreateOrderHistoryCommand : IRequest<Response<bool>>
     {
         public string OrderId { get; set; }
         public string DocumentId { get; set; }
         public string State { get; set; }
         public string Name { get; set; }
 
-        public class DocumentHistoryCommandHandler : IRequestHandler<CreateDocumentHistoryCommand, Response<bool>>
+        public class OrderHistoryCommandHandler : IRequestHandler<CreateOrderHistoryCommand, Response<bool>>
         {
             private readonly IApplicationDbContext _context;
 
-            public DocumentHistoryCommandHandler(IApplicationDbContext context)
+            public OrderHistoryCommandHandler(IApplicationDbContext context)
             {
                 _context = context;
             }
 
-            public async Task<Response<bool>> Handle(CreateDocumentHistoryCommand request, CancellationToken cancellationToken)
+            public async Task<Response<bool>> Handle(CreateOrderHistoryCommand request, CancellationToken cancellationToken)
             {
-                _context.DocumentHistories.Add(new Domain.Entities.DocumentHistory
+                _context.OrderHistories.Add(new Domain.Entities.OrderHistory
                 {
-                    DocumentHistoryId=Guid.NewGuid().ToString(),
+                    OrderHistoryId=Guid.NewGuid().ToString(),
                     OrderId=request.OrderId,
                     DocumentId=request.DocumentId,
                     State=request.State,
