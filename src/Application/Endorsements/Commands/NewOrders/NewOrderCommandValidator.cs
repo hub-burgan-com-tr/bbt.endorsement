@@ -6,19 +6,28 @@ namespace Application.Endorsements.Commands.NewOrders
     {
         public NewOrderCommandValidator()
         {
+
             RuleFor(v => v.StartRequest).SetValidator(new StartRequestValidator());
-         //   RuleFor(model => model.StartRequest.Documents)
-         //  .Must(collection => collection.All(item => item.Type.ToString() == ContentType.PDF.ToString() && string.IsNullOrEmpty(item.Content)))
-         //  .WithMessage("Lütfen dosya seçiniz");
-         //   RuleFor(model => model.StartRequest.Documents)
-         //  .Must(collection => collection.All(item => item.Type.ToString() == ContentType.PlainText.ToString() && string.IsNullOrEmpty(item.Content)))
-         //  .WithMessage("Metin girilmelidir.");
-         //   RuleFor(model => model.StartRequest.Documents)
-         //  .Must(collection => collection.All(item => item.Type.ToString() == ContentType.PlainText.ToString() && string.IsNullOrEmpty(item.Title)))
-         //  .WithMessage("Başlık girilmelidir.");
-         //   RuleFor(model => model.StartRequest.Documents)
-         //.Must(collection => collection.All(item => item.Actions.All(item2 => string.IsNullOrEmpty(item2.Title))))
-         //.WithMessage("Lütfen seçenek ekleyiniz.");
+            RuleFor(x => x.StartRequest.Documents).NotEmpty().WithMessage("Belge eklemeden ilerleyemezsiniz.");
+
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.PDF).ChildRules(y =>
+            {
+                y.RuleFor(z => z.Content).NotEmpty().WithMessage("Lütfen dosya seçiniz");
+
+            });
+
+            RuleForEach(x => x.StartRequest.Documents).ChildRules(y => y.RuleFor(z => z.Actions).NotEmpty().WithMessage("Lütfen seçenek ekleyiniz."));
+
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.PlainText).ChildRules(y =>
+            {
+                y.RuleFor(z => z.Content).NotEmpty().WithMessage("Metin Girilmelidir");
+            });
+
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.PlainText).ChildRules(y =>
+            {
+                y.RuleFor(z => z.Title).NotEmpty().WithMessage("Başlık girilmelidir.");
+            });
+
         }
     }
 
