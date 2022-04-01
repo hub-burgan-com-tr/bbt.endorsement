@@ -40,6 +40,8 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
+    options.UseInlineDefinitionsForEnums();
+
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
     options.IncludeXmlComments(xmlPath);
