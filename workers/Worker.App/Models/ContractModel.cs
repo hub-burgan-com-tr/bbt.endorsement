@@ -22,9 +22,9 @@ namespace Worker.App.Models
         public bool RetryEnd { get; set; }
         public int Limit { get; set; }
 
-        public int MaxRetryCount { get; set; }
+        public int? MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
-        public int ExpireInMinutes { get; set; }
+        public int? ExpireInMinutes { get; set; }
 
 
         public object Document { get; set; }
