@@ -25,7 +25,7 @@ public static class FormDefinitionSeed
                 Label = label.ToString(),
                 Created = DateTime.Now,
                 Tags = "",
-                TemplateName = "sigorta_onayformu.pdf",
+                TemplateName = "tr-sigorta-onay-formu",
                 RetryFrequence = 10,
                 Mode = "Completed",
                 Url = "",
