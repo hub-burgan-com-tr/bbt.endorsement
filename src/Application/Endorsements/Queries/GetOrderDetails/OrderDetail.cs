@@ -76,9 +76,9 @@ public class OrderDetail
 
     public class OrderConfig
     {
-        public int MaxRetryCount { get; set; }
+        public int? MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
-        public int ExpireInMinutes { get; set; }
+        public int? ExpireInMinutes { get; set; }
         public string NotifyMessageSMS { get; set; }
         public string NotifyMessagePush { get; set; }
         public string RenotifyMessageSMS { get; set; }
