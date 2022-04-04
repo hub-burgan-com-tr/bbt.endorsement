@@ -14,7 +14,7 @@ namespace Application.Endorsements.Commands.CreateOrderHistory
         public string OrderId { get; set; }
         public string DocumentId { get; set; }
         public string State { get; set; }
-        public string Name { get; set; }
+        public string Description { get; set; }
 
         public class OrderHistoryCommandHandler : IRequestHandler<CreateOrderHistoryCommand, Response<bool>>
         {
@@ -32,8 +32,8 @@ namespace Application.Endorsements.Commands.CreateOrderHistory
                     OrderHistoryId=Guid.NewGuid().ToString(),
                     OrderId=request.OrderId,
                     DocumentId=request.DocumentId,
-                    State=request.State,
-                    Name=request.Name,
+                    State = request.State,
+                    Description = request.Description,
                     Created=DateTime.Now
                 });
                  var result=  _context.SaveChanges();

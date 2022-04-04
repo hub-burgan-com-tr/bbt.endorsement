@@ -45,20 +45,7 @@ namespace Api.Controllers
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, FormType = Form.Order });
         }
 
-        [SwaggerOperation(
-           Summary = "create order history",
-          Description = "canceled order")]
-        [Route("create-order-history")]
-        [HttpPost]
-        [SwaggerResponse(200, "Success, create document history successfully.", typeof(bool))]
-        [SwaggerResponse(201, "Success, endorsement order document history is created successfully", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-
-        public async Task<Response<bool>> CreateOrderHistory([FromBody] CreateOrderHistoryCommand request)
-        {
-            return await Mediator.Send(request);
-        }
+  
 
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
@@ -290,7 +277,7 @@ namespace Api.Controllers
         )]
         [Route("my-approval-detail")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried my approval detail are returned successfully.", typeof(List<GetMyApprovalDetailsDto>))]
+        [SwaggerResponse(200, "Success, queried my approval detail are returned successfully.", typeof(GetMyApprovalDetailsDto))]
         [SwaggerResponse(404, "Success but there is no my approval detail available for the query.", typeof(void))]
 
         [ProducesResponseType((int)HttpStatusCode.OK)]

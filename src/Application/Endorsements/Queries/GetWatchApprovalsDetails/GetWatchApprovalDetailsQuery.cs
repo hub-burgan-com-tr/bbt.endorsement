@@ -36,7 +36,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
                 MaxRetryCount = x.Config.MaxRetryCount,
                 RetryFrequence = x.Config.RetryFrequence,
                 ExpireInMinutes = x.Config.ExpireInMinutes,
-                History = x.OrderHistories.Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm"), Name = x.Name, State = x.State }).ToList(),
+                History = x.OrderHistories.Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
                 Documents = x.Documents.Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name, TypeName = x.Type == "HTML" ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault().Title }).ToList() }).FirstOrDefaultAsync();
             return Response<GetWatchApprovalDetailsDto>.Success(response, 200);
         }

@@ -15,14 +15,14 @@ namespace Worker.App.Domain.Entities
         [Required]
         public string OrderId { get; set; }
         [MaxLength(36)]
-        [Required]
+
         public string DocumentId { get; set; }
         [Required]
         [MaxLength(250)]
         public string State { get; set; }
         [MaxLength(250)]
         [Required]
-        public string Name { get; set; }
+        public string Description { get; set; }
         public virtual Document Document { get; set; }
         public virtual Order Order { get; set; }
     }

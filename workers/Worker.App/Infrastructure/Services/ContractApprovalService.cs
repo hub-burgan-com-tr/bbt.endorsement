@@ -5,8 +5,10 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Models;
+using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -46,7 +48,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void ErrorHandler()
     {
-        Log.Information("ErrorHandler Worker registered");
+        //Log.Information("ErrorHandler Worker registered");
 
         CreateWorker("ErrorHandler", async (jobClient, job) =>
         {
@@ -62,7 +64,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void SaveEntity()
     {
-        Log.Information("SaveEntity Worker registered ");
+       // Log.Information("SaveEntity Worker registered ");
 
         CreateWorker("SaveEntity", async (jobClient, job) =>
         {
@@ -83,6 +85,16 @@ public class ContractApprovalService : IContractApprovalService
                         Model = variables
                     });
                     variables.IsProcess = true;
+
+                    if(response != null)
+                    {
+                        var history = _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Yeni Onay Emri",
+                            Description = ""
+                        });
+                    }
                 }
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
@@ -106,7 +118,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void LoadContactInfo()
     {
-        Log.Information("LoadContactInfo Worker registered ");
+        //Log.Information("LoadContactInfo Worker registered ");
 
         CreateWorker("LoadContactInfo", async (jobClient, job) =>
         {
@@ -116,6 +128,13 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Müşteri Bilgileri",
+                Description = ""
+            });
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
@@ -123,7 +142,7 @@ public class ContractApprovalService : IContractApprovalService
     }
     private void SendOtp()
     {
-        Log.Information("SendOtp Worker registered ");
+       // Log.Information("SendOtp Worker registered ");
 
         CreateWorker("SendOtp", async (jobClient, job) =>
         {
@@ -142,6 +161,12 @@ public class ContractApprovalService : IContractApprovalService
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Hatırlatma Mesajı (Sms)",
+                    Description = ""
+                });
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
@@ -155,21 +180,11 @@ public class ContractApprovalService : IContractApprovalService
 
     private void SendPush()
     {
-        Log.Information("SendPush Worker registered ");
+        //Log.Information("SendPush Worker registered ");
 
         CreateWorker("SendPush", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-
-            try
-            {
-                throw new Exception("Hata");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
 
             if (variables != null)
                 variables.Limit += 1;
@@ -177,6 +192,13 @@ public class ContractApprovalService : IContractApprovalService
 
             string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"SendPush");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Hatırlatma Mesajı (Push Notification)",
+                Description = ""
+            });
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -186,7 +208,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void UpdateEntity()
     {
-        Log.Information("UpdateEntity Worker registered ");
+        //Log.Information("UpdateEntity Worker registered ");
 
         CreateWorker("UpdateEntity", async (jobClient, job) =>
         {
@@ -197,8 +219,15 @@ public class ContractApprovalService : IContractApprovalService
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Update Entity",
+                    Description = ""
+                });
+
                 await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data) // "{\"IsTimeOut\":\"" + true + "\"}"
+                    .Variables(data)
                     .Send();
             }
         });
@@ -206,7 +235,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void ApproveContract()
     {
-        Log.Information("ApproveContract Worker registered ");
+        //Log.Information("ApproveContract Worker registered ");
 
         CreateWorker("ApproveContract", async (jobClient, job) =>
         {
@@ -220,24 +249,58 @@ public class ContractApprovalService : IContractApprovalService
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            string[] parameters = { "", "" };
-            Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
+
+            try
+            {
+                foreach (var item in variables.Documents)
+                {
+                    var document = _mediator.Send(new UpdateDocumentStateCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        DocumentId = item.DocumentId,
+                        ActionId = item.ActionId
+                    });
+                }
+
+                string[] parameters = { "", "" };
+                Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
+
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Approve Contract",
+                    Description = ""
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
-
         });
     }
     private void DeleteEntity()
     {
-        Log.Information("DeleteEntity Worker registered ");
+       // Log.Information("DeleteEntity Worker registered ");
 
         CreateWorker("DeleteEntity", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"DeleteEntity");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Delete Entity",
+                Description = ""
+            });
+
             await jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
@@ -247,13 +310,21 @@ public class ContractApprovalService : IContractApprovalService
 
     private void ConsumeCallback()
     {
-        Log.Information("ConsumeCallback Worker registered ");
+       // Log.Information("ConsumeCallback Worker registered ");
 
         CreateWorker("ConsumeCallback", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"ConsumeCallback");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Consume Callback",
+                Description = ""
+            });
+
             await jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();

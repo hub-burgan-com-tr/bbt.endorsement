@@ -58,7 +58,7 @@
         /// <summary>
         /// Belge
         /// </summary>
-        public string Name { get; set; }
+        public string Description { get; set; }
         /// <summary>
         /// İşlem Tarihi
         /// </summary>
