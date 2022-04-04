@@ -17,7 +17,6 @@
         /// <summary>
         /// İslem No
         /// </summary>
-        public string ProcessNo { get; set; }
         /// <summary>
         /// Onay Tarihi
         /// </summary>
