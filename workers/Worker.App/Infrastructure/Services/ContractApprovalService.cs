@@ -90,8 +90,8 @@ public class ContractApprovalService : IContractApprovalService
                         var history = _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
-                            State = "",
-                            Description = "Yeni Onay Emri"
+                            State = "Yeni Onay Emri",
+                            Description = ""
                         });
                     }
                 }
@@ -127,6 +127,13 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Müşteri Bilgileri",
+                Description = ""
+            });
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
@@ -153,6 +160,12 @@ public class ContractApprovalService : IContractApprovalService
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Hatırlatma Mesajı (Sms)",
+                    Description = ""
+                });
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
@@ -172,22 +185,19 @@ public class ContractApprovalService : IContractApprovalService
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
 
-            try
-            {
-                throw new Exception("Hata");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-
-
             if (variables != null)
                 variables.Limit += 1;
             variables.IsProcess = true;
 
             string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"SendPush");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Hatırlatma Mesajı (Push Notification)",
+                Description = ""
+            });
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -208,8 +218,15 @@ public class ContractApprovalService : IContractApprovalService
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Update Entity",
+                    Description = ""
+                });
+
                 await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data) // "{\"IsTimeOut\":\"" + true + "\"}"
+                    .Variables(data)
                     .Send();
             }
         });
@@ -234,6 +251,13 @@ public class ContractApprovalService : IContractApprovalService
             string[] parameters = { "", "" };
             Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
 
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Approve Contract",
+                Description = ""
+            });
+
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
@@ -249,6 +273,14 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"DeleteEntity");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Delete Entity",
+                Description = ""
+            });
+
             await jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
@@ -265,6 +297,14 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"ConsumeCallback");
+
+            var history = _mediator.Send(new CreateOrderHistoryCommand
+            {
+                OrderId = variables.InstanceId.ToString(),
+                State = "Consume Callback",
+                Description = ""
+            });
+
             await jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
