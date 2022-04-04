@@ -1,23 +1,39 @@
-<app-main-content blockTitle="Onayladıklarım" subTitle="Onayladıklarım | Sigorta Teklif Talimatı">
+<app-main-content blockTitle="Onayladıklarım" [subTitle]="'Onayladıklarım | '+data.title">
   <div class="box mb-4">
-    <div class="title">Sigorta Teklif Talimatı</div>
-    <div class="item">
+    <div class="title">{{data.title}}</div>
+    <div class="item" *ngFor="let i of data.documents; let index = index">
       <div class="row align-items-center">
         <div class="col">
-          <div class="title">1- Mng Hayat Teklif Alma İzni</div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked disabled>
-            <label class="form-check-label" for="flexCheckChecked">
-              Okudum, Anladım
-            </label>
+          <div class="title">{{index + 1}}- {{i.name}}</div>
+          <div *ngIf="i.actions.length===1;else other_content">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="flexCheckChecked"
+                     [value]="i.actions[0].title"
+                     [checked]="i.actions[0].checked"
+                     disabled>
+              <label class="form-check-label" for="flexCheckChecked">
+                {{i.actions[0].title}}
+              </label>
+            </div>
           </div>
+          <ng-template #other_content>
+            <div class="form-check" *ngFor="let f of i.actions;let fIndex=index;">
+              <input class="form-check-input" type="radio" [name]="'flexRadioDefault'+index"
+                     [id]="'flexRadioDefault'+index+fIndex" disabled
+                     [checked]="f.checked"
+                     [value]="f.title">
+              <label class="form-check-label" [for]="'flexRadioDefault'+index+fIndex">
+                {{f.title}}
+              </label>
+            </div>
+          </ng-template>
         </div>
         <div class="col-auto">
           <img src="/assets/img/check-circle.png">
         </div>
       </div>
     </div>
-    <div class="item">
+    <!--<div class="item">
       <div class="row align-items-center">
         <div class="col">
           <div class="title">2- Mng Hayat Teklif Alma İzni</div>
@@ -39,9 +55,9 @@
           <img src="/assets/img/block2x.png">
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
-  <div class="box">
+  <div class="box" *ngIf="data&&data.history">
     <div class="title border-0">Tarihçe</div>
     <table class="table">
       <thead>
@@ -52,30 +68,10 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td class="pl-15px">Okudum, anladım</td>
-        <td>2-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">03.01.2022 15:35</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Okudum, anladım</td>
-        <td>1-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">03.01.2022 15:30</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Hatırlatma Mesajı</td>
-        <td></td>
-        <td class="fit pr-15px">03.01.2022 15:00</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Onay Belgesi Geldi</td>
-        <td>2-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">01.01.2022 12:00</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Onay Belgesi Geldi</td>
-        <td>1-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">01.01.2022 12:00</td>
+      <tr *ngFor="let i of data.history">
+        <td class="pl-15px">{{i.state}}</td>
+        <td>{{i.description}}</td>
+        <td class="fit pr-15px">{{i.createdDate}}</td>
       </tr>
       </tbody>
     </table>

@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {GetEndorsementListRequestModel} from "../../models/my-approval";
+import {Subject, takeUntil} from "rxjs";
+import {IApproveService} from "../../services/i-approve.service";
 
 @Component({
   selector: 'app-i-approve',
@@ -6,22 +9,50 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./i-approve.component.scss']
 })
 export class IApproveComponent implements OnInit {
-  data = [
-    {id: 1, title: 'Sigorta Teklif Talimatı', file: true, icon: 'check'},
-    {id: 2, title: '3. Para Birim Talimatı', file: false, icon: 'check'},
-    {id: 3, title: 'Maaş Ödeme Talimatı', file: true, icon: 'block'},
-    {id: 4, title: '1021 İşlem Onayı', file: true, icon: 'refresh'},
-    {id: 5, title: 'Avans Ödeme Talimatı', file: false, icon: 'check'},
-    {id: 6, title: 'Maaş Ödeme Talimatı', file: false, icon: 'check'},
-    {id: 7, title: '1021 İşlem Onayı', file: true, icon: 'check'},
-    {id: 8, title: 'Avans Ödeme Talimatı', file: true, icon: 'refresh'},
-    {id: 9, title: '1021 İşlem Onayı', file: false, icon: 'check'},
-  ]
+  private destroy$ = new Subject();
+  data: any = [];
 
-  constructor() {
+  pageSize = 10;
+  pageNumber = 1;
+  totalPages = 1;
+  hasNextPage = true;
+  hasPreviousPage = true;
+
+  constructor(private iApproveService: IApproveService) {
   }
 
   ngOnInit(): void {
+    this.getMyApproval();
   }
 
+  getMyApproval() {
+    let requestModel: GetEndorsementListRequestModel = {
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize
+    };
+    this.iApproveService.getMyApproval(requestModel).pipe(takeUntil(this.destroy$)).subscribe({
+      next: res => {
+        if (res.data) {
+          this.data = res.data.items;
+          this.pageNumber = res.data.pageNumber;
+          this.totalPages = res.data.totalPages;
+          this.hasNextPage = res.data.hasNextPage;
+          this.hasPreviousPage = res.data.hasPreviousPage;
+        } else
+          console.error("Kayıt bulunamadı");
+      },
+      error: err => {
+        console.error(err.message);
+      }
+    });
+  }
+
+  changePage(changeValue) {
+    this.pageNumber = this.pageNumber + changeValue;
+    this.getMyApproval();
+  }
+
+  counter(i: number) {
+    return new Array(i);
+  }
 }

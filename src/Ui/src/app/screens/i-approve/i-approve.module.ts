@@ -4,6 +4,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {IApproveComponent} from "./i-approve.component";
 import {SharedModule} from "../../modules/shared.module";
 import {IApproveDetailComponent} from "./i-approve-detail/i-approve-detail.component";
+import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
   {path: '', component: IApproveComponent},
@@ -18,7 +19,8 @@ const routes: Routes = [
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    CommonModule
+    CommonModule,
+    FormsModule
   ]
 })
 export class IApproveModule {
