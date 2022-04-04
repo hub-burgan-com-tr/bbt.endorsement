@@ -11,9 +11,7 @@
         /// <summary>
         /// Belge Onaylandı Mı
         /// </summary>
-        public List<Action> HTMLActions { get; set; }
-        public List<Action> PlainTextActions { get; set; }
-        public List<Action> PDFActions { get; set; }        
+        public List<Action> Actions { get; set; }       
         public List<GetMyApprovalDetailHistoryDto> History { get; set; }
         public string Title { get; internal set; }
     }
@@ -21,7 +19,6 @@
     {
         public int Choice { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
         public string State { get; set; }
     }
     public class GetMyApprovalDetailHistoryDto
