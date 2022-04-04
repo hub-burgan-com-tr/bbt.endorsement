@@ -37,6 +37,6 @@ namespace Worker.App.Models
         public string DocumentId { get; set; }
         public string ActionId { get; set; }
         public int Choice { get; set; }
-        public bool IsSelected { get; set; }
+        public bool? IsSelected { get; set; }
     }
 }

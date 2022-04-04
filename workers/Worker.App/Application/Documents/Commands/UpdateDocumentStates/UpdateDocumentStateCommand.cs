@@ -10,7 +10,7 @@ namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
         public string OrderId { get; set; }
         public string DocumentId { get; set; }
         public string ActionId { get; set; }
-        public bool IsSelected { get; set; }
+        public bool? IsSelected { get; set; }
     }
 
     public class UpdateDocumentStateCommandHandler : IRequestHandler<UpdateDocumentStateCommand, Response<UpdateDocumentStateResponse>>
