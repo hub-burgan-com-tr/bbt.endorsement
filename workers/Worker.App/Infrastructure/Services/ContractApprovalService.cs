@@ -91,7 +91,7 @@ public class ContractApprovalService : IContractApprovalService
                         {
                             OrderId = variables.InstanceId.ToString(),
                             State = "",
-                            Description = ""
+                            Description = "Yeni Onay Emri"
                         });
                     }
                 }
