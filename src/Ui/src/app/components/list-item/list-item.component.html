@@ -4,13 +4,13 @@
       <img [src]="'/assets/img/'+data.icon+'.png'">
     </div>
   </div>
-  <div [class]="data.name?'col-3':'col'">
+  <div [class]="data.nameAndSurname?'col-3':'col'">
     <div class="item-title">
       {{data.title}}
     </div>
   </div>
-  <div class="col" *ngIf="data.name">
-    <div class="name">{{data.name}}</div>
+  <div class="col" *ngIf="data.nameAndSurname">
+    <div class="name">{{data.nameAndSurname}}</div>
   </div>
   <div class="col" *ngIf="data.date">
     <div class="date">{{data.date}}</div>

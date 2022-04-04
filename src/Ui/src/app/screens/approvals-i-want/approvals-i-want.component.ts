@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {Subject, takeUntil} from "rxjs";
+import {ApprovalsIWantService} from "../../services/approvals-i-want.service";
 
 @Component({
   selector: 'app-approvals-i-want',
@@ -6,67 +8,50 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./approvals-i-want.component.scss']
 })
 export class ApprovalsIWantComponent implements OnInit {
-  data = [
-    {
-      id: 1,
-      title: 'Sigorta Teklif Talimatı',
-      name: 'Uğur KARATAŞ, 48545454545',
-      date: '12 Ocak 2022',
-      statusText: 'Bekliyor',
-      status: 1,
-      file: true
-    },
-    {
-      id: 2,
-      title: '3. Para Birim Talimatı',
-      name: 'Uğur KARATAŞ, 48545454545',
-      date: '12 Ocak 2022',
-      statusText: 'Onaylandı',
-      status: 2,
-      file: false
-    },
-    {
-      id: 3,
-      title: 'Maaş Ödeme Talimatı',
-      name: 'Uğur KARATAŞ, 48545454545',
-      date: '12 Ocak 2022',
-      statusText: 'Ret',
-      status: 0,
-      file: true
-    },
-    {
-      id: 4,
-      title: '1021 İşlem Onayı',
-      name: 'Uğur KARATAŞ, 48545454545',
-      date: '12 Ocak 2022',
-      statusText: 'Bekliyor',
-      status: 1,
-      file: true
-    },
-    {
-      id: 5,
-      title: 'Avans Ödeme Talimatı',
-      name: 'Uğur KARATAŞ, 48545454545',
-      date: '12 Ocak 2022',
-      statusText: 'Onaylandı',
-      status: 2,
-      file: false
-    },
-    {
-      id: 6,
-      title: 'Maaş Ödeme Talimatı',
-      name: 'Uğur KARATAŞ, 48545454545',
-      date: '12 Ocak 2022',
-      statusText: 'Ret',
-      status: 0,
-      file: false
-    }
-  ]
+  private destroy$ = new Subject();
+  data: any[];
 
-  constructor() {
+  pageSize = 10;
+  pageNumber = 1;
+  totalPages = 1;
+  hasNextPage = true;
+  hasPreviousPage = true;
+
+  constructor(private approvalsIWantService: ApprovalsIWantService) {
   }
 
   ngOnInit(): void {
+    this.getWantApproval();
   }
 
+  getWantApproval() {
+    let requestModel = {
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize
+    };
+    this.approvalsIWantService.getWantApproval(requestModel).pipe(takeUntil(this.destroy$)).subscribe({
+      next: res => {
+        if (res.data) {
+          this.data = res.data.items;
+          this.pageNumber = res.data.pageNumber;
+          this.totalPages = res.data.totalPages;
+          this.hasNextPage = res.data.hasNextPage;
+          this.hasPreviousPage = res.data.hasPreviousPage;
+        } else
+          console.error("Kayıt bulunamadı");
+      },
+      error: err => {
+        console.error(err.message);
+      }
+    });
+  }
+
+  changePage(changeValue) {
+    this.pageNumber = this.pageNumber + changeValue;
+    this.getWantApproval();
+  }
+
+  counter(i: number) {
+    return new Array(i);
+  }
 }
