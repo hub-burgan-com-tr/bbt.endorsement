@@ -1,4 +1,5 @@
 ﻿using Worker.App.Domain.Enums;
+using static Worker.App.Models.StartRequest;
 
 namespace Worker.App.Models
 {
@@ -6,7 +7,7 @@ namespace Worker.App.Models
     {
         public ContractModel()
         {
-            Documents = new List<object>();
+            Documents = new List<ApproveOrderDocument>();
         }
 
         public StartRequest StartRequest { get; set; }
@@ -27,9 +28,14 @@ namespace Worker.App.Models
         public int? ExpireInMinutes { get; set; }
 
 
-        public object Document { get; set; }
-        public List<object> Documents { get; set; }
+        public ApproveOrderDocument Document { get; set; }
+        public List<ApproveOrderDocument> Documents { get; set; }
     }
 
-
+    public class ApproveOrderDocument
+    {
+        public string DocumentId { get; set; }
+        public string ActionId { get; set; }
+        public int Choice { get; set; }
+    }
 }
