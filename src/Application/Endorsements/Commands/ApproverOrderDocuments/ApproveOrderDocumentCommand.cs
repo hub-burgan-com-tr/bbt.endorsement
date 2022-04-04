@@ -11,15 +11,13 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
     {
         public Guid OrderId { get; set; }
 
-        public List<OrderDocument> Documents { get; set; }
+        public List<ApproveOrderDocument> Documents { get; set; }
     }
-    public class OrderDocument
+    public class ApproveOrderDocument
     {
         public string DocumentId { get; set; }
         public string ActionId { get; set; }
         public int Choice { get; set; }
-
-
     }
 
     public class ApproveOrderDocumentCommandHandler : IRequestHandler<ApproveOrderDocumentCommand, Response<bool>>
