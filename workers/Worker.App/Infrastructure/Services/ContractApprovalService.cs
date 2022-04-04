@@ -245,7 +245,6 @@ public class ContractApprovalService : IContractApprovalService
                 variables.Approved = true;
                 variables.Completed = true;
                 variables.IsProcess = true;
-                variables.Documents.Add(variables.Document);
             }
             string data = "";
 
@@ -259,8 +258,7 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         OrderId = variables.InstanceId.ToString(),
                         DocumentId = item.DocumentId,
-                        ActionId = item.ActionId,
-                        IsSelected = item.IsSelected
+                        ActionId = item.ActionId
                     });
                 }
 

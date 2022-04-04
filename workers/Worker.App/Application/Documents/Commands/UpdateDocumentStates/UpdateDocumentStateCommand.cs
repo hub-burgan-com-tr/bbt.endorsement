@@ -10,7 +10,6 @@ namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
         public string OrderId { get; set; }
         public string DocumentId { get; set; }
         public string ActionId { get; set; }
-        public bool? IsSelected { get; set; }
     }
 
     public class UpdateDocumentStateCommandHandler : IRequestHandler<UpdateDocumentStateCommand, Response<UpdateDocumentStateResponse>>
@@ -32,15 +31,14 @@ namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
             if(action == null)
                 return Task.FromResult(new Response<UpdateDocumentStateResponse>());
 
-            if (request.IsSelected == true)
-            {
-                if (action.Choice == (int)ActionType.Approve)
-                    document.State = ActionType.Approve.ToString();
-                else if (action.Choice == (int)ActionType.Reject)
-                    document.State = ActionType.Reject.ToString();
-            }
-            
+            action.IsSelected = true;
+            if (action.Choice == (int)ActionType.Approve)
+                document.State = ActionType.Approve.ToString();
+            else if (action.Choice == (int)ActionType.Reject)
+                document.State = ActionType.Reject.ToString();
+
             _context.Documents.Update(document);
+            _context.DocumentActions.Update(action);
             _context.SaveChanges();
 
             return Task.FromResult(new Response<UpdateDocumentStateResponse>());
