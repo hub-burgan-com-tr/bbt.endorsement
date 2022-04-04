@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +28,7 @@ namespace Application.Endorsements.Queries.GetApprovals
         }
         public async Task<Response<PaginatedList<GetApprovalDto>>> Handle(GetApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = await _context.Orders.Include(x => x.Documents).OrderByDescending(x => x.Created).Select(x => new GetApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any() }).PaginatedListAsync(request.PageNumber, request.PageSize);
+            var list = await _context.Orders.Include(x => x.Documents).OrderByDescending(x => x.Created).Select(x => new GetApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any(x=>x.Type==ContentType.PDF.ToString()) }).PaginatedListAsync(request.PageNumber, request.PageSize);
             return Response<PaginatedList<GetApprovalDto>>.Success(list, 200);
         }
     }
