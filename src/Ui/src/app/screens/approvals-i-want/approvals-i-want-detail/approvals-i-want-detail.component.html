@@ -1,4 +1,4 @@
-<app-main-content blockTitle="İstediğim Onaylar" subTitle="İstediğim Onaylar | Sigorta Teklif Talimatı">
+<app-main-content blockTitle="İstediğim Onaylar" [subTitle]="'İstediğim Onaylar | '+data.title">
   <div right *ngIf="step" class="d-flex justify-content-end">
     <button class="btn btn-outline-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 me-3" *ngIf="step==1">İptal Et</button>
     <button class="btn btn-warning text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none no-hover" *ngIf="step==1">
@@ -38,11 +38,11 @@
       <div class="row">
         <div class="col-8">
           <div>Başlık</div>
-          <p class="fs-18 fw-600">Maaş Ödeme Talimatı</p>
+          <p class="fs-18 fw-600">{{data.title}}</p>
         </div>
         <div class="col">
           <div>Onaycı</div>
-          <p class="fs-18 fw-600">Uğur Karataş</p>
+          <p class="fs-18 fw-600">{{data.nameAndSurname}}</p>
         </div>
       </div>
     </div>
@@ -92,30 +92,10 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td class="pl-15px">Okudum, anladım</td>
-        <td>2-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">03.01.2022 15:35</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Okudum, anladım</td>
-        <td>1-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">03.01.2022 15:30</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Hatırlatma Mesajı</td>
-        <td></td>
-        <td class="fit pr-15px">03.01.2022 15:00</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Onay Belgesi Geldi</td>
-        <td>2-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">01.01.2022 12:00</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Onay Belgesi Geldi</td>
-        <td>1-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">01.01.2022 12:00</td>
+      <tr *ngFor="let h of data.history">
+        <td class="pl-15px">{{h.state}}</td>
+        <td>{{h.description}}</td>
+        <td class="fit pr-15px">{{h.createdDate}}</td>
       </tr>
       </tbody>
     </table>

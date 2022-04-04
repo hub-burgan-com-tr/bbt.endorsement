@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {GetEndorsementListRequestModel} from "../../models/my-approval";
 import {Subject, takeUntil} from "rxjs";
 import {IApproveService} from "../../services/i-approve.service";
 
@@ -26,7 +25,7 @@ export class IApproveComponent implements OnInit {
   }
 
   getMyApproval() {
-    let requestModel: GetEndorsementListRequestModel = {
+    let requestModel = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };
