@@ -22,7 +22,7 @@ namespace Worker.App.Domain.Entities
         public string State { get; set; }
         [MaxLength(250)]
         [Required]
-        public string Name { get; set; }
+        public string Description { get; set; }
         public virtual Document Document { get; set; }
         public virtual Order Order { get; set; }
     }
