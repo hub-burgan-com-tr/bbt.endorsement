@@ -30,7 +30,9 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                 .Select(x => new GetMyApprovalDetailsDto
                 {
                     Title = x.Title,
-                    Documents=x.Documents.Select(x=>new OrderDocument { Name=x.Name,Actions=x.FormDefinitionId!=null?x.FormDefinition.FormDefinitionActions.Select(x=>new Action { Choice = x.Choice, Title = x.Title, State = x.State }).ToList():x.DocumentActions.Select(x=>new Action { Choice=x.Choice,State=x.State,Title=x.Title}).ToList()}).ToList(),
+                    Documents=x.Documents.Select(x=>new OrderDocument { Name=x.Name,
+                        
+                        Actions=x.FormDefinitionId!=null?x.FormDefinition.FormDefinitionActions.Select(y=>new Action { Checked = y.State==ActionType.Approve.ToString()?true:false, Title = y.Title, DocumentId = x.DocumentId }).ToList():x.DocumentActions.Select(y=>new Action { Checked = x.State == ActionType.Approve.ToString() ? true : false, Title = y.Title, DocumentId = x.DocumentId }).ToList()}).ToList(),
                     History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
 
                 }).FirstOrDefault();
