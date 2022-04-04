@@ -12,14 +12,13 @@
     {
         public string Name { get; set; }     
         public List<Action> Actions { get; set; }
-
-
+        public int Choice { get; internal set; }
     }
     public class Action
     {
-        public int Choice { get; set; }
+        public string DocumentId { get; set; }
         public string Title { get; set; }
-        public string State { get; set; }
+        public bool Checked { get; set; }
     }
     public class GetMyApprovalDetailHistoryDto
     {
