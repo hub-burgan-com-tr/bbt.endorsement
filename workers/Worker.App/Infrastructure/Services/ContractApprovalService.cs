@@ -258,7 +258,8 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         OrderId = variables.InstanceId.ToString(),
                         DocumentId = item.DocumentId,
-                        ActionId = item.ActionId
+                        ActionId = item.ActionId,
+                        IsSelected = item.IsSelected
                     });
                 }
 
