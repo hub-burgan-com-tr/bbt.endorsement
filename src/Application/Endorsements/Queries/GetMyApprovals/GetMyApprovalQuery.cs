@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -37,7 +38,7 @@ namespace Application.Endorsements.Queries.GetMyApprovals
                 {
                     OrderId = x.OrderId,
                     Title = x.Title,
-                    IsDocument = x.Documents.Any(),
+                    IsDocument = x.Documents.Any(x => x.Type == ContentType.PDF.ToString()),
                     OrderIcon = x.State,
                 })
                 .PaginatedListAsync(request.PageNumber, request.PageSize);

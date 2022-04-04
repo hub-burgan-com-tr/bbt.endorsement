@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,7 @@ namespace Application.Endorsements.Queries.GetWantApprovals
         }
         public async Task<Response<PaginatedList<GetWantApprovalDto>>> Handle(GetWantApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = await _context.Orders.Include(x=>x.Documents).Include(x=>x.Customer).OrderByDescending(x => x.Created).Select(x => new GetWantApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any(),NameAndSurname=x.Customer.FirstName+" "+x.Customer.LastName,ProcessNo=x.Reference.ProcessNo,State=x.State,Date= x.Created.ToString("dd MMMM yyyy")
+            var list = await _context.Orders.Include(x=>x.Documents).Include(x=>x.Customer).OrderByDescending(x => x.Created).Select(x => new GetWantApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any(x => x.Type == ContentType.PDF.ToString()),NameAndSurname=x.Customer.FirstName+" "+x.Customer.LastName,ProcessNo=x.Reference.ProcessNo,State=x.State,Date= x.Created.ToString("dd MMMM yyyy")
             }).PaginatedListAsync(request.PageNumber, request.PageSize);
             return Response<PaginatedList<GetWantApprovalDto>>.Success(list, 200);
         }

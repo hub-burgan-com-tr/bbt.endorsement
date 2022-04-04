@@ -27,7 +27,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
         public async Task<Response<List<GetMyApprovalDetailsDto>>> Handle(GetMyApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
 
-            var list = _context.Documents.Include(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x=>x.OrderHistories).Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
+            var list = _context.Documents.Include(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
             {
                 Title = x.Order.Title,
                 Name = x.Name,
