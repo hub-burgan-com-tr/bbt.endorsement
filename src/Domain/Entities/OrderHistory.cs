@@ -20,7 +20,7 @@ namespace Domain.Entities
         [Required]
         public string OrderId { get; set; }
         [MaxLength(36)]
-        [Required]
+
         public string DocumentId { get; set; }
         [Required]
         [MaxLength(250)]
