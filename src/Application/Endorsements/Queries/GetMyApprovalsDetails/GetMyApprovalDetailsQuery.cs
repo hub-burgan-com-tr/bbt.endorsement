@@ -8,8 +8,8 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
 {
     public class GetMyApprovalDetailsQuery : IRequest<Response<List<GetMyApprovalDetailsDto>>>
     {/// <summary>
-    /// Onay Id
-    /// </summary>
+     /// Onay Id
+     /// </summary>
         public string OrderId { get; set; }
 
     }
@@ -27,17 +27,11 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
         public async Task<Response<List<GetMyApprovalDetailsDto>>> Handle(GetMyApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
 
-            var list = _context.Documents.Include(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
+            var list = _context.Documents.Include(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x => x.DocumentActions).Include(x => x.OrderHistories).Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
             {
                 Title = x.Order.Title,
                 Name = x.Name,
-                PlainTextActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.PlainText.ToString())
-                 .Select(x => new Action { Choice = x.Choice, Title = x.Title, Type = x.Type,State=x.State }).ToList(),
-                HTMLActions = x.FormDefinition.FormDefinitionActions
-                .Select(x => new Action { Choice = x.Choice, Title = x.Title, Type = x.Type, State = x.State }).ToList(),
-                PDFActions = x.DocumentActions.Where(x => x.Document.Type == ContentType.PDF.ToString())
-                 .Select(x => new Action { Choice = x.Choice, Title = x.Title, Type = x.Type, State = x.State }).ToList(),
-                History=x.OrderHistories.Select(x=> new GetMyApprovalDetailHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm") , Description = x.Description, State=x.State}).ToList()
+                History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
             }).ToList();
             return Response<List<GetMyApprovalDetailsDto>>.Success(list, 200);
         }
