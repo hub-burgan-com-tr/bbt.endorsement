@@ -11,9 +11,8 @@
         /// <summary>
         /// Belge Onaylandımı
         /// </summary>
-        public List<Action> HTMLActions { get; set; }
-        public List<Action> PlainTextActions { get; set; }
-        public List<Action> PDFActions { get; set; }
+        public List<Action> Actions { get; set; }
+    
 
 
     }
