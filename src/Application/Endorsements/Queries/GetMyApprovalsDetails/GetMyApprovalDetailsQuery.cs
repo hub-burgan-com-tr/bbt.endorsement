@@ -31,7 +31,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                 {
                     Title = x.Title,
                     Documents=x.Documents.Select(x=>new OrderDocument { Name=x.Name,Actions=x.FormDefinitionId!=null?x.FormDefinition.FormDefinitionActions.Select(x=>new Action { Choice = x.Choice, Title = x.Title, State = x.State }).ToList():x.DocumentActions.Select(x=>new Action { Choice=x.Choice,State=x.State,Title=x.Title}).ToList()}).ToList(),
-                    History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
+                    History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
 
                 }).FirstOrDefault();
             return Response<GetMyApprovalDetailsDto>.Success(response, 200);
