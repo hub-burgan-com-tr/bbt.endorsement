@@ -39,10 +39,6 @@ namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
                 else if (action.Choice == (int)ActionType.Reject)
                     document.State = ActionType.Reject.ToString();
             }
-            else
-            {
-
-            }
             
             _context.Documents.Update(document);
             _context.SaveChanges();
