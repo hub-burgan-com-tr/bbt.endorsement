@@ -2,18 +2,18 @@
 {
     public class GetMyApprovalDetailsDto
     {
-    
-        /// <summary>
-        /// Onay Başlık
-        /// </summary>
-        public string Name { get; set; }
 
-        /// <summary>
-        /// Belge Onaylandı Mı
-        /// </summary>
-        public List<Action> Actions { get; set; }       
-        public List<GetMyApprovalDetailHistoryDto> History { get; set; }
         public string Title { get; internal set; }
+
+        public List<OrderDocument> Documents { get; set; }
+        public List<GetMyApprovalDetailHistoryDto> History { get; set; }
+    }
+    public class OrderDocument
+    {
+        public string Name { get; set; }     
+        public List<Action> Actions { get; set; }
+
+
     }
     public class Action
     {

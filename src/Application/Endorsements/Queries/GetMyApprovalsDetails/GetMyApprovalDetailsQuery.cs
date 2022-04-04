@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Endorsements.Queries.GetMyApprovalsDetails
 {
-    public class GetMyApprovalDetailsQuery : IRequest<Response<List<GetMyApprovalDetailsDto>>>
+    public class GetMyApprovalDetailsQuery : IRequest<Response<GetMyApprovalDetailsDto>>
     {/// <summary>
      /// Onay Id
      /// </summary>
@@ -16,7 +16,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
     /// <summary>
     /// Onayladıklarım Detay Sayfası
     /// </summary>
-    public class GetMyApprovalDetailQueryHandler : IRequestHandler<GetMyApprovalDetailsQuery, Response<List<GetMyApprovalDetailsDto>>>
+    public class GetMyApprovalDetailQueryHandler : IRequestHandler<GetMyApprovalDetailsQuery, Response<GetMyApprovalDetailsDto>>
     {
         private IApplicationDbContext _context;
 
@@ -24,17 +24,17 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
         {
             _context = context;
         }
-        public async Task<Response<List<GetMyApprovalDetailsDto>>> Handle(GetMyApprovalDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetMyApprovalDetailsDto>> Handle(GetMyApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
+            var response = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Documents).ThenInclude(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x=>x.OrderHistories).Where(x => x.OrderId == request.OrderId)
+                .Select(x => new GetMyApprovalDetailsDto
+                {
+                    Title = x.Title,
+                    Documents=x.Documents.Select(x=>new OrderDocument { Name=x.Name,Actions=x.FormDefinitionId!=null?x.FormDefinition.FormDefinitionActions.Select(x=>new Action { Choice = x.Choice, Title = x.Title, State = x.State }).ToList():x.DocumentActions.Select(x=>new Action { Choice=x.Choice,State=x.State,Title=x.Title}).ToList()}).ToList(),
+                    History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
 
-            var list = _context.Documents.Include(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x => x.DocumentActions).Include(x => x.OrderHistories).Where(x => x.OrderId == request.OrderId).Select(x => new GetMyApprovalDetailsDto
-            {
-                Title = x.Order.Title,
-                Name = x.Name,
-                Actions = x.FormDefinitionId != null ? x.FormDefinition.FormDefinitionActions.Select(z => new Action { Choice = z.Choice, Title = z.Title, State = z.State }).ToList() : x.DocumentActions.Select(z => new Action { Choice = z.Choice, Title = z.Title, State = z.State }).ToList(),
-                History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = DateTime.Now.ToString("dd MM yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
-            }).ToList();
-            return Response<List<GetMyApprovalDetailsDto>>.Success(list, 200);
+                }).FirstOrDefault();
+            return Response<GetMyApprovalDetailsDto>.Success(response, 200);
         }
     }
 }
