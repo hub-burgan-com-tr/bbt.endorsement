@@ -249,7 +249,7 @@ public class ContractApprovalService : IContractApprovalService
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-
+            Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
             try
             {
                 foreach (var item in variables.Documents)
@@ -262,9 +262,6 @@ public class ContractApprovalService : IContractApprovalService
                         IsSelected = item.IsSelected
                     });
                 }
-
-                string[] parameters = { "", "" };
-                Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
 
                 var history = _mediator.Send(new CreateOrderHistoryCommand
                 {
