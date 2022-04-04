@@ -7,6 +7,7 @@ import {NgxSmartModalModule} from 'ngx-smart-modal';
 import {SharedModule} from "../../modules/shared.module";
 import {MyApprovalCompletedComponent} from "./my-approval-completed/my-approval-completed.component";
 import {FormsModule} from "@angular/forms";
+import {SafePipe} from "../../pipes/safe.pipe";
 
 const routes: Routes = [
   {path: '', component: MyApprovalComponent},
@@ -18,7 +19,8 @@ const routes: Routes = [
   declarations: [
     MyApprovalComponent,
     MyApprovalDetailComponent,
-    MyApprovalCompletedComponent
+    MyApprovalCompletedComponent,
+    SafePipe
   ],
     imports: [
         SharedModule,
