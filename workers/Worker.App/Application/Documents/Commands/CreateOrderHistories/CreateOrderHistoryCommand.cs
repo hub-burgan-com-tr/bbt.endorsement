@@ -3,14 +3,14 @@ using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Coomon.Models;
 using Worker.App.Domain.Entities;
 
-namespace Worker.AppApplication.Documents.Commands.CreateDocumentHistories;
+namespace Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 
 public class CreateOrderHistoryCommand : IRequest<Response<bool>>
 {
     public string OrderId { get; set; }
     public string DocumentId { get; set; }
     public string State { get; set; }
-    public string Name { get; set; }
+    public string Description { get; set; }
 
 }
 
@@ -31,7 +31,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             OrderId = request.OrderId,
             DocumentId = request.DocumentId,
             State = request.State,
-            Name = request.Name,
+            Description = request.Description,
             Created = DateTime.Now
         });
         var result = _context.SaveChanges();

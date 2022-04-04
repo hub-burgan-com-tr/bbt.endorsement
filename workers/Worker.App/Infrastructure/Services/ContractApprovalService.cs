@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Models;
+using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -83,6 +84,16 @@ public class ContractApprovalService : IContractApprovalService
                         Model = variables
                     });
                     variables.IsProcess = true;
+
+                    if(response != null)
+                    {
+                        var history = _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "",
+                            Description = ""
+                        });
+                    }
                 }
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
