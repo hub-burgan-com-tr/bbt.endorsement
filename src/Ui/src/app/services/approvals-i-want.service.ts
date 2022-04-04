@@ -7,24 +7,23 @@ import {ApiBaseResponseModel} from "../models/api-base-response.model";
 @Injectable({
   providedIn: 'root'
 })
-export class IApproveService {
+export class ApprovalsIWantService {
   baseUrl = environment.baseUrl;
 
   constructor(private httpClient: HttpClient) {
   }
 
-  getMyApproval(data: any) {
-    const url = `${this.baseUrl}/${ApiPaths.MyApproval}`;
+  getWantApproval(data: any) {
+    const url = `${this.baseUrl}/${ApiPaths.WantApproval}`;
     let params = new HttpParams();
     params = params.append('pageNumber', data.pageNumber);
     params = params.append('pageSize', data.pageSize);
     return this.httpClient.get<ApiBaseResponseModel>(url, {params: params});
   }
-
-  getMyApprovalDetail(orderId) {
-    const url = `${this.baseUrl}/${ApiPaths.MyApprovalDetail}`;
+  getWantApprovalDetail(orderId: any) {
+    const url = `${this.baseUrl}/${ApiPaths.WantApprovalDetail}`;
     let params = new HttpParams();
-    params = params.append('orderId', orderId);
+    params = params.append('orderId',orderId);
     return this.httpClient.get<ApiBaseResponseModel>(url, {params: params});
   }
 }

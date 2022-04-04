@@ -128,7 +128,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                             Created = _dateTime.Now,
                             Choice = action.Choice,
                             Title = action.Title,
-                            Type = action.Type.ToString()==((int)ContentType.PDF).ToString() ? ActionType.Approve.ToString() : ContentType.PlainText.ToString()
+                            Type = action.Type.ToString() == ((int)ContentType.PDF).ToString() ? ActionType.Approve.ToString() : ContentType.PlainText.ToString()
                         });
                     }
                 }

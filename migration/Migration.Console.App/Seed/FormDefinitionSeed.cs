@@ -20,7 +20,7 @@ public static class FormDefinitionSeed
 
             var formdefinition = context.FormDefinitions.Add(new FormDefinition
             {
-                FormDefinitionId = Guid.NewGuid().ToString(),
+                FormDefinitionId = "b25635e8-1abd-4768-ab97-e1285999a62a",
                 Name = "Sigorta Onay Formu",
                 Label = label.ToString(),
                 Created = DateTime.Now,
@@ -41,7 +41,7 @@ public static class FormDefinitionSeed
 
             var formdefinition2 = context.FormDefinitions.Add(new FormDefinition
             {
-                FormDefinitionId = Guid.NewGuid().ToString(),
+                FormDefinitionId = "fff57322-7417-4805-acb0-3691e8540020",
                 Name = "Sigorta Teklif Formu",
                 Label = label.ToString(),
                 Created = DateTime.Now,

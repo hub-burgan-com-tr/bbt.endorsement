@@ -9,4 +9,6 @@ export enum ApiPaths {
   ApproveOrderDocument = 'Endorsement/Approve-Order-Document',
   MyApproval = 'Endorsement/My-Approval',
   MyApprovalDetail = 'Endorsement/My-Approval-Detail',
+  WantApproval = 'Endorsement/Want-Approval',
+  WantApprovalDetail = 'Endorsement/Want-Approval-Detail',
 }

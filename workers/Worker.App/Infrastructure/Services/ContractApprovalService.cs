@@ -245,13 +245,13 @@ public class ContractApprovalService : IContractApprovalService
                 variables.Approved = true;
                 variables.Completed = true;
                 variables.IsProcess = true;
-                variables.Documents.Add(variables.Document);
             }
-            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            string data = "";
 
-
+            Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
             try
             {
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 foreach (var item in variables.Documents)
                 {
                     var document = _mediator.Send(new UpdateDocumentStateCommand
@@ -261,9 +261,6 @@ public class ContractApprovalService : IContractApprovalService
                         ActionId = item.ActionId
                     });
                 }
-
-                string[] parameters = { "", "" };
-                Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
 
                 var history = _mediator.Send(new CreateOrderHistoryCommand
                 {
