@@ -17,7 +17,6 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
     {
         public string DocumentId { get; set; }
         public string ActionId { get; set; }
-        public int Choice { get; set; }
     }
 
     public class ApproveOrderDocumentCommandHandler : IRequestHandler<ApproveOrderDocumentCommand, Response<bool>>

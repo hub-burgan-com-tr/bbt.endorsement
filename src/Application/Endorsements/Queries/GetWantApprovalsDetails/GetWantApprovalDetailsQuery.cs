@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +38,7 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
                 RetryFrequence=x.Config.RetryFrequence,
                 ExpireInMinutes=x.Config.ExpireInMinutes,
                 History = x.OrderHistories.Select(x => new GetWantApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
-                Documents =x.Documents.Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,TypeName= x.Type == "HTML" ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault().Title}).ToList() }).FirstOrDefaultAsync();
+                Documents =x.Documents.Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,TypeName= x.Type == ContentType.PlainText.ToString() ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault(y=>y.State==ActionType.Approve.ToString()).Title}).ToList() }).FirstOrDefaultAsync();
                 return Response<GetWantApprovalDetailsDto>.Success(response, 200);
         }
     }
