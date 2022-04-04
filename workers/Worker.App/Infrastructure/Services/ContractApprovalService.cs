@@ -5,6 +5,7 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Models;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
@@ -246,6 +247,17 @@ public class ContractApprovalService : IContractApprovalService
                 variables.IsProcess = true;
                 variables.Documents.Add(variables.Document);
             }
+
+            foreach (var item in variables.Documents)
+            {
+                var document = _mediator.Send(new UpdateDocumentStateCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    DocumentId = item.DocumentId,
+                    ActionId = item.ActionId
+                });
+            }
+
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             string[] parameters = { "", "" };
