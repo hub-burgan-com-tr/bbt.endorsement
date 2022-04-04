@@ -247,33 +247,41 @@ public class ContractApprovalService : IContractApprovalService
                 variables.IsProcess = true;
                 variables.Documents.Add(variables.Document);
             }
-
-            foreach (var item in variables.Documents)
-            {
-                var document = _mediator.Send(new UpdateDocumentStateCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    DocumentId = item.DocumentId,
-                    ActionId = item.ActionId
-                });
-            }
-
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            string[] parameters = { "", "" };
-            Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
 
-            var history = _mediator.Send(new CreateOrderHistoryCommand
+            try
             {
-                OrderId = variables.InstanceId.ToString(),
-                State = "Approve Contract",
-                Description = ""
-            });
+                foreach (var item in variables.Documents)
+                {
+                    var document = _mediator.Send(new UpdateDocumentStateCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        DocumentId = item.DocumentId,
+                        ActionId = item.ActionId
+                    });
+                }
+
+                string[] parameters = { "", "" };
+                Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
+
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Approve Contract",
+                    Description = ""
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
-
         });
     }
     private void DeleteEntity()
