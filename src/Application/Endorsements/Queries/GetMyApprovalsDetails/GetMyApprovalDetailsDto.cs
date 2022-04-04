@@ -12,7 +12,6 @@
     {
         public string Name { get; set; }     
         public List<Action> Actions { get; set; }
-        public int Choice { get; internal set; }
     }
     public class Action
     {

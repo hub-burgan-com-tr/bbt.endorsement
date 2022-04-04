@@ -42,7 +42,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                         Name=y.Name,
                         
                        DocumentId = y.DocumentId,
-                        Actions=y.FormDefinitionId!=null?y.FormDefinition.FormDefinitionActions.Select(z=>new DocumentAction {Value=z.Choice,DocumentActionId=z.FormDefinitionActionId,Title=z.Title }).ToList():y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.Choice, Title=z.Title}).ToList()
+                        Actions=y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.Choice, Title=z.Title}).ToList()
                     }).ToList(),                
                    }).FirstOrDefault();
           
