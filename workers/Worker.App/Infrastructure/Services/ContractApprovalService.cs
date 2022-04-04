@@ -48,7 +48,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void ErrorHandler()
     {
-        Log.Information("ErrorHandler Worker registered");
+        //Log.Information("ErrorHandler Worker registered");
 
         CreateWorker("ErrorHandler", async (jobClient, job) =>
         {
@@ -64,7 +64,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void SaveEntity()
     {
-        Log.Information("SaveEntity Worker registered ");
+       // Log.Information("SaveEntity Worker registered ");
 
         CreateWorker("SaveEntity", async (jobClient, job) =>
         {
@@ -118,7 +118,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void LoadContactInfo()
     {
-        Log.Information("LoadContactInfo Worker registered ");
+        //Log.Information("LoadContactInfo Worker registered ");
 
         CreateWorker("LoadContactInfo", async (jobClient, job) =>
         {
@@ -142,7 +142,7 @@ public class ContractApprovalService : IContractApprovalService
     }
     private void SendOtp()
     {
-        Log.Information("SendOtp Worker registered ");
+       // Log.Information("SendOtp Worker registered ");
 
         CreateWorker("SendOtp", async (jobClient, job) =>
         {
@@ -180,7 +180,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void SendPush()
     {
-        Log.Information("SendPush Worker registered ");
+        //Log.Information("SendPush Worker registered ");
 
         CreateWorker("SendPush", async (jobClient, job) =>
         {
@@ -208,7 +208,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void UpdateEntity()
     {
-        Log.Information("UpdateEntity Worker registered ");
+        //Log.Information("UpdateEntity Worker registered ");
 
         CreateWorker("UpdateEntity", async (jobClient, job) =>
         {
@@ -235,7 +235,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void ApproveContract()
     {
-        Log.Information("ApproveContract Worker registered ");
+        //Log.Information("ApproveContract Worker registered ");
 
         CreateWorker("ApproveContract", async (jobClient, job) =>
         {
@@ -278,7 +278,7 @@ public class ContractApprovalService : IContractApprovalService
     }
     private void DeleteEntity()
     {
-        Log.Information("DeleteEntity Worker registered ");
+       // Log.Information("DeleteEntity Worker registered ");
 
         CreateWorker("DeleteEntity", async (jobClient, job) =>
         {
@@ -302,7 +302,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void ConsumeCallback()
     {
-        Log.Information("ConsumeCallback Worker registered ");
+       // Log.Information("ConsumeCallback Worker registered ");
 
         CreateWorker("ConsumeCallback", async (jobClient, job) =>
         {
