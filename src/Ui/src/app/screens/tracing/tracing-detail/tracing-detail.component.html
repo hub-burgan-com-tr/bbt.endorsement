@@ -1,23 +1,15 @@
-<app-main-content blockTitle="İzleme" subTitle="İzleme | Sigorta Teklif Talimatı">
+<app-main-content blockTitle="İzleme" [subTitle]="'İzleme | '+data.title">
   <div class="box mb-4">
     <div class="title">Belgeler</div>
     <table class="table">
       <tbody>
-      <tr>
+      <tr *ngFor="let d of data.documents">
         <td class="pl-15px no-wrap">
           <img src="/assets/img/eye.png" class="c-pointer">
         </td>
-        <td>Belge</td>
-        <td>Maaş Ödeme Talimatı</td>
-        <td>(ONAY) Okudum, anladım</td>
-      </tr>
-      <tr>
-        <td class="pl-15px no-wrap">
-          <img src="/assets/img/eye.png" class="c-pointer">
-        </td>
-        <td>Metin</td>
-        <td>Maaş Ödeme Talimatı</td>
-        <td>(ONAY) Okudum, anladım</td>
+        <td>{{d.typeName}}</td>
+        <td>{{d.name}}</td>
+        <td>{{d.title}}</td>
       </tr>
       </tbody>
     </table>
@@ -27,11 +19,11 @@
       <div class="row">
         <div class="col-8">
           <div>Başlık</div>
-          <p class="fs-18 fw-600">Maaş Ödeme Talimatı</p>
+          <p class="fs-18 fw-600">{{data.title}}</p>
         </div>
         <div class="col">
           <div>Onaycı</div>
-          <p class="fs-18 fw-600">Uğur Karataş</p>
+          <p class="fs-18 fw-600">{{data.nameAndSurname}}</p>
         </div>
       </div>
     </div>
@@ -40,15 +32,15 @@
       <div class="row">
         <div class="col">
           <div>İşlem</div>
-          <p class="fs-18 fw-600">Şube Operasyon</p>
+          <p class="fs-18 fw-600">{{data.process}}</p>
         </div>
         <div class="col">
           <div>Aşama</div>
-          <p class="fs-18 fw-600">Acil Ödeme</p>
+          <p class="fs-18 fw-600">{{data.state}}</p>
         </div>
         <div class="col">
           <div>İşlem No</div>
-          <p class="fs-18 fw-600">84545415</p>
+          <p class="fs-18 fw-600">{{data.processNo}}</p>
         </div>
       </div>
     </div>
@@ -57,15 +49,15 @@
       <div class="row">
         <div class="col">
           <div>Geçerlilik</div>
-          <p class="fs-18 fw-600">60 dk</p>
+          <p class="fs-18 fw-600">{{data.expireInMinutes}} dk</p>
         </div>
         <div class="col">
           <div>Hatırlatma Frekansı</div>
-          <p class="fs-18 fw-600">10 dk</p>
+          <p class="fs-18 fw-600">{{data.retryFrequence}} dk</p>
         </div>
         <div class="col">
           <div>Hatırlatma Sayısı</div>
-          <p class="fs-18 fw-600">4</p>
+          <p class="fs-18 fw-600">{{data.maxRetryCount}}</p>
         </div>
       </div>
     </div>
@@ -121,30 +113,10 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td class="pl-15px">Okudum, anladım</td>
-        <td>2-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">03.01.2022 15:35</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Okudum, anladım</td>
-        <td>1-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">03.01.2022 15:30</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Hatırlatma Mesajı</td>
-        <td></td>
-        <td class="fit pr-15px">03.01.2022 15:00</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Onay Belgesi Geldi</td>
-        <td>2-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">01.01.2022 12:00</td>
-      </tr>
-      <tr>
-        <td class="pl-15px">Onay Belgesi Geldi</td>
-        <td>1-Mng Hayat Teklif Alma İzni</td>
-        <td class="fit pr-15px">01.01.2022 12:00</td>
+      <tr *ngFor="let h of data.history">
+        <td class="pl-15px">{{h.state}}</td>
+        <td>{{h.description}}</td>
+        <td class="fit pr-15px">{{h.createdDate}}</td>
       </tr>
       </tbody>
     </table>

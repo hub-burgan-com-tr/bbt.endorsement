@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {TracingService} from "../../services/tracing.service";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-tracing',
@@ -7,8 +9,8 @@ import {FormBuilder, FormControl, FormGroup, NgForm, Validators} from "@angular/
   styleUrls: ['./tracing.component.scss']
 })
 export class TracingComponent implements OnInit {
-  show = false;
-  data = [
+  private destroy$ = new Subject();
+  /*data = [
     {
       id: 1,
       contractName: 'Sigorta Teklif Talimatı',
@@ -87,19 +89,25 @@ export class TracingComponent implements OnInit {
       status: 0,
       file: false
     }
-  ];
+  ];*/
+  data: any;
 
+  pageSize = 10;
+  pageNumber = 1;
+  totalPages = 1;
+  hasNextPage = true;
+  hasPreviousPage = true;
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private tracingService: TracingService) {
     this.formGroup = this.fb.group({
-      approving: '',
-      seekingApproval: '',
+      customer: '',
+      approver: '',
       process: '',
-      stage: '',
-      stageNo: '',
+      state: '',
+      processNo: '',
     }, {
-      validators: this.atLeastOneHasValue(['approving', 'seekingApproval', 'process', 'stage', 'stageNo']),
+      validators: this.atLeastOneHasValue(['customer', 'approver', 'process', 'state', 'processNo']),
       updateOn: 'submit'
     });
   }
@@ -108,11 +116,13 @@ export class TracingComponent implements OnInit {
   }
 
   onSubmit() {
-    this.formGroup.valid ? this.show = true : this.show = false;
+    if (!this.formGroup.valid) {
+      return;
+    }
+    this.getWatchApproval();
   }
 
   clear(form) {
-    this.show = false;
     form.submitted = false;
     this.formGroup.reset();
   }
@@ -127,4 +137,40 @@ export class TracingComponent implements OnInit {
       return {atLeastOneValueRequired: true};
     };
   };
+
+  getWatchApproval() {
+    const model = {
+      customer: this.formGroup.get('customer')?.value,
+      approver: this.formGroup.get('approver')?.value,
+      process: this.formGroup.get('process')?.value,
+      state: this.formGroup.get('state')?.value,
+      processNo: this.formGroup.get('processNo')?.value,
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize
+    };
+    this.tracingService.getWatchApproval(model).pipe(takeUntil(this.destroy$)).subscribe({
+      next: res => {
+        if (res.data) {
+          this.data = res.data.items;
+          this.pageNumber = res.data.pageNumber;
+          this.totalPages = res.data.totalPages;
+          this.hasNextPage = res.data.hasNextPage;
+          this.hasPreviousPage = res.data.hasPreviousPage;
+        } else
+          console.error("Kayıt bulunamadı");
+      },
+      error: err => {
+        console.error(err.message);
+      }
+    });
+  }
+
+  changePage(changeValue) {
+    this.pageNumber = this.pageNumber + changeValue;
+    this.getWatchApproval();
+  }
+
+  counter(i: number) {
+    return new Array(i);
+  }
 }

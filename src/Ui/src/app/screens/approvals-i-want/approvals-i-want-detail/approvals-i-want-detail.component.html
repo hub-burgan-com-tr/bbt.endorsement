@@ -14,21 +14,13 @@
     <div class="title">Belgeler</div>
     <table class="table">
       <tbody>
-      <tr>
+      <tr *ngFor="let d of data.documents">
         <td class="pl-15px no-wrap">
           <img src="/assets/img/eye.png" class="c-pointer">
         </td>
-        <td>Belge</td>
-        <td>Maaş Ödeme Talimatı</td>
-        <td>(ONAY) Okudum, anladım</td>
-      </tr>
-      <tr>
-        <td class="pl-15px no-wrap">
-          <img src="/assets/img/eye.png" class="c-pointer">
-        </td>
-        <td>Metin</td>
-        <td>Maaş Ödeme Talimatı</td>
-        <td>(ONAY) Okudum, anladım</td>
+        <td>{{d.typeName}}</td>
+        <td>{{d.name}}</td>
+        <td>{{d.title}}</td>
       </tr>
       </tbody>
     </table>
@@ -51,15 +43,15 @@
       <div class="row">
         <div class="col">
           <div>İşlem</div>
-          <p class="fs-18 fw-600">Şube Operasyon</p>
+          <p class="fs-18 fw-600">{{data.process}}</p>
         </div>
         <div class="col">
           <div>Aşama</div>
-          <p class="fs-18 fw-600">Acil Ödeme</p>
+          <p class="fs-18 fw-600">{{data.state}}</p>
         </div>
         <div class="col">
           <div>İşlem No</div>
-          <p class="fs-18 fw-600">84545415</p>
+          <p class="fs-18 fw-600">{{data.processNo}}</p>
         </div>
       </div>
     </div>
@@ -68,15 +60,15 @@
       <div class="row">
         <div class="col">
           <div>Geçerlilik</div>
-          <p class="fs-18 fw-600">60 dk</p>
+          <p class="fs-18 fw-600">{{data.expireInMinutes}} dk</p>
         </div>
         <div class="col">
           <div>Hatırlatma Frekansı</div>
-          <p class="fs-18 fw-600">10 dk</p>
+          <p class="fs-18 fw-600">{{data.retryFrequence}} dk</p>
         </div>
         <div class="col">
           <div>Hatırlatma Sayısı</div>
-          <p class="fs-18 fw-600">4</p>
+          <p class="fs-18 fw-600">{{data.maxRetryCount}}</p>
         </div>
       </div>
     </div>
