@@ -69,7 +69,7 @@ export class MyApprovalDetailComponent implements OnInit {
           model.documents.push({
             documentId: i.documentId,
             actionId: actionId,
-            choice: i.choice
+            // choice: i.choice
           });
         }
       });

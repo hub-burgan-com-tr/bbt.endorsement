@@ -10,16 +10,16 @@
       <div class="row">
         <div class="col">
           <div class="form-group">
-            <label for="approving">Onaycı</label>
-            <input type="text" class="form-control" id="approving" name="approving" formControlName="approving"
+            <label for="customer">Onaycı</label>
+            <input type="text" class="form-control" id="customer" name="customer" formControlName="customer"
             >
           </div>
         </div>
         <div class="col">
           <div class="form-group">
-            <label for="seeking-approval">Onay İsteyen</label>
-            <input type="text" class="form-control" id="seeking-approval" name="seeking-approval"
-                   formControlName="seekingApproval">
+            <label for="approver">Onay İsteyen</label>
+            <input type="text" class="form-control" id="approver" name="approver"
+                   formControlName="approver">
           </div>
         </div>
         <div class="col">
@@ -31,28 +31,30 @@
         </div>
         <div class="col">
           <div class="form-group">
-            <label for="stage">Aşama</label>
-            <input type="text" class="form-control" id="stage" name="stage" formControlName="stage"
+            <label for="state">Aşama</label>
+            <input type="text" class="form-control" id="state" name="state" formControlName="state"
             >
           </div>
         </div>
         <div class="col">
           <div class="form-group">
-            <label for="stageNo">İşlem No</label>
-            <input type="text" class="form-control" id="stageNo" name="stageNo" formControlName="stageNo"
+            <label for="processNo">İşlem No</label>
+            <input type="text" class="form-control" id="processNo" name="processNo" formControlName="processNo"
             >
           </div>
         </div>
       </div>
       <div class="row d-flex justify-content-end mt-4">
         <div class="col-md col-md-auto col-sm-12 d-flex">
-          <button class="btn btn-outline-primary me-4 px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 w-100" type='button' (click)="clear(ngForm)">Temizle</button>
+          <button class="btn btn-outline-primary me-4 px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 w-100" type='button'
+                  (click)="clear(ngForm)">Temizle
+          </button>
           <button class="btn btn-primary px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 w-100" type="submit">Sorgula</button>
         </div>
       </div>
     </form>
   </div>
-  <div class="box" *ngIf="show">
+  <div class="box" *ngIf="data && data.length > 0">
     <table class="table table-custom">
       <thead>
       <tr>
@@ -71,14 +73,14 @@
       <tbody>
       <tr class="c-pointer"
           *ngFor="let row of data"
-          [routerLink]="['./detail']">
-        <td class="col-auto">{{row.contractName}}</td>
+          [routerLink]="['./detail']" [queryParams]="{orderId:row.orderId}">
+        <td class="col-auto">{{row.title}}</td>
+        <td class="col-auto">{{row.customer}}</td>
         <td class="col-auto">{{row.approver}}</td>
-        <td class="col-auto">{{row.personSeekingApproval}}</td>
         <td class="col-auto">{{row.process}}</td>
-        <td class="col-auto">{{row.stage}}</td>
-        <td class="col-auto">{{row.stageNo}}</td>
-        <td class="col-auto">{{row.createdDate}}</td>
+        <td class="col-auto">{{row.state}}</td>
+        <td class="col-auto">{{row.processNo}}</td>
+        <td class="col-auto">{{row.date}}</td>
         <td class="status" [ngClass]="{'danger':row.status===0,'warning':row.status===1,'success':row.status===2}">
           {{row.statusText}}
           <span class="status-box"></span>
@@ -94,5 +96,20 @@
       </tr>
       </tbody>
     </table>
+  </div>
+  <div class="d-flex align-items-center justify-content-end mt-3" *ngIf="data && data.length > 0">
+    <span>Page:</span>
+    <select class="form-control-sm ms-2 me-2" [(ngModel)]="pageNumber" (change)="getWatchApproval()">
+      <option *ngFor='let i of counter(totalPages); let val = index' [value]="val+1">{{val + 1}}</option>
+    </select>
+    <span class="me-3">of {{totalPages}}</span>
+    <button class="bi-chevron-left me-2"
+            (click)="changePage(-1)"
+            [disabled]="!hasPreviousPage"
+            [ngClass]="{'disable-paging-button':!hasPreviousPage}"></button>
+    <button class="bi-chevron-right"
+            (click)="changePage(+1)"
+            [disabled]="!hasNextPage"
+            [ngClass]="{'disable-paging-button':!hasNextPage}"></button>
   </div>
 </app-main-content>

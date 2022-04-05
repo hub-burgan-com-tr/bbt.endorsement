@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {TracingComponent} from './tracing.component';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../modules/shared.module";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TracingDetailComponent} from './tracing-detail/tracing-detail.component';
 
 const routes: Routes = [
@@ -20,7 +20,8 @@ const routes: Routes = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class TracingModule {
