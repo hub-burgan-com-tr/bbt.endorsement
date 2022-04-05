@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +28,8 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
         public async Task<Response<GetWatchApprovalDetailsDto>> Handle(GetWatchApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
             var response = await _context.Orders.Include(x=>x.Customer).Include(x=>x.OrderHistories).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetWatchApprovalDetailsDto 
-            { OrderId = x.OrderId, 
+            { 
+                OrderId = x.OrderId, 
                 Title = x.Title,
                 NameAndSurname = x.Customer.FirstName+" "+x.Customer.LastName,
                 Process = x.Reference.Process,
@@ -37,7 +39,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
                 RetryFrequence = x.Config.RetryFrequence,
                 ExpireInMinutes = x.Config.ExpireInMinutes,
                 History = x.OrderHistories.Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
-                Documents = x.Documents.Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name, TypeName = x.Type == "HTML" ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault().Title }).ToList() }).FirstOrDefaultAsync();
+                Documents = x.Documents.Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name, TypeName = x.Type == "HTML" ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.Type == ActionType.Approve.ToString()).Title }).ToList() }).FirstOrDefaultAsync();
             return Response<GetWatchApprovalDetailsDto>.Success(response, 200);
         }
     }
