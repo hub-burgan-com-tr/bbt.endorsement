@@ -39,7 +39,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
                 RetryFrequence = x.Config.RetryFrequence,
                 ExpireInMinutes = x.Config.ExpireInMinutes,
                 History = x.OrderHistories.Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
-                Documents = x.Documents.Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name, TypeName = x.Type == "HTML" ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.State == ActionType.Approve.ToString()).Title }).ToList() }).FirstOrDefaultAsync();
+                Documents = x.Documents.Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name, TypeName = x.Type == "HTML" ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.Type == ActionType.Approve.ToString()).Title }).ToList() }).FirstOrDefaultAsync();
             return Response<GetWatchApprovalDetailsDto>.Success(response, 200);
         }
     }
