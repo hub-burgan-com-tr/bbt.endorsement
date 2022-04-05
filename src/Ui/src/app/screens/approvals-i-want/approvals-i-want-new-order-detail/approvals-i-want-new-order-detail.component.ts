@@ -54,9 +54,9 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
         processNo: [this.model.reference.processNo, Validators.required],
       }),
       config: this.fb.group({
-        expireInMinutes: [this.model.config.expireInMinutes],
+        expireInMinutes: [this.model.config.expireInMinutes, Validators.required],
         retryFrequence: [this.model.config.retryFrequence, Validators.required],
-        maxRetryCount: [this.model.config.maxRetryCount],
+        maxRetryCount: [this.model.config.maxRetryCount, Validators.required],
       })
     });
     this.formGroupApproval = this.fb.group({

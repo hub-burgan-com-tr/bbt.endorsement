@@ -24,9 +24,9 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
         processNo: ['', Validators.required],
       }),
       config: this.fb.group({
-        expireInMinutes: [''],
+        expireInMinutes: ['',Validators.required],
         retryFrequence: ['', Validators.required],
-        maxRetryCount: [''],
+        maxRetryCount: ['',Validators.required],
       })
     })
   }

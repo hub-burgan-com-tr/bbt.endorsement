@@ -241,7 +241,11 @@
             <div class="form-group">
               <label for="expireInMinutes">Geçerlilik</label>
               <input type="text" class="form-control" id="expireInMinutes" name="expireInMinutes" onlyNumber
-                     formControlName="expireInMinutes">
+                     formControlName="expireInMinutes"
+                     [ngClass]="{ 'is-invalid': submitted && fc.expireInMinutes.invalid }">
+              <div *ngIf="submitted && fc.expireInMinutes.errors" class="invalid-feedback">
+                <div *ngIf="fc.expireInMinutes.errors.required">Geçerlilik girilmelidir.</div>
+              </div>
             </div>
           </div>
           <div class="col-md col-sm-12">
@@ -251,7 +255,7 @@
                      formControlName="retryFrequence"
                      [ngClass]="{ 'is-invalid': submitted && fc.retryFrequence.invalid }">
               <div *ngIf="submitted && fc.retryFrequence.errors" class="invalid-feedback">
-                <div *ngIf="fc.retryFrequence.errors.required">Hatırlatma frekansı girilmelidir.</div>
+                <div *ngIf="fc.retryFrequence.errors.required">Hatırlatma Frekansı girilmelidir.</div>
               </div>
             </div>
           </div>
@@ -259,7 +263,11 @@
             <div class="form-group">
               <label for="maxRetryCount">Hatırlatma Sayısı</label>
               <input type="text" class="form-control" id="maxRetryCount" name="maxRetryCount" onlyNumber
-                     formControlName="maxRetryCount">
+                     formControlName="maxRetryCount"
+                     [ngClass]="{ 'is-invalid': submitted && fc.maxRetryCount.invalid }">
+              <div *ngIf="submitted && fc.maxRetryCount.errors" class="invalid-feedback">
+                <div *ngIf="fc.maxRetryCount.errors.required">Hatırlatma Sayısı girilmelidir.</div>
+              </div>
             </div>
           </div>
         </div>
