@@ -35,10 +35,9 @@ public static class FormDefinitionSeed
 
             });
             formdefinition.Entity.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "" });
-
             formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,anladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
             formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,Anlamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
-
+           
             var formdefinition2 = context.FormDefinitions.Add(new FormDefinition
             {
                 FormDefinitionId = "fff57322-7417-4805-acb0-3691e8540020",
@@ -53,12 +52,35 @@ public static class FormDefinitionSeed
                 ExpireInMinutes = 60,
                 MaxRetryCount = 4,
                 Type = ContentType.PDF.ToString(),
-
-
             });
             formdefinition2.Entity.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "" });
             formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,anladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
             formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,Anlamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
+
+
+            var templateName3 = "sigorta_onayformu_test.txt";
+            var path3 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName3);
+            var label3 = File.ReadAllText(path3, Encoding.Default);
+            var formdefinition3 = context.FormDefinitions.Add(new FormDefinition
+            {
+                FormDefinitionId = "fff57322-7417-4805-acb0-3691e8540021",
+                Name = "Sigorta Teklif Formu Test",
+                Label = label3.ToString(),
+                Created = DateTime.Now,
+                Tags = "",
+                TemplateName = "Ugur",
+                RetryFrequence = 10,
+                Mode = "Completed",
+                Url = "",
+                ExpireInMinutes = 60,
+                MaxRetryCount = 4,
+                Type = ContentType.PDF.ToString(),
+            });
+            formdefinition3.Entity.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "" });
+            formdefinition3.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,anladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
+            formdefinition3.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,Anlamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
+
+
             await context.SaveChangesAsync();
         }
     }
