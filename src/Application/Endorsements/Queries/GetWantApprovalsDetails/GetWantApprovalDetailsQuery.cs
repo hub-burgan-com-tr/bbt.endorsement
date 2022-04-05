@@ -28,7 +28,8 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
         public async Task<Response<GetWantApprovalDetailsDto>> Handle(GetWantApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
             var response = await _context.Orders.Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto 
-            { OrderId = x.OrderId,
+            {
+                OrderId = x.OrderId,
                 Title = x.Title,
                 NameAndSurname =x.Customer.FirstName+" "+x.Customer.LastName,
                 Process=x.Reference.Process,
