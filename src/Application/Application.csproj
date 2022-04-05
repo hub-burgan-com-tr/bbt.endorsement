@@ -16,6 +16,7 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
+    <PackageReference Include="RestSharp" Version="107.3.0" />
     <PackageReference Include="zb-client" Version="1.2.1" />
   </ItemGroup>
 
