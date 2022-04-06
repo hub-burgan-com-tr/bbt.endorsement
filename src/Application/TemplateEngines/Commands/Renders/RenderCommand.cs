@@ -28,20 +28,18 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         if (form == null)
             return new Response<RenderResponse>();
 
-        var postUrl = "http://20.126.170.150:5000/Template/Render";
+        var postUrl = ""; // "http://20.126.170.150:5000/Template/Render";
         var name = form.TemplateName;
         var renderId = Guid.NewGuid().ToString();
-        var content = JsonConvert.DeserializeObject(request.content);
-        var content2 = JsonConvert.SerializeObject(content);
 
-        var jsonData = "{" +
+        string jsonData = "{" +
                           "\"name\": \"Ugur\"," +
                           "\"render-id\": " + Guid.NewGuid().ToString() + "," +
                           "\"render-data\": " + request.content + "," +
                           "\"render-data-for-log\":  " + request.content + "," +
         "}";
 
-
+        var jsonReturn = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(request.content);
         var restClient = new RestClient();
         var restRequest = new RestRequest()
         {
@@ -50,6 +48,7 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         };
         restRequest.AddHeader("Content-Type", "application/json");
         restRequest.AddHeader("Accept", "application/json");
+        restRequest.AddObject(jsonData);
 
         var response = await restClient.ExecutePostAsync(restRequest);
         var c = response.Content;
