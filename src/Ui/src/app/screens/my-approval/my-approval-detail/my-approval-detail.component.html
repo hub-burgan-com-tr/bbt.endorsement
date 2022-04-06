@@ -32,10 +32,21 @@
       <div *ngFor="let detail of details; let d = index">
         <div class="box p-3 mb-4" *ngIf="d===step">
           <b class="mb-2 d-block">{{detail.name}}</b>
-          <div class="mb-4">
-            <iframe *ngIf="detail.content.indexOf('data:')>-1;else normalContent" [src]="detail.content | safe" width="100%"
-                    height="500"></iframe>
-            <ng-template #normalContent>{{detail.content}}</ng-template>
+          <div class="mb-4" *ngIf="detail.content">
+            <ng-container *ngIf="detail.content.indexOf('data:')>-1;else second">
+              <iframe [src]="detail.content | safe"
+                      width="100%"
+                      height="500"></iframe>
+            </ng-container>
+            <ng-template #second>
+              <ng-container *ngIf="detail.content.indexOf('html')>-1;else normalContent">
+                <iframe [srcdoc]="detail.content | safeHtml" width="100%"
+                        height="500"></iframe>
+              </ng-container>
+            </ng-template>
+            <ng-template #normalContent>
+              {{detail.content}}
+            </ng-template>
           </div>
           <div *ngIf="detail.actions.length != 0">
             <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
