@@ -17,7 +17,6 @@ public static class FormDefinitionSeed
             var templateName = "sigorta_onayformu.txt";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
             var label = File.ReadAllText(path, Encoding.Default);
-
             var formdefinition = context.FormDefinitions.Add(new FormDefinition
             {
                 FormDefinitionId = "b25635e8-1abd-4768-ab97-e1285999a62a",
