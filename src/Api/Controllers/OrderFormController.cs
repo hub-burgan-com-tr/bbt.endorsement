@@ -30,8 +30,8 @@ namespace Api.Controllers
         {
             request.Id = Guid.NewGuid();
 
-            var form = await Mediator.Send(new RenderCommand { formId = request.FormId, content = request.Content });
-            request.Content = form.Data.Form;
+            //var form = await Mediator.Send(new RenderCommand { formId = request.FormId, content = request.Content });
+            //request.Content = form.Data.Form;
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, FormType = Form.FormOrder });
         }
