@@ -17,6 +17,11 @@ public static class FormDefinitionSeed
             var templateName = "sigorta_onayformu.txt";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
             var label = File.ReadAllText(path, Encoding.Default);
+            var templateName2 = "sigorta_teklifformu.txt";
+            var path2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName2);
+            var label2 = File.ReadAllText(path2, Encoding.Default);
+
+
 
             var formdefinition = context.FormDefinitions.Add(new FormDefinition
             {
@@ -42,7 +47,7 @@ public static class FormDefinitionSeed
             {
                 FormDefinitionId = "fff57322-7417-4805-acb0-3691e8540020",
                 Name = "Sigorta Teklif Formu",
-                Label = label.ToString(),
+                Label = label2.ToString(),
                 Created = DateTime.Now,
                 Tags = "",
                 TemplateName = "tr-sigorta-teklif-formu",
@@ -51,7 +56,7 @@ public static class FormDefinitionSeed
                 Url = "",
                 ExpireInMinutes = 60,
                 MaxRetryCount = 4,
-                Type = ContentType.PDF.ToString(),
+                Type = ContentType.HTML.ToString(),
             });
             formdefinition2.Entity.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "" });
             formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum,anladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });

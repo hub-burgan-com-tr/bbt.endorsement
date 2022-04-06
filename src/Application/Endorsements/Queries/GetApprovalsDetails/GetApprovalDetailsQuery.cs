@@ -40,7 +40,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                         Content=y.Content,
                         Link=y.Name,
                         Name=y.Name,
-                        
+                        Type=y.Type,                     
                        DocumentId = y.DocumentId,
                         Actions=y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.Choice, Title=z.Title}).ToList()
                     }).ToList(),                

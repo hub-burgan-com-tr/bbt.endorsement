@@ -22,7 +22,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
         public string Name { get; set; }
         public string Content { get; set; }
         public string Link { get; set; }
-
+        public string Type { get; set; }
         public List<DocumentAction> Actions { get; set; }
 
 
