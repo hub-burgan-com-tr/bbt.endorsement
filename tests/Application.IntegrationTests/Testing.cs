@@ -1,4 +1,5 @@
 ﻿using Infrastructure;
+using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
 using Infrastructure.Persistence;
 using MediatR;
@@ -27,17 +28,32 @@ public class Testing
     public void RunBeforeAnyTests()
     {
         var builder = WebApplication.CreateBuilder();
+
         IWebHostEnvironment environment = builder.Environment;
+        if (environment.EnvironmentName == "Development")
+        {
+            var configuration = builder
+                .Configuration
+                .AddJsonFile($"appsettings.Development.json", false, true)
+                .AddEnvironmentVariables()
+                .Build();
 
-        var configuration = builder
-         .Configuration
-         .AddJsonFile($"appsettings.Development.json", false, true)
-         .AddEnvironmentVariables()
-         .Build();
+            Log.Logger = new LoggerConfiguration()
+               .ReadFrom.Configuration(configuration)
+               .CreateLogger();
+        }
+        else
+        {
+            var configuration = builder
+                .Configuration
+                .AddJsonFile("appsettings.json", true, true)
+                .AddEnvironmentVariables()
+                .Build();
 
-        Log.Logger = new LoggerConfiguration()
-           .ReadFrom.Configuration(configuration)
-           .CreateLogger();
+            Log.Logger = new LoggerConfiguration()
+               .ReadFrom.Configuration(configuration)
+               .CreateLogger();
+        }
 
 
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
@@ -47,7 +63,11 @@ public class Testing
         builder.Services.AddApplication();
         builder.Services.AddInfrastructure(builder);
 
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+        var settings = builder.Configuration.Get<AppSettings>();
         var app = builder.Build();
+        app.AddUseMiddleware();
+
         using (var scope = app.Services.CreateScope())
         {
             var serviceProvider = scope.ServiceProvider;

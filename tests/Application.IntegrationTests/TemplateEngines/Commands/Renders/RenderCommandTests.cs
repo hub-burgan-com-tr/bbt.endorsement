@@ -8,7 +8,7 @@ namespace Application.IntegrationTests.TemplateEngines.Commands.Renders
     public class RenderCommandTests : TestBase
     {
         [Test]
-        [TestCase("fff57322-7417-4805-acb0-3691e8540021", "")]
+        [TestCase("fff57322-7417-4805-acb0-3691e8540021", "data.name")]
         public async Task Render(string formId, string content)
         {
             try

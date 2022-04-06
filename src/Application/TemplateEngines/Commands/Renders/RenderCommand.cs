@@ -2,6 +2,7 @@
 using Application.Common.Models;
 using MediatR;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace Application.TemplateEngines.Commands.Renders;
@@ -27,6 +28,7 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         if (form == null)
             return new Response<RenderResponse>();
 
+        var postUrl = "http://20.126.170.150:5000/Template/Render";
         var name = form.TemplateName;
         var renderId = Guid.NewGuid().ToString();
         var content = JsonConvert.DeserializeObject(request.content);
@@ -39,7 +41,7 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
                           "\"render-data-for-log\":  " + request.content + "," +
         "}";
 
-        var postUrl = "http://20.126.170.150:5000/Template/Render";
+
         var restClient = new RestClient();
         var restRequest = new RestRequest()
         {
@@ -48,10 +50,30 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         };
         restRequest.AddHeader("Content-Type", "application/json");
         restRequest.AddHeader("Accept", "application/json");
-        restRequest.AddJsonBody(request.content);
 
         var response = await restClient.ExecutePostAsync(restRequest);
         var c = response.Content;
+
+        //var restClient = new RestClient();
+        //var restRequest = new RestRequest()
+        //{
+        //    Resource = postUrl,
+        //    Method = Method.Post
+        //};
+        //restRequest.AddHeader("Content-Type", "application/json");
+        //restRequest.AddHeader("Accept", "application/json");
+
+        //JObject json = JObject.Parse(request.content);
+
+        //restRequest.AddParameter("name", name, ParameterType.RequestBody);
+        //restRequest.AddParameter("render-id", renderId, ParameterType.RequestBody);
+        //restRequest.AddParameter("render-data", json, ParameterType.RequestBody);
+        //restRequest.AddParameter("render-data-for-log", json, ParameterType.RequestBody);
+
+        //var response = await restClient.ExecutePostAsync(restRequest);
+        //var c = response.Content;
+
+
 
         //var client = new RestClient("http://20.126.170.150:5000");
         //var restRequest = new RestRequest("Template/Render", Method.Post);
