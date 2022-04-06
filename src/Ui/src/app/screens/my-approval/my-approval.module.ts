@@ -8,6 +8,7 @@ import {SharedModule} from "../../modules/shared.module";
 import {MyApprovalCompletedComponent} from "./my-approval-completed/my-approval-completed.component";
 import {FormsModule} from "@angular/forms";
 import {SafePipe} from "../../pipes/safe.pipe";
+import {SafeHtmlPipe} from "../../pipes/safe-html.pipe";
 
 const routes: Routes = [
   {path: '', component: MyApprovalComponent},
@@ -20,7 +21,8 @@ const routes: Routes = [
     MyApprovalComponent,
     MyApprovalDetailComponent,
     MyApprovalCompletedComponent,
-    SafePipe
+    SafePipe,
+    SafeHtmlPipe
   ],
     imports: [
         SharedModule,

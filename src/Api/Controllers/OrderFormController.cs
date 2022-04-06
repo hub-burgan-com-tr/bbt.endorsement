@@ -4,6 +4,7 @@ using Application.Endorsements.Commands.NewOrders;
 using Application.OrderForms.Queries.GetApproverInformations;
 using Application.OrderForms.Queries.GetFormContents;
 using Application.OrderForms.Queries.GetForms;
+using Application.TemplateEngines.Commands.Renders;
 using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -27,7 +28,11 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
-            request.Id = Guid.NewGuid();            
+            request.Id = Guid.NewGuid();
+
+            //var form = await Mediator.Send(new RenderCommand { formId = request.FormId, content = request.Content });
+            //request.Content = form.Data.Form;
+
             return await Mediator.Send(new NewOrderFormCommand { Request = request, FormType = Form.FormOrder });
         }
 
