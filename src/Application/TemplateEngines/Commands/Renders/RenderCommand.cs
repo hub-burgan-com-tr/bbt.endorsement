@@ -28,30 +28,49 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         if (form == null)
             return new Response<RenderResponse>();
 
-        var postUrl = ""; // "http://20.126.170.150:5000/Template/Render";
-        var name = form.TemplateName;
-        var renderId = Guid.NewGuid().ToString();
 
-        string jsonData = "{" +
-                          "\"name\": \"Ugur\"," +
-                          "\"render-id\": " + Guid.NewGuid().ToString() + "," +
-                          "\"render-data\": " + request.content + "," +
-                          "\"render-data-for-log\":  " + request.content + "," +
-        "}";
+        dynamic json = JObject.Parse(request.content);
 
-        var jsonReturn = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(request.content);
-        var restClient = new RestClient();
-        var restRequest = new RestRequest()
+
+        using (var client = new HttpClient())
         {
-            Resource = postUrl,
-            Method = Method.Post
-        };
-        restRequest.AddHeader("Content-Type", "application/json");
-        restRequest.AddHeader("Accept", "application/json");
-        restRequest.AddObject(jsonData);
+            client.BaseAddress = new Uri("http://20.126.170.150:5000");
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("name", "Ugur"),
+                new KeyValuePair<string, string>("render-id",  Guid.NewGuid().ToString()),
+                new KeyValuePair<string, string>("render-data",json),
+                new KeyValuePair<string, string>("render-data-for-log", json)
+            });
+            var result = await client.PostAsync("/Template/Render", content);
+            string resultContent = await result.Content.ReadAsStringAsync();
 
-        var response = await restClient.ExecutePostAsync(restRequest);
-        var c = response.Content;
+        }
+
+        //var postUrl = ""; // "http://20.126.170.150:5000/Template/Render";
+        //var name = form.TemplateName;
+        //var renderId = Guid.NewGuid().ToString();
+
+        //string jsonData = "{" +
+        //                  "\"name\": \"Ugur\"," +
+        //                  "\"render-id\": " + Guid.NewGuid().ToString() + "," +
+        //                  "\"render-data\": " + request.content + "," +
+        //                  "\"render-data-for-log\":  " + request.content + "," +
+        //"}";
+
+        //var jsonReturn = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(request.content);
+        //var restClient = new RestClient();
+        //var restRequest = new RestRequest()
+        //{
+        //    Resource = postUrl,
+        //    Method = Method.Post
+        //};
+        //restRequest.AddHeader("Content-Type", "application/json");
+        //restRequest.AddHeader("Accept", "application/json");
+        //restRequest.AddObject(jsonData);
+
+        //var response = await restClient.ExecutePostAsync(restRequest);
+        //var c = response.Content;
 
         //var restClient = new RestClient();
         //var restRequest = new RestRequest()
