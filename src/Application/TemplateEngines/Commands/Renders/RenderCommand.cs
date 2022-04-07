@@ -1,16 +1,15 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using MediatR;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using RestSharp;
+using System.Web;
 
 namespace Application.TemplateEngines.Commands.Renders;
 
 public class RenderCommand : IRequest<Response<RenderResponse>>
 {
-    public string formId { get; set; }
-    public string content { get; set; }
+    public string FormId { get; set; }
+    public string Content { get; set; }
 }
 
 public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<RenderResponse>>
@@ -24,119 +23,27 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
 
     public async Task<Response<RenderResponse>> Handle(RenderCommand request, CancellationToken cancellationToken)
     {
-        var form = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == request.formId);
+        var form = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == request.FormId);
         if (form == null)
             return new Response<RenderResponse>();
 
+        string jsonData = @"{" +
+                          "\"name\":"  + "\"" + form.TemplateName + "\"" + "," +
+                          "\"render-id\":" + "\"" + Guid.NewGuid().ToString() + "\"" + "," +
+                          "\"render-data\": " + request.Content + "," +
+                          "\"render-data-for-log\":  " + request.Content +
+        "}";
 
-        dynamic json = JObject.Parse(request.content);
+        var restClient = new RestClient("http://20.126.170.150:5000");
+        var restRequest = new RestRequest("/Template/Render", Method.Post);
+        restRequest.AddHeader("Content-Type", "application/json");
+        restRequest.AddHeader("Accept", "application/json");
+        restRequest.AddStringBody(jsonData, DataFormat.Json);
+        var response = await restClient.ExecutePostAsync(restRequest);
 
+        var content = response.Content;
+        var html = content.Replace(@"""", String.Empty);
 
-        using (var client = new HttpClient())
-        {
-            client.BaseAddress = new Uri("http://20.126.170.150:5000");
-            var content = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("name", "Ugur"),
-                new KeyValuePair<string, string>("render-id",  Guid.NewGuid().ToString()),
-                new KeyValuePair<string, string>("render-data",json),
-                new KeyValuePair<string, string>("render-data-for-log", json)
-            });
-            var result = await client.PostAsync("/Template/Render", content);
-            string resultContent = await result.Content.ReadAsStringAsync();
-
-        }
-
-        //var postUrl = ""; // "http://20.126.170.150:5000/Template/Render";
-        //var name = form.TemplateName;
-        //var renderId = Guid.NewGuid().ToString();
-
-        //string jsonData = "{" +
-        //                  "\"name\": \"Ugur\"," +
-        //                  "\"render-id\": " + Guid.NewGuid().ToString() + "," +
-        //                  "\"render-data\": " + request.content + "," +
-        //                  "\"render-data-for-log\":  " + request.content + "," +
-        //"}";
-
-        //var jsonReturn = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(request.content);
-        //var restClient = new RestClient();
-        //var restRequest = new RestRequest()
-        //{
-        //    Resource = postUrl,
-        //    Method = Method.Post
-        //};
-        //restRequest.AddHeader("Content-Type", "application/json");
-        //restRequest.AddHeader("Accept", "application/json");
-        //restRequest.AddObject(jsonData);
-
-        //var response = await restClient.ExecutePostAsync(restRequest);
-        //var c = response.Content;
-
-        //var restClient = new RestClient();
-        //var restRequest = new RestRequest()
-        //{
-        //    Resource = postUrl,
-        //    Method = Method.Post
-        //};
-        //restRequest.AddHeader("Content-Type", "application/json");
-        //restRequest.AddHeader("Accept", "application/json");
-
-        //JObject json = JObject.Parse(request.content);
-
-        //restRequest.AddParameter("name", name, ParameterType.RequestBody);
-        //restRequest.AddParameter("render-id", renderId, ParameterType.RequestBody);
-        //restRequest.AddParameter("render-data", json, ParameterType.RequestBody);
-        //restRequest.AddParameter("render-data-for-log", json, ParameterType.RequestBody);
-
-        //var response = await restClient.ExecutePostAsync(restRequest);
-        //var c = response.Content;
-
-
-
-        //var client = new RestClient("http://20.126.170.150:5000");
-        //var restRequest = new RestRequest("Template/Render", Method.Post);
-        //restRequest.AddHeader("Content-Type", "application/json");
-        //restRequest.RequestFormat = DataFormat.Json;
-
-        //restRequest.AddParameter("name", name, ParameterType.RequestBody);
-        //restRequest.AddParameter("render-id", renderId, ParameterType.RequestBody);
-        //restRequest.AddParameter("render-data", request.content, ParameterType.RequestBody);
-        //restRequest.AddParameter("render-data-for-log", request.content, ParameterType.RequestBody);
-
-        //var response = await client.ExecuteAsync(restRequest);
-        //var d = response.Content;
-
-        //var model = new RenderModel
-        //{
-        //    name = name,
-        //    RenderId = renderId,
-        //    RenderData = request.content,
-        //    RenderDataForLog = request.content
-        //};
-        //var client = new RestClient("http://20.126.170.150:5000");
-        //var restRequest = new RestRequest("/Template/Render", Method.Post);
-        //restRequest.AddHeader("Content-Type", "application/json");
-        //restRequest.AddJsonBody(model);
-        //var response = await client.ExecuteAsync(restRequest);
-
-
-        //var client = new RestClient("http://20.126.170.150:5000");
-        //var restRequest = new RestRequest("/Template/Render", Method.Post);
-        //restRequest.AddHeader("Content-Type", "application/json");
-        //var body = @"{
-        //" + "\n" +
-        //@"  ""name"": ""Ugur"",
-        //" + "\n" +
-        //@"  ""render-id"": ""ca3be60f-4de6-47f4-9ab3-58a0d4425f32"",
-        //" + "\n" +
-        //@"  ""render-data"": { ""name"": ""ugur"" },
-        //" + "\n" +
-        //@"  ""render-data-for-log"": {""name"":""ugur""}
-        //" + "\n" +
-        //@"} ";
-        //restRequest.AddJsonBody(body);
-        //var response = await client.ExecuteAsync(restRequest);
-
-        return Response<RenderResponse>.Success(new RenderResponse { }, 200);
+        return Response<RenderResponse>.Success(new RenderResponse { Content = html }, 200);
     }
 }
