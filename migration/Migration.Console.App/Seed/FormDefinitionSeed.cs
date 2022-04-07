@@ -11,7 +11,6 @@ public static class FormDefinitionSeed
     {
         if (context == null)
             return;
-
         if (!context.FormDefinitions.Any())
         {
             var templateName = "sigorta_onayformu.txt";
