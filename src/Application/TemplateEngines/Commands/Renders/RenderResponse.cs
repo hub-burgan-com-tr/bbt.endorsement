@@ -4,7 +4,7 @@ namespace Application.TemplateEngines.Commands.Renders
 {
     public class RenderResponse
     {
-        public string Form { get; set; }
+        public string Content { get; set; }
     }
 
     public class RenderModel
