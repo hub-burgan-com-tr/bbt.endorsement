@@ -28,10 +28,12 @@ namespace Domain.Entities
         [MaxLength(50)]
         public string Mode { get; set; }
         public string Url { get; set; }
-        public int? ExpireInMinutes { get; set; }
+        [Required]
+        public int ExpireInMinutes { get; set; }
         [Required]
         public int RetryFrequence { get; set; }
-        public int? MaxRetryCount { get; set; }
+        [Required]
+        public int MaxRetryCount { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FormDefinitionTag> FormDefinitionTags { get; set; }
         public virtual ICollection<FormDefinitionAction> FormDefinitionActions { get; set; }

@@ -11,9 +11,9 @@ namespace Application.Models
 
 
         public Guid InstanceId { get; set; }
-        public int? MaxRetryCount { get; set; }
+        public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
-        public int? ExpireInMinutes { get; set; }
+        public int ExpireInMinutes { get; set; }
 
 
         public bool Device { get; set; }
