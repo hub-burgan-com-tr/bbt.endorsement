@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using MediatR;
+using Microsoft.AspNetCore.Html;
 using RestSharp;
 using System.Web;
 
@@ -42,7 +43,10 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         var response = await restClient.ExecutePostAsync(restRequest);
 
         var content = response.Content;
-        var html = content.Replace(@"""", String.Empty);
+        var html = content;
+
+        html = html.Replace(@"\""", String.Empty);
+        html = html.Replace("\"", String.Empty);
 
         return Response<RenderResponse>.Success(new RenderResponse { Content = html }, 200);
     }
