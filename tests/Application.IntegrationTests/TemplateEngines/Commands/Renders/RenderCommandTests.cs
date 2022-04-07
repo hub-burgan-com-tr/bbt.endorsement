@@ -15,8 +15,8 @@ namespace Application.IntegrationTests.TemplateEngines.Commands.Renders
             {
                 RenderCommand model = new RenderCommand
                 {
-                    formId = formId,
-                    content = content
+                    FormId = formId,
+                    Content = content
                 };
                 var response = await SendAsync(model);
                 Assert.IsNotNull(response);

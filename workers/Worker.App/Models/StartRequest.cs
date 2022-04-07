@@ -53,6 +53,6 @@ public class StartRequest
         public string RenotifyMessageSMS { get; set; }
         public string RenotifyMessagePush { get; set; }
     }
-    public enum ContentType { HTML, PDF, PlainText }
+    public enum ContentType {File=1, PlainText=2,HTML =3,PDF=4}
     public enum CalbackMode { Completed, Verbose }
 }

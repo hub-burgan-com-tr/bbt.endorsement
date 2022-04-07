@@ -25,7 +25,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDocumentList
             { Name = x.Name, 
              
                 Actions = x.DocumentActions
-                .Select(x => new Action { Choice = x.Choice, Title = x.Title,Type=x.Type, State = x.State }).ToList()
+                .Select(x => new Action {Checked= x.State == ActionType.Approve.ToString() ? true : false, Title = x.Title, DocumentId = x.DocumentId }).ToList()
             }).ToList();
             return Response<List<GetApprovalDocumentListDto>>.Success(list, 200);
         }

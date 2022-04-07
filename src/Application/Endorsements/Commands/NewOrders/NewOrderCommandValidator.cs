@@ -10,7 +10,7 @@ namespace Application.Endorsements.Commands.NewOrders
             RuleFor(v => v.StartRequest).SetValidator(new StartRequestValidator());
             RuleFor(x => x.StartRequest.Documents).NotEmpty().WithMessage("Belge eklemeden ilerleyemezsiniz.");
 
-            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.PDF).ChildRules(y =>
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.File).ChildRules(y =>
             {
                 y.RuleFor(z => z.Content).NotEmpty().WithMessage("Lütfen dosya seçiniz");
 
