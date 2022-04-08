@@ -139,7 +139,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     DocumentId = Guid.NewGuid().ToString(),
                     Content = item.Content,
                     Name =item.Title,
-                    Type = item.Type.ToString(),
+                    Type =item.Content.Contains("pdf")?ContentType.PDF.ToString(): item.Type.ToString(),
                     Created = _dateTime.Now,
                     DocumentActions = actions
                 });
