@@ -83,6 +83,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var order = new Order
             {
                 OrderId = startFormRequest.Id.ToString(),
+                State = OrderState.Pending.ToString(),
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
@@ -155,6 +156,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
+                State = OrderState.Pending.ToString(),
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,

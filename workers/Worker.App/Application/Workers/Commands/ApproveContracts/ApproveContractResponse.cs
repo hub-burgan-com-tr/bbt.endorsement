@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Worker.App.Domain.Enums;
 
 namespace Worker.App.Application.Workers.Commands.ApproveContracts
 {
     public class ApproveContractResponse
     {
+        public OrderState OrderState { get; set; }
     }
 }
