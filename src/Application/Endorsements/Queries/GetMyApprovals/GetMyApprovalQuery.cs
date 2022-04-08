@@ -4,6 +4,7 @@ using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,7 @@ namespace Application.Endorsements.Queries.GetMyApprovals
 
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = await _context.Orders
+            var list = await _context.Orders.Where(x => x.State != OrderState.Pending.ToString())
                 .Include(x => x.Documents)
                 .OrderByDescending(x => x.Created)
                 .Select(x => new GetMyApprovalDto
