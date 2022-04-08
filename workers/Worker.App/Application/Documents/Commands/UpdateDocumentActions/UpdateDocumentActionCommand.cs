@@ -31,6 +31,10 @@ namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
             if(action == null)
                 return Task.FromResult(new Response<UpdateDocumentActionResponse>());
 
+            var actionIsSelected = _context.DocumentActions.FirstOrDefault(x => x.Document.OrderId == request.OrderId && x.DocumentId == document.DocumentId && x.IsSelected == true);
+            if(actionIsSelected.IsSelected == true)
+                return Task.FromResult(new Response<UpdateDocumentActionResponse>());
+
             action.IsSelected = true;
             if (action.Choice == (int)ActionType.Approve)
                 document.State = ActionType.Approve.ToString();
