@@ -6,7 +6,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
+using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.SaveEntities;
+using Worker.App.Domain.Enums;
 using Worker.App.Models;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
@@ -267,6 +269,12 @@ public class ContractApprovalService : IContractApprovalService
                     State = "Approve Contract",
                     Description = ""
                 });
+
+                var orderState = await _mediator.Send(new ApproveContractCommand { OrderId = variables.InstanceId.ToString() });
+                if (orderState.Data.OrderState == OrderState.Reject)
+                    variables.Completed = false;
+                if (orderState.Data.OrderState == OrderState.Approve)
+                    variables.Completed = true;
             }
             catch (Exception ex)
             {
