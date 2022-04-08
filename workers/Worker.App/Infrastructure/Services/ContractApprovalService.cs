@@ -246,6 +246,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 variables.Approved = true;
                 variables.IsProcess = true;
+                variables.Completed = false;
             }
             string data = "";
 
@@ -271,9 +272,7 @@ public class ContractApprovalService : IContractApprovalService
                 });
 
                 var orderState = await _mediator.Send(new ApproveContractCommand { OrderId = variables.InstanceId.ToString() });
-                if (orderState.Data.OrderState == OrderState.Reject)
-                    variables.Completed = false;
-                if (orderState.Data.OrderState == OrderState.Approve)
+                if (orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
                     variables.Completed = true;
             }
             catch (Exception ex)
