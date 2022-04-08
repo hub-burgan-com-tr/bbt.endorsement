@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ApprovalsIWantService} from "../../../services/approvals-i-want.service";
 import {Subject, takeUntil} from "rxjs";
+import {NgxSmartModalService} from "ngx-smart-modal";
 
 @Component({
   selector: 'app-approvals-i-want-detail',
@@ -13,8 +14,9 @@ export class ApprovalsIWantDetailComponent implements OnInit {
   data: any;
   orderId: any;
   step;
+  modalDetail: any;
 
-  constructor(private route: ActivatedRoute, private approvalsIWantService: ApprovalsIWantService) {
+  constructor(private route: ActivatedRoute, private approvalsIWantService: ApprovalsIWantService, private modal: NgxSmartModalService) {
     this.route.queryParams.subscribe(params => {
       this.orderId = params['orderId'];
       this.approvalsIWantService.getWantApprovalDetail(this.orderId).pipe(takeUntil(this.destroy$)).subscribe(res => {
@@ -26,4 +28,8 @@ export class ApprovalsIWantDetailComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openModal(d: any) {
+    this.modalDetail = d;
+    this.modal.open('document');
+  }
 }
