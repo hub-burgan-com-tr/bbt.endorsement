@@ -39,7 +39,7 @@ namespace Application.Endorsements.Queries.GetMyApprovals
                     OrderId = x.OrderId,
                     Title = x.Title,
                     IsDocument = x.Documents.Any(x => x.Type == ContentType.File.ToString()),
-                    OrderIcon = x.State,
+                    State = x.State,
                 })
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
             return Response<PaginatedList<GetMyApprovalDto>>.Success(list, 200);
