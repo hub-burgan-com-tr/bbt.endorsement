@@ -1,10 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.Endorsements.Commands.NewOrders;
-using Domain.Enum;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Application.Endorsements.Queries.GetApprovalsDetails
 {
