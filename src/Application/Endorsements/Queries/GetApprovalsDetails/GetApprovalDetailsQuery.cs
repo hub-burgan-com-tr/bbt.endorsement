@@ -32,7 +32,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                     CitizenShipNumber = x.Customer.CitizenshipNumber, 
                     FirstAndSurname = x.Customer.FirstName + " " + x.Customer.LastName, 
                     
-                    Documents = x.Documents.Select(y=>new OrderDocument
+                    Documents = x.Documents.Where(x=>x.State==null).Select(y=>new OrderDocument
                     {
                         Content=y.Content,
                         Link=y.Name,
