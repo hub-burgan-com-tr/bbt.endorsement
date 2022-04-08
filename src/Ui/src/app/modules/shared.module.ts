@@ -8,6 +8,8 @@ import {
 } from "../components/main-content-button-group/main-content-button-group.component";
 import {RouterModule} from "@angular/router";
 import {OnlyNumberDirective} from "../directives/only-number.directive";
+import {SafePipe} from "../pipes/safe.pipe";
+import {SafeHtmlPipe} from "../pipes/safe-html.pipe";
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {OnlyNumberDirective} from "../directives/only-number.directive";
     MainContentComponent,
     BackButtonDirective,
     MainContentButtonGroupComponent,
-    OnlyNumberDirective
+    OnlyNumberDirective,
+    SafePipe,
+    SafeHtmlPipe
   ],
   imports: [CommonModule, RouterModule],
   exports: [
@@ -24,7 +28,9 @@ import {OnlyNumberDirective} from "../directives/only-number.directive";
     MainContentComponent,
     BackButtonDirective,
     MainContentButtonGroupComponent,
-    OnlyNumberDirective
+    OnlyNumberDirective,
+    SafePipe,
+    SafeHtmlPipe
   ]
 })
 export class SharedModule {
