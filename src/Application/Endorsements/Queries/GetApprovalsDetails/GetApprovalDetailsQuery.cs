@@ -39,7 +39,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                         Name=y.Name,
                         Type=y.Type,                     
                        DocumentId = y.DocumentId,
-                        Actions=y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.Choice, Title=z.Title}).ToList()
+                        Actions=y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.DocumentActionId, Title=z.Title}).ToList()
                     }).ToList(),                
                    }).FirstOrDefault();
           
