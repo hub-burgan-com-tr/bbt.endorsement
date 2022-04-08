@@ -5,6 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../../modules/shared.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TracingDetailComponent} from './tracing-detail/tracing-detail.component';
+import {NgxSmartModalModule} from "ngx-smart-modal";
 
 const routes: Routes = [
   {path: '', component: TracingComponent},
@@ -21,7 +22,8 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxSmartModalModule.forRoot(),
   ]
 })
 export class TracingModule {
