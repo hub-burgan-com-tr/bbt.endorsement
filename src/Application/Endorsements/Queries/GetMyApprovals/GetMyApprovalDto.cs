@@ -19,6 +19,6 @@ namespace Application.Endorsements.Queries.GetMyApprovals
     /// <summary>
     /// Onay Icon
     /// </summary>
-        public string OrderIcon { get; set; }
+        public string State { get; set; }
     }   
 }
