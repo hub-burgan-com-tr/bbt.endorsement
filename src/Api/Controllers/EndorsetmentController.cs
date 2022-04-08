@@ -215,10 +215,6 @@ namespace Api.Controllers
             var result = await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
             return Ok(result);
         }
-
-
-
-
         /// <summary>
         ///  Onayımdakiler  Belge Listesi
         /// </summary>

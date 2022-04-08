@@ -18,9 +18,9 @@
         /// <summary>
         /// Geçerlilik
         /// </summary>
-        public int? MaxRetryCount { get; set; }
+        public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
-        public int? ExpireInMinutes { get; set; }
+        public int ExpireInMinutes { get; set; }
 
         /// <summary>
         /// Belgeler
@@ -50,7 +50,8 @@
         /// Belge Onay Ad
         /// </summary>
         public string Title { get; set; }
-
+        public string Content { get; internal set; }
+        public string Type { get; internal set; }
     }
     public class GetWantApprovalDetailsHistoryDto
     {

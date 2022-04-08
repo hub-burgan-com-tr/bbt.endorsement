@@ -13,11 +13,6 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
 
         public List<ApproveOrderDocument> Documents { get; set; }
     }
-    public class ApproveOrderDocument
-    {
-        public string DocumentId { get; set; }
-        public string ActionId { get; set; }
-    }
 
     public class ApproveOrderDocumentCommandHandler : IRequestHandler<ApproveOrderDocumentCommand, Response<bool>>
     {
@@ -33,7 +28,7 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
             var model = new ContractModel
             {
                 InstanceId = request.OrderId,
-                Document = request.Documents               
+                Documents = request.Documents               
             };
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });          
             var response = await _zeebe.SendMessage(model.InstanceId.ToString(), "ApproveData", payload);

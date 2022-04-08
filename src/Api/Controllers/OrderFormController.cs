@@ -8,6 +8,7 @@ using Application.TemplateEngines.Commands.Renders;
 using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -30,8 +31,9 @@ namespace Api.Controllers
         {
             request.Id = Guid.NewGuid();
 
-            //var form = await Mediator.Send(new RenderCommand { formId = request.FormId, content = request.Content });
-            //request.Content = form.Data.Form;
+            var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
+            if(form.Data != null)
+                request.Content = form.Data.Content;
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, FormType = Form.FormOrder });
         }

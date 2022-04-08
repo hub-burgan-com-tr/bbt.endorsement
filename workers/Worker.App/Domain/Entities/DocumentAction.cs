@@ -20,7 +20,7 @@ namespace Worker.App.Domain.Entities
         [MaxLength(50)]
         public string State { get; set; }
         public int Choice { get; set; }
-        public bool? IsSelected { get; set; }
+        public bool IsSelected { get; set; }
         public virtual Document Document { get; set; }
 
     }

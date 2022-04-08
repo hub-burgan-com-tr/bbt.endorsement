@@ -2,6 +2,6 @@
 
 public enum ActionType
 {
-    Approve=1,
-    Reject=2
+    Approve = 1,
+    Reject = 2
 }
