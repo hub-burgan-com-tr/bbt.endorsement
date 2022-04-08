@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Worker.App.Application.Workers.Commands.ApproveContracts
+﻿namespace Worker.App.Application.Workers.Commands.ApproveContracts
 {
     public class ApproveContractResponse
     {
+        public IEnumerable<GetOrderDocumentState> Documents { get; set; }
+    }
+
+    public class GetOrderDocumentState
+    {
+        public string DocumentId { get; set; }
+        public string State { get; set; }
     }
 }
