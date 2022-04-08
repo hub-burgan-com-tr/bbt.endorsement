@@ -11,13 +11,13 @@ export class StateClassPipe implements PipeTransform {
   transform(state) {
     switch (state) {
       case 'Pending':
-        return 'warning';
+        return 'blue';
       case 'Cancel':
-        return 'danger';
+        return 'black';
       case 'Approve':
         return 'success';
       case 'Timeout':
-        return 'danger';
+        return 'grey';
       case 'Reject':
         return 'danger';
       default:

@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Subject, takeUntil} from "rxjs";
 import {NgxSmartModalService} from "ngx-smart-modal";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MyApprovalService} from "../../../services/my-approval.service";
 import {
   GetApprovalDetailRequestModel,
   GetApprovalPhysicallyDocumentDetailRequestModel
 } from "../../../models/my-approval";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-my-approval-detail',
@@ -23,7 +24,7 @@ export class MyApprovalDetailComponent implements OnInit {
     documentId: '',
     name: '',
     content: '',
-    choice: false,
+    choice: '',
     actions: [],
     type: ''
   }];
@@ -33,10 +34,12 @@ export class MyApprovalDetailComponent implements OnInit {
     content: '',
     actions: []
   }];
+  showError: boolean = false;
 
   constructor(public ngxSmartModalService: NgxSmartModalService,
               private route: ActivatedRoute,
-              private myApprovalService: MyApprovalService) {
+              private myApprovalService: MyApprovalService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -51,8 +54,12 @@ export class MyApprovalDetailComponent implements OnInit {
     this.ngxSmartModalService.open('confirmModal');
   }
 
-  continue() {
-    // this.getApprovalPhysicallyDocumentDetail();
+  continue(f: NgForm) {
+    if (!f.valid) {
+      this.showError = true;
+      return;
+    }
+    this.showError = false;
     this.step++;
     if (this.step >= (this.details.length - 1)) {
       this.buttonText = 'Kaydet';
@@ -65,17 +72,21 @@ export class MyApprovalDetailComponent implements OnInit {
         documents: []
       };
       this.details.forEach(i => {
-        const actionId = i.actions.find(f => f.value == i.choice)?.documentActionId;
+        let actionId = '';
+        if (i.choice) {
+          actionId = i.actions[0].value;
+        } else {
+          actionId = i.actions.find(f => f.value == i.choice)?.documentActionId;
+        }
         if (actionId) {
           model.documents.push({
             documentId: i.documentId,
             actionId: actionId,
-            // choice: i.choice
           });
         }
       });
       this.myApprovalService.saveApproveOrderDocument(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        console.log(res);
+        this.router.navigate(['..'], {relativeTo: this.route});
       });
       return;
     }
