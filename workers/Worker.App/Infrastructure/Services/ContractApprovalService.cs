@@ -254,7 +254,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 foreach (var item in variables.Documents)
                 {
-                    var document = _mediator.Send(new UpdateDocumentStateCommand
+                    var document = _mediator.Send(new UpdateDocumentActionCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
                         DocumentId = item.DocumentId,

@@ -1,6 +1,6 @@
 ﻿namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
 {
-    public class UpdateDocumentStateResponse
+    public class UpdateDocumentActionResponse
     {
         public bool Completed { get; set; }
     }
