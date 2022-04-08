@@ -243,7 +243,6 @@ public class ContractApprovalService : IContractApprovalService
             if (variables != null)
             {
                 variables.Approved = true;
-                variables.Completed = true;
                 variables.IsProcess = true;
             }
             string data = "";

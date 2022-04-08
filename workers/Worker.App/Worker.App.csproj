@@ -43,4 +43,9 @@
 		</None>
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Folder Include="Application\Documents\Queries\" />
+	</ItemGroup>
+
 </Project>
