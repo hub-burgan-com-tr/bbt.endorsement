@@ -54,7 +54,10 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
                 _context.SaveChanges();
             }
 
-            return new Response<ApproveContractResponse>();
+            order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
+            var orderState = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
+
+            return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = orderState }, 200);
         }
     }
 }
