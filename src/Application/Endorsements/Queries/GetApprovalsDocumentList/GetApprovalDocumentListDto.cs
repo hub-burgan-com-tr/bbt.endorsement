@@ -19,9 +19,8 @@
 
     public class Action
     {
-        public int Choice { get; set; }
+        public string DocumentId { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
-        public string State { get;  set; }
+        public bool Checked { get; set; }
     }
 }

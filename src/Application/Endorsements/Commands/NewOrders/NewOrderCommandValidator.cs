@@ -10,7 +10,7 @@ namespace Application.Endorsements.Commands.NewOrders
             RuleFor(v => v.StartRequest).SetValidator(new StartRequestValidator());
             RuleFor(x => x.StartRequest.Documents).NotEmpty().WithMessage("Belge eklemeden ilerleyemezsiniz.");
 
-            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.PDF).ChildRules(y =>
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.File).ChildRules(y =>
             {
                 y.RuleFor(z => z.Content).NotEmpty().WithMessage("Lütfen dosya seçiniz");
 
@@ -39,7 +39,9 @@ namespace Application.Endorsements.Commands.NewOrders
             RuleFor(v => v.Reference.Process).NotEmpty().WithMessage("İşlem bilgisi girilmelidir.");
             RuleFor(v => v.Reference.State).NotEmpty().WithMessage("Aşama bilgisi girilmelidir.");
             RuleFor(v => v.Reference.ProcessNo).NotEmpty().WithMessage("İşlem no bilgisi girilmelidir.");
+            RuleFor(v => v.Config.ExpireInMinutes).NotEmpty().WithMessage("Geçerlilik girilmelidir.");
             RuleFor(v => v.Config.RetryFrequence).NotEmpty().WithMessage("Hatırlatma frekansı girilmelidir.");
+            RuleFor(v => v.Config.MaxRetryCount).NotEmpty().WithMessage("Hatırlatma Sayısı girilmelidir.");
             RuleFor(v => v.Approver.First).NotEmpty().WithMessage("Ad girilmelidir.");
             RuleFor(v => v.Approver.Last).NotEmpty().WithMessage("Soyad girilmelidir.");
             RuleFor(v => v.Approver.CitizenshipNumber.ToString()).MaximumLength(11).MinimumLength(11).WithMessage("TCKN 11 haneli olmalıdır.");

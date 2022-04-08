@@ -45,14 +45,14 @@ public class StartRequest
     }
     public class OrderConfig
     {
-        public int? MaxRetryCount { get; set; }
+        public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
-        public int? ExpireInMinutes { get; set; }
+        public int ExpireInMinutes { get; set; }
         public string NotifyMessageSMS { get; set; }
         public string NotifyMessagePush { get; set; }
         public string RenotifyMessageSMS { get; set; }
         public string RenotifyMessagePush { get; set; }
     }
-    public enum ContentType { HTML, PDF, PlainText }
+    public enum ContentType {File=1, PlainText=2,HTML =3,PDF=4}
     public enum CalbackMode { Completed, Verbose }
 }

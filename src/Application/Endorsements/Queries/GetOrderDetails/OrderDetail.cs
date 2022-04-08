@@ -31,7 +31,7 @@ public class OrderDetail
         public Guid Id { get; set; }
         public string Name { get; set; }
         public ContentType Type { get; set; }
-        public enum ContentType { HTML, PDF, PlainText }
+        public enum ContentType {File=1,HTML=2, PDF=3, PlainText=4 }
         public ActionClass[] Actions { get; set; }
         public class ActionClass
         {
@@ -76,9 +76,9 @@ public class OrderDetail
 
     public class OrderConfig
     {
-        public int? MaxRetryCount { get; set; }
+        public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
-        public int? ExpireInMinutes { get; set; }
+        public int ExpireInMinutes { get; set; }
         public string NotifyMessageSMS { get; set; }
         public string NotifyMessagePush { get; set; }
         public string RenotifyMessageSMS { get; set; }
