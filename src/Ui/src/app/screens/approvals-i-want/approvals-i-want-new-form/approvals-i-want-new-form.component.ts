@@ -72,7 +72,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         citizenshipNumber: parseInt("83418131290"),
         first: "Uğur",
         last: "Karataş"
-      }, JSON.parse(e.data), this.formDefinitionId, <IReference>{
+      }, JSON.stringify(e.data), this.formDefinitionId, <IReference>{
         process: this.f.process.value,
         processNo: this.f.processNo.value,
         state: this.f.state.value

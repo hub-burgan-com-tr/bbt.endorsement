@@ -1,7 +1,7 @@
 <div class="row">
-  <div class="col-auto" *ngIf="data.icon">
+  <div class="col-auto" *ngIf="data.state">
     <div class="icon">
-      <img [src]="'/assets/img/'+data.icon+'.png'">
+      <img [src]="'/assets/img/'+data.state+'.png'">
     </div>
   </div>
   <div [class]="data.nameAndSurname?'col-3':'col'">
@@ -15,9 +15,9 @@
   <div class="col" *ngIf="data.date">
     <div class="date">{{data.date}}</div>
   </div>
-  <div class="col" *ngIf="data.status!=null">
+  <div class="col" *ngIf="data.state!=null">
     <div class="status"
-         [ngClass]="{'danger':data.status===0,'warning':data.status===1,'success':data.status===2}">{{data.statusText}}
+         [ngClass]="data.state|stateClass">{{data.state | state}}
       <span class="status-box"></span>
     </div>
   </div>

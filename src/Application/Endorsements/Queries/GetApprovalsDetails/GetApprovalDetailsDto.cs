@@ -12,7 +12,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
     }
     public class DocumentAction
     {
-        public int Value { get; set; }
+        public string Value { get; set; }
         public string Title { get; set; }
         public string DocumentActionId { get; internal set; }
     }

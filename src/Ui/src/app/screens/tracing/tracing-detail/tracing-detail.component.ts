@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Subject, takeUntil} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {TracingService} from "../../../services/tracing.service";
+import {NgxSmartModalService} from "ngx-smart-modal";
 
 @Component({
   selector: 'app-tracing-detail',
@@ -13,8 +14,8 @@ export class TracingDetailComponent implements OnInit {
   data: any;
   orderId: any;
   step;
-
-  constructor(private route: ActivatedRoute, private tracingService: TracingService) {
+  modalDetail: any;
+  constructor(private route: ActivatedRoute, private tracingService: TracingService, private modal: NgxSmartModalService) {
     this.route.queryParams.subscribe(params => {
       this.orderId = params['orderId'];
       this.tracingService.getWatchApprovalDetail(this.orderId).pipe(takeUntil(this.destroy$)).subscribe(res => {
@@ -24,5 +25,9 @@ export class TracingDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+  openModal(d: any) {
+    this.modalDetail = d;
+    this.modal.open('document');
   }
 }

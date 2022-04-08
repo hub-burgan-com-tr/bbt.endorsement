@@ -10,6 +10,8 @@ import {RouterModule} from "@angular/router";
 import {OnlyNumberDirective} from "../directives/only-number.directive";
 import {SafePipe} from "../pipes/safe.pipe";
 import {SafeHtmlPipe} from "../pipes/safe-html.pipe";
+import {StatePipe} from "../pipes/state.pipe";
+import {StateClassPipe} from "../pipes/state-class.pipe";
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import {SafeHtmlPipe} from "../pipes/safe-html.pipe";
     MainContentButtonGroupComponent,
     OnlyNumberDirective,
     SafePipe,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    StatePipe,
+    StateClassPipe
   ],
   imports: [CommonModule, RouterModule],
   exports: [
@@ -30,7 +34,9 @@ import {SafeHtmlPipe} from "../pipes/safe-html.pipe";
     MainContentButtonGroupComponent,
     OnlyNumberDirective,
     SafePipe,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    StatePipe,
+    StateClassPipe
   ]
 })
 export class SharedModule {

@@ -1,10 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.Endorsements.Commands.NewOrders;
-using Domain.Enum;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Application.Endorsements.Queries.GetApprovalsDetails
 {
@@ -35,14 +32,14 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                     CitizenShipNumber = x.Customer.CitizenshipNumber, 
                     FirstAndSurname = x.Customer.FirstName + " " + x.Customer.LastName, 
                     
-                    Documents = x.Documents.Select(y=>new OrderDocument
+                    Documents = x.Documents.Where(x=>x.State==null).Select(y=>new OrderDocument
                     {
                         Content=y.Content,
                         Link=y.Name,
                         Name=y.Name,
                         Type=y.Type,                     
                        DocumentId = y.DocumentId,
-                        Actions=y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.Choice, Title=z.Title}).ToList()
+                        Actions=y.DocumentActions.Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.DocumentActionId, Title=z.Title}).ToList()
                     }).ToList(),                
                    }).FirstOrDefault();
           

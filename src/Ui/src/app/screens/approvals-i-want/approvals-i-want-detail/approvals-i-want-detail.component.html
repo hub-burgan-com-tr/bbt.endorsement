@@ -1,4 +1,28 @@
-<app-main-content blockTitle="İstediğim Onaylar" [subTitle]="'İstediğim Onaylar | '+data.title">
+<ngx-smart-modal #document identifier="document" [customClass]="'custom-modal'">
+  <ng-container *ngIf="modalDetail?.type==='File';else second">
+    <img [src]="modalDetail?.content" *ngIf="modalDetail?.content.indexOf('data:image')>-1;else fileContent">
+    <ng-template #fileContent>
+      {{modalDetail?.content}}
+    </ng-template>
+  </ng-container>
+  <ng-template #second>
+    <ng-container *ngIf="modalDetail?.type==='PDF';else third">
+      <iframe [src]="modalDetail?.content | safe"
+              width="100%"
+              height="500"></iframe>
+    </ng-container>
+  </ng-template>
+  <ng-template #third>
+    <ng-container *ngIf="modalDetail?.type==='HTML';else normalContent">
+      <iframe [srcdoc]="modalDetail?.content | safeHtml" width="100%"
+              height="500"></iframe>
+    </ng-container>
+  </ng-template>
+  <ng-template #normalContent>
+    {{modalDetail?.content}}
+  </ng-template>
+</ngx-smart-modal>
+<app-main-content blockTitle="İstediğim Onaylar" [subTitle]="data&&data.title">
   <div right *ngIf="step" class="d-flex justify-content-end">
     <button class="btn btn-outline-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 me-3" *ngIf="step==1">İptal Et</button>
     <button class="btn btn-warning text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none no-hover" *ngIf="step==1">
@@ -14,9 +38,9 @@
     <div class="title">Belgeler</div>
     <table class="table">
       <tbody>
-      <tr *ngFor="let d of data.documents">
+      <tr *ngFor="let d of data&&data.documents">
         <td class="pl-15px no-wrap">
-          <img src="/assets/img/eye.png" class="c-pointer">
+          <img src="/assets/img/eye.png" class="c-pointer" (click)="openModal(d)">
         </td>
         <td>{{d.typeName}}</td>
         <td>{{d.name}}</td>
@@ -25,7 +49,7 @@
       </tbody>
     </table>
   </div>
-  <div class="box mb-4 py-3">
+  <div class="box mb-4 py-3" *ngIf="data">
     <div class="px-15px">
       <div class="row">
         <div class="col-8">
@@ -73,7 +97,7 @@
       </div>
     </div>
   </div>
-  <div class="box">
+  <div class="box" *ngIf="data">
     <div class="title border-0">Tarihçe</div>
     <table class="table">
       <thead>
