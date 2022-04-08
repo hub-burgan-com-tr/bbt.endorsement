@@ -3,7 +3,11 @@
 @import '~bootstrap/scss/variables';
 @import "~bootstrap/scss/mixins";
 @import "bootstrap-icons/font/bootstrap-icons";
-
+*{
+  img{
+    max-width: 100%;
+  }
+}
 app-root {
   color: #464646;
 
