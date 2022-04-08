@@ -31,6 +31,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                 {
                     Title = x.Title,
                     Documents=x.Documents.Select(x=>new OrderDocument { Name=x.Name,
+                    Content=x.Content,
                         
                         Actions=x.DocumentActions.Select(y=>new Action { Checked = y.Type == ActionType.Approve.ToString() ? true : false, Title = y.Title, DocumentId = x.DocumentId }).ToList()}).ToList(),
                     History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
