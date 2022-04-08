@@ -49,11 +49,6 @@ export class MyApprovalDetailComponent implements OnInit {
     this.getApprovalDetail();
   }
 
-  send() {
-    this.ngxSmartModalService.close('myModal');
-    this.ngxSmartModalService.open('confirmModal');
-  }
-
   continue(f: NgForm) {
     if (!f.valid) {
       this.showError = true;
@@ -67,29 +62,39 @@ export class MyApprovalDetailComponent implements OnInit {
     //Post data
     if (this.step > (this.details.length - 1)) {
       this.step--;
-      const model = {
-        orderId: this.orderId,
-        documents: []
-      };
-      this.details.forEach(i => {
-        let actionId = '';
-        if (i.choice) {
-          actionId = i.actions[0].value;
-        } else {
-          actionId = i.actions.find(f => f.value == i.choice)?.documentActionId;
-        }
-        if (actionId) {
-          model.documents.push({
-            documentId: i.documentId,
-            actionId: actionId,
-          });
-        }
-      });
-      this.myApprovalService.saveApproveOrderDocument(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        this.router.navigate(['..'], {relativeTo: this.route});
-      });
+      this.ngxSmartModalService.open('sendModal');
       return;
     }
+
+  }
+
+  redirectToList() {
+    this.router.navigate(['..'], {relativeTo: this.route});
+  }
+
+  send() {
+    const model = {
+      orderId: this.orderId,
+      documents: []
+    };
+    this.details.forEach(i => {
+      let actionId = '';
+      if (i.choice) {
+        actionId = i.actions[0].value;
+      } else {
+        actionId = i.actions.find(f => f.value == i.choice)?.documentActionId;
+      }
+      if (actionId) {
+        model.documents.push({
+          documentId: i.documentId,
+          actionId: actionId,
+        });
+      }
+    });
+    this.myApprovalService.saveApproveOrderDocument(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.ngxSmartModalService.close('sendModal');
+      this.ngxSmartModalService.open('confirmModal');
+    });
   }
 
   getApprovalDetail() {
@@ -105,25 +110,6 @@ export class MyApprovalDetailComponent implements OnInit {
             if (this.details.length === 1) {
               this.buttonText = 'Kaydet';
             }
-          } else
-            console.error("Kayıt bulunamadı");
-        },
-        error: err => {
-          console.error(err.message);
-        }
-      });
-  }
-
-  getApprovalPhysicallyDocumentDetail() {
-    let requestModel: GetApprovalPhysicallyDocumentDetailRequestModel = {
-      orderId: this.orderId
-    };
-    this.myApprovalService.getApprovalPhysicallyDocumentDetail(requestModel).pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: res => {
-          if (res.data) {
-            this.title = res.data.title
-            this.physicallyDocuments = res.data.documents
           } else
             console.error("Kayıt bulunamadı");
         },

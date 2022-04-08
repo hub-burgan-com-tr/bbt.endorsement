@@ -1,18 +1,18 @@
-<ngx-smart-modal #confirmModal identifier="confirmModal">
+<ngx-smart-modal #confirmModal identifier="confirmModal" (onAnyCloseEvent)="redirectToList()">
   <h1>İşlem Başarılı</h1>
   <p>Onay gönderiminiz başarılı olmuştur. <br>Detayları incelemek için tıklayın.</p>
 
   <div class="button-container">
-    <button class="btn btn-primary" [routerLink]="['./completed']">Tamam</button>
+    <button class="btn btn-primary" (click)="confirmModal.close()">Tamam</button>
   </div>
 </ngx-smart-modal>
-<ngx-smart-modal #myModal identifier="myModal">
+<ngx-smart-modal #sendModal identifier="sendModal">
   <h1>Bilgilendirme</h1>
   <p>Onay kaydedilecektir. Emin misiniz?</p>
 
   <div class="button-container">
     <button class="btn btn-primary" (click)="send()">Kaydet</button>
-    <button class="btn btn-outline-primary" (click)="myModal.close()">İptal</button>
+    <button class="btn btn-outline-primary" (click)="sendModal.close()">İptal</button>
   </div>
 </ngx-smart-modal>
 <app-main-content blockTitle="Onayımdakiler" subTitle="{{title}}">
