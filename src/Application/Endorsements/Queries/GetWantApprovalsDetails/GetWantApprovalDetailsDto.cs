@@ -50,7 +50,8 @@
         /// Belge Onay Ad
         /// </summary>
         public string Title { get; set; }
-
+        public string Content { get; internal set; }
+        public string Type { get; internal set; }
     }
     public class GetWantApprovalDetailsHistoryDto
     {
