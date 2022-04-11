@@ -61,7 +61,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
                   Customer = x.Customer.FirstName+" "+x.Customer.LastName,
                   Approver = x.Approver.FirstName+" "+x.Approver.LastName,
                   Process = x.Reference.Process,
-                  State = x.State,
+                  State = x.Reference.State,
                   ProcessNo = x.Reference.ProcessNo,
                   Date = x.Created.ToString("dd.MM.yyyy HH:mm"),
                   IsDocument = x.Documents.Any(x => x.Type == ContentType.File.ToString()),

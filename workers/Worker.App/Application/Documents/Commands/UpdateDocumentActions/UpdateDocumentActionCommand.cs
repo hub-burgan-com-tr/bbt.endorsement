@@ -32,7 +32,7 @@ namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
                 return Task.FromResult(new Response<UpdateDocumentActionResponse>());
 
             var actionIsSelected = _context.DocumentActions.FirstOrDefault(x => x.Document.OrderId == request.OrderId && x.DocumentId == document.DocumentId && x.IsSelected == true);
-            if(actionIsSelected.IsSelected == true)
+            if(actionIsSelected != null)
                 return Task.FromResult(new Response<UpdateDocumentActionResponse>());
 
             action.IsSelected = true;

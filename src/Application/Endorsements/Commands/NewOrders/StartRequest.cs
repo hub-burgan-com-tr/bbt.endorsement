@@ -13,12 +13,12 @@
         public OrderApprover Approver { get; set; }
     }
 
-    public class OrderApprover
-    {
-        public long CitizenshipNumber { get; set; }
-        public string First { get; set; }
-        public string Last { get; set; }
-    }
+    //public class OrderApprover
+    //{
+    //    public long CitizenshipNumber { get; set; }
+    //    public string First { get; set; }
+    //    public string Last { get; set; }
+    //}
     public class OrderDocument
     {
         public string Title { get; set; }
@@ -63,7 +63,7 @@
     public enum CalbackMode { Completed, Verbose }
     public enum ActionType { Approve=1, Reject=2 }
 
-    public class OrderApprover_
+    public class OrderApprover
     {
         public long ClientNumber { get; set; }
         public long CitizenshipNumber { get; set; }

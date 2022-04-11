@@ -36,5 +36,4 @@ public class ApproveOrderDocument
 {
     public string DocumentId { get; set; }
     public string ActionId { get; set; }
-    public int Choice { get; set; }
 }
