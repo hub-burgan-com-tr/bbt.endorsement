@@ -47,7 +47,35 @@ namespace Api.Controllers
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, FormType = Form.Order });
         }
 
-  
+        [SwaggerOperation(
+            Summary = "approve order document",
+            Description = "order documents that you want to approve"
+        )]
+        [Route("approve-order-document")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<Response<bool>> ApproveOrderDocument(ApproveOrderDocumentCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [SwaggerOperation(
+          Summary = "cancel order",
+          Description = "canceled order")]
+        [Route("cancel-order")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, cancel order successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, cancel order successfully.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<Response<bool>> CancelOrder([FromBody]
+            CancelOrderCommand data)
+        {
+            return await Mediator.Send(new CancelOrderCommand { orderId = data.orderId });
+        }
 
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
@@ -123,21 +151,6 @@ namespace Api.Controllers
         }
 
 
-        [SwaggerOperation(
-      Summary = "cancel order",
-      Description = "canceled order")]
-        [Route("cancel-order")]
-        [HttpPost]
-        [SwaggerResponse(200, "Success, cancel order successfully.", typeof(bool))]
-        [SwaggerResponse(201, "Success, cancel order successfully.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Response<bool>> CancelOrder([FromBody] 
-            CancelOrderCommand data)
-        {
-            return await Mediator.Send(new CancelOrderCommand { orderId = data.orderId });
-        }
-
 
         [SwaggerOperation(
           Summary = "Query endorsement order documents.",
@@ -157,21 +170,6 @@ namespace Api.Controllers
             });
         }
 
-
-        [SwaggerOperation(
-            Summary = "approve order document",
-            Description = "order documents that you want to approve"
-        )]
-        [Route("approve-order-document")]
-        [HttpPost]
-        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
-        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Response<bool>> ApproveOrderDocument(ApproveOrderDocumentCommand command)
-        {
-            return await Mediator.Send(command);
-        }
 
         /// <summary>
         ///  Onayımdakiler Listesi

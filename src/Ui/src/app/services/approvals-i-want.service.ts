@@ -20,10 +20,16 @@ export class ApprovalsIWantService {
     params = params.append('pageSize', data.pageSize);
     return this.httpClient.get<ApiBaseResponseModel>(url, {params: params});
   }
+
   getWantApprovalDetail(orderId: any) {
     const url = `${this.baseUrl}/${ApiPaths.WantApprovalDetail}`;
     let params = new HttpParams();
-    params = params.append('orderId',orderId);
+    params = params.append('orderId', orderId);
     return this.httpClient.get<ApiBaseResponseModel>(url, {params: params});
+  }
+
+  cancelOrder(orderId: any) {
+    const url = `${this.baseUrl}/${ApiPaths.CancelOrder}`;
+    return this.httpClient.post<ApiBaseResponseModel>(url, {orderId});
   }
 }

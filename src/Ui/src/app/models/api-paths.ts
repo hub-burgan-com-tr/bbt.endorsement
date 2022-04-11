@@ -13,4 +13,5 @@ export enum ApiPaths {
   WantApprovalDetail = 'Endorsement/want-approval-detail',
   WatchApproval = 'Endorsement/watch-approval',
   WatchApprovalDetail = 'Endorsement/watch-approval-detail',
+  CancelOrder = 'Endorsement/cancel-order',
 }
