@@ -39,6 +39,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       actions: this.fb.array([]),
       file: '',
       fileName: '',
+      fileType: '',
       title: '',
       content: '',
       formId: '',
@@ -215,7 +216,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
     this.submitted = true;
     if (this.formGroup.valid) {
       this.model.documents.map(x => {
-        x.content = x.file != '' ? x.file : x.content;
+        x.content = x.file != '' && x.type == 1 ? x.file : x.content;
         x.title = x.fileName != '' ? x.fileName : x.title;
       })
       this.model.approver = {
@@ -305,7 +306,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       reader.onload = () => {
         this.formNewDocument.patchValue({
           file: reader.result,
-          fileName: this.selectedFileName
+          fileName: this.selectedFileName,
+          fileType: file.type
         });
       };
     }
