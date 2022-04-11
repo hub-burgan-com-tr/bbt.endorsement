@@ -95,7 +95,7 @@
                   <button class="btn btn-white px-5" type="button" (click)="file.click()">Bilgisayarıma Gözat</button>
                   <input type="file" #file [hidden]="true" (change)="onClickUploadDocument($event)">
                 </div>
-                <div class="col">PNG, JPG or DOCSX, yüklenebilir en fazla 20MB gibi bir yazı vs.</div>
+                <!--<div class="col">PNG, JPG or DOCSX, yüklenebilir en fazla 20MB gibi bir yazı vs.</div>-->
               </div>
 
               <div *ngIf="newDocumentSubmitted && fnd.file.errors" class="text-danger">

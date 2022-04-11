@@ -7,6 +7,10 @@
 app-root {
   color: #464646;
 
+  img {
+    max-width: 100%;
+  }
+
   .formio-component {
     .formio-error-wrapper {
       padding: 0;
@@ -35,7 +39,7 @@ app-root {
     }
   }
 
-  .bi-chevron-left, .bi-chevron-right{
+  .bi-chevron-left, .bi-chevron-right {
     background-color: gray;
     color: white;
     width: 31px;
@@ -44,7 +48,7 @@ app-root {
     border-radius: 5px;
   }
 
-  .disable-paging-button{
+  .disable-paging-button {
     background-color: lightgray !important;
   }
 
@@ -158,52 +162,56 @@ app-root {
   .scale-2x {
     transform: scale(2);
   }
+
   .nsm-dialog.custom-modal {
     max-width: 1000px;
   }
+
   ngx-smart-modal {
 
     .overlay {
       display: flex;
       justify-content: center;
       align-items: center;
-.nsm-dialog{
-  &.error{
-    .nsm-content{
-      .nsm-body{
-        h1{
-          color: red;
+
+      .nsm-dialog {
+        &.error {
+          .nsm-content {
+            .nsm-body {
+              h1 {
+                color: red;
+              }
+            }
+          }
         }
-      }
-    }
-  }
-  .nsm-content {
-    border-radius: 10px;
 
-    .nsm-body {
-      h1 {
-        color: #0099d8;
-        font-size: 20px;
-      }
+        .nsm-content {
+          border-radius: 10px;
 
-      .button-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        margin-top: 20px;
+          .nsm-body {
+            h1 {
+              color: #0099d8;
+              font-size: 20px;
+            }
 
-        button {
-          width: 100%;
+            .button-container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+              margin-top: 20px;
 
-          &:not(:last-child) {
-            margin-bottom: 10px;
+              button {
+                width: 100%;
+
+                &:not(:last-child) {
+                  margin-bottom: 10px;
+                }
+              }
+            }
           }
         }
       }
-    }
-  }
-}
 
 
     }
@@ -686,6 +694,7 @@ app-root {
               background: #ee1c24;
             }
           }
+
           &.grey {
             color: grey;
 
@@ -693,6 +702,7 @@ app-root {
               background: grey;
             }
           }
+
           &.blue {
             color: #2eb2e9;
 
