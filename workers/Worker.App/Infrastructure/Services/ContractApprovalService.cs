@@ -275,13 +275,6 @@ public class ContractApprovalService : IContractApprovalService
                     });
                 }
 
-                var history = _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Approve Contract",
-                    Description = ""
-                });
-
                 var orderState = await _mediator.Send(new ApproveContractCommand { OrderId = variables.InstanceId.ToString() });
                 if(orderState.Data.OrderState != OrderState.Pending)
                 {
