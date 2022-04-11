@@ -8,7 +8,7 @@
           <div class="title">{{index + 1}}- {{i.name}}</div>
           <div class="mb-4" *ngIf="i.content">
             <ng-container *ngIf="i.type==='File';else second">
-              <img [src]="i.content" *ngIf="i.content.indexOf('data:image')>-1;else fileContent">
+              <img class="mw-100" [src]="i.content" *ngIf="i.content.indexOf('data:image')>-1;else fileContent">
               <ng-template #fileContent>
                 {{i.content}}
               </ng-template>
@@ -54,7 +54,7 @@
           </ng-template>
         </div>
         <div class="col-auto">
-          <img src="/assets/img/check-circle.png">
+          <img src="/assets/img/{{i.state?'check-circle':'block2x'}}.png">
         </div>
       </div>
     </div>

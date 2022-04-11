@@ -35,7 +35,8 @@
             <b class="mb-2 d-block">{{detail.name}}</b>
             <div class="mb-4" *ngIf="detail.content">
               <ng-container *ngIf="detail.type==='File';else second">
-                <img [src]="detail.content" *ngIf="detail.content.indexOf('data:image')>-1;else fileContent">
+                <img class="mw-100" [src]="detail.content"
+                     *ngIf="detail.content.indexOf('data:image')>-1;else fileContent">
                 <ng-template #fileContent>
                   {{detail.content}}
                 </ng-template>
