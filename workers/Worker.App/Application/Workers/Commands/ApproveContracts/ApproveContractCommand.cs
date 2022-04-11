@@ -23,10 +23,13 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
 
         public async Task<Response<ApproveContractResponse>> Handle(ApproveContractCommand request, CancellationToken cancellationToken)
         {
-            var order = _context.Orders.FirstOrDefault(x=> x.OrderId == request.OrderId && x.State == OrderState.Pending.ToString());
+            var order = _context.Orders.FirstOrDefault(x=> x.OrderId == request.OrderId);
 
-            if (order == null)
-                return Response<ApproveContractResponse>.Fail("", 200);
+            if (order == null && order.State != OrderState.Pending.ToString())
+            {
+                var state = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
+                return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = state }, 200);
+            }
 
             var documents = _context.Documents
                  .Where(x => x.OrderId == request.OrderId)
@@ -41,7 +44,7 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
             {
                 order.State = OrderState.Reject.ToString();
                 order.LastModified = _dateTime.Now;
-                _context.Orders.Update(order);
+                order = _context.Orders.Update(order).Entity;
                 _context.SaveChanges();
             }
 
@@ -50,14 +53,22 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
             {
                 order.State = OrderState.Approve.ToString();
                 order.LastModified = _dateTime.Now;
-                _context.Orders.Update(order);
+                order = _context.Orders.Update(order).Entity;
                 _context.SaveChanges();
             }
 
-            order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
             var orderState = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
 
-            return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = orderState }, 200);
+            var approveContractDocuments = _context.Documents
+                .Where(x => x.OrderId == order.OrderId)
+                .Select(x => new ApproveContractDocumentResponse
+                {
+                    DocumentId = x.DocumentId,
+                    DocumentName = x.Name,
+                    ActionTitle = x.DocumentActions.FirstOrDefault(x => x.IsSelected) != null ? x.DocumentActions.FirstOrDefault(x => x.IsSelected).Title : ""
+                }).ToList();
+
+            return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = orderState, Documents = approveContractDocuments }, 200);
         }
     }
 }

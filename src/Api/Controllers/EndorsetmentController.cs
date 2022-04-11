@@ -20,6 +20,8 @@ using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Enum;
 using Application.Endorsements.Commands.CreateOrderHistory;
+using Application.Endorsements.Queries.GetSearchPersonSummary;
+using Application.Endorsements.Queries.GetPersonSummary;
 
 namespace Api.Controllers
 {
@@ -45,7 +47,35 @@ namespace Api.Controllers
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, FormType = Form.Order });
         }
 
-  
+        [SwaggerOperation(
+            Summary = "approve order document",
+            Description = "order documents that you want to approve"
+        )]
+        [Route("approve-order-document")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<Response<bool>> ApproveOrderDocument(ApproveOrderDocumentCommand command)
+        {
+            return await Mediator.Send(command);
+        }
+
+        [SwaggerOperation(
+          Summary = "cancel order",
+          Description = "canceled order")]
+        [Route("cancel-order")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, cancel order successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, cancel order successfully.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<Response<bool>> CancelOrder([FromBody]
+            CancelOrderCommand data)
+        {
+            return await Mediator.Send(new CancelOrderCommand { orderId = data.orderId });
+        }
 
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
@@ -121,21 +151,6 @@ namespace Api.Controllers
         }
 
 
-        [SwaggerOperation(
-      Summary = "cancel order",
-      Description = "canceled order")]
-        [Route("cancel-order")]
-        [HttpPost]
-        [SwaggerResponse(200, "Success, cancel order successfully.", typeof(bool))]
-        [SwaggerResponse(201, "Success, cancel order successfully.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Response<bool>> CancelOrder([FromBody] 
-            CancelOrderCommand data)
-        {
-            return await Mediator.Send(new CancelOrderCommand { orderId = data.orderId });
-        }
-
 
         [SwaggerOperation(
           Summary = "Query endorsement order documents.",
@@ -155,21 +170,6 @@ namespace Api.Controllers
             });
         }
 
-
-        [SwaggerOperation(
-            Summary = "approve order document",
-            Description = "order documents that you want to approve"
-        )]
-        [Route("approve-order-document")]
-        [HttpPost]
-        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
-        [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Response<bool>> ApproveOrderDocument(ApproveOrderDocumentCommand command)
-        {
-            return await Mediator.Send(command);
-        }
 
         /// <summary>
         ///  Onayımdakiler Listesi
@@ -390,19 +390,29 @@ namespace Api.Controllers
         }
 
 
-        //[Route("Search")]
-        //[HttpGet]
-        //[SwaggerResponse(200, "Success, queried person are returned successfully.", typeof(OrderApprover))]
-        //[SwaggerResponse(404, "Success but there is no watch approval detail  available for the query.", typeof(void))]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //public async Task<IActionResult> Search([FromQuery] string name)
-        //{
-        //    var response = await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
-        //    return Ok(response);
-        //}
+        [Route("person-search")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
+        [SwaggerResponse(404, "Success but there is no person search  available for the query.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> PersonSearch([FromQuery] string name)
+        {
+            var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
+            return Ok(response);
+        }
 
-
+        [Route("person-get")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, queried person get are returned successfully.", typeof(GetPersonSummaryDto))]
+        [SwaggerResponse(404, "Success but there is no person get  available for the query.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> PersonGet([FromQuery] long Id)
+        {
+            var response = await Mediator.Send(new GetPersonSummaryQuery() { Id = Id });
+            return Ok(response);
+        }
 
     }
 }
