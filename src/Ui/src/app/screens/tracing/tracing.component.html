@@ -81,12 +81,12 @@
         <td class="col-auto">{{row.state}}</td>
         <td class="col-auto">{{row.processNo}}</td>
         <td class="col-auto">{{row.date}}</td>
-        <td class="status" [ngClass]="{'danger':row.status===0,'warning':row.status===1,'success':row.status===2}">
-          {{row.statusText}}
+        <td class="status" [ngClass]="row.orderState | stateClass">
+          {{row.orderState | state}}
           <span class="status-box"></span>
         </td>
         <td class="col-auto">
-          <img src="/assets/img/attachment.png" *ngIf="row.file">
+          <img src="/assets/img/attachment.png" *ngIf="row.isDocument">
         </td>
         <td class="col-auto">
           <div class="icon">

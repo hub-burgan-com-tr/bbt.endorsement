@@ -69,7 +69,7 @@ export class MyApprovalDetailComponent implements OnInit {
   }
 
   redirectToList() {
-    this.router.navigate(['..'], {relativeTo: this.route});
+    this.router.navigate(['/i-approve/detail'], {queryParams: {orderId: this.orderId}});
   }
 
   send() {

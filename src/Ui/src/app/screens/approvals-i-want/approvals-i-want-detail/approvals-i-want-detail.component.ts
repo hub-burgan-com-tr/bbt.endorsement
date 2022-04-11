@@ -32,4 +32,10 @@ export class ApprovalsIWantDetailComponent implements OnInit {
     this.modalDetail = d;
     this.modal.open('document');
   }
+
+  cancelOrder() {
+    this.approvalsIWantService.cancelOrder(this.orderId).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      console.log(res);
+    });
+  }
 }

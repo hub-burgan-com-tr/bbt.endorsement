@@ -7,9 +7,6 @@
 app-root {
   color: #464646;
 
-  img {
-    max-width: 100%;
-  }
 
   .formio-component {
     .formio-error-wrapper {
@@ -767,6 +764,31 @@ app-root {
             color: #bbb;
           }
         }
+      }
+    }
+
+    .btn {
+      &.danger {
+        background: #ee1c24;
+        color: #fff;
+      }
+
+      &.grey {
+        background: grey;
+      }
+
+      &.blue {
+        background: #2eb2e9;
+      }
+
+      &.black {
+        background: #000;
+        color: #fff;
+      }
+
+      &.success {
+        background: #39b54a;
+        color: #fff;
       }
     }
   }
