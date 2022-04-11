@@ -32,11 +32,13 @@ export class ApprovalsIWantDetailComponent implements OnInit {
     this.modalDetail = d;
     this.modal.open('document');
   }
-
+  redirectToList(){
+    this.router.navigate(['..'], {relativeTo: this.route});
+  }
   cancelOrder() {
     this.approvalsIWantService.cancelOrder(this.orderId).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.modal.close('cancelOrderModal');
-      this.router.navigate(['..'], {relativeTo: this.route});
+      this.modal.open('cancelOrderConfirmed');
     });
   }
 }

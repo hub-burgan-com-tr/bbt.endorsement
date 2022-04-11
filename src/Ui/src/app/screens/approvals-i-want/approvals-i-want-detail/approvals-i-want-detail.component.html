@@ -30,6 +30,13 @@
     <button class="btn btn-secondary" (click)="cancelOrderModal.close()">İptal</button>
   </div>
 </ngx-smart-modal>
+<ngx-smart-modal #cancelOrderConfirmed identifier="cancelOrderConfirmed" (onAnyCloseEvent)="redirectToList()">
+  <h1>Bilgilendirme</h1>
+  <p>Onay iptal işlemi başarılı olmuştur.</p>
+  <div class="button-container">
+    <button class="btn btn-primary" (click)="cancelOrderConfirmed.close()">Tamam</button>
+  </div>
+</ngx-smart-modal>
 <app-main-content blockTitle="İstediğim Onaylar" [subTitle]="data&&data.title">
   <div right class="d-flex justify-content-end">
     <button class="btn btn-outline-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 me-3" (click)="cancelOrderModal.open()"
