@@ -1,26 +1,36 @@
 ﻿using Application.Common.Models;
+using Application.Endorsements.Queries.GetSearchPersonSummary;
 using MediatR;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace Application.Endorsements.Queries.GetPersonSummary
 {
-    public class GetPersonSummaryQuery : IRequest<Response<GetPersonSummaryDto>>
+    public class GetPersonSummaryQuery : IRequest<Response<GetSearchPersonSummaryResponse>>
     {
         public long Id { get; set; }
     }
 
-    public class GetPersonSummaryQueryHandler : IRequestHandler<GetPersonSummaryQuery, Response<GetPersonSummaryDto>>
-    {
-       
-        public async Task<Response<GetPersonSummaryDto>> Handle(GetPersonSummaryQuery request, CancellationToken cancellationToken)
+        public class GetSearchPersonSummaryQueryHandler : IRequestHandler<GetPersonSummaryQuery, Response<GetSearchPersonSummaryResponse>>
         {
-            var restClient = new RestClient("http://20.31.226.131:5000");
+            public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetPersonSummaryQuery request, CancellationToken cancellationToken)
+            {
+                var restClient = new RestClient("http://20.31.226.131:5000");
+                var restRequest = new RestRequest("/Person", Method.Get);
+                restRequest.AddParameter("/", request.Id, ParameterType.QueryString);
+                var response = await restClient.ExecuteAsync(restRequest);
+                var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
 
-            var restRequest = new RestRequest(String.Format("{0}/{1}", "/Person",request.Id), Method.Get);
-            var response = restClient.ExecuteGetAsync<GetPersonSummaryDto>(restRequest);
-            return Response<GetPersonSummaryDto>.Success(new GetPersonSummaryDto { CitizenshipNumber = response.Result.Data.CitizenshipNumber, First = response.Result.Data.First, Last = response.Result.Data.Last }, 200);
-
+                var persons = data.Select(x => new GetSearchPersonSummaryDto
+                {
+                    CitizenshipNumber = x.CitizenshipNumber,
+                    First = x.Name.First,
+                    Last = x.Name.Last
+                });
+                return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
+            }
         }
+
     }
 
-}
+

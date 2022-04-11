@@ -404,7 +404,7 @@ namespace Api.Controllers
 
         [Route("person-get")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried person get are returned successfully.", typeof(GetPersonSummaryDto))]
+        [SwaggerResponse(200, "Success, queried person get are returned successfully.", typeof(GetSearchPersonSummaryDto))]
         [SwaggerResponse(404, "Success but there is no person get  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
