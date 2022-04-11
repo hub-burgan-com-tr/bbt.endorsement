@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
+using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Domain.Enums;
 using Worker.App.Models;
@@ -313,7 +314,7 @@ public class ContractApprovalService : IContractApprovalService
     }
     private void DeleteEntity()
     {
-       // Log.Information("DeleteEntity Worker registered ");
+        // Log.Information("DeleteEntity Worker registered ");
 
         CreateWorker("DeleteEntity", async (jobClient, job) =>
         {
@@ -321,15 +322,20 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"DeleteEntity");
 
-            var history = _mediator.Send(new CreateOrderHistoryCommand
+            var response = await _mediator.Send(new DeleteEntityCommand { OrderId = variables.InstanceId.ToString() });
+
+            if (response != null && response.Data.OrderState == OrderState.Cancel && response.Data.IsUpdated)
             {
-                OrderId = variables.InstanceId.ToString(),
-                State = "Delete Entity",
-                Description = ""
-            });
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "İptal",
+                    Description = "Emir iptal edildi"
+                });
+            }
 
             await jobClient.NewCompleteJobCommand(job.Key)
-                      .Variables("{\"Approve\":\"" + true + "\"}")
+                      .Variables(data)
                       .Send();
 
         });
