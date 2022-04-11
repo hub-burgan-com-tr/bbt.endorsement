@@ -53,7 +53,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
                 orders = orders.Where(x => x.Reference.State.Contains(request.State.Trim()));
             if (!string.IsNullOrEmpty(request.ProcessNo))
                 orders = orders.Where(x => x.Reference.ProcessNo == request.ProcessNo.Trim());
-            var list = await orders
+            var list = await orders.OrderByDescending(x=>x.Created)
               .Select(x => new GetWatchApprovalDto
               {
                   OrderId = x.OrderId,
@@ -64,7 +64,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
                   State = x.Reference.State,
                   ProcessNo = x.Reference.ProcessNo,
                   Date = x.Created.ToString("dd.MM.yyyy HH:mm"),
-                  IsDocument = x.Documents.Any(x => x.Type == ContentType.File.ToString()),
+                  IsDocument = x.Documents.Any(x => x.Type == ContentType.File.ToString() || x.Type == ContentType.PDF.ToString() && x.FormDefinitionId == null),
                   OrderState = x.State,
               }).PaginatedListAsync(request.PageNumber, request.PageSize);
 
