@@ -410,6 +410,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> PersonGet([FromQuery] long Id)
         {
+          
             var response = await Mediator.Send(new GetPersonSummaryQuery() { Id = Id });
             return Ok(response);
         }

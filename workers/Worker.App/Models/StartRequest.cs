@@ -21,6 +21,7 @@ public class StartRequest
         public string Content { get; set; }
         public string FileName { get; set; }
         public ContentType Type { get; set; }
+        public string FileType { get; set; }
         public List<DocumentAction> Actions { get; set; }
 
         public class DocumentAction
@@ -54,5 +55,7 @@ public class StartRequest
         public string RenotifyMessagePush { get; set; }
     }
     public enum ContentType {File=1, PlainText=2,HTML =3,PDF=4}
+    public enum FileType
+    {Image=1,PDF=2,HTML=3,File=4}
     public enum CalbackMode { Completed, Verbose }
 }

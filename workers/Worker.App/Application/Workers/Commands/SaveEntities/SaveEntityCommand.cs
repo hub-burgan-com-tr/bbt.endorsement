@@ -77,6 +77,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Content = startFormRequest.Content,
                 Name = startFormRequest.Title,
                 Type = formDefinition.Type.ToString(),
+                FileType=formDefinition.Type.ToString()
                 Created = _dateTime.Now,
                 DocumentActions = actions,
                 FormDefinitionId = startFormRequest.FormId
@@ -141,7 +142,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     DocumentId = Guid.NewGuid().ToString(),
                     Content = item.Content,
                     Name =item.Title,
-                    Type =item.Content.Contains("pdf")?ContentType.PDF.ToString(): item.Type.ToString(),
+                    Type = item.Type.ToString(),
+                    FileType =GetFileType(item.FileType),
                     Created = _dateTime.Now,
                     DocumentActions = actions
                 });
@@ -176,6 +178,25 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             _context.SaveChanges();
 
             return entity.OrderId;
+        }
+
+        private string GetFileType(string fileType)
+        {
+            if (fileType.Contains("image"))
+            {
+                return FileType.Image.ToString();
+            }
+            else if (fileType.Contains("pdf"))
+            {
+                return FileType.PDF.ToString();
+
+            }
+            else
+            {
+                return FileType.File.ToString();
+
+            }
+          
         }
     }
 }

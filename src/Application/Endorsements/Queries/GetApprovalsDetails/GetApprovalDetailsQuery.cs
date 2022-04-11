@@ -2,6 +2,7 @@
 using Application.Common.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Worker.App.Models.StartRequest;
 
 namespace Application.Endorsements.Queries.GetApprovalsDetails
 {
@@ -37,7 +38,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                         Content=y.Content,
                         Link=y.Name,
                         Name=y.Name,
-                        Type=y.Type,                     
+                        Type=y.FormDefinitionId==null?y.FileType:y.Type,                     
                        DocumentId = y.DocumentId,
                         Actions=y.DocumentActions.OrderByDescending(x=>x.Created).Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.DocumentActionId, Title=z.Title}).ToList()
                     }).ToList(),                
@@ -45,5 +46,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
           
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
+
+       
     }
 }
