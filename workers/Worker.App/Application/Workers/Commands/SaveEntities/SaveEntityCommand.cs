@@ -28,20 +28,22 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
-            var response = new SaveEntityResponse();
+            var orderId = "";
             if(request.Model.FormType == Form.Order)
-            {
-                response= OrderCreate(request.Model.StartRequest);
-            }
+                orderId = OrderCreate(request.Model.StartRequest);
             else if (request.Model.FormType == Form.FormOrder)
-            {
-                response = FormOrderCreate(request.Model.StartFormRequest);
-            }
+                orderId = FormOrderCreate(request.Model.StartFormRequest);
+
+            var documentList = _context.Documents.Where(x => x.OrderId == orderId);
+            var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
+            foreach (var item in documentList)
+                saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
+            var response =  new SaveEntityResponse { OrderId = orderId, Documents = saveEntityDocuments };
 
             return Response<SaveEntityResponse>.Success(response, 200);
         }
 
-        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest)
+        private string FormOrderCreate(StartFormRequest startFormRequest)
         {
             if (startFormRequest == null) return null;
 
@@ -100,7 +102,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var entity = _context.Orders.Add(order).Entity;
             _context.SaveChanges();
 
-            return new SaveEntityResponse { OrderId = entity.OrderId };
+            return entity.OrderId;
         }
 
         private string GetCustomerId(OrderApprover approver)
@@ -111,7 +113,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return customerId;
         }
 
-        private SaveEntityResponse OrderCreate(StartRequest startRequest)
+        private string OrderCreate(StartRequest startRequest)
         {
             if (startRequest == null) return null;
 
@@ -173,7 +175,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var entity = _context.Orders.Add(order).Entity;
             _context.SaveChanges();
 
-            return new SaveEntityResponse { OrderId = entity.OrderId };
+            return entity.OrderId;
         }
     }
 }
