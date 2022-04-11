@@ -232,9 +232,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       this.model.config.maxRetryCount = parseInt(this.model.config.maxRetryCount);
       this.model.config.retryFrequence = parseInt(this.model.config.retryFrequence);
       this.newOrderService.save(this.model).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        console.log(res);
+        this.modal.open('success');
       });
-      this.modal.open('success');
     }
   }
 
