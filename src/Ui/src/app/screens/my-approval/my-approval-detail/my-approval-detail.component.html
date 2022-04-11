@@ -1,18 +1,18 @@
-<ngx-smart-modal #confirmModal identifier="confirmModal">
+<ngx-smart-modal #confirmModal identifier="confirmModal" (onAnyCloseEvent)="redirectToList()">
   <h1>İşlem Başarılı</h1>
   <p>Onay gönderiminiz başarılı olmuştur. <br>Detayları incelemek için tıklayın.</p>
 
   <div class="button-container">
-    <button class="btn btn-primary" [routerLink]="['./completed']">Tamam</button>
+    <button class="btn btn-primary" (click)="confirmModal.close()">Tamam</button>
   </div>
 </ngx-smart-modal>
-<ngx-smart-modal #myModal identifier="myModal">
+<ngx-smart-modal #sendModal identifier="sendModal">
   <h1>Bilgilendirme</h1>
   <p>Onay kaydedilecektir. Emin misiniz?</p>
 
   <div class="button-container">
     <button class="btn btn-primary" (click)="send()">Kaydet</button>
-    <button class="btn btn-outline-primary" (click)="myModal.close()">İptal</button>
+    <button class="btn btn-outline-primary" (click)="sendModal.close()">İptal</button>
   </div>
 </ngx-smart-modal>
 <app-main-content blockTitle="Onayımdakiler" subTitle="{{title}}">
@@ -28,63 +28,73 @@
         </div>
       </div>
     </div>-->
-    <div class="col-md-12 col-sm-12">
-      <div *ngFor="let detail of details; let d = index">
-        <div class="box p-3 mb-4" *ngIf="d===step">
-          <b class="mb-2 d-block">{{detail.name}}</b>
-          <div class="mb-4" *ngIf="detail.content">
-            <ng-container *ngIf="detail.type==='File';else second">
-              <img [src]="detail.content" *ngIf="detail.content.indexOf('data:image')>-1;else fileContent">
-              <ng-template #fileContent>
+    <form #f="ngForm" name="f" (ngSubmit)="continue(f)">
+      <div class="col-md-12 col-sm-12">
+        <div *ngFor="let detail of details; let d = index">
+          <div class="box p-3 mb-4" *ngIf="d===step">
+            <b class="mb-2 d-block">{{detail.name}}</b>
+            <div class="mb-4" *ngIf="detail.content">
+              <ng-container *ngIf="detail.type==='File';else second">
+                <img [src]="detail.content" *ngIf="detail.content.indexOf('data:image')>-1;else fileContent">
+                <ng-template #fileContent>
+                  {{detail.content}}
+                </ng-template>
+              </ng-container>
+              <ng-template #second>
+                <ng-container *ngIf="detail.type==='PDF';else third">
+                  <iframe [src]="detail.content | safe"
+                          width="100%"
+                          height="500"></iframe>
+                </ng-container>
+              </ng-template>
+              <ng-template #third>
+                <ng-container *ngIf="detail.type==='HTML';else normalContent">
+                  <iframe [srcdoc]="detail.content | safeHtml" width="100%"
+                          height="500"></iframe>
+                </ng-container>
+              </ng-template>
+              <ng-template #normalContent>
                 {{detail.content}}
               </ng-template>
-            </ng-container>
-            <ng-template #second>
-              <ng-container *ngIf="detail.type==='PDF';else third">
-                <iframe [src]="detail.content | safe"
-                        width="100%"
-                        height="500"></iframe>
-              </ng-container>
-            </ng-template>
-            <ng-template #third>
-              <ng-container *ngIf="detail.type==='HTML';else normalContent">
-                <iframe [srcdoc]="detail.content | safeHtml" width="100%"
-                        height="500"></iframe>
-              </ng-container>
-            </ng-template>
-            <ng-template #normalContent>
-              {{detail.content}}
-            </ng-template>
-          </div>
-          <div *ngIf="detail.actions.length != 0">
-            <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
-            <ng-template #check>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedDetail' + d }}"
-                       [value]="detail.actions[0].value" [(ngModel)]="detail.choice">
-                <label class="form-check-label" for="{{ 'actionCheckedDetail' + d }}">
-                  {{detail.actions[0].title}}
-                </label>
-              </div>
-            </ng-template>
-            <ng-template #radio>
-              <div class="form-check" *ngFor="let action of detail.actions; let a = index">
-                <input class="form-check-input" type="radio"
-                       name="{{ 'flexRadio-detail' + d }}"
-                       id="{{ 'flexRadio-' + d + '-' + a }}"
-                       [value]="action.value" [(ngModel)]="detail.choice">
-                <label class="form-check-label" for="{{ 'flexRadio-' + d + '-' + a }}">
-                  {{action.title}}
-                </label>
-              </div>
-            </ng-template>
+            </div>
+            <div *ngIf="detail.actions.length != 0">
+              <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
+              <ng-template #check>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedDetail' + d }}"
+                         name="{{ 'actionCheckedDetail' + d }}"
+                         [value]="detail.actions[0].value" [(ngModel)]="detail.choice" required
+                         (ngModelChange)="detail.choice?showError=false:showError=true;">
+                  <label class="form-check-label" for="{{ 'actionCheckedDetail' + d }}">
+                    {{detail.actions[0].title}}
+                  </label>
+                </div>
+              </ng-template>
+              <ng-template #radio>
+                <div class="form-check" *ngFor="let action of detail.actions; let a = index">
+                  <input class="form-check-input" type="radio"
+                         name="{{ 'flexRadio-detail' + d }}"
+                         id="{{ 'flexRadio-' + d + '-' + a }}"
+                         [value]="action.value" [(ngModel)]="detail.choice"
+                         required
+                         (ngModelChange)="detail.choice?showError=false:showError=true;"
+                  >
+                  <label class="form-check-label" for="{{ 'flexRadio-' + d + '-' + a }}">
+                    {{action.title}}
+                  </label>
+                </div>
+              </ng-template>
+            </div>
+            <small *ngIf="showError" class="text-danger">
+              Lütfen seçim yapınız
+            </small>
           </div>
         </div>
+        <div class="justify-content-center d-flex">
+          <button class="btn btn-orange px-5 mt-5" type="submit">{{buttonText}}
+          </button>
+        </div>
       </div>
-      <div class="justify-content-center d-flex">
-        <button class="btn btn-orange px-5 mt-5" (click)="continue()">{{buttonText}}
-        </button>
-      </div>
-    </div>
+    </form>
   </div>
 </app-main-content>

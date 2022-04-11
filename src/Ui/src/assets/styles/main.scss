@@ -686,12 +686,26 @@ app-root {
               background: #ee1c24;
             }
           }
-
-          &.warning {
-            color: #f6c500;
+          &.grey {
+            color: grey;
 
             .status-box {
-              background: #f6c500;
+              background: grey;
+            }
+          }
+          &.blue {
+            color: #2eb2e9;
+
+            .status-box {
+              background: #2eb2e9;
+            }
+          }
+
+          &.black {
+            color: #000;
+
+            .status-box {
+              background: #000;
             }
           }
 
