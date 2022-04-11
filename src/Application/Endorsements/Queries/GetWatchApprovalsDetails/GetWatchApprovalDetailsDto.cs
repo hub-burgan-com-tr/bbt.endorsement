@@ -30,6 +30,7 @@
         /// Tarihce
         /// </summary>
         public List<GetWatchApprovalDetailsHistoryDto> History { get; set; }
+        public string OrderState { get; internal set; }
     }
 
 

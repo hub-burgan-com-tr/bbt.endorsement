@@ -30,6 +30,7 @@
         /// Tarihce
         /// </summary>
         public List<GetWantApprovalDetailsHistoryDto> History { get; set; }
+        public string OrderState { get; internal set; }
     }
 
     public class GetWantApprovalDocumentDetailsDto
