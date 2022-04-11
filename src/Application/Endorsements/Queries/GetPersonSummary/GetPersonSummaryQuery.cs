@@ -16,8 +16,7 @@ namespace Application.Endorsements.Queries.GetPersonSummary
             public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetPersonSummaryQuery request, CancellationToken cancellationToken)
             {
                 var restClient = new RestClient("http://20.31.226.131:5000");
-                var restRequest = new RestRequest("/Person", Method.Get);
-                restRequest.AddParameter("/", request.Id, ParameterType.QueryString);
+                var restRequest = new RestRequest("/Person/+"+request.Id+"+", Method.Get);
                 var response = await restClient.ExecuteAsync(restRequest);
                 var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
 
