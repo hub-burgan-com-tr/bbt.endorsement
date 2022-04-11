@@ -18,8 +18,8 @@ namespace Application.Endorsements.Commands.NewOrderForms
                 RuleFor(v => v.Reference.Process).NotEmpty().WithMessage("İşlem bilgisi girilmelidir.");
                 RuleFor(v => v.Reference.State).NotEmpty().WithMessage("Aşama bilgisi girilmelidir.");
                 RuleFor(v => v.Reference.ProcessNo).NotEmpty().WithMessage("İşlem no bilgisi girilmelidir.");
-                RuleFor(v => v.Approver.First).NotEmpty().WithMessage("Ad girilmelidir.");
-                RuleFor(v => v.Approver.Last).NotEmpty().WithMessage("Soyad girilmelidir.");
+                RuleFor(v => v.Approver.Name.First).NotEmpty().WithMessage("Ad girilmelidir.");
+                RuleFor(v => v.Approver.Name.Last).NotEmpty().WithMessage("Soyad girilmelidir.");
                 RuleFor(v => v.Approver.CitizenshipNumber.ToString()).MaximumLength(11).MinimumLength(11).WithMessage("TCKN 11 haneli olmalıdır.");
                 
 
