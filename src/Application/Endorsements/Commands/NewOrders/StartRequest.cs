@@ -25,6 +25,7 @@
         public string Content { get; set; }
         public string FileName { get; set; }
         public int Type { get; set; }
+        public string FileType { get; set; }
         public List<DocumentAction> Actions { get; set; }
 
     }
