@@ -44,7 +44,7 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
             {
                 order.State = OrderState.Reject.ToString();
                 order.LastModified = _dateTime.Now;
-                _context.Orders.Update(order);
+                order = _context.Orders.Update(order).Entity;
                 _context.SaveChanges();
             }
 
@@ -53,11 +53,10 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
             {
                 order.State = OrderState.Approve.ToString();
                 order.LastModified = _dateTime.Now;
-                _context.Orders.Update(order);
+                order = _context.Orders.Update(order).Entity;
                 _context.SaveChanges();
             }
 
-            order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
             var orderState = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
 
             var approveContractDocuments = _context.Documents
