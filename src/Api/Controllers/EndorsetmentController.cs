@@ -130,10 +130,10 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, cancel order successfully.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Response<bool>> CancelOrder(
-            [FromQuery] string orderId)
+        public async Task<Response<bool>> CancelOrder([FromBody] 
+            CancelOrderCommand data)
         {
-            return await Mediator.Send(new CancelOrderCommand { orderId = orderId });
+            return await Mediator.Send(new CancelOrderCommand { orderId = data.orderId });
         }
 
 
@@ -390,7 +390,17 @@ namespace Api.Controllers
         }
 
 
-
+        //[Route("Search")]
+        //[HttpGet]
+        //[SwaggerResponse(200, "Success, queried person are returned successfully.", typeof(OrderApprover))]
+        //[SwaggerResponse(404, "Success but there is no watch approval detail  available for the query.", typeof(void))]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
+        //public async Task<IActionResult> Search([FromQuery] string name)
+        //{
+        //    var response = await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
+        //    return Ok(response);
+        //}
 
 
 
