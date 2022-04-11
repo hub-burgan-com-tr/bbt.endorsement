@@ -24,7 +24,7 @@ export class MyApprovalDetailComponent implements OnInit {
     documentId: '',
     name: '',
     content: '',
-    choice: '',
+    choice: null,
     actions: [],
     type: ''
   }];
@@ -79,7 +79,7 @@ export class MyApprovalDetailComponent implements OnInit {
     };
     this.details.forEach(i => {
       let actionId = '';
-      if (i.choice) {
+      if (i.choice === true) {
         actionId = i.actions[0].value;
       } else {
         actionId = i.actions.find(f => f.value == i.choice)?.documentActionId;
