@@ -7,12 +7,12 @@
     <button class="btn btn-outline-primary" (click)="documentDelete.close()">İptal</button>
   </div>
 </ngx-smart-modal>
-<ngx-smart-modal #success identifier="success">
+<ngx-smart-modal #success identifier="success" (onAnyCloseEvent)="redirectToList()">
   <h1>İşlem Başarılı</h1>
   <p>Yeni Onaylama Emri başarıyla gönderildi.</p>
 
   <div class="button-container">
-    <button class="btn btn-primary" [routerLink]="['../']">Tamam</button>
+    <button class="btn btn-primary">Tamam</button>
   </div>
 </ngx-smart-modal>
 <ngx-smart-modal #error identifier="error" customClass="error">
