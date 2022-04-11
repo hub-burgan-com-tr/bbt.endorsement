@@ -16,17 +16,17 @@ namespace Application.Endorsements.Queries.GetPersonSummary
             public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetPersonSummaryQuery request, CancellationToken cancellationToken)
             {
                 var restClient = new RestClient("http://20.31.226.131:5000");
-                var restRequest = new RestRequest("/Person/+"+request.Id+"+", Method.Get);
+            var restRequest = new RestRequest("/Person/" + request.Id, Method.Get);
                 var response = await restClient.ExecuteAsync(restRequest);
-                var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
+                var data = JsonConvert.DeserializeObject<PersonResponse>(response.Content);
 
-                var persons = data.Select(x => new GetSearchPersonSummaryDto
+                var person = new GetSearchPersonSummaryDto
                 {
-                    CitizenshipNumber = x.CitizenshipNumber,
-                    First = x.Name.First,
-                    Last = x.Name.Last
-                });
-                return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
+                    CitizenshipNumber = data.CitizenshipNumber,
+                    First = data.Name.First,
+                    Last = data.Name.Last
+                };
+                return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Person = person }, 200);
             }
         }
 
