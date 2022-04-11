@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Endorsements.Commands.NewOrders;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,9 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                     Title = x.Title,
                     Documents=x.Documents.Select(x=>new OrderDocument { Name=x.Name,
                     Content=x.Content,
-                    Type=x.Type,                        
+                    OrderState=x.Order.State,
+                    State=x.State== ActionType.Approve.ToString()?true:false,
+                    Type =x.Type,                        
                        Actions=x.DocumentActions.Select(y=>new Action { Checked = y.IsSelected, Title = y.Title, DocumentId = x.DocumentId }).ToList()}).ToList(),
                     History = x.OrderHistories.Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
 

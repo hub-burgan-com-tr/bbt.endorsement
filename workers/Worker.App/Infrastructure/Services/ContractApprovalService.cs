@@ -96,6 +96,16 @@ public class ContractApprovalService : IContractApprovalService
                             State = "Yeni Onay Emri",
                             Description = ""
                         });
+
+                        foreach (var document in response.Data.Documents)
+                        {
+                            await _mediator.Send(new CreateOrderHistoryCommand
+                            {
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "Onay Belgesi Geldi",
+                                Description  = document.Name
+                            });
+                        }
                     }
                 }
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });

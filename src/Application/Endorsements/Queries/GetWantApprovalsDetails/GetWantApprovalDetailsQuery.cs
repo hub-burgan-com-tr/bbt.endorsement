@@ -38,6 +38,7 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
                 MaxRetryCount=x.Config.MaxRetryCount,
                 RetryFrequence=x.Config.RetryFrequence,
                 ExpireInMinutes=x.Config.ExpireInMinutes,
+                OrderState=x.State,
                 History = x.OrderHistories.Select(x => new GetWantApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
                 Documents =x.Documents.Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,TypeName= x.Type == ContentType.PlainText.ToString() ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault(y=>y.Type==ActionType.Approve.ToString()).Title,Content=x.Content,Type=x.Type}).ToList() }).FirstOrDefaultAsync();
                 return Response<GetWantApprovalDetailsDto>.Success(response, 200);
