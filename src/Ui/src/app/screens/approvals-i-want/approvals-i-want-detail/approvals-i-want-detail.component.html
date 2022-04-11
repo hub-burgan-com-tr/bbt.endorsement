@@ -22,14 +22,23 @@
     {{modalDetail?.content}}
   </ng-template>
 </ngx-smart-modal>
+<ngx-smart-modal #cancelOrderModal identifier="cancelOrderModal">
+  <h1>Bilgilendirme</h1>
+  <p>Onay İptal Edilecekir, Emin misiniz?</p>
+  <div class="button-container">
+    <button class="btn btn-danger" (click)="cancelOrder()">Evet</button>
+    <button class="btn btn-secondary" (click)="cancelOrderModal.close()">İptal</button>
+  </div>
+</ngx-smart-modal>
 <app-main-content blockTitle="İstediğim Onaylar" [subTitle]="data&&data.title">
   <div right class="d-flex justify-content-end">
-    <button class="btn btn-outline-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 me-3" (click)="cancelOrder()" *ngIf="data&&data.orderState==='Pending'">İptal
+    <button class="btn btn-outline-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 me-3" (click)="cancelOrderModal.open()"
+            *ngIf="data&&data.orderState==='Pending'">İptal
       Et
     </button>
     <button class="btn text-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0 cursor-none no-hover"
             [ngClass]="data&&data.orderState | stateClass">
-      {{data&&data.orderState|state}}
+      {{data && data.orderState|state}}
     </button>
   </div>
   <div class="box mb-4">
