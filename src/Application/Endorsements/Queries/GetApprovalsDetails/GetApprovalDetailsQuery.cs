@@ -2,7 +2,6 @@
 using Application.Common.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static Worker.App.Models.StartRequest;
 
 namespace Application.Endorsements.Queries.GetApprovalsDetails
 {
