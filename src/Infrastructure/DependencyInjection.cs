@@ -8,6 +8,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, WebApplicationBuilder builder)
         {
+            
             services.AddDbContext(builder.Configuration);
             services.AddScopedServices();
             services.AddTransientServices();

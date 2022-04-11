@@ -4,7 +4,6 @@ using Worker.App.Domain.Entities;
 using Worker.App.Models;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Domain.Enums;
-using static Worker.App.Models.StartRequest;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -77,7 +76,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Content = startFormRequest.Content,
                 Name = startFormRequest.Title,
                 Type = formDefinition.Type.ToString(),
-                FileType=formDefinition.Type.ToString()
+                FileType=formDefinition.Type.ToString(),
                 Created = _dateTime.Now,
                 DocumentActions = actions,
                 FormDefinitionId = startFormRequest.FormId
@@ -196,7 +195,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 return FileType.File.ToString();
 
             }
-          
+
         }
+        public enum FileType
+        { Image = 1, PDF = 2, HTML = 3, File = 4 }
     }
 }
