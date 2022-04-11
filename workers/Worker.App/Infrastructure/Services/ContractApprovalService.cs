@@ -9,6 +9,7 @@ using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.SaveEntities;
+using Worker.App.Application.Workers.Commands.UpdateEntities;
 using Worker.App.Domain.Enums;
 using Worker.App.Models;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
@@ -232,12 +233,16 @@ public class ContractApprovalService : IContractApprovalService
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
-                var history = _mediator.Send(new CreateOrderHistoryCommand
+                var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId.ToString() });
+                if (response != null && response.Data.IsUpdated)
                 {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Update Entity",
-                    Description = ""
-                });
+                    var history = _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        State = "Zaman Aşımı",
+                        Description = "Order zaman aşımına uğradı"
+                    });
+                }
 
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
