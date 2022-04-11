@@ -208,6 +208,10 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
     return (<FormArray>this.formNewDocument.controls.actions).controls;
   }
 
+  redirectToList() {
+    this.router.navigate(['..'], {relativeTo: this.route})
+  }
+
   onSubmit() {
     if (this.model.documents.length === 0) {
       this.modal.open('error');
