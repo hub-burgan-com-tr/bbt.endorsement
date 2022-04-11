@@ -60,7 +60,16 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
             order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
             var orderState = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
 
-            return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = orderState }, 200);
+            var approveContractDocuments = _context.Documents
+                .Where(x => x.OrderId == order.OrderId)
+                .Select(x => new ApproveContractDocumentResponse
+                {
+                    DocumentId = x.DocumentId,
+                    DocumentName = x.Name,
+                    ActionTitle = x.DocumentActions.FirstOrDefault(x => x.IsSelected) != null ? x.DocumentActions.FirstOrDefault(x => x.IsSelected).Title : ""
+                }).ToList();
+
+            return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = orderState, Documents = approveContractDocuments }, 200);
         }
     }
 }

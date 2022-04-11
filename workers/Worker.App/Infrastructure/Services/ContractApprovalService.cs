@@ -282,6 +282,20 @@ public class ContractApprovalService : IContractApprovalService
                 });
 
                 var orderState = await _mediator.Send(new ApproveContractCommand { OrderId = variables.InstanceId.ToString() });
+                if(orderState.Data.OrderState != OrderState.Pending)
+                {
+                    foreach (var item in orderState.Data.Documents)
+                    {
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            DocumentId = item.DocumentId,
+                            State = item.ActionTitle,
+                            Description = item.DocumentName
+                        });
+                    }
+                }
+
                 if (orderState.Data != null && orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
                     variables.Completed = true;
             }
