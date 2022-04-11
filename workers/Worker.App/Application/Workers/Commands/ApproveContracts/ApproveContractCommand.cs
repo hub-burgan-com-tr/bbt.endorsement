@@ -23,10 +23,13 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
 
         public async Task<Response<ApproveContractResponse>> Handle(ApproveContractCommand request, CancellationToken cancellationToken)
         {
-            var order = _context.Orders.FirstOrDefault(x=> x.OrderId == request.OrderId && x.State == OrderState.Pending.ToString());
+            var order = _context.Orders.FirstOrDefault(x=> x.OrderId == request.OrderId);
 
-            if (order == null)
-                return Response<ApproveContractResponse>.Fail("", 200);
+            if (order == null && order.State != OrderState.Pending.ToString())
+            {
+                var state = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
+                return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = state }, 200);
+            }
 
             var documents = _context.Documents
                  .Where(x => x.OrderId == request.OrderId)
