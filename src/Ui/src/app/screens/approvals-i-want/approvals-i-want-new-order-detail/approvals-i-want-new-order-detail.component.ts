@@ -39,6 +39,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       actions: this.fb.array([]),
       file: '',
       fileName: '',
+      fileType: '',
       title: '',
       content: '',
       formId: '',
@@ -305,7 +306,8 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       reader.onload = () => {
         this.formNewDocument.patchValue({
           file: reader.result,
-          fileName: this.selectedFileName
+          fileName: this.selectedFileName,
+          fileType: file.type
         });
       };
     }
