@@ -32,14 +32,14 @@ namespace Application.Endorsements.Queries.GetMyApprovals
 
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = await _context.Orders.Where(x => x.State != OrderState.Pending.ToString())
+            var list = await _context.Orders.Where(x => (x.State != OrderState.Pending.ToString()||x.State!=OrderState.Cancel.ToString()))
                 .Include(x => x.Documents)
                 .OrderByDescending(x => x.Created)
                 .Select(x => new GetMyApprovalDto
                 {
                     OrderId = x.OrderId,
                     Title = x.Title,
-                    IsDocument = x.Documents.Any(x => x.Type == ContentType.File.ToString() || x.Type == ContentType.PDF.ToString() && x.FormDefinitionId == null),
+                    IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString() && x.FormDefinitionId == null),
                     State = x.State,
                 })
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
