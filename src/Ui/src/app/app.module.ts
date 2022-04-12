@@ -6,12 +6,13 @@ import {LoginComponent} from "./screens/login/login.component";
 import {DefaultLayoutComponent} from "./layouts/default-layout/default-layout.component";
 import {HeaderComponent} from "./components/header/header.component";
 import {HttpClientModule} from "@angular/common/http";
+import { RenderFileComponent } from './components/render-file/render-file.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DefaultLayoutComponent,
-    HeaderComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
