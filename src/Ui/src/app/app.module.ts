@@ -7,6 +7,7 @@ import {DefaultLayoutComponent} from "./layouts/default-layout/default-layout.co
 import {HeaderComponent} from "./components/header/header.component";
 import {HttpClientModule} from "@angular/common/http";
 import { RenderFileComponent } from './components/render-file/render-file.component';
+import { PersonSearchComponent } from './components/person-search/person-search.component';
 @NgModule({
   declarations: [
     AppComponent,
