@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Subject, takeUntil} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {IApproveService} from "../../../services/i-approve.service";
+import {saveAs} from 'file-saver'
 
 @Component({
   selector: 'app-i-approve-detail',

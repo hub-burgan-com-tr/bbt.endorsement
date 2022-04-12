@@ -12,6 +12,8 @@ import {SafePipe} from "../pipes/safe.pipe";
 import {SafeHtmlPipe} from "../pipes/safe-html.pipe";
 import {StatePipe} from "../pipes/state.pipe";
 import {StateClassPipe} from "../pipes/state-class.pipe";
+import {DownloadLinkComponent} from "../components/download-link/download-link.component";
+import {RenderFileComponent} from "../components/render-file/render-file.component";
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import {StateClassPipe} from "../pipes/state-class.pipe";
     SafePipe,
     SafeHtmlPipe,
     StatePipe,
-    StateClassPipe
+    StateClassPipe,
+    DownloadLinkComponent,
+    RenderFileComponent
   ],
   imports: [CommonModule, RouterModule],
   exports: [
@@ -36,7 +40,9 @@ import {StateClassPipe} from "../pipes/state-class.pipe";
     SafePipe,
     SafeHtmlPipe,
     StatePipe,
-    StateClassPipe
+    StateClassPipe,
+    DownloadLinkComponent,
+    RenderFileComponent
   ]
 })
 export class SharedModule {

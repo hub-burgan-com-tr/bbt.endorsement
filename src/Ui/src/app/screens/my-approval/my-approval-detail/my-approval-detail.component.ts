@@ -26,7 +26,8 @@ export class MyApprovalDetailComponent implements OnInit {
     content: '',
     choice: null,
     actions: [],
-    type: ''
+    type: '',
+    mimeType: ''
   }];
   physicallyDocuments = [{
     name: '',
