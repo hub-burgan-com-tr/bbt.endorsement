@@ -1,4 +1,5 @@
-﻿using Application.BbtInternals.Queries.GetSearchPersonSummary;
+﻿using Application.BbtInternals.Models;
+using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Application.Common.Models;
 using MediatR;
 using Newtonsoft.Json;

@@ -1,4 +1,5 @@
-﻿using Application.Common.Models;
+﻿using Application.BbtInternals.Models;
+using Application.Common.Models;
 using MediatR;
 using Newtonsoft.Json;
 using RestSharp;

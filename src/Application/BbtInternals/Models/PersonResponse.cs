@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Application.BbtInternals.Queries.GetSearchPersonSummary
+namespace Application.BbtInternals.Models
 {
     public partial class PersonResponse
     {
