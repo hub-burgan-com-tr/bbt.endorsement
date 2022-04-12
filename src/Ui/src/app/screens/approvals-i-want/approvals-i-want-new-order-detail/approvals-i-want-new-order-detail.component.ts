@@ -218,7 +218,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
     if (this.formGroup.valid) {
       this.model.documents.map(x => {
         x.content = x.file != '' && x.type == 1 ? x.file : x.content;
-        x.title = x.fileName != '' ? x.fileName : x.title;
+        x.title = x.fileName != '' && x.type == 1 ? x.fileName : x.title;
       })
       this.model.config.expireInMinutes = parseInt(this.model.config.expireInMinutes);
       this.model.config.maxRetryCount = parseInt(this.model.config.maxRetryCount);
