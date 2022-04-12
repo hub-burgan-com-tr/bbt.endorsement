@@ -19,6 +19,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   panelTitle: string = 'Yeni Belge Ekle';
   isEditing: boolean = false;
   submitted = false;
+  errorMessage;
   selectedFileName;
   approvalSubmitted = false;
   newDocumentSubmitted = false;
@@ -211,11 +212,18 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
 
   onSubmit() {
     if (this.model.documents.length === 0) {
+      this.errorMessage = 'Belge eklemeden ilerleyemezsiniz.';
+      this.modal.open('error');
+      return;
+    }
+    if (!this.person) {
+      this.errorMessage = 'Onaycı eklemeden ilerleyemezsiniz.';
       this.modal.open('error');
       return;
     }
     this.submitted = true;
     if (this.formGroup.valid) {
+      this.model = {...this.model, ...this.formGroup.getRawValue()};
       this.model.documents.map(x => {
         x.content = x.file != '' && x.type == 1 ? x.file : x.content;
         x.title = x.fileName != '' && x.type == 1 ? x.fileName : x.title;
