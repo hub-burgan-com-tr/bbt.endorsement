@@ -17,7 +17,7 @@
 </ngx-smart-modal>
 <ngx-smart-modal #error identifier="error" customClass="error">
   <h1>Hata!</h1>
-  <p>Belge eklemeden ilerleyemezsiniz.</p>
+  <p>{{errorMessage}}</p>
 
   <div class="button-container">
     <button class="btn btn-danger" (click)="error.close()">Tamam</button>

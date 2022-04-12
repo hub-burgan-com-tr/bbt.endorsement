@@ -34,16 +34,16 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 
                     Documents = x.Documents.OrderByDescending(x => x.Created).Where(x => x.State == null).Select(y => new OrderDocument
                     {
-                        Content = y.Content,
-                        Link = y.Name,
-                        Name = y.Name,
-                        Type = y.FileType,
-                        MımeType = y.MımeType,
-                        DocumentId = y.DocumentId,
-                        Actions = y.DocumentActions.OrderByDescending(x => x.Created).Select(z => new DocumentAction { DocumentActionId = z.DocumentActionId, Value = z.DocumentActionId, Title = z.Title }).ToList()
-                    }).ToList(),
-                }).FirstOrDefault();
-
+                        Content=y.Content,
+                        Link=y.Name,
+                        Name=y.Name,
+                        Type=y.FileType,  
+                        MimeType=y.MimeType,
+                       DocumentId = y.DocumentId,
+                        Actions=y.DocumentActions.OrderByDescending(x=>x.Created).Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.DocumentActionId, Title=z.Title}).ToList()
+                    }).ToList(),                
+                   }).FirstOrDefault();
+          
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
 
