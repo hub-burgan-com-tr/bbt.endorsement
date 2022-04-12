@@ -24,13 +24,12 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   newDocumentSubmitted = false;
   actionsHasError = false;
   formGroup: FormGroup;
-  formGroupApproval: FormGroup;
   formNewDocument: FormGroup;
-  approvalFormValidationMessage = '';
   showChoiceAddPanel: boolean = false;
   model: NewApprovalOrder;
   selectedDocumentIndex: number;
   approvalButtonText: string = 'Kaydet';
+  person;
 
   constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private modal: NgxSmartModalService) {
     this.initModel();
@@ -60,9 +59,6 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
         maxRetryCount: [this.model.config.maxRetryCount, Validators.required],
       })
     });
-    this.formGroupApproval = this.fb.group({
-      citizenshipNumber: ['', Validators.required]
-    });
   }
 
   ngOnInit(): void {
@@ -71,6 +67,11 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  getPersonFromChild(person) {
+    this.person = JSON.parse(person);
+    console.log(this.person);
   }
 
   initModel() {
@@ -196,10 +197,6 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
     return (<FormGroup>this.formGroup.controls.config).controls;
   }
 
-  get fa() {
-    return this.formGroupApproval.controls;
-  }
-
   get fnd() {
     return this.formNewDocument.controls;
   }
@@ -223,11 +220,6 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
         x.content = x.file != '' && x.type == 1 ? x.file : x.content;
         x.title = x.fileName != '' ? x.fileName : x.title;
       })
-      this.model.approver = {
-        citizenshipNumber: parseInt("83418131290"),
-        first: "Uğur",
-        last: "Karataş"
-      };
       this.model.config.expireInMinutes = parseInt(this.model.config.expireInMinutes);
       this.model.config.maxRetryCount = parseInt(this.model.config.maxRetryCount);
       this.model.config.retryFrequence = parseInt(this.model.config.retryFrequence);
@@ -239,25 +231,20 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
 
   onSubmitApproval() {
     this.approvalSubmitted = true;
-    if (this.formGroupApproval.valid) {
-      this.model.approver = {
-        citizenshipNumber: this.fa.citizenshipNumber.value,
-        first: '',
-        last: '',
-      }
-      this.approvalButtonText = 'Güncelle';
-      this.newOrderService.setModel(this.model);
-      this.closeApproverPanel();
+    if (!this.person)
+      return;
+    this.model.approver = {
+      citizenshipNumber: this.person.citizenshipNumber,
+      first: this.person.first,
+      last: this.person.last,
     }
+    this.approvalButtonText = 'Güncelle';
+    this.newOrderService.setModel(this.model);
+    this.closeApproverPanel();
   }
 
   closeApproverPanel() {
-    this.formGroupApproval.reset();
     this.approvalSubmitted = false;
-    Object.keys(this.formGroupApproval.controls).forEach((key, index) => {
-      this.formGroupApproval.controls[key].setErrors(null);
-      this.formGroupApproval.controls[key].setValue('');
-    });
     this.showUpdatePanel = false;
   }
 
