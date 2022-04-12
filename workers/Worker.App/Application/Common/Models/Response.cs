@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Worker.App.Application.Coomon.Models;
+namespace Worker.App.Application.Common.Models;
 
 
 public class Response<T>

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Worker.App.Application.Common.Interfaces;
-using Worker.App.Application.Coomon.Models;
+using Worker.App.Application.Common.Models;
 using Worker.App.Domain.Enums;
 
 namespace Worker.App.Application.Workers.Commands.UpdateEntities

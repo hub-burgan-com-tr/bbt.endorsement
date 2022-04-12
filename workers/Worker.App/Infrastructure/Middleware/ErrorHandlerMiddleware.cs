@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Serilog;
 using System.Net;
-using Worker.App.Application.Coomon.Models;
+using Worker.App.Application.Common.Models;
 
 namespace Worker.App.Infrastructure.Middleware;
 public class ErrorHandlerMiddleware

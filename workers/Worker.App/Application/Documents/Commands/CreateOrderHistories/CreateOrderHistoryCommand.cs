@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Worker.App.Application.Common.Interfaces;
-using Worker.App.Application.Coomon.Models;
+using Worker.App.Application.Common.Models;
 using Worker.App.Domain.Entities;
 
 namespace Worker.AppApplication.Documents.Commands.CreateOrderHistories;

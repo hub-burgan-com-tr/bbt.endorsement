@@ -1,8 +1,7 @@
 ﻿using Application.BbtInternals.Models;
+using Application.Common.Interfaces;
 using Application.Common.Models;
 using MediatR;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace Application.BbtInternals.Queries.GetPerson
 {
@@ -13,13 +12,16 @@ namespace Application.BbtInternals.Queries.GetPerson
 
     public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, Response<PersonResponse>>
     {
+        private IInternalsService _internalsService;
+
+        public GetPersonQueryHandler(IInternalsService internalsService)
+        {
+            _internalsService = internalsService;
+        }
         public async Task<Response<PersonResponse>> Handle(GetPersonQuery request, CancellationToken cancellationToken)
         {
-            var restClient = new RestClient("http://20.31.226.131:5000");
-            var restRequest = new RestRequest("/Person/" + request.Id, Method.Get);
-            var response = await restClient.ExecuteAsync(restRequest);
-            var data = JsonConvert.DeserializeObject<PersonResponse>(response.Content);
-            return Response<PersonResponse>.Success(data, 200);
+            var response = await _internalsService.GetPersonById(request.Id); 
+            return Response<PersonResponse>.Success(response.Data, 200);
         }
     }
 }

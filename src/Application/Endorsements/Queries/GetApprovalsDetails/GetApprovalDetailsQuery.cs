@@ -25,28 +25,28 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 
         public async Task<Response<GetApprovalDetailsDto>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Customer).Include(x=>x.Documents).ThenInclude(x=>x.FormDefinition).ThenInclude(x=>x.FormDefinitionActions).Where(x => x.OrderId == request.OrderId)
+            var response = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Customer).Include(x => x.Documents).ThenInclude(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Where(x => x.OrderId == request.OrderId)
                 .Select(x => new GetApprovalDetailsDto
-                { 
+                {
                     Title = x.Title,
-                    CitizenShipNumber = x.Customer.CitizenshipNumber, 
-                    FirstAndSurname = x.Customer.FirstName + " " + x.Customer.LastName, 
-                    
-                    Documents = x.Documents.OrderByDescending(x=>x.Created).Where(x=>x.State==null).Select(y=>new OrderDocument
+                    CitizenShipNumber = x.Customer.CitizenshipNumber,
+                    FirstAndSurname = x.Customer.FirstName + " " + x.Customer.LastName,
+
+                    Documents = x.Documents.OrderByDescending(x => x.Created).Where(x => x.State == null).Select(y => new OrderDocument
                     {
-                        Content=y.Content,
-                        Link=y.Name,
-                        Name=y.Name,
-                        Type=y.FileType,  
-                        MımeType=y.MımeType,
-                       DocumentId = y.DocumentId,
-                        Actions=y.DocumentActions.OrderByDescending(x=>x.Created).Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.DocumentActionId, Title=z.Title}).ToList()
-                    }).ToList(),                
-                   }).FirstOrDefault();
-          
+                        Content = y.Content,
+                        Link = y.Name,
+                        Name = y.Name,
+                        Type = y.FileType,
+                        MımeType = y.MımeType,
+                        DocumentId = y.DocumentId,
+                        Actions = y.DocumentActions.OrderByDescending(x => x.Created).Select(z => new DocumentAction { DocumentActionId = z.DocumentActionId, Value = z.DocumentActionId, Title = z.Title }).ToList()
+                    }).ToList(),
+                }).FirstOrDefault();
+
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
 
-       
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Worker.App.Application.Coomon.Models;
+using Worker.App.Application.Common.Models;
 
 namespace Worker.App.Application.Workers.Commands.SendPushs
 {
