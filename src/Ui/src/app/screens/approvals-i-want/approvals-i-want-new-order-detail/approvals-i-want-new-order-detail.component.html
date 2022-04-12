@@ -12,7 +12,7 @@
   <p>Yeni Onaylama Emri başarıyla gönderildi.</p>
 
   <div class="button-container">
-    <button class="btn btn-primary">Tamam</button>
+    <button class="btn btn-primary" (click)="success.close()">Tamam</button>
   </div>
 </ngx-smart-modal>
 <ngx-smart-modal #error identifier="error" customClass="error">
@@ -289,29 +289,27 @@
     </div>
     <p class="fs-18 fw-600 mt-3">{{model.approver.first}} {{model.approver.last}}</p>
     <div class="approval-update-panel " *ngIf="showUpdatePanel">
-      <form [formGroup]="formGroupApproval" (ngSubmit)="onSubmitApproval()" class="approval-add-panel">
+      <div class="approval-add-panel">
         <div class="content">
           <div class="row my-4">
             <div class="col-12">
               <div class="title p-0 mb-2 no-border">Yeni Onaycı Ekle</div>
               <div class="row">
                 <div class="col-12 col-md-6">
-                  <input type="text" class="form-control" id="citizenshipNumber" name="citizenshipNumber"
-                         formControlName="citizenshipNumber" maxlength="50"
-                         [ngClass]="{ 'is-invalid': approvalSubmitted && fa.citizenshipNumber.invalid }">
-                  <div *ngIf="approvalSubmitted && fa.citizenshipNumber.errors" class="invalid-feedback">
-                    <div *ngIf="fa.citizenshipNumber.errors.required">Onaycı girilmelidir</div>
-                  </div>
+                  <app-person-search (returnListEvent)="getPersonFromChild($event)"></app-person-search>
+                  <small *ngIf="approvalSubmitted && !person" class="text-danger">
+                    Onaycı seçilmelidir.
+                  </small>
                 </div>
               </div>
             </div>
           </div>
           <div class="button-group d-flex justify-content-end">
             <button class="btn btn-outline-primary px-5 me-3" (click)="closeApproverPanel()">İptal</button>
-            <button class="btn btn-primary px-5" type="submit">Kaydet</button>
+            <button class="btn btn-primary px-5" type="submit" (click)="onSubmitApproval()">Kaydet</button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
   <div class="d-flex justify-content-center">

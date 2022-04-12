@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +28,7 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
         }
         public async Task<Response<GetWantApprovalDetailsDto>> Handle(GetWantApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = await _context.Orders.Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto 
+            var response = await _context.Orders.Where(x=> x.State != OrderState.Cancel.ToString()).Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto 
             {
                 OrderId = x.OrderId,
                 Title = x.Title,
@@ -40,7 +41,7 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
                 ExpireInMinutes=x.Config.ExpireInMinutes,
                 OrderState=x.State,
                 History = x.OrderHistories.OrderByDescending(x=>x.Created).Select(x => new GetWantApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
-                Documents =x.Documents.OrderByDescending(x=>x.Created).Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,TypeName= x.Type == ContentType.PlainText.ToString() ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault(y=>y.Type==ActionType.Approve.ToString()).Title,Content=x.Content,Type=x.Type}).ToList() }).FirstOrDefaultAsync();
+                Documents =x.Documents.OrderByDescending(x=>x.Created).Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,MımeType=x.MımeType,TypeName= x.Type == ContentType.PlainText.ToString() ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault(y=>y.Type==ActionType.Approve.ToString()).Title,Content=x.Content,Type=x.Type}).ToList() }).FirstOrDefaultAsync();
                 return Response<GetWantApprovalDetailsDto>.Success(response, 200);
         }
     }

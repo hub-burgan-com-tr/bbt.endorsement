@@ -6,7 +6,7 @@ using System.Net;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PersonController : ApiControllerBase
     {

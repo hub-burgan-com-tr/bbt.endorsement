@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgxSmartModalService} from "ngx-smart-modal";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Components, FormioComponent, FormioOptions} from "@formio/angular";
 import {NewOrderFormService} from "../../../services/new-order-form.service";
 import {Subject, takeUntil} from "rxjs";
@@ -17,6 +17,7 @@ import {IReference} from "../../../models/reference";
 
 export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
+  person;
   form;
   formTitle;
   formDefinitionId;
@@ -26,6 +27,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   options: FormioOptions = {
     disableAlerts: true,
   }
+  personName;
 
   constructor(private fb: FormBuilder,
               private modal: NgxSmartModalService,
@@ -35,8 +37,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     this.formGroup = this.fb.group({
       process: ['', [Validators.required]],
       state: ['', [Validators.required]],
-      processNo: ['', [Validators.required]],
-      citizenshipNumber: ['', [Validators.required]]
+      processNo: ['', [Validators.required]]
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.formDefinitionId = params['formDefinitionId'];
@@ -56,6 +57,10 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  getPersonFromChild(person) {
+    this.person = JSON.parse(person);
+  }
+
   get f() {
     return this.formGroup.controls;
   }
@@ -65,13 +70,16 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   submitForm(e) {
+    if (!this.person) {
+      return;
+    }
     if (this.formGroup.valid) {
       //@TODO
       //Ad Soyad servisten çekilip gönderilecek
       const model = new NewApprovalOrderForm(<IApprover>{
-        citizenshipNumber: parseInt("83418131290"),
-        first: "Uğur",
-        last: "Karataş"
+        citizenshipNumber: this.person.citizenshipNumber,
+        first: this.person.first,
+        last: this.person.last
       }, JSON.stringify(e.data), this.formDefinitionId, <IReference>{
         process: this.f.process.value,
         processNo: this.f.processNo.value,

@@ -77,6 +77,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Name = startFormRequest.Title,
                 Type = formDefinition.Type.ToString(),
                 FileType=formDefinition.Type.ToString(),
+                MımeType=formDefinition.Type.ToString()==ContentType.HTML.ToString()? "text/html": "application/pdf",
                 Created = _dateTime.Now,
                 DocumentActions = actions,
                 FormDefinitionId = startFormRequest.FormId
@@ -143,6 +144,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Name =item.Title,
                     Type = item.Type.ToString(),
                     FileType =item.Type.ToString()==ContentType.PlainText.ToString()?FileType.PlainText.ToString():GetFileType(item.FileType),
+                    MımeType=item.FileType,
                     Created = _dateTime.Now,
                     DocumentActions = actions
                 });

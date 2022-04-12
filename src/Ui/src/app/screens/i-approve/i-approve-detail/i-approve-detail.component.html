@@ -6,30 +6,7 @@
       <div class="row align-items-center">
         <div class="col">
           <div class="title">{{index + 1}}- {{i.name}}</div>
-          <div class="mb-4" *ngIf="i.content">
-            <ng-container *ngIf="i.type==='File';else second">
-              <img class="mw-100" [src]="i.content" *ngIf="i.content.indexOf('data:image')>-1;else fileContent">
-              <ng-template #fileContent>
-                {{i.content}}
-              </ng-template>
-            </ng-container>
-            <ng-template #second>
-              <ng-container *ngIf="i.type==='PDF';else third">
-                <iframe [src]="i.content | safe"
-                        width="100%"
-                        height="500"></iframe>
-              </ng-container>
-            </ng-template>
-            <ng-template #third>
-              <ng-container *ngIf="i.type==='HTML';else normalContent">
-                <iframe [srcdoc]="i.content | safeHtml" width="100%"
-                        height="500"></iframe>
-              </ng-container>
-            </ng-template>
-            <ng-template #normalContent>
-              {{i.content}}
-            </ng-template>
-          </div>
+          <app-render-file [detail]="i"></app-render-file>
           <div *ngIf="i.actions.length===1;else other_content">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="flexCheckChecked"

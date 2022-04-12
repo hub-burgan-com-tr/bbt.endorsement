@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +28,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
         }
         public async Task<Response<GetWatchApprovalDetailsDto>> Handle(GetWatchApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = await _context.Orders.Include(x=>x.Customer).Include(x=>x.OrderHistories).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetWatchApprovalDetailsDto 
+            var response = await _context.Orders.Where(x => x.State != OrderState.Cancel.ToString()).Include(x=>x.Customer).Include(x=>x.OrderHistories).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetWatchApprovalDetailsDto 
             { 
                 OrderId = x.OrderId, 
                 Title = x.Title,
@@ -40,7 +41,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
                 ExpireInMinutes = x.Config.ExpireInMinutes,
                 OrderState=x.State,
                 History = x.OrderHistories.OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
-                Documents = x.Documents.OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name, TypeName = x.Type ==ContentType.PlainText.ToString() ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.Type == ActionType.Approve.ToString()).Title, Content = x.Content, Type = x.Type }).ToList() }).FirstOrDefaultAsync();
+                Documents = x.Documents.OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name,MımeType=x.MımeType, TypeName = x.Type ==ContentType.PlainText.ToString() ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.Type == ActionType.Approve.ToString()).Title, Content = x.Content, Type = x.Type }).ToList() }).FirstOrDefaultAsync();
             return Response<GetWatchApprovalDetailsDto>.Success(response, 200);
         }
     }

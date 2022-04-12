@@ -48,12 +48,10 @@
       <div class="box-title mt-5 p-0 no-border">Onaycı Ekle</div>
       <div class="row mt-3">
         <div class="col-4">
-          <input type="text" class="form-control" id="citizenshipNumber" name="citizenshipNumber"
-                 formControlName="citizenshipNumber" maxlength="50"
-                 [ngClass]="{ 'is-invalid': submitted && f.citizenshipNumber.invalid }">
-          <div *ngIf="submitted && f.citizenshipNumber.errors" class="invalid-feedback">
-            <div *ngIf="f.citizenshipNumber.errors.required">Onaycı girilmelidir</div>
-          </div>
+          <app-person-search (returnListEvent)="getPersonFromChild($event)"></app-person-search>
+          <small *ngIf="submitted && !person" class="text-danger">
+            Onaycı seçilmelidir.
+          </small>
         </div>
       </div>
       <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>

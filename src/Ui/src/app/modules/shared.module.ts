@@ -12,6 +12,10 @@ import {SafePipe} from "../pipes/safe.pipe";
 import {SafeHtmlPipe} from "../pipes/safe-html.pipe";
 import {StatePipe} from "../pipes/state.pipe";
 import {StateClassPipe} from "../pipes/state-class.pipe";
+import {DownloadLinkComponent} from "../components/download-link/download-link.component";
+import {RenderFileComponent} from "../components/render-file/render-file.component";
+import {PersonSearchComponent} from "../components/person-search/person-search.component";
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -24,9 +28,12 @@ import {StateClassPipe} from "../pipes/state-class.pipe";
     SafePipe,
     SafeHtmlPipe,
     StatePipe,
-    StateClassPipe
+    StateClassPipe,
+    DownloadLinkComponent,
+    RenderFileComponent,
+    PersonSearchComponent
   ],
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   exports: [
     ListItemComponent,
     MainContentComponent,
@@ -36,7 +43,10 @@ import {StateClassPipe} from "../pipes/state-class.pipe";
     SafePipe,
     SafeHtmlPipe,
     StatePipe,
-    StateClassPipe
+    StateClassPipe,
+    DownloadLinkComponent,
+    RenderFileComponent,
+    PersonSearchComponent
   ]
 })
 export class SharedModule {

@@ -64,7 +64,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
                   State = x.Reference.State,
                   ProcessNo = x.Reference.ProcessNo,
                   Date = x.Created.ToString("dd.MM.yyyy HH:mm"),
-                  IsDocument = x.Documents.Any(x => x.Type == ContentType.File.ToString() || x.Type == ContentType.PDF.ToString() && x.FormDefinitionId == null),
+                  IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString() && x.FormDefinitionId == null),
                   OrderState = x.State,
               }).PaginatedListAsync(request.PageNumber, request.PageSize);
 
