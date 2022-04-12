@@ -30,13 +30,11 @@ builder.Services.AddSwaggerGen(options =>
         Contact = new OpenApiContact
         {
             Name = "Contract Approval API",
-            //Url = new Uri("http://168.119.122.177:9090/my-approval"),
             Email = ""
         },
         License = new OpenApiLicense
         {
             Name = "",
-            //Url = new Uri("http://168.119.122.177:9090/my-approval"),
         }
     });
 

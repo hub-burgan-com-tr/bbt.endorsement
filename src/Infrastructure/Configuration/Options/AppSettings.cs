@@ -10,3 +10,10 @@ public class AppSettings
     public LoggingOptions Logging { get; set; }
     public ZeebeOptions Zeebe { get; set; }
 }
+
+public class Entegration
+{
+    public string Internals { get; set; }
+    public string TemplateEngine { get; set; }
+    public string Sso { get; set; }
+}
