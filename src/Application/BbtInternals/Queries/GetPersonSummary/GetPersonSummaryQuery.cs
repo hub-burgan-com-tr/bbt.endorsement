@@ -1,8 +1,7 @@
 ﻿using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Application.Common.Interfaces;
 using Application.Common.Models;
 using MediatR;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace Application.BbtInternals.Queries.GetPersonSummary
 {
@@ -11,25 +10,27 @@ namespace Application.BbtInternals.Queries.GetPersonSummary
         public long Id { get; set; }
     }
 
-        public class GetSearchPersonSummaryQueryHandler : IRequestHandler<GetPersonSummaryQuery, Response<GetSearchPersonSummaryResponse>>
+    public class GetSearchPersonSummaryQueryHandler : IRequestHandler<GetPersonSummaryQuery, Response<GetSearchPersonSummaryResponse>>
+    {
+        private IInternalsService _internalsService;
+
+        public GetSearchPersonSummaryQueryHandler(IInternalsService internalsService)
         {
-            public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetPersonSummaryQuery request, CancellationToken cancellationToken)
-            {
-                var restClient = new RestClient("http://20.31.226.131:5000");
-            var restRequest = new RestRequest("/Person/" + request.Id, Method.Get);
-                var response = await restClient.ExecuteAsync(restRequest);
-                var data = JsonConvert.DeserializeObject<PersonResponse>(response.Content);
-
-                var person = new GetSearchPersonSummaryDto
-                {
-                    CitizenshipNumber = data.CitizenshipNumber,
-                    First = data.Name.First,
-                    Last = data.Name.Last
-                };
-                return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Person = person }, 200);
-            }
+            _internalsService = internalsService;
         }
-
+        public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetPersonSummaryQuery request, CancellationToken cancellationToken)
+        {
+            var response = await _internalsService.GetPersonById(request.Id);
+            var person = new GetSearchPersonSummaryDto
+            {
+                CitizenshipNumber = response.Data.CitizenshipNumber,
+                First = response.Data.Name.First,
+                Last = response.Data.Name.Last
+            };
+            return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Person = person }, 200);
+        }
     }
+
+}
 
 

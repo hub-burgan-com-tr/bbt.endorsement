@@ -7,6 +7,7 @@ using Infrastructure.Configuration.Options;
 using Infrastructure.Persistence;
 using Microsoft.OpenApi.Models;
 
+IConfiguration configuration;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
@@ -30,13 +31,11 @@ builder.Services.AddSwaggerGen(options =>
         Contact = new OpenApiContact
         {
             Name = "Contract Approval API",
-            //Url = new Uri("http://168.119.122.177:9090/my-approval"),
             Email = ""
         },
         License = new OpenApiLicense
         {
             Name = "",
-            //Url = new Uri("http://168.119.122.177:9090/my-approval"),
         }
     });
 
@@ -52,7 +51,7 @@ builder.Services.AddSwaggerGen(options =>
 IWebHostEnvironment environment = builder.Environment;
 
 if (environment.EnvironmentName == "Development")
-    builder
+    configuration = builder
         .Configuration
         .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
@@ -60,7 +59,7 @@ if (environment.EnvironmentName == "Development")
         .AddUserSecrets<Program>()
         .Build();
 else
-    builder
+    configuration = builder
         .Configuration
         .AddJsonFile("appsettings.json", false, true)
         .AddEnvironmentVariables()
@@ -68,12 +67,16 @@ else
         .AddUserSecrets<Program>()
         .Build();
 
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
 
+//builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+//builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.Configure<AppSettings>(options => configuration.GetSection(nameof(AppSettings)).Bind(options));
+var settings = builder.Configuration.Get<AppSettings>();
 var app = builder.Build();
+
+
 app.AddUseMiddleware();
 
 // Configure the HTTP request pipeline.
