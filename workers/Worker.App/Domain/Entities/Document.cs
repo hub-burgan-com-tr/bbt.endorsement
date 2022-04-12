@@ -28,6 +28,8 @@ namespace Worker.App.Domain.Entities
         [MaxLength(50)]
         public string FileType { get; set; }
         [MaxLength(50)]
+        public string MımeType { get; set; }
+        [MaxLength(50)]
         public string State { get; set; }
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
