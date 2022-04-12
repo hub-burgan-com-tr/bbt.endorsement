@@ -229,6 +229,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
     }
   }
 
+
   onSubmitApproval() {
     this.approvalSubmitted = true;
     if (!this.person)
