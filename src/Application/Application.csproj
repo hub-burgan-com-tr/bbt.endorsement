@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Endorsements\EventHandlers\" />
-    <Folder Include="NewFolder\" />
     <Folder Include="OrderForms\Commands\" />
   </ItemGroup>
 

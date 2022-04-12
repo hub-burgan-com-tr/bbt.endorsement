@@ -19,9 +19,6 @@ using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Enum;
-using Application.Endorsements.Commands.CreateOrderHistory;
-using Application.Endorsements.Queries.GetSearchPersonSummary;
-using Application.Endorsements.Queries.GetPersonSummary;
 
 namespace Api.Controllers
 {
@@ -390,30 +387,7 @@ namespace Api.Controllers
         }
 
 
-        [Route("person-search")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
-        [SwaggerResponse(404, "Success but there is no person search  available for the query.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> PersonSearch([FromQuery] string name)
-        {
-            var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
-            return Ok(response);
-        }
-
-        [Route("person-get")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, queried person get are returned successfully.", typeof(GetSearchPersonSummaryDto))]
-        [SwaggerResponse(404, "Success but there is no person get  available for the query.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> PersonGet([FromQuery] long Id)
-        {
-          
-            var response = await Mediator.Send(new GetPersonSummaryQuery() { Id = Id });
-            return Ok(response);
-        }
+       
 
     }
 }

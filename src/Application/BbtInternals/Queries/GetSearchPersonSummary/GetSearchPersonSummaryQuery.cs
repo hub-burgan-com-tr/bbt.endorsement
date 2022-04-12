@@ -3,7 +3,7 @@ using MediatR;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace Application.Endorsements.Queries.GetSearchPersonSummary
+namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 {
     public class GetSearchPersonSummaryQuery :IRequest<Response<GetSearchPersonSummaryResponse>>
     {

@@ -37,7 +37,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                         Content=y.Content,
                         Link=y.Name,
                         Name=y.Name,
-                        Type=y.FormDefinitionId==null?y.FileType:y.Type,                     
+                        Type=y.FileType,                     
                        DocumentId = y.DocumentId,
                         Actions=y.DocumentActions.OrderByDescending(x=>x.Created).Select(z=>new DocumentAction { DocumentActionId=z.DocumentActionId, Value = z.DocumentActionId, Title=z.Title}).ToList()
                     }).ToList(),                

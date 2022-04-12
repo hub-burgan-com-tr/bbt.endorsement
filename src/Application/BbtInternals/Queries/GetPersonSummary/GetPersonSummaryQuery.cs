@@ -1,10 +1,10 @@
-﻿using Application.Common.Models;
-using Application.Endorsements.Queries.GetSearchPersonSummary;
+﻿using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Application.Common.Models;
 using MediatR;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace Application.Endorsements.Queries.GetPersonSummary
+namespace Application.BbtInternals.Queries.GetPersonSummary
 {
     public class GetPersonSummaryQuery : IRequest<Response<GetSearchPersonSummaryResponse>>
     {

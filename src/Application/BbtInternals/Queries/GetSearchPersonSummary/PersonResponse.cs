@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Application.Endorsements.Queries.GetSearchPersonSummary
+namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 {
     public partial class PersonResponse
     {

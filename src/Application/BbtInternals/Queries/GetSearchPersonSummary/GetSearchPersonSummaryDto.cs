@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Endorsements.Queries.GetSearchPersonSummary
+namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 {
     public class GetSearchPersonSummaryDto
     {

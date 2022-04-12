@@ -142,7 +142,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Content = item.Content,
                     Name =item.Title,
                     Type = item.Type.ToString(),
-                    FileType =GetFileType(item.FileType),
+                    FileType =item.Type.ToString()==ContentType.PlainText.ToString()?FileType.PlainText.ToString():GetFileType(item.FileType),
                     Created = _dateTime.Now,
                     DocumentActions = actions
                 });
@@ -198,6 +198,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
         }
         public enum FileType
-        { Image = 1, PDF = 2, HTML = 3, File = 4 }
+        { Image = 1, PDF = 2, HTML = 3, File = 4, PlainText=5 }
+        public enum ContentType { File = 1, PlainText = 2, HTML = 3, PDF = 4, }
+
     }
 }

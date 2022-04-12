@@ -1,4 +1,4 @@
-﻿namespace Application.Endorsements.Queries.GetSearchPersonSummary
+﻿namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 {
     public class GetSearchPersonSummaryResponse
     {
