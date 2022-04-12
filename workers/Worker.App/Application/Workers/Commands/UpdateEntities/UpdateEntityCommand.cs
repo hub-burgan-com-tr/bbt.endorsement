@@ -24,8 +24,10 @@ namespace Worker.App.Application.Workers.Commands.UpdateEntities
         public async Task<Response<UpdateEntityResponse>> Handle(UpdateEntityCommand request, CancellationToken cancellationToken)
         {
             var order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
+            if (order == null)
+                return new Response<UpdateEntityResponse>();
 
-            if (order == null && order.State != OrderState.Pending.ToString())
+            if (order.State != OrderState.Pending.ToString())
             {
                 var state = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
                 return Response<UpdateEntityResponse>.Success(new UpdateEntityResponse { OrderState = state, IsUpdated = false }, 200);

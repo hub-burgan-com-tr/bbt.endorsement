@@ -84,7 +84,6 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (variables != null)
                 {
-                    var _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
                     var response = await _mediator.Send(new SaveEntityCommand
                     {
                         Model = variables
