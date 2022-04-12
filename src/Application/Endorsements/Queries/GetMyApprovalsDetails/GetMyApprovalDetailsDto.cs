@@ -15,7 +15,7 @@
         public string Content { get; internal set; }
         public string Type { get; internal set; }
         public bool State { get; internal set; }
-        public string MımeType { get; set; }
+        public string MimeType { get; set; }
         public string OrderState { get; internal set; }
     }
     public class Action

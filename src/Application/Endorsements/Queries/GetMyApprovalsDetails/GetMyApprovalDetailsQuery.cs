@@ -33,7 +33,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                     Documents=x.Documents.OrderByDescending(x=>x.Created).Select(x=>new OrderDocument { Name=x.Name,
                     Content=x.Content,
                     OrderState=x.Order.State,
-                    MımeType=x.MımeType,
+                    MimeType=x.MimeType,
                     State=x.State== ActionType.Approve.ToString()?true:false,
                     Type =x.Type,                        
                        Actions=x.DocumentActions.OrderByDescending(x=>x.Created).Select(y=>new Action { Checked = y.IsSelected, Title = y.Title, DocumentId = x.DocumentId }).ToList()}).ToList(),
