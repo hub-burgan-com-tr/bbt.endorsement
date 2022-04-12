@@ -190,6 +190,11 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 return FileType.PDF.ToString();
 
             }
+            if (fileType.Contains("html"))
+            {
+                return FileType.HTML.ToString();
+
+            }
             else
             {
                 return FileType.File.ToString();
