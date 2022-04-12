@@ -1,7 +1,6 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using MediatR;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 {
@@ -12,15 +11,17 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 
     public class GetSearchPersonSummaryQueryHandler : IRequestHandler<GetSearchPersonSummaryQuery, Response<GetSearchPersonSummaryResponse>>
     {
+        private IInternalsService _internalsService;
+
+        public GetSearchPersonSummaryQueryHandler(IInternalsService internalsService)
+        {
+            _internalsService = internalsService;
+        }
+
         public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetSearchPersonSummaryQuery request, CancellationToken cancellationToken)
         {
-            var restClient = new RestClient("http://20.31.226.131:5000");
-            var restRequest = new RestRequest("/Person", Method.Get);
-            restRequest.AddParameter("name", request.Name, ParameterType.QueryString);
-            var response = await restClient.ExecuteAsync(restRequest);
-            var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
-
-            var persons = data.Select(x => new GetSearchPersonSummaryDto
+            var response = await _internalsService.GetPersonSearch(request.Name);
+            var persons = response.Data.Select(x => new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = x.CitizenshipNumber,
                 First = x.Name.First,

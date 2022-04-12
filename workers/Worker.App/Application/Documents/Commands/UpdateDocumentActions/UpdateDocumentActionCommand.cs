@@ -31,7 +31,7 @@ namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
             if(action == null)
                 return Task.FromResult(new Response<UpdateDocumentActionResponse>());
 
-            var actionIsSelected = _context.DocumentActions.FirstOrDefault(x => x.Document.OrderId == request.OrderId && x.DocumentId == document.DocumentId && x.IsSelected == true);
+            var actionIsSelected = _context.DocumentActions.FirstOrDefault(x => x.Document.OrderId == request.OrderId && x.DocumentId == document.DocumentId && x.DocumentActionId == action.DocumentActionId && x.IsSelected == true);
             if(actionIsSelected != null)
                 return Task.FromResult(new Response<UpdateDocumentActionResponse>());
 

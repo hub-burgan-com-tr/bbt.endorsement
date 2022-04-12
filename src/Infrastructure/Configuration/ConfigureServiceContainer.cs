@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Infrastructure.InternalsServices;
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
@@ -40,6 +41,7 @@ public static class ConfigureServiceContainer
         services.AddSingleton<IServerEventService, ServerEventService>();
         services.AddSingleton<IClientEventService, ClientEventService>();
         services.AddSingleton<IZeebeService, ZeebeService>();
+        services.AddSingleton<IInternalsService, InternalsService>();
     }
 
     public static void AddServices(this IServiceCollection services)
