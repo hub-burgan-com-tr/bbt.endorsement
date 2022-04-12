@@ -8,6 +8,7 @@ using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
+using Worker.App.Application.Workers.Commands.LoadContactInfos;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Application.Workers.Commands.UpdateEntities;
 using Worker.App.Domain.Enums;
@@ -95,7 +96,7 @@ public class ContractApprovalService : IContractApprovalService
                         var history = _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
-                            State = "Yeni Onay Emri",
+                            State = "Yeni Onay Emri Oluşturuldu",
                             Description = ""
                         });
 
@@ -141,14 +142,16 @@ public class ContractApprovalService : IContractApprovalService
                 variables.RetryEnd = true;
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
+            var person = await _mediator.Send(new LoadContactInfoCommand { Id = 1 });
+
             Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
 
-            var history = _mediator.Send(new CreateOrderHistoryCommand
-            {
-                OrderId = variables.InstanceId.ToString(),
-                State = "Müşteri Bilgileri",
-                Description = ""
-            });
+            //var history = _mediator.Send(new CreateOrderHistoryCommand
+            //{
+            //    OrderId = variables.InstanceId.ToString(),
+            //    State = "Müşteri Bilgileri",
+            //    Description = ""
+            //});
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
@@ -239,8 +242,8 @@ public class ContractApprovalService : IContractApprovalService
                     var history = _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
-                        State = "Zaman Aşımı",
-                        Description = "Order zaman aşımına uğradı"
+                        State = "Yeni Onay Emri Zaman Aşımına Uğradı",
+                        Description = ""
                     });
                 }
 
@@ -327,8 +330,8 @@ public class ContractApprovalService : IContractApprovalService
                 var history = _mediator.Send(new CreateOrderHistoryCommand
                 {
                     OrderId = variables.InstanceId.ToString(),
-                    State = "İptal",
-                    Description = "Emir iptal edildi"
+                    State = "Emir iptal edildi",
+                    Description = ""
                 });
             }
 
@@ -349,12 +352,12 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"ConsumeCallback");
 
-            var history = _mediator.Send(new CreateOrderHistoryCommand
-            {
-                OrderId = variables.InstanceId.ToString(),
-                State = "Consume Callback",
-                Description = ""
-            });
+            //var history = _mediator.Send(new CreateOrderHistoryCommand
+            //{
+            //    OrderId = variables.InstanceId.ToString(),
+            //    State = "Consume Callback",
+            //    Description = ""
+            //});
 
             await jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")

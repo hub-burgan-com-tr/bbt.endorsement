@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Infrastructure.Configuration.Options;
+using Worker.App.Infrastructure.InternalsServices;
 using Worker.App.Infrastructure.Persistence;
 using Worker.App.Infrastructure.Services;
 using Worker.App.Infrastructure.Services.ZeebeServices;
@@ -40,6 +41,7 @@ namespace Infrastructure.Configuration
         {
             services.AddSingleton<IZeebeService, ZeebeService>();
             services.AddSingleton<IContractApprovalService, ContractApprovalService>();
+            services.AddSingleton<IInternalsService, InternalsService>();
         }
     }
 }
