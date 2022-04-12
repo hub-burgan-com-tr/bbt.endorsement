@@ -220,7 +220,7 @@
     <bpmn:boundaryEvent id="Event_TimeoutTimer" name="Timeout Timer" attachedToRef="Activity_ContractApprovalProcess">
       <bpmn:outgoing>Flow_10ia34g</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1oqd6g9">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_10ia34g" sourceRef="Event_TimeoutTimer" targetRef="Activity_TimeoutProcess" />
@@ -413,6 +413,10 @@
       <bpmndi:BPMNShape id="Activity_1mqztst_di" bpmnElement="Activity_ContractApprovalProcess" isExpanded="true">
         <dc:Bounds x="250" y="80" width="2250" height="510" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0st7chg_di" bpmnElement="Flow_0st7chg">
+        <di:waypoint x="2340" y="370" />
+        <di:waypoint x="2422" y="370" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0941ddq_di" bpmnElement="Flow_0941ddq">
         <di:waypoint x="1975" y="370" />
         <di:waypoint x="2065" y="370" />
@@ -531,10 +535,6 @@
         <di:waypoint x="2115" y="370" />
         <di:waypoint x="2240" y="370" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0st7chg_di" bpmnElement="Flow_0st7chg">
-        <di:waypoint x="2340" y="370" />
-        <di:waypoint x="2422" y="370" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0k9mjyd_di" bpmnElement="Event_0k9mjyd">
         <dc:Bounds x="412" y="352" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -543,6 +543,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0vlxwl9_di" bpmnElement="Activity_LoadContactInfo">
         <dc:Bounds x="770" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_005sint_di" bpmnElement="Event_005sint">
+        <dc:Bounds x="2422" y="352" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2430" y="395" width="20" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_07g446g_di" bpmnElement="Gateway_12a5y1i" isMarkerVisible="true">
         <dc:Bounds x="2065" y="345" width="50" height="50" />
@@ -618,12 +624,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_115zy17_di" bpmnElement="Gateway_ApproveContract" isMarkerVisible="true">
         <dc:Bounds x="1925" y="345" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_005sint_di" bpmnElement="Event_005sint">
-        <dc:Bounds x="2422" y="352" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2430" y="395" width="20" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0jfywen_di" bpmnElement="Activity_0jfywen">
         <dc:Bounds x="2240" y="330" width="100" height="80" />
