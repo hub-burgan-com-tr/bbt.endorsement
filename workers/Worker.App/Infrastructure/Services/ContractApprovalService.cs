@@ -89,6 +89,7 @@ public class ContractApprovalService : IContractApprovalService
                         Model = variables
                     });
                     variables.IsProcess = true;
+                    variables.Device = true;
 
                     if(response != null)
                     {
