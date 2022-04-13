@@ -22,7 +22,7 @@ namespace Worker.App.Infrastructure.InternalsServices
         {
             var restClient = new RestClient(internalsUrl);
             var restRequest = new RestRequest("/Person/" + id, Method.Get);
-            var response = await restClient.ExecuteAsync(restRequest);
+            var response = restClient.ExecuteAsync(restRequest).Result;
             var data = JsonConvert.DeserializeObject<PersonResponse>(response.Content);
             return Response<PersonResponse>.Success(data, 200);
         }
