@@ -32,7 +32,7 @@ namespace Worker.App.Infrastructure.InternalsServices
             var restClient = new RestClient(internalsUrl);
             var restRequest = new RestRequest("/Person", Method.Get);
             restRequest.AddParameter("name", name, ParameterType.QueryString);
-            var response = await restClient.ExecuteAsync(restRequest);
+            var response = restClient.ExecuteAsync(restRequest).Result;
             var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
             return Response<List<PersonResponse>>.Success(data, 200);
         }
