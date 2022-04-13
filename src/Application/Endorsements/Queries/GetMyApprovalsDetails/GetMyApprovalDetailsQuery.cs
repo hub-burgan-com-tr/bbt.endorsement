@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +27,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
         }
         public async Task<Response<GetMyApprovalDetailsDto>> Handle(GetMyApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Documents).ThenInclude(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x=>x.OrderHistories).Where(x => x.OrderId == request.OrderId)
+            var response = _context.Orders.Where(x => x.State != OrderState.Pending.ToString() && x.State != OrderState.Cancel.ToString()).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Documents).ThenInclude(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Include(x=>x.OrderHistories).Where(x => x.OrderId == request.OrderId)
                 .Select(x => new GetMyApprovalDetailsDto
                 {
                     Title = x.Title,

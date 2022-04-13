@@ -15,7 +15,6 @@ namespace Worker.App.Domain.Entities
         ///  emrin geçerlilik süresi dakika olarak tanımlanır. 
         /// </summary>
         [Required]
-
         public int ExpireInMinutes { get; set; }
 
 
@@ -29,7 +28,6 @@ namespace Worker.App.Domain.Entities
         /// kullanıcıya kaç defa hatırlatma yapılacağı bilgisini içerir. 
         /// </summary>
         [Required]
-
         public int MaxRetryCount { get; set; }
 
 
