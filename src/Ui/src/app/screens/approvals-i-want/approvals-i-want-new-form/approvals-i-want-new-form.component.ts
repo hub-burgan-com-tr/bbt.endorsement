@@ -66,7 +66,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   redirectToList() {
-    this.router.navigate(['../']);
+    this.router.navigate(['approvals-i-want']);
   }
 
   submitForm(e) {
