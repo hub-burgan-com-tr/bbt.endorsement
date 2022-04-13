@@ -209,15 +209,23 @@ public class ContractApprovalService : IContractApprovalService
                 variables.Limit += 1;
             variables.IsProcess = true;
 
-            string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.ForContext("OrderId", variables.InstanceId).Information($"SendPush");
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            var history = _mediator.Send(new CreateOrderHistoryCommand
+            try
             {
-                OrderId = variables.InstanceId.ToString(),
-                State = "Hatırlatma Mesajı (Push Notification)",
-                Description = ""
-            });
+                Log.ForContext("OrderId", variables.InstanceId).Information($"SendPush");
+
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Hatırlatma Mesajı (Push Notification)",
+                    Description = ""
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+            }
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
