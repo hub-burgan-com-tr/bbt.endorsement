@@ -9,6 +9,7 @@ import {Subject, takeUntil} from "rxjs";
 })
 export class PersonSearchComponent implements OnInit {
   name;
+  @Input() hasError;
   @Output() returnListEvent = new EventEmitter<string>();
   private destroy$: Subject<any> = new Subject<any>();
   persons;

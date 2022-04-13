@@ -296,7 +296,7 @@
               <div class="title p-0 mb-2 no-border">Yeni Onaycı Ekle</div>
               <div class="row">
                 <div class="col-12 col-md-6">
-                  <app-person-search (returnListEvent)="getPersonFromChild($event)"></app-person-search>
+                  <app-person-search (returnListEvent)="getPersonFromChild($event)" [hasError]="approvalSubmitted && !person"></app-person-search>
                   <small *ngIf="approvalSubmitted && !person" class="text-danger">
                     Onaycı seçilmelidir.
                   </small>

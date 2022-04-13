@@ -1,4 +1,7 @@
-<input type="text" class="form-control" id="name" name="name" [(ngModel)]="name" (ngModelChange)="onChange($event)" maxlength="50" autocomplete="off">
+<div class="form-group">
+  <input type="text" class="form-control" [ngClass]="{'is-invalid':hasError}" id="name" name="name" [(ngModel)]="name"
+         (ngModelChange)="onChange($event)" maxlength="50" autocomplete="off">
+</div>
 <ul class="list-unstyled" id="personList">
   <li *ngFor="let p of persons" (click)="selectPerson(p)"
       [ngClass]="selectedPerson.citizenshipNumber===p.citizenshipNumber?'selected':''">{{p.first}} {{p.last}}
