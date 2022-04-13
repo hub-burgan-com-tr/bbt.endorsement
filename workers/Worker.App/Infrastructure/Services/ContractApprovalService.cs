@@ -89,6 +89,7 @@ public class ContractApprovalService : IContractApprovalService
                         Model = variables
                     });
                     variables.IsProcess = true;
+                    variables.Device = true;
 
                     if(response != null)
                     {
@@ -139,6 +140,8 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             if (variables != null)
                 variables.RetryEnd = true;
+
+            variables.Device = true;
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             var person = await _mediator.Send(new LoadContactInfoCommand { Id = 1 });
