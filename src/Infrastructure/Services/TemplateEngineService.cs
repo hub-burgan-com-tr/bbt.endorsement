@@ -23,12 +23,8 @@ namespace Infrastructure.Services
             restRequest.AddStringBody(jsonData, DataFormat.Json);
             var response = await restClient.ExecutePostAsync(restRequest);
 
-            var html = response.Content;
-
-            html = html.Replace(@"\""", String.Empty);
-            html = html.Replace("\"", String.Empty);
-
-            return Response<string>.Success(html, 200);
+            var data = HtmlReplace(response.Content);
+            return Response<string>.Success(data, 200);
         }
 
         public async Task<Response<string>> PdfRender(string templateName, string content)
@@ -42,12 +38,15 @@ namespace Infrastructure.Services
             restRequest.AddStringBody(jsonData, DataFormat.Json);
             var response = await restClient.ExecutePostAsync(restRequest);
 
-            var html = response.Content;
+            var data = HtmlReplace(response.Content);
+            return Response<string>.Success(data, 200);
+        }
 
-            html = html.Replace(@"\""", String.Empty);
-            html = html.Replace("\"", String.Empty);
-
-            return Response<string>.Success(html, 200);
+        private string HtmlReplace(string content)
+        {
+            var data = content.Replace(@"\""", String.Empty);
+            data = data.Replace("\"", String.Empty);
+            return data;
         }
 
         private string GetJsonData(string templateName, string content)
