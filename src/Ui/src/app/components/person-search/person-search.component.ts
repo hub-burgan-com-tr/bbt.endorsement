@@ -32,8 +32,10 @@ export class PersonSearchComponent implements OnInit {
       })
     }
   }
+
   selectPerson(p) {
     this.selectedPerson = p;
     this.returnListEvent.emit(JSON.stringify(this.selectedPerson));
+    this.persons = this.persons.filter(p => p.citizenshipNumber == this.selectedPerson.citizenshipNumber);
   }
 }

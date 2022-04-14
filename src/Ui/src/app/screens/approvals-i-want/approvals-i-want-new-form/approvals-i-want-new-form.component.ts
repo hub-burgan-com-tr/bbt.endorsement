@@ -36,7 +36,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
               private router: Router) {
     this.formGroup = this.fb.group({
       process: ['', [Validators.required]],
-      state: ['', [Validators.required]],
+      state: [''],
       processNo: ['', [Validators.required]]
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
