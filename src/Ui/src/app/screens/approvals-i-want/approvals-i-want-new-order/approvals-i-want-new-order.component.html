@@ -15,8 +15,11 @@
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="process">İşlem</label>
-              <input type="text" class="form-control" id="process" name="process" formControlName="process"
-                     [ngClass]="{ 'is-invalid': submitted && fr.process.invalid }">
+              <select name="process" id="process" formControlName="process" class="form-select"
+                      [ngClass]="{ 'is-invalid': submitted && fr.process.invalid }">
+                <option value="">Seçiniz</option>
+                <option value="1">Seçenek 1</option>
+              </select>
               <div *ngIf="submitted && fr.process.errors" class="invalid-feedback">
                 <div *ngIf="fr.process.errors.required">İşlem bilgisi girilmelidir.</div>
               </div>
@@ -25,11 +28,10 @@
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="state">Aşama</label>
-              <input type="text" class="form-control" id="state" name="state" formControlName="state"
-                     [ngClass]="{ 'is-invalid': submitted && fr.state.invalid }">
-              <div *ngIf="submitted && fr.state.errors" class="invalid-feedback">
-                <div *ngIf="fr.state.errors.required">Aşama bilgisi girilmelidir.</div>
-              </div>
+              <select name="state" id="state" formControlName="state" class="form-select">
+                <option value="">Seçiniz</option>
+                <option value="1">Seçenek 1</option>
+              </select>
             </div>
           </div>
           <div class="col-md col-sm-12">

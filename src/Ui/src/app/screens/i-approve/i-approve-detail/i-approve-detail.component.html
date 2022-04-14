@@ -7,31 +7,14 @@
         <div class="col">
           <div class="title">{{index + 1}}- {{i.name}}</div>
           <app-render-file [detail]="i"></app-render-file>
-          <div *ngIf="i.actions.length===1;else other_content">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="flexCheckChecked"
-                     [value]="i.actions[0].title"
-                     [checked]="i.actions[0].checked"
-                     disabled>
-              <label class="form-check-label" for="flexCheckChecked">
-                {{i.actions[0].title}}
-              </label>
+          <div class="row g-0 d-flex align-items-center">
+            <div class="col-auto">
+              <b>{{i.actions.title}}</b>
+            </div>
+            <div class="col-auto ps-2">
+              <img class="mw-50" src="/assets/img/{{i.state?'check-circle':'block2x'}}.png">
             </div>
           </div>
-          <ng-template #other_content>
-            <div class="form-check" *ngFor="let f of i.actions;let fIndex=index;">
-              <input class="form-check-input" type="radio" [name]="'flexRadioDefault'+index"
-                     [id]="'flexRadioDefault'+index+fIndex" disabled
-                     [checked]="f.checked"
-                     [value]="f.title">
-              <label class="form-check-label" [for]="'flexRadioDefault'+index+fIndex">
-                {{f.title}}
-              </label>
-            </div>
-          </ng-template>
-        </div>
-        <div class="col-auto">
-          <img src="/assets/img/{{i.state?'check-circle':'block2x'}}.png">
         </div>
       </div>
     </div>

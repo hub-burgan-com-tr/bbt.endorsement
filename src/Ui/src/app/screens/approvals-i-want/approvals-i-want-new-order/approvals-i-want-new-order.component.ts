@@ -20,7 +20,7 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
       title: ['', Validators.required],
       reference: this.fb.group({
         process: ['', Validators.required],
-        state: ['', Validators.required],
+        state: [''],
         processNo: ['', Validators.required],
       }),
       config: this.fb.group({

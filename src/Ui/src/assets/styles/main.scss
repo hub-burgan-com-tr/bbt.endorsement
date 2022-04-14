@@ -232,21 +232,29 @@ app-root {
     }*/
   }
 
+  .mw-50 {
+    max-width: 50%;
+  }
+
   #personList {
     margin: 0;
     padding: 0;
-    li{
-      &:first-of-type{
+
+    li {
+      &:first-of-type {
         margin-top: 10px;
       }
+
       padding: 5px;
       border-bottom: 1px solid #fff;
       background: #efefef;
       cursor: pointer;
-      &:hover{
+
+      &:hover {
         background: #ddd;
       }
-      &.selected{
+
+      &.selected {
         background: #0099d8;
         color: #fff;
       }
