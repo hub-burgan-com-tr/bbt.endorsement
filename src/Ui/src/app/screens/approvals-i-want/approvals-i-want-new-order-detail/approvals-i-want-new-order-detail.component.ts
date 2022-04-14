@@ -207,7 +207,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   }
 
   redirectToList() {
-    this.router.navigate(['..'], {relativeTo: this.route})
+    this.router.navigate(['approvals-i-want']);
   }
 
   onSubmit() {
