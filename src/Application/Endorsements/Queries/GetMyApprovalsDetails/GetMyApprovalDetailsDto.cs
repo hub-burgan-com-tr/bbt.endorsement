@@ -11,7 +11,7 @@
     public class OrderDocument
     {
         public string Name { get; set; }     
-        public List<Action> Actions { get; set; }
+        public Action Actions { get; set; }
         public string Content { get; internal set; }
         public string Type { get; internal set; }
         public bool State { get; internal set; }
