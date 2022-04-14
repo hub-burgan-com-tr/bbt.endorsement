@@ -310,6 +310,16 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (orderState.Data != null && orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
                     variables.Completed = true;
+
+                if (variables.Approved)
+                {
+                    await _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        State = "Workflow tamamlandı",
+                        Description = ""
+                    });
+                }
             }
             catch (Exception ex)
             {
