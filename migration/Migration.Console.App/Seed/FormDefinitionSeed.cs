@@ -40,7 +40,7 @@ public static class FormDefinitionSeed
             var labelpdf = File.ReadAllText(pathpdf, Encoding.Default);
             var formdefinition2 = context.FormDefinitions.Add(new FormDefinition
             {
-                FormDefinitionId = "b25635e8-1abd-4768-ab97-e1285999a62a",
+                FormDefinitionId = "b25635e8-1abd-4768-ab97-e1285999a62b",
                 Name = "Sigorta Teklif Formu",
                 Label = labelpdf.ToString(),
                 Created = DateTime.Now,
