@@ -273,7 +273,6 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             if (variables != null)
             {
-                variables.Approved = true;
                 variables.IsProcess = true;
                 variables.Completed = false;
             }
@@ -309,10 +308,9 @@ public class ContractApprovalService : IContractApprovalService
                 }
 
                 if (orderState.Data != null && orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
-                    variables.Completed = true;
-
-                if (variables.Approved)
                 {
+                    variables.Completed = true;
+                    variables.Approved = true;
                     await _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
