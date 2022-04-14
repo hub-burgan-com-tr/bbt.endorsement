@@ -2,6 +2,7 @@
 using System.Text;
 using Application.Endorsements.Commands.NewOrders;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Migration.Console.App.Seed;
 
