@@ -1,9 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Domain.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Html;
-using RestSharp;
-using System.Web;
 
 namespace Application.TemplateEngines.Commands.Renders;
 
@@ -16,10 +14,12 @@ public class RenderCommand : IRequest<Response<RenderResponse>>
 public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<RenderResponse>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ITemplateEngineService _templateEngineService;
 
-    public RenderCommandHandler(IApplicationDbContext context)
+    public RenderCommandHandler(IApplicationDbContext context, ITemplateEngineService templateEngineService)
     {
         _context = context;
+        _templateEngineService = templateEngineService;
     }
 
     public async Task<Response<RenderResponse>> Handle(RenderCommand request, CancellationToken cancellationToken)
@@ -28,25 +28,17 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         if (form == null)
             return new Response<RenderResponse>();
 
-        string jsonData = @"{" +
-                          "\"name\":"  + "\"" + form.TemplateName + "\"" + "," +
-                          "\"render-id\":" + "\"" + Guid.NewGuid().ToString() + "\"" + "," +
-                          "\"render-data\": " + request.Content + "," +
-                          "\"render-data-for-log\":  " + request.Content +
-        "}";
-
-        var restClient = new RestClient("http://20.126.170.150:5000");
-        var restRequest = new RestRequest("/Template/Render", Method.Post);
-        restRequest.AddHeader("Content-Type", "application/json");
-        restRequest.AddHeader("Accept", "application/json");
-        restRequest.AddStringBody(jsonData, DataFormat.Json);
-        var response = await restClient.ExecutePostAsync(restRequest);
-
-        var content = response.Content;
-        var html = content;
-
-        html = html.Replace(@"\""", String.Empty);
-        html = html.Replace("\"", String.Empty);
+        var html = "";
+        if(form.Type == ContentType.HTML.ToString())
+        {
+            var response = await _templateEngineService.HtmlRender(form.TemplateName, request.Content);
+            html = response.Data;
+        }
+        else if(form.Type == ContentType.PDF.ToString())
+        {
+            var response = await _templateEngineService.PdfRender(form.TemplateName, request.Content);
+            html = response.Data;
+        }
 
         return Response<RenderResponse>.Success(new RenderResponse { Content = html }, 200);
     }
