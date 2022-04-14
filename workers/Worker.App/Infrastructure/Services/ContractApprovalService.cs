@@ -141,10 +141,23 @@ public class ContractApprovalService : IContractApprovalService
             if (variables != null)
                 variables.RetryEnd = true;
 
-            variables.Device = true;
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             var person = await _mediator.Send(new LoadContactInfoCommand { Id = 1 });
+            if(person.Data != null)
+            {
+                if(person.Data.Person.Devices.Any())
+                {
+                    variables.Device = true;
+                    var device = person.Data.Person.Devices.FirstOrDefault();
+                }
+                else
+                {
+                    variables.Device = false;
+                    var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                    var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
+                }
+            }
 
             Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
 
