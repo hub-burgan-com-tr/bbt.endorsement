@@ -9,7 +9,7 @@
           <app-render-file [detail]="i"></app-render-file>
           <div class="row g-0 d-flex align-items-center">
             <div class="col-auto">
-              <b>{{i.actions.title}}</b>
+              <b>{{i.actions && i.actions.title}}</b>
             </div>
             <div class="col-auto ps-2">
               <img class="mw-50" src="/assets/img/{{i.state?'check-circle':'block2x'}}.png">
@@ -62,7 +62,7 @@
     </table>
   </div>
   <div class="d-flex justify-content-center mt-5">
-    <button class="btn btn-primary px-5" backButton>
+    <button class="btn btn-primary px-5" [routerLink]="['..']">
       Geri Dön
     </button>
   </div>
