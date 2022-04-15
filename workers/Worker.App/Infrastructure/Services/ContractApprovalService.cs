@@ -322,7 +322,7 @@ public class ContractApprovalService : IContractApprovalService
                     }
                 }
 
-                if (orderState.Data != null && orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
+                if (orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
                 {
                     variables.Completed = true;
                     variables.Approved = true;
