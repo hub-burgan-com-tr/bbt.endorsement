@@ -68,12 +68,6 @@
       <bpmn:sequenceFlow id="Flow_1mhc32m" name="Approved " sourceRef="Gateway_12a5y1i" targetRef="Activity_1bfj4zy">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= Approved = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:boundaryEvent id="Event_LimitTime" name="Limit Time" attachedToRef="Activity_1bfj4zy">
-        <bpmn:outgoing>Flow_1ufej76</bpmn:outgoing>
-        <bpmn:timerEventDefinition id="TimerEventDefinition_1jt8vs5">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
-        </bpmn:timerEventDefinition>
-      </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_1ufej76" sourceRef="Event_LimitTime" targetRef="Gateway_Limit" />
       <bpmn:parallelGateway id="Gateway_Limit">
         <bpmn:incoming>Flow_1ufej76</bpmn:incoming>
@@ -216,6 +210,12 @@
         <bpmn:outgoing>Flow_0st7chg</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_0st7chg" sourceRef="Activity_0jfywen" targetRef="Event_005sint" />
+      <bpmn:boundaryEvent id="Event_LimitTime" name="Limit Time" cancelActivity="false" attachedToRef="Activity_1bfj4zy">
+        <bpmn:outgoing>Flow_1ufej76</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_1iuxw6x">
+          <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">= RetryFrequence</bpmn:timeCycle>
+        </bpmn:timerEventDefinition>
+      </bpmn:boundaryEvent>
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="Event_TimeoutTimer" name="Timeout Timer" attachedToRef="Activity_ContractApprovalProcess">
       <bpmn:outgoing>Flow_10ia34g</bpmn:outgoing>
@@ -628,10 +628,10 @@
       <bpmndi:BPMNShape id="Activity_0jfywen_di" bpmnElement="Activity_0jfywen">
         <dc:Bounds x="2240" y="330" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0wrx92l_di" bpmnElement="Event_LimitTime">
+      <bpmndi:BPMNShape id="Event_1gfjxip_di" bpmnElement="Event_LimitTime">
         <dc:Bounds x="1642" y="312" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1663.5" y="293" width="51" height="14" />
+          <dc:Bounds x="1664" y="293" width="51" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1rj1dmk_di" bpmnElement="Activity_DeleteProcess" isExpanded="true">
