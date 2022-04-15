@@ -40,6 +40,9 @@ namespace Application.Endorsements.Commands.NewOrderForms
             var expireInMinutes = "PT"+ config.ExpireInMinutes + "M";
             var retryFrequence = "PT" + config.RetryFrequence + "M";
 
+            expireInMinutes = expireInMinutes.Replace(@"\""", String.Empty).Replace("\"", String.Empty);
+            retryFrequence = retryFrequence.Replace(@"\""", String.Empty).Replace("\"", String.Empty);
+
             var model = new ContractModel
             {
                 StartFormRequest = request.Request,
