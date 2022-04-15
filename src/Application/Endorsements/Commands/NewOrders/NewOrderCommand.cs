@@ -34,14 +34,17 @@ namespace Application.Endorsements.Commands.NewOrders
             validator.ValidateAndThrow(request);
 
             var instanceId = request.StartRequest.Id;
+            var expireInMinutes = "PT" + request.StartRequest.Config.ExpireInMinutes + "M";
+            var retryFrequence = "PT" + request.StartRequest.Config.RetryFrequence + "M";
+
             var model = new ContractModel
             {
                 StartRequest = request.StartRequest,
                 FormType = request.FormType,
                 Device = false,
                 InstanceId = instanceId,
-                ExpireInMinutes = request.StartRequest.Config.ExpireInMinutes,
-                RetryFrequence = request.StartRequest.Config.RetryFrequence,
+                ExpireInMinutes = expireInMinutes,
+                RetryFrequence = retryFrequence,
                 MaxRetryCount = request.StartRequest.Config.MaxRetryCount,
             };
 
