@@ -16,7 +16,6 @@ namespace Application.Endorsements.Commands.NewOrderForms
             {
                 RuleFor(v => v.Title).NotEmpty().WithMessage("Başlık girilmelidir.");
                 RuleFor(v => v.Reference.Process).NotEmpty().WithMessage("İşlem bilgisi girilmelidir.");
-                RuleFor(v => v.Reference.State).NotEmpty().WithMessage("Aşama bilgisi girilmelidir.");
                 RuleFor(v => v.Reference.ProcessNo).NotEmpty().WithMessage("İşlem no bilgisi girilmelidir.");
                 RuleFor(v => v.Approver.First).NotEmpty().WithMessage("Ad girilmelidir.");
                 RuleFor(v => v.Approver.Last).NotEmpty().WithMessage("Soyad girilmelidir.");
