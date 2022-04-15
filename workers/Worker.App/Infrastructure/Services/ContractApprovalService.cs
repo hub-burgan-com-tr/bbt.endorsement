@@ -76,10 +76,12 @@ public class ContractApprovalService : IContractApprovalService
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            var bpmnProcessId = job.BpmnProcessId;
+            var processInstanceKey = job.ProcessInstanceKey;
             try
             {
                 // var state = customHeaders["State"].ToString();
-
+             
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
 
                 if (variables != null)
