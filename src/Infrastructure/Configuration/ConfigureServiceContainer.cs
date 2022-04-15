@@ -42,6 +42,7 @@ public static class ConfigureServiceContainer
         services.AddSingleton<IClientEventService, ClientEventService>();
         services.AddSingleton<IZeebeService, ZeebeService>();
         services.AddSingleton<IInternalsService, InternalsService>();
+        services.AddSingleton<ITemplateEngineService, TemplateEngineService>();
     }
 
     public static void AddServices(this IServiceCollection services)

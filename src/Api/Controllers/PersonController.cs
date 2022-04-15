@@ -21,7 +21,6 @@ namespace Api.Controllers
             var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
             return Ok(response);
         }
-
         [Route("person-get")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried person get are returned successfully.", typeof(GetSearchPersonSummaryDto))]

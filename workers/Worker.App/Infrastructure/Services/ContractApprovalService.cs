@@ -76,10 +76,12 @@ public class ContractApprovalService : IContractApprovalService
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            var bpmnProcessId = job.BpmnProcessId;
+            var processInstanceKey = job.ProcessInstanceKey;
             try
             {
                 // var state = customHeaders["State"].ToString();
-
+             
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
 
                 if (variables != null)
@@ -141,10 +143,23 @@ public class ContractApprovalService : IContractApprovalService
             if (variables != null)
                 variables.RetryEnd = true;
 
-            variables.Device = true;
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             var person = await _mediator.Send(new LoadContactInfoCommand { Id = 1 });
+            if(person.Data != null)
+            {
+                if(person.Data.Person.Devices.Any())
+                {
+                    variables.Device = true;
+                    var device = person.Data.Person.Devices.FirstOrDefault();
+                }
+                else
+                {
+                    variables.Device = false;
+                    var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                    var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
+                }
+            }
 
             Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
 
@@ -273,7 +288,6 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             if (variables != null)
             {
-                variables.Approved = true;
                 variables.IsProcess = true;
                 variables.Completed = false;
             }
@@ -309,7 +323,16 @@ public class ContractApprovalService : IContractApprovalService
                 }
 
                 if (orderState.Data != null && orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
+                {
                     variables.Completed = true;
+                    variables.Approved = true;
+                    await _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        State = "Workflow tamamlandı",
+                        Description = ""
+                    });
+                }
             }
             catch (Exception ex)
             {

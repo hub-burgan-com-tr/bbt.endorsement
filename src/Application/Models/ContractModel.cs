@@ -24,8 +24,8 @@ public class ContractModel
     public int Limit { get; set; }
 
     public int MaxRetryCount { get; set; }
-    public int RetryFrequence { get; set; }
-    public int ExpireInMinutes { get; set; }
+    public string RetryFrequence { get; set; }
+    public string ExpireInMinutes { get; set; }
 
 
     public ApproveOrderDocument Document { get; set; }
