@@ -244,7 +244,7 @@
               <label for="expireInMinutes">Geçerlilik</label>
               <input type="text" class="form-control" id="expireInMinutes" name="expireInMinutes" onlyNumber
                      formControlName="expireInMinutes"
-                     [ngClass]="{ 'is-invalid': submitted && fc.expireInMinutes.invalid }">
+                     [ngClass]="{ 'is-invalid': submitted && fc.expireInMinutes.invalid }" autocomplete="off">
               <div *ngIf="submitted && fc.expireInMinutes.errors" class="invalid-feedback">
                 <div *ngIf="fc.expireInMinutes.errors.required">Geçerlilik girilmelidir.</div>
               </div>
@@ -255,7 +255,7 @@
               <label for="retryFrequence">Hatırlatma Frekansı</label>
               <input type="text" class="form-control" id="retryFrequence" name="retryFrequence" onlyNumber
                      formControlName="retryFrequence"
-                     [ngClass]="{ 'is-invalid': submitted && fc.retryFrequence.invalid }">
+                     [ngClass]="{ 'is-invalid': submitted && fc.retryFrequence.invalid }" autocomplete="off">
               <div *ngIf="submitted && fc.retryFrequence.errors" class="invalid-feedback">
                 <div *ngIf="fc.retryFrequence.errors.required">Hatırlatma Frekansı girilmelidir.</div>
               </div>
@@ -266,7 +266,7 @@
               <label for="maxRetryCount">Hatırlatma Sayısı</label>
               <input type="text" class="form-control" id="maxRetryCount" name="maxRetryCount" onlyNumber
                      formControlName="maxRetryCount"
-                     [ngClass]="{ 'is-invalid': submitted && fc.maxRetryCount.invalid }">
+                     [ngClass]="{ 'is-invalid': submitted && fc.maxRetryCount.invalid }" autocomplete="off">
               <div *ngIf="submitted && fc.maxRetryCount.errors" class="invalid-feedback">
                 <div *ngIf="fc.maxRetryCount.errors.required">Hatırlatma Sayısı girilmelidir.</div>
               </div>
