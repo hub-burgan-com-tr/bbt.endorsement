@@ -23,9 +23,18 @@ namespace Worker.App.Models
         public bool RetryEnd { get; set; }
         public int Limit { get; set; }
 
+        /// <summary>
+        /// Zeebe is also controlled from the "Limit" parameter
+        /// </summary>
         public int MaxRetryCount { get; set; }
-        public int RetryFrequence { get; set; }
-        public int ExpireInMinutes { get; set; }
+        /// <summary>
+        /// Timer Definition "Retry" : PT1M
+        /// </summary>
+        public string RetryFrequence { get; set; }
+        /// <summary>
+        /// Timer Definition "Timeout" : PT15M
+        /// </summary>
+        public string ExpireInMinutes { get; set; }
 
 
         public ApproveOrderDocument Document { get; set; }

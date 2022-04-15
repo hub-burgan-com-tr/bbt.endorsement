@@ -36,14 +36,18 @@ namespace Application.Endorsements.Commands.NewOrderForms
             var instanceId = request.Request.Id;
 
             var config = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == request.Request.FormId);
+
+            var expireInMinutes = "PT"+ config.ExpireInMinutes + "M";
+            var retryFrequence = "PT" + config.RetryFrequence + "M";
+
             var model = new ContractModel
             {
                 StartFormRequest = request.Request,
                 FormType = request.FormType,
                 Device = false,
                 InstanceId = instanceId,
-                ExpireInMinutes = config.ExpireInMinutes,
-                RetryFrequence = config.RetryFrequence,
+                ExpireInMinutes = expireInMinutes,
+                RetryFrequence = retryFrequence,
                 MaxRetryCount = config.MaxRetryCount,
             };
             

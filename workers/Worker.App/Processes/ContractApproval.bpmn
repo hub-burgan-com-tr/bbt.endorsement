@@ -91,10 +91,10 @@
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_0h3gjrt" sourceRef="Gateway_Limit" targetRef="Gateway_0x8x5ak" />
       <bpmn:sequenceFlow id="Flow_19sxxbe" name="Has Retry Limit" sourceRef="Gateway_0x8x5ak" targetRef="Activity_LoadContactInfo">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= Limit &lt;= 3</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= Limit &lt;= MaxRetryCount</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0oqobog" sourceRef="Gateway_0x8x5ak" targetRef="Activity_1bfj4zy">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= Limit &gt; 3</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= Limit &gt; MaxRetryCount</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ji105p" sourceRef="Event_0k9mjyd" targetRef="Activity_SaveEntity" />
       <bpmn:serviceTask id="Activity_SaveEntity" name="Save Entity">
