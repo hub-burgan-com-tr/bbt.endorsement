@@ -4,6 +4,7 @@ using Application.Endorsements.Commands.NewOrders;
 using Application.OrderForms.Queries.GetFormContents;
 using Application.OrderForms.Queries.GetForms;
 using Application.OrderForms.Queries.GetProcess;
+using Application.OrderForms.Queries.GetProcessAndState;
 using Application.OrderForms.Queries.GetStates;
 using Application.TemplateEngines.Commands.Renders;
 using Domain.Enum;
@@ -93,8 +94,8 @@ namespace Api.Controllers
             return Ok(list);
         }
         [SwaggerOperation(
-          Summary = "Get form by name",
-          Description = "Returns form by name"
+          Summary = "Get state by name",
+          Description = "Returns state by name"
       )]
         [Route("GetState")]
         [HttpGet]
@@ -107,12 +108,12 @@ namespace Api.Controllers
         }
 
         [SwaggerOperation(
-          Summary = "Get form by name",
-          Description = "Returns form by name"
+          Summary = "Get process by name",
+          Description = "Returns process by name"
       )]
         [Route("GetProcess")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, Process is returned successfully.", typeof(List<GetFormDto>))]
+        [SwaggerResponse(200, "Success, Process is returned successfully.", typeof(List<GetProcessDto>))]
         [SwaggerResponse(404, "Process not found.", typeof(void))]
         public async Task<IActionResult> GetProcessAsync()
         {
@@ -120,7 +121,18 @@ namespace Api.Controllers
             return Ok(list);
         }
 
-
+        [SwaggerOperation(
+       Summary = "Get process and state by name",
+       Description = "Returns process and state by name")]
+        [Route("GetProcessAndState")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process And State is returned successfully.", typeof(GetProcessAndStateDto))]
+        [SwaggerResponse(404, "Process And State not found.", typeof(void))]
+        public async Task<IActionResult> GetProcessAndStateAsync()
+        {
+            var list = await Mediator.Send(new GetProcessAndStateQuery { ProcessParameterTypeId = (int)ParameterType.Process,StateParameterTypeId=(int)ParameterType.State });
+            return Ok(list);
+        }
 
     }
 }
