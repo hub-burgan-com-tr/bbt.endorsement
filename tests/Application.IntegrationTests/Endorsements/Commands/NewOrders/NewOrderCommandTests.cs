@@ -1,14 +1,13 @@
 ﻿using Application.Endorsements.Commands.NewOrders;
+using Application.IntegrationTests;
+using Domain.Models;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Application.IntegrationTests.Endorsements.Commands.NewOrders;
-
-using static Application.Endorsements.Commands.NewOrders.StartRequest;
-using static Testing;
+using static Application.IntegrationTests.Testing;
 
 public class NewOrderCommandTests : TestBase
 {

@@ -38,7 +38,6 @@ public class OrderDetail
             public int Choice { get; set; }
             public string Title { get; set; }
             public ActionType State { get; set; }
-            public enum ActionType { Approved, Rejected }
         }
         public Log[] Logs { get; set; }
         public class Log
@@ -61,7 +60,6 @@ public class OrderDetail
         {
             public CalbackMode Mode { get; set; }
             public string URL { get; set; }
-            public enum CalbackMode { Completed, Verbose }
 
             public Log[] Logs { get; set; }
             public class Log

@@ -1,4 +1,5 @@
 ﻿using Application.Endorsements.Commands.NewOrders;
+using Domain.Models;
 using FluentValidation;
 
 namespace Application.Endorsements.Commands.NewOrderForms

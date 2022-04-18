@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Endorsements\EventHandlers\" />
+    <Folder Include="Models\" />
     <Folder Include="OrderForms\Commands\" />
   </ItemGroup>
 

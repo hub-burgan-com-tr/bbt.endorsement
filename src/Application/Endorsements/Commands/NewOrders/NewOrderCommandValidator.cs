@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Domain.Models;
 using FluentValidation;
 
 namespace Application.Endorsements.Commands.NewOrders
