@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NewOrderService} from "../../../services/new-order.service";
 import {NewApprovalOrder} from "../../../models/new-approval-order";
+import {Subject, takeUntil} from "rxjs";
+import {CommonService} from "../../../services/common.service";
 
 @Component({
   selector: 'app-approvals-i-want-new-order',
@@ -13,8 +15,10 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
   submitted = false;
   formGroup: FormGroup;
   model: NewApprovalOrder;
+  private destroy$ = new Subject();
+  dropdownData: any;
 
-  constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {
+  constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private commonService: CommonService) {
     this.model = new NewApprovalOrder();
     this.formGroup = this.fb.group({
       title: ['', Validators.required],
@@ -24,14 +28,17 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
         processNo: ['', Validators.required],
       }),
       config: this.fb.group({
-        expireInMinutes: ['',Validators.required],
+        expireInMinutes: ['', Validators.required],
         retryFrequence: ['', Validators.required],
-        maxRetryCount: ['',Validators.required],
+        maxRetryCount: ['', Validators.required],
       })
     })
   }
 
   ngOnInit(): void {
+    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.dropdownData = res.data;
+    });
   }
 
   get f() {

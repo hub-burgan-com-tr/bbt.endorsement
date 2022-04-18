@@ -15,4 +15,5 @@ export enum ApiPaths {
   WatchApprovalDetail = 'Endorsement/watch-approval-detail',
   CancelOrder = 'Endorsement/cancel-order',
   PersonSearch = 'Person/person-search',
+  GetProcessAndState = 'Forms/GetProcessAndState',
 }

@@ -25,15 +25,19 @@
         <div class="col">
           <div class="form-group">
             <label for="process">İşlem</label>
-            <input type="text" class="form-control" id="process" name="process" formControlName="process"
-            >
+            <select name="process" id="process" formControlName="process" class="form-select">
+              <option value="">Seçiniz</option>
+              <option [value]="i.id" *ngFor="let i of dropdownData?.process">{{i.text}}</option>
+            </select>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label for="state">Aşama</label>
-            <input type="text" class="form-control" id="state" name="state" formControlName="state"
-            >
+            <select name="state" id="state" formControlName="state" class="form-select">
+              <option value="">Seçiniz</option>
+              <option [value]="i.id" *ngFor="let i of dropdownData?.state">{{i.text}}</option>
+            </select>
           </div>
         </div>
         <div class="col">

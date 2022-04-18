@@ -11,29 +11,29 @@
     <div class="box p-5">
       <div class="box-title p-0 no-border">Referans</div>
       <div class="row mt-3">
-        <div class="col-4">
+        <div class="col">
           <div class="form-group">
             <label for="process">İşlem</label>
             <select name="process" id="process" formControlName="process" class="form-select"
                     [ngClass]="{ 'is-invalid': submitted && f.process.invalid }">
               <option value="">Seçiniz</option>
-              <option value="1">Seçenek 1</option>
+              <option [value]="i.id" *ngFor="let i of dropdownData?.process">{{i.text}}</option>
             </select>
             <div *ngIf="submitted && f.process.errors" class="invalid-feedback">
               <div *ngIf="f.process.errors.required">İşlem girilmelidir.</div>
             </div>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col">
           <div class="form-group">
             <label for="state">Aşama</label>
             <select name="state" id="state" formControlName="state" class="form-select">
               <option value="">Seçiniz</option>
-              <option value="1">Seçenek 1</option>
+              <option [value]="i.id" *ngFor="let i of dropdownData?.state">{{i.text}}</option>
             </select>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col">
           <div class="form-group">
             <label for="processNo">İşlem No</label>
             <input type="text" class="form-control" id="processNo" name="processNo"
@@ -42,6 +42,16 @@
             <div *ngIf="submitted && f.processNo.errors" class="invalid-feedback">
               <div *ngIf="f.processNo.errors.required">İşlem No girilmelidir.</div>
             </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="state">Form</label>
+            <select name="form" id="form" formControlName="form" class="form-select"
+                    (ngModelChange)="formChanged($event)">
+              <option value="">Seçiniz</option>
+              <option [value]="i.formDefinitionId" *ngFor="let i of formDropdown">{{i.name}}</option>
+            </select>
           </div>
         </div>
       </div>
@@ -55,8 +65,10 @@
           </small>
         </div>
       </div>
-      <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>
-      <formio [form]="form" [options]="options" (submit)="submitForm($event)"></formio>
+      <div *ngIf="form">
+        <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>
+        <formio [form]="form" [options]="options" (submit)="submitForm($event)"></formio>
+      </div>
     </div>
     <div class="button-group d-flex align-items-center justify-content-center mt-5">
       <button class="btn btn-primary px-5" (click)="next()">Kaydet</button>

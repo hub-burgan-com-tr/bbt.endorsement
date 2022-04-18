@@ -6,6 +6,7 @@ import "../../../extensions/ng-form.extensions";
 import {NewOrderService} from "../../../services/new-order.service";
 import {NewApprovalOrder} from "../../../models/new-approval-order";
 import {Subject, takeUntil} from "rxjs";
+import {CommonService} from "../../../services/common.service";
 
 @Component({
   selector: 'app-approvals-i-want-new-order-detail',
@@ -31,8 +32,9 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   selectedDocumentIndex: number;
   approvalButtonText: string = 'Kaydet';
   person;
+  dropdownData: any;
 
-  constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private modal: NgxSmartModalService) {
+  constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private modal: NgxSmartModalService, private commonService: CommonService) {
     this.initModel();
     this.formNewDocument = this.fb.group({
       type: ['', Validators.required],
@@ -63,6 +65,9 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
+    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.dropdownData = res.data;
+    });
   }
 
   ngOnDestroy() {

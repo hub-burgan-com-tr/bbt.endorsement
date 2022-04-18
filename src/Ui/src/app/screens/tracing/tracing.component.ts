@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {TracingService} from "../../services/tracing.service";
 import {Subject, takeUntil} from "rxjs";
+import {CommonService} from "../../services/common.service";
 
 @Component({
   selector: 'app-tracing',
@@ -10,88 +11,9 @@ import {Subject, takeUntil} from "rxjs";
 })
 export class TracingComponent implements OnInit {
   private destroy$ = new Subject();
-  /*data = [
-    {
-      id: 1,
-      contractName: 'Sigorta Teklif Talimatı',
-      approver: 'Merve Aydın',
-      personSeekingApproval: 'Uğur Karataş',
-      process: 'Şube Operasyon',
-      stage: 'Acil Ödeme',
-      stageNo: '1234',
-      createdDate: '12 Ocak 2022 12:00',
-      statusText: 'Bekliyor',
-      status: 1,
-      file: true
-    },
-    {
-      id: 2,
-      contractName: '3. Para Birim Talimatı',
-      approver: 'Merve Aydın',
-      personSeekingApproval: 'Uğur Karataş',
-      process: 'Şube Operasyon',
-      stage: 'Acil Ödeme',
-      stageNo: '1234',
-      createdDate: '12 Ocak 2022 12:00',
-      statusText: 'Onaylandı',
-      status: 2,
-      file: false
-    },
-    {
-      id: 3,
-      contractName: 'Maaş Ödeme Talimatı',
-      approver: 'Merve Aydın',
-      personSeekingApproval: 'Uğur Karataş',
-      process: 'Şube Operasyon',
-      stage: 'Acil Ödeme',
-      stageNo: '1234',
-      createdDate: '12 Ocak 2022 12:00',
-      statusText: 'Ret',
-      status: 0,
-      file: true
-    },
-    {
-      id: 4,
-      contractName: '1021 İşlem Onayı',
-      approver: 'Merve Aydın',
-      personSeekingApproval: 'Uğur Karataş',
-      process: 'Şube Operasyon',
-      stage: 'Acil Ödeme',
-      stageNo: '1234',
-      createdDate: '12 Ocak 2022 12:00',
-      statusText: 'Bekliyor',
-      status: 1,
-      file: true
-    },
-    {
-      id: 5,
-      contractName: 'Avans Ödeme Talimatı',
-      approver: 'Merve Aydın',
-      personSeekingApproval: 'Uğur Karataş',
-      process: 'Şube Operasyon',
-      stage: 'Acil Ödeme',
-      stageNo: '1234',
-      createdDate: '12 Ocak 2022 12:00',
-      statusText: 'Onaylandı',
-      status: 2,
-      file: false
-    },
-    {
-      id: 6,
-      contractName: 'Maaş Ödeme Talimatı',
-      approver: 'Merve Aydın',
-      personSeekingApproval: 'Uğur Karataş',
-      process: 'Şube Operasyon',
-      stage: 'Acil Ödeme',
-      stageNo: '1234',
-      createdDate: '12 Ocak 2022 12:00',
-      statusText: 'Ret',
-      status: 0,
-      file: false
-    }
-  ];*/
-  data: any;
 
+  data: any;
+  dropdownData: any;
   pageSize = 10;
   pageNumber = 1;
   totalPages = 1;
@@ -99,7 +21,7 @@ export class TracingComponent implements OnInit {
   hasPreviousPage = true;
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder, private tracingService: TracingService) {
+  constructor(private fb: FormBuilder, private tracingService: TracingService, private commonService: CommonService) {
     this.formGroup = this.fb.group({
       customer: '',
       approver: '',
@@ -117,11 +39,15 @@ export class TracingComponent implements OnInit {
   }
 
   initData() {
+    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.dropdownData = res.data;
+    });
     const model = localStorage.getItem('tracingForm') ? JSON.parse(localStorage.getItem('tracingForm')) : null;
     this.formGroup.patchValue({...model});
-    this.pageNumber = model.pageNumber;
-    if (model)
+    if (model) {
       this.getWatchApproval();
+      this.pageNumber = model.pageNumber;
+    }
     localStorage.removeItem('tracingForm');
   }
 

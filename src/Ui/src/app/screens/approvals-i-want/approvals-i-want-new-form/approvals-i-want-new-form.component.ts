@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import NewApprovalOrderForm from "../../../models/new-approval-order-form";
 import {IApprover} from "../../../models/approver";
 import {IReference} from "../../../models/reference";
+import {CommonService} from "../../../services/common.service";
 
 @Component({
   selector: 'app-approvals-i-want-new-form',
@@ -28,16 +29,19 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     disableAlerts: true,
   }
   personName;
+  dropdownData: any;
+  formDropdown: any;
 
   constructor(private fb: FormBuilder,
               private modal: NgxSmartModalService,
               private newOrderFormService: NewOrderFormService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router, private commonService: CommonService) {
     this.formGroup = this.fb.group({
       process: ['', [Validators.required]],
       state: [''],
-      processNo: ['', [Validators.required]]
+      processNo: ['', [Validators.required]],
+      form: ['']
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.formDefinitionId = params['formDefinitionId'];
@@ -45,13 +49,22 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.newOrderFormService.getFormContent(this.formDefinitionId).pipe(takeUntil(this.destroy$)).subscribe(res => {
-      const {data} = res;
-      this.form = data && JSON.parse(data.content);
-      this.formTitle = data && data.title;
+    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.dropdownData = res.data;
     });
+    this.newOrderFormService.getForm().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.formDropdown = res && res.data;
+    })
   }
-
+  formChanged(val){
+    if (val){
+      this.newOrderFormService.getFormContent(val).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        const {data} = res;
+        this.form = data && JSON.parse(data.content);
+        this.formTitle = data && data.title;
+      });
+    }
+  }
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
