@@ -1,11 +1,13 @@
 ﻿using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrderForms;
 using Application.Endorsements.Commands.NewOrders;
-using Application.OrderForms.Queries.GetApproverInformations;
 using Application.OrderForms.Queries.GetFormContents;
 using Application.OrderForms.Queries.GetForms;
+using Application.OrderForms.Queries.GetProcess;
+using Application.OrderForms.Queries.GetStates;
 using Application.TemplateEngines.Commands.Renders;
 using Domain.Enum;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Text.Json;
@@ -90,28 +92,35 @@ namespace Api.Controllers
             var list = await Mediator.Send(new GetFormContentQuery { FormDefinitionId = formDefinitionId });
             return Ok(list);
         }
-
-
-
-        /// <summary>
-        /// Onaycı Bilgileri Getir
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         [SwaggerOperation(
-            Summary = "Get approver by name and surname",
-            Description = "Returns form by name"
-        )]
-        [Route("approval-information")]
+          Summary = "Get form by name",
+          Description = "Returns form by name"
+      )]
+        [Route("GetState")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, form is returned successfully.", typeof(string))]
-        [SwaggerResponse(404, "Approver not found.", typeof(void))]
-        public async Task<IActionResult> GetApproverInformationAsync([FromQuery] int type, [FromQuery] string value)
+        [SwaggerResponse(200, "Success, state is returned successfully.", typeof(List<GetStateDto>))]
+        [SwaggerResponse(404, "State not found.", typeof(void))]
+        public async Task<IActionResult> GetStateAsync()
         {
-            await Mediator.Send(new GetApproverInformationQuery { Type = type, Value = value });
-            return Ok();
+            var list = await Mediator.Send(new GetStateQuery { ParameterTypeId=(int)ParameterType.State});
+            return Ok(list);
         }
+
+        [SwaggerOperation(
+          Summary = "Get form by name",
+          Description = "Returns form by name"
+      )]
+        [Route("GetProcess")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process is returned successfully.", typeof(List<GetFormDto>))]
+        [SwaggerResponse(404, "Process not found.", typeof(void))]
+        public async Task<IActionResult> GetProcessAsync()
+        {
+            var list = await Mediator.Send(new GetProcessQuery {ParameterTypeId=(int)ParameterType.Process});
+            return Ok(list);
+        }
+
+
 
     }
 }

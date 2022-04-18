@@ -17,6 +17,8 @@ namespace Application.Common.Interfaces
         DbSet<Approver> Approvers { get; }
         DbSet<Customer> Customers { get; }
         DbSet<OrderHistory> OrderHistories { get; }
+        DbSet<ParameterType> ParameterTypes { get; }
+        DbSet<Parameter> Parameters { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         int SaveChanges();
