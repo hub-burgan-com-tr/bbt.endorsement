@@ -76,8 +76,6 @@ public class ContractApprovalService : IContractApprovalService
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-            var bpmnProcessId = job.BpmnProcessId;
-            var processInstanceKey = job.ProcessInstanceKey;
             try
             {
                 // var state = customHeaders["State"].ToString();
@@ -88,7 +86,8 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     var response = await _mediator.Send(new SaveEntityCommand
                     {
-                        Model = variables
+                        Model = variables,
+                        ProcessInstanceKey = job.ProcessInstanceKey
                     });
                     variables.IsProcess = true;
                     variables.Device = true;
