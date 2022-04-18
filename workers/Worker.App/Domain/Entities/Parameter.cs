@@ -18,5 +18,7 @@ namespace Worker.App.Domain.Entities
         [MaxLength(250)]
         public string Text { get; set; }
         public virtual ParameterType ParameterType { get; set; }
+
+
     }
 }

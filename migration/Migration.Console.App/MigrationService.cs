@@ -21,7 +21,8 @@ namespace Migration.Console.App
         {
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
-            FormDefinitionSeed.SeedFormDefinitionsAsync(_context).Wait();   
+            FormDefinitionSeed.SeedFormDefinitionsAsync(_context).Wait();
+            ParamaterSeed.SeedFormDefinitionsAsync(_context).Wait();
         }
     }
 }
