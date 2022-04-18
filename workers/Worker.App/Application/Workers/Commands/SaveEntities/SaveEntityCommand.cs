@@ -28,22 +28,23 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
-            var orderId = "";
+            var response = new SaveEntityResponse();
             if(request.Model.FormType == Form.Order)
-                orderId = OrderCreate(request.Model.StartRequest, request.ProcessInstanceKey);
+                response = OrderCreate(request.Model.StartRequest, request.ProcessInstanceKey);
             else if (request.Model.FormType == Form.FormOrder)
-                orderId = FormOrderCreate(request.Model.StartFormRequest, request.ProcessInstanceKey);
+                response = FormOrderCreate(request.Model.StartFormRequest, request.ProcessInstanceKey);
 
-            var documentList = _context.Documents.Where(x => x.OrderId == orderId);
+            var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
             var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
             foreach (var item in documentList)
                 saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
-            var response =  new SaveEntityResponse { OrderId = orderId, Documents = saveEntityDocuments };
+
+            response.Documents = saveEntityDocuments;
 
             return Response<SaveEntityResponse>.Success(response, 200);
         }
 
-        private string FormOrderCreate(StartFormRequest startFormRequest, long processInstanceKey)
+        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest, long processInstanceKey)
         {
             if (startFormRequest == null) return null;
 
@@ -105,7 +106,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var entity = _context.Orders.Add(order).Entity;
             _context.SaveChanges();
 
-            return entity.OrderId;
+            return new SaveEntityResponse
+            {
+                OrderId = entity.OrderId,
+                ExpireInMinutes = order.Config.ExpireInMinutes,
+                MaxRetryCount = order.Config.MaxRetryCount,
+                RetryFrequence = order.Config.RetryFrequence
+            };
         }
 
         private string GetCustomerId(OrderApprover approver)
@@ -116,7 +123,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return customerId;
         }
 
-        private string OrderCreate(StartRequest startRequest, long processInstanceKey)
+        private SaveEntityResponse OrderCreate(StartRequest startRequest, long processInstanceKey)
         {
             if (startRequest == null) return null;
 
@@ -183,7 +190,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var entity = _context.Orders.Add(order).Entity;
             _context.SaveChanges();
 
-            return entity.OrderId;
+            return new SaveEntityResponse
+            {
+                OrderId = entity.OrderId,
+                ExpireInMinutes = order.Config.ExpireInMinutes,
+                MaxRetryCount = order.Config.MaxRetryCount,
+                RetryFrequence= order.Config.RetryFrequence
+            };
         }
 
         private string GetFileType(string fileType)

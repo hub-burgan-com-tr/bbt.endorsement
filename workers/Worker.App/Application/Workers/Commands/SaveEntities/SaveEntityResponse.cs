@@ -8,6 +8,9 @@
         }
 
         public string OrderId { get; set; }
+        public int ExpireInMinutes { get; set; }
+        public int RetryFrequence { get; set; }
+        public int MaxRetryCount { get; set; }
         public List<SaveEntityDocumentResponse> Documents { get; set; }
     }
 
