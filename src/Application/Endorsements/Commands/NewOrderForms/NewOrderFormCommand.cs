@@ -1,8 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.Endorsements.Commands.NewOrders;
-using Application.Models;
-using Domain.Enum;
+using Domain.Enums;
+using Domain.Models;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;

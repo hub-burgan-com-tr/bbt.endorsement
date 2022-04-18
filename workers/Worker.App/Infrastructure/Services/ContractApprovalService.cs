@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Domain.Enums;
+using Domain.Models;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Serilog;
@@ -11,8 +13,6 @@ using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.LoadContactInfos;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Application.Workers.Commands.UpdateEntities;
-using Worker.App.Domain.Enums;
-using Worker.App.Models;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
 using JsonSerializer = System.Text.Json.JsonSerializer;

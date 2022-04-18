@@ -1,4 +1,4 @@
-﻿using Worker.App.Domain.Common;
+﻿using Domain.Common;
 
 namespace Worker.App.Application.Common.Interfaces;
 

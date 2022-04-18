@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enums
 {
     public enum Form
     {

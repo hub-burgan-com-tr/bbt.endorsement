@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Endorsements\Commands\NewOrders\" />
     <Folder Include="OrderForm\Commands\" />
   </ItemGroup>
 

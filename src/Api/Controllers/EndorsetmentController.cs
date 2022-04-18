@@ -19,6 +19,8 @@ using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Enum;
+using Domain.Models;
+using Domain.Enums;
 
 namespace Api.Controllers
 {

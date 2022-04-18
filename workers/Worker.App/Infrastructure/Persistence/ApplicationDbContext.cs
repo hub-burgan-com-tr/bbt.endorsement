@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Common;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using Worker.App.Domain.Common;
-using Worker.App.Domain.Entities;
 using Worker.App.Application.Common.Interfaces;
 
 namespace Worker.App.Infrastructure.Persistence;

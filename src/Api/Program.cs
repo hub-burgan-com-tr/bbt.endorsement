@@ -4,6 +4,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
+using Infrastructure.Filter;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 
@@ -48,6 +49,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
+   // options.SchemaFilter<EnumSchemaFilter>();
     options.UseInlineDefinitionsForEnums();
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

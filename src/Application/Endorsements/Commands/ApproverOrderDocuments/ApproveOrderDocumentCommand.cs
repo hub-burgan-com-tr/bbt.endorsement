@@ -1,6 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.Models;
+using Domain.Models;
 using MediatR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
