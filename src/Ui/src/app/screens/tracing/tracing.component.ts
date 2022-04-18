@@ -113,6 +113,16 @@ export class TracingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initData();
+  }
+
+  initData() {
+    const model = localStorage.getItem('tracingForm') ? JSON.parse(localStorage.getItem('tracingForm')) : null;
+    this.formGroup.patchValue({...model});
+    this.pageNumber = model.pageNumber;
+    if (model)
+      this.getWatchApproval();
+    localStorage.removeItem('tracingForm');
   }
 
   onSubmit() {
@@ -124,7 +134,14 @@ export class TracingComponent implements OnInit {
 
   clear(form) {
     form.submitted = false;
-    this.formGroup.reset();
+    this.formGroup.patchValue({
+      customer: '',
+      approver: '',
+      process: '',
+      state: '',
+      processNo: '',
+    });
+    this.data = null;
   }
 
   atLeastOneHasValue = (fields: Array<string>) => {
@@ -148,6 +165,7 @@ export class TracingComponent implements OnInit {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };
+    localStorage.setItem('tracingForm', JSON.stringify(model));
     this.tracingService.getWatchApproval(model).pipe(takeUntil(this.destroy$)).subscribe({
       next: res => {
         if (res.data) {
