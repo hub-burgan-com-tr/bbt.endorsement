@@ -1,7 +1,7 @@
-﻿using MediatR;
+﻿using Domain.Enums;
+using MediatR;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
-using Worker.App.Domain.Enums;
 
 namespace Worker.App.Application.Documents.Commands.UpdateDocumentStates
 {

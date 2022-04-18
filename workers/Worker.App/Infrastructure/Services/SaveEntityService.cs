@@ -1,7 +1,7 @@
-﻿using Worker.App.Application.Common.Interfaces;
-using Worker.App.Domain.Entities;
+﻿using Domain.Entities;
+using Domain.Models;
+using Worker.App.Application.Common.Interfaces;
 using Worker.App.Dtos;
-using Worker.App.Models;
 
 namespace Worker.App.Infrastructure.Services
 {

@@ -1,5 +1,5 @@
-﻿using MediatR;
-using Worker.App.Domain.Common;
+﻿using Domain.Common;
+using MediatR;
 
 namespace Worker.App.Application.Common.Models;
 

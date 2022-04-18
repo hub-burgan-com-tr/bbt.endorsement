@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Worker.App.Domain.Entities;
-using DocumentAction = Worker.App.Domain.Entities.DocumentAction;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Worker.App.Application.Common.Interfaces
 {

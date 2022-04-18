@@ -1,4 +1,4 @@
-﻿using Worker.App.Domain.Enums;
+﻿using Domain.Enums;
 
 namespace Worker.App.Application.Workers.Commands.DeleteEntities
 {

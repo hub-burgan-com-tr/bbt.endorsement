@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace Domain.Models;
 
@@ -61,12 +62,14 @@ public class OrderDocument
     public string Title { get; set; }
     public string Content { get; set; }
     public string FileName { get; set; }
-    public int Type { get; set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public ContentType Type { get; set; }
     public string FileType { get; set; }
-    public List<DocumentAction> Actions { get; set; }
+    public List<DocumentActionClass> Actions { get; set; }
 
 }
-public class DocumentAction
+public class DocumentActionClass
 {
     public int Choice { get; set; }
     public string Title { get; set; }

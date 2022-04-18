@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Worker.App.Domain.Common;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Serilog;
+using Domain.Common;
 
 namespace Worker.App.Infrastructure.Services;
 public class DomainEventService : IDomainEventService

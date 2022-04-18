@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Worker.App.Application.Common.Models;
-using Worker.App.Domain.Entities;
-using Worker.App.Models;
 using Worker.App.Application.Common.Interfaces;
-using Worker.App.Domain.Enums;
+using Domain.Models;
+using Domain.Entities;
+using Domain.Enums;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -143,10 +143,10 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 {
                     DocumentId = Guid.NewGuid().ToString(),
                     Content = item.Content,
-                    Name =item.Title,
+                    Name = item.Title,
                     Type = item.Type.ToString(),
-                    FileType =item.Type.ToString()==ContentType.PlainText.ToString()?FileType.PlainText.ToString():GetFileType(item.FileType),
-                    MimeType=item.FileType,
+                    FileType = item.Type.ToString() == ContentType.PlainText.ToString() ? FileType.PlainText.ToString() : GetFileType(item.FileType),
+                    MimeType = item.FileType,
                     Created = _dateTime.Now,
                     DocumentActions = actions
                 });

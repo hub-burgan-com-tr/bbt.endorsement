@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\**" />
+    <EmbeddedResource Remove="Domain\**" />
+    <None Remove="Domain\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Infrastructure\Logging\LoggingExtensions.cs" />
   </ItemGroup>
 
@@ -47,6 +53,11 @@
 
 	<ItemGroup>
 	  <Folder Include="Application\Documents\Queries\" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
-﻿using Worker.App.Dtos;
-using Worker.App.Models;
+﻿using Domain.Models;
+using Worker.App.Dtos;
 
 namespace Worker.App.Application.Common.Interfaces
 {
