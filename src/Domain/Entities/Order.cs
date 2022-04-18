@@ -22,6 +22,7 @@ namespace Domain.Entities
         public string Title { get; set; }
         [MaxLength(50)]
         public string State { get; set; }
+        public long ProcessInstanceKey { get; set; }
 
 
         private bool _done;

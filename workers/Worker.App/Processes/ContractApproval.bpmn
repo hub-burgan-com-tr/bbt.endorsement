@@ -213,16 +213,10 @@
       <bpmn:boundaryEvent id="Event_LimitTime" name="Limit Time" cancelActivity="false" attachedToRef="Activity_1bfj4zy">
         <bpmn:outgoing>Flow_1ufej76</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1iuxw6x">
-          <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">= RetryFrequence</bpmn:timeCycle>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">= RetryFrequence</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:boundaryEvent>
     </bpmn:subProcess>
-    <bpmn:boundaryEvent id="Event_TimeoutTimer" name="Timeout Timer" attachedToRef="Activity_ContractApprovalProcess">
-      <bpmn:outgoing>Flow_10ia34g</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_1oqd6g9">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15M</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_10ia34g" sourceRef="Event_TimeoutTimer" targetRef="Activity_TimeoutProcess" />
     <bpmn:sequenceFlow id="Flow_14ivxht" sourceRef="Start" targetRef="Activity_ContractApprovalProcess" />
     <bpmn:subProcess id="Activity_DeleteProcess" name="Delete Process&#10;">
@@ -298,6 +292,12 @@
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_1bt5h62" sourceRef="Event_Error" targetRef="Activity_ErrorProcess" />
     <bpmn:sequenceFlow id="Flow_04zftsb" sourceRef="Activity_ErrorProcess" targetRef="Event_01p839q" />
+    <bpmn:boundaryEvent id="Event_TimeoutTimer" name="Timeout Timer" cancelActivity="false" attachedToRef="Activity_ContractApprovalProcess">
+      <bpmn:outgoing>Flow_10ia34g</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_078h45i">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">= ExpireInMinutes</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
   </bpmn:process>
   <bpmn:message id="Message_0l782at" name="contact_approval_contract_new" />
   <bpmn:message id="Message_16i859u" name="ApproveData">
@@ -718,7 +718,7 @@
           <dc:Bounds x="1141" y="553" width="78" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1q35mc0_di" bpmnElement="Event_TimeoutTimer">
+      <bpmndi:BPMNShape id="Event_0iqntz3_di" bpmnElement="Event_TimeoutTimer">
         <dc:Bounds x="477" y="572" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="464" y="553" width="71" height="14" />

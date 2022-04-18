@@ -9,7 +9,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
     public class SaveEntityCommand : IRequest<Response<SaveEntityResponse>>
     {
-        public ContractModel Model { get; set; }    
+        public ContractModel Model { get; set; }   
+        public long ProcessInstanceKey { get; set; }
     }
 
     public class SaveEntityCommandHandler : IRequestHandler<SaveEntityCommand, Response<SaveEntityResponse>>
@@ -29,9 +30,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         {
             var orderId = "";
             if(request.Model.FormType == Form.Order)
-                orderId = OrderCreate(request.Model.StartRequest);
+                orderId = OrderCreate(request.Model.StartRequest, request.ProcessInstanceKey);
             else if (request.Model.FormType == Form.FormOrder)
-                orderId = FormOrderCreate(request.Model.StartFormRequest);
+                orderId = FormOrderCreate(request.Model.StartFormRequest, request.ProcessInstanceKey);
 
             var documentList = _context.Documents.Where(x => x.OrderId == orderId);
             var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
@@ -42,7 +43,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return Response<SaveEntityResponse>.Success(response, 200);
         }
 
-        private string FormOrderCreate(StartFormRequest startFormRequest)
+        private string FormOrderCreate(StartFormRequest startFormRequest, long processInstanceKey)
         {
             if (startFormRequest == null) return null;
 
@@ -86,6 +87,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var order = new Order
             {
                 OrderId = startFormRequest.Id.ToString(),
+                ProcessInstanceKey = processInstanceKey,
                 State = OrderState.Pending.ToString(),
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
@@ -114,7 +116,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return customerId;
         }
 
-        private string OrderCreate(StartRequest startRequest)
+        private string OrderCreate(StartRequest startRequest, long processInstanceKey)
         {
             if (startRequest == null) return null;
 
@@ -161,6 +163,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
+                ProcessInstanceKey = processInstanceKey,
                 State = OrderState.Pending.ToString(),
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
