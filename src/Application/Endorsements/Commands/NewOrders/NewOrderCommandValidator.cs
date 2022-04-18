@@ -12,7 +12,7 @@ namespace Application.Endorsements.Commands.NewOrders
             RuleFor(v => v.StartRequest).SetValidator(new StartRequestValidator());
             RuleFor(x => x.StartRequest.Documents).NotEmpty().WithMessage("Belge eklemeden ilerleyemezsiniz.");
 
-            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == ContentType.File).ChildRules(y =>
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.File).ChildRules(y =>
             {
                 y.RuleFor(z => z.Content).NotEmpty().WithMessage("Lütfen dosya seçiniz");
 
@@ -20,12 +20,12 @@ namespace Application.Endorsements.Commands.NewOrders
 
             RuleForEach(x => x.StartRequest.Documents).ChildRules(y => y.RuleFor(z => z.Actions).NotEmpty().WithMessage("Lütfen seçenek ekleyiniz."));
 
-            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == ContentType.PlainText).ChildRules(y =>
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.PlainText).ChildRules(y =>
             {
                 y.RuleFor(z => z.Content).NotEmpty().WithMessage("Metin Girilmelidir");
             });
 
-            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == ContentType.PlainText).ChildRules(y =>
+            RuleForEach(x => x.StartRequest.Documents).Where(x => x.Type == (int)ContentType.PlainText).ChildRules(y =>
             {
                 y.RuleFor(z => z.Title).NotEmpty().WithMessage("Başlık girilmelidir.");
             });

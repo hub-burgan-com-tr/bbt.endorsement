@@ -139,17 +139,19 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     }
                 }
 
+                string type = Enum.GetName(typeof(ContentType), item.Type);
+
                 documents.Add(new Document
                 {
                     DocumentId = Guid.NewGuid().ToString(),
                     Content = item.Content,
                     Name = item.Title,
-                    Type = item.Type.ToString(),
+                    Type = type,
                     FileType = item.Type.ToString() == ContentType.PlainText.ToString() ? FileType.PlainText.ToString() : GetFileType(item.FileType),
                     MimeType = item.FileType,
                     Created = _dateTime.Now,
                     DocumentActions = actions
-                });
+                }); ;
             }
 
             var config = new Config();
@@ -193,23 +195,16 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             else if (fileType.Contains("pdf"))
             {
                 return FileType.PDF.ToString();
-
             }
             if (fileType.Contains("html"))
             {
                 return FileType.HTML.ToString();
-
             }
             else
             {
                 return FileType.File.ToString();
-
             }
 
         }
-        public enum FileType
-        { Image = 1, PDF = 2, HTML = 3, File = 4, PlainText=5 }
-        public enum ContentType { File = 1, PlainText = 2, HTML = 3, PDF = 4, }
-
     }
 }
