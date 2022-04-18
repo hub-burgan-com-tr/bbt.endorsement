@@ -8,6 +8,7 @@ namespace Application.Common.Interfaces
         public Task<ITopology> Status();
         public Task<IDeployResponse> Deploy(string modelFilename);
         public Task<string> SendMessage(string instanceId, string messageName, string payload);
+        public Task<string> NewSetVariables(long elementInstanceKey, string payload);
         public void StartWorkers(string url);
         public IZeebeClient Client();
 

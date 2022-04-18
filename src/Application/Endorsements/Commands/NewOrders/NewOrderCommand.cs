@@ -37,9 +37,6 @@ namespace Application.Endorsements.Commands.NewOrders
             var expireInMinutes = "PT" + request.StartRequest.Config.ExpireInMinutes + "M";
             var retryFrequence = "PT" + request.StartRequest.Config.RetryFrequence + "M";
 
-            expireInMinutes = expireInMinutes.Replace(@"\""", String.Empty).Replace("\"", String.Empty);
-            retryFrequence = retryFrequence.Replace(@"\""", String.Empty).Replace("\"", String.Empty);
-
             var model = new ContractModel
             {
                 StartRequest = request.StartRequest,

@@ -13,6 +13,7 @@ using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.LoadContactInfos;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Application.Workers.Commands.UpdateEntities;
+using Worker.App.Application.Workers.Queries.GetOrderConfigs;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -287,6 +288,13 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             if (variables != null)
             {
+                var orderConfig = _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
+                if(orderConfig != null)
+                {
+                    variables.RetryFrequence = orderConfig.Data.RetryFrequence;
+                    variables.ExpireInMinutes = orderConfig.Data.ExpireInMinutes;
+                    variables.MaxRetryCount = orderConfig.Data.MaxRetryCount;
+                }
                 variables.IsProcess = true;
                 variables.Completed = false;
             }

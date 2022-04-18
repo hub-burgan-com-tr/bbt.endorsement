@@ -73,5 +73,18 @@ namespace Infrastructure.ZeebeServices
         {
             return client;
         }
+
+        public async Task<string> NewSetVariables(long elementInstanceKey, string payload)
+        {
+            _logger.LogInformation("elementInstanceKey: " + elementInstanceKey);
+            await client.NewSetVariablesCommand(elementInstanceKey)
+                .Variables(payload)
+                .Send();
+
+            string jsonText = JsonSerializer.Serialize(elementInstanceKey, new JsonSerializerOptions
+            { Converters = { new JsonStringEnumConverter() } });
+
+            return jsonText;
+        }
     }
 }
