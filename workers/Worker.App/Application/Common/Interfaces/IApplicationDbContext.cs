@@ -19,6 +19,8 @@ namespace Worker.App.Application.Common.Interfaces
         DbSet<Customer> Customers { get; }
         DbSet<ParameterType> ParameterTypes { get; }
         DbSet<Parameter> Parameters { get; }
+        DbSet<FormDefinitionTagMap> FormDefinitionTagMaps { get; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         int SaveChanges();
     }

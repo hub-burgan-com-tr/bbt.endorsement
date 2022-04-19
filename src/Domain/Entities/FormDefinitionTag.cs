@@ -7,14 +7,17 @@ namespace Domain.Entities
     [Table("FormDefinitionTag", Schema = "form")]
     public class FormDefinitionTag : AuditableEntity
     {
+        public FormDefinitionTag()
+        {
+            FormDefinitionTagMaps = new HashSet<FormDefinitionTagMap>();
+        }
         [Key]
         [MaxLength(36)]
         public string FormDefinitionTagId { get; set; }
 
-        [MaxLength(36)]
-        public string FormDefinitionId { get; set; }
+       
         public string Tag { get; set; }
+        public virtual ICollection<FormDefinitionTagMap> FormDefinitionTagMaps { get; set; }
 
-        public virtual FormDefinition FormDefinition { get; set; }
     }
 }

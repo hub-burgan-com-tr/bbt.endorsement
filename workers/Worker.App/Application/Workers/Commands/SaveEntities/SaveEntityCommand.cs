@@ -89,6 +89,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             {
                 OrderId = startFormRequest.Id.ToString(),
                 ProcessInstanceKey = processInstanceKey,
+                DocumentSystemId = formDefinition.DocumentSystemId,
+
                 State = OrderState.Pending.ToString(),
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
@@ -98,8 +100,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
                     Created = _dateTime.Now,
-                    Process = startFormRequest.Reference.Process,
-                    State = startFormRequest.Reference.State,
+                    Process = startFormRequest.Title,
+                    State = startFormRequest.Title,
                 },
                 Documents = documents,
             };
@@ -172,6 +174,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
+                DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999a62b",
                 ProcessInstanceKey = processInstanceKey,
                 State = OrderState.Pending.ToString(),
                 Title = startRequest.Title,

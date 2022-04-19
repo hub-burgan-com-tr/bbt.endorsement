@@ -6,6 +6,7 @@
         public int RetryFrequence { get; set; }
         public int MaxRetryCount { get; set; }
         public string Type { get; set; }
+        public string DocumentSystemId { get; set; }
         public IEnumerable<FormDefinitionActionDto> Actions { get; set; }
     }
 

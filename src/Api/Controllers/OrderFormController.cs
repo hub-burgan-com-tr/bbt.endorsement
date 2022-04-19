@@ -5,6 +5,8 @@ using Application.OrderForms.Queries.GetForms;
 using Application.OrderForms.Queries.GetProcess;
 using Application.OrderForms.Queries.GetProcessAndState;
 using Application.OrderForms.Queries.GetStates;
+using Application.OrderForms.Queries.GetTags;
+using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
 using Domain.Enums;
 using Domain.Models;
@@ -129,6 +131,33 @@ namespace Api.Controllers
         public async Task<IActionResult> GetProcessAndStateAsync()
         {
             var list = await Mediator.Send(new GetProcessAndStateQuery { ProcessParameterTypeId = (int)ParameterType.Process,StateParameterTypeId=(int)ParameterType.State });
+            return Ok(list);
+        }
+
+        [SwaggerOperation(
+      Summary = "Get process and tags by name",
+      Description = "Returns process and tags by name")]
+        [Route("GetTags")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process And Tags is returned successfully.", typeof(List<GetTagsDto>))]
+        [SwaggerResponse(404, "Process And Tags not found.", typeof(void))]
+        public async Task<IActionResult> GetTags()
+        {
+            var list = await Mediator.Send(new GetTagsQuery());
+            return Ok(list);
+        }
+
+
+        [SwaggerOperation(
+Summary = "Get process and tags Form by name",
+Description = "Returns process and tags form by name")]
+        [Route("GetTagsFormName")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process And Tags form name is returned successfully.", typeof(List<GetTagsDto>))]
+        [SwaggerResponse(404, "Process And Tags form name  not found.", typeof(void))]
+        public async Task<IActionResult> GetTagsFormName([FromQuery] string formDefinitionTagId)
+        {
+            var list = await Mediator.Send(new GetTagsFormNameQuery { FormDefinitionTagId=formDefinitionTagId});
             return Ok(list);
         }
 
