@@ -11,7 +11,26 @@
     <div class="box p-5">
       <div class="box-title p-0 no-border">Referans</div>
       <div class="row mt-3">
-        <div class="col">
+        <div class="col-4">
+          <div class="form-group">
+            <label for="tag">Etiket</label>
+            <select name="tag" id="tag" formControlName="tag" class="form-select" (ngModelChange)="tagChanged($event)">
+              <option value="">Seçiniz</option>
+              <option [value]="i.formDefinitionTagId" *ngFor="let i of tags">{{i.tag}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label for="form">Form</label>
+            <select name="form" id="form" formControlName="form" class="form-select"
+                    (ngModelChange)="formChanged($event)">
+              <option value="">Seçiniz</option>
+              <option [value]="i.formDefinitionId" *ngFor="let i of formDropdown">{{i.name}}</option>
+            </select>
+          </div>
+        </div>
+        <!--<div class="col">
           <div class="form-group">
             <label for="process">İşlem</label>
             <select name="process" id="process" formControlName="process" class="form-select"
@@ -32,8 +51,8 @@
               <option [value]="i.id" *ngFor="let i of dropdownData?.state">{{i.text}}</option>
             </select>
           </div>
-        </div>
-        <div class="col">
+        </div>-->
+        <div class="col-4">
           <div class="form-group">
             <label for="processNo">İşlem No</label>
             <input type="text" class="form-control" id="processNo" name="processNo"
@@ -44,16 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="col">
-          <div class="form-group">
-            <label for="state">Form</label>
-            <select name="form" id="form" formControlName="form" class="form-select"
-                    (ngModelChange)="formChanged($event)">
-              <option value="">Seçiniz</option>
-              <option [value]="i.formDefinitionId" *ngFor="let i of formDropdown">{{i.name}}</option>
-            </select>
-          </div>
-        </div>
+
       </div>
       <div class="box-title mt-5 p-0 no-border">Onaycı Ekle</div>
       <div class="row mt-3">

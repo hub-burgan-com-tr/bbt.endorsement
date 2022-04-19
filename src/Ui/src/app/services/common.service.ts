@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {ApiPaths} from "../models/api-paths";
@@ -15,6 +15,16 @@ export class CommonService {
 
   getProcessAndState() {
     const url = `${this.baseUrl}/${ApiPaths.GetProcessAndState}`;
+    return this.httpClient.get<ApiBaseResponseModel>(url);
+  }
+
+  getTags() {
+    const url = `${this.baseUrl}/${ApiPaths.GetTags}`;
+    return this.httpClient.get<ApiBaseResponseModel>(url);
+  }
+
+  getTagsFormName(formDefinitionTagId: any) {
+    const url = `${this.baseUrl}/${ApiPaths.GetTagsFormName}?formDefinitionTagId=${formDefinitionTagId}`;
     return this.httpClient.get<ApiBaseResponseModel>(url);
   }
 }
