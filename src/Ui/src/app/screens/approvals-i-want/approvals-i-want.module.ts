@@ -13,6 +13,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ApprovalsIWantNewFormComponent} from './approvals-i-want-new-form/approvals-i-want-new-form.component';
 import {FormioAppConfig, FormioModule} from "@formio/angular";
 import {AppConfig} from "../../../../formio-config";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 const routes: Routes = [
   {path: '', component: ApprovalsIWantComponent},
@@ -30,15 +31,16 @@ const routes: Routes = [
     ApprovalsIWantNewOrderDetailComponent,
     ApprovalsIWantNewFormComponent
   ],
-  imports: [
-    SharedModule,
-    CommonModule,
-    RouterModule.forChild(routes),
-    NgxSmartModalModule.forRoot(),
-    FormsModule,
-    ReactiveFormsModule,
-    FormioModule
-  ],
+    imports: [
+        SharedModule,
+        CommonModule,
+        RouterModule.forChild(routes),
+        NgxSmartModalModule.forRoot(),
+        FormsModule,
+        ReactiveFormsModule,
+        FormioModule,
+        NgSelectModule
+    ],
   providers: [
     {provide: FormioAppConfig, useValue: AppConfig}
   ]

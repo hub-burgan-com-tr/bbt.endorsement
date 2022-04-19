@@ -9,6 +9,7 @@ import NewApprovalOrderForm from "../../../models/new-approval-order-form";
 import {IApprover} from "../../../models/approver";
 import {IReference} from "../../../models/reference";
 import {CommonService} from "../../../services/common.service";
+import {NgSelectConfig} from "@ng-select/ng-select";
 
 @Component({
   selector: 'app-approvals-i-want-new-form',
@@ -39,8 +40,8 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router, private commonService: CommonService) {
     this.formGroup = this.fb.group({
-      tag: [''],
-      form: [''],
+      tag: ['', [Validators.required]],
+      form: ['', [Validators.required]],
       processNo: ['', [Validators.required]],
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
@@ -128,6 +129,8 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
 
   next() {
     this.submitted = true;
+    this.formGroup.valid;
+    console.log(this.formGroup);
     if (this.formio) {
       this.formio.formio.emit('submitButton');
     }

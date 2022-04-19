@@ -14,20 +14,38 @@
         <div class="col-4">
           <div class="form-group">
             <label for="tag">Etiket</label>
-            <select name="tag" id="tag" formControlName="tag" class="form-select" (ngModelChange)="tagChanged($event)">
+            <ng-select id="tag" formControlName="tag" [clearable]="false" (ngModelChange)="tagChanged($event)"
+                       [ngClass]="{ 'is-invalid': submitted && f.tag.invalid }"
+            >
+              <ng-option value="">Seçiniz</ng-option>
+              <ng-option *ngFor="let i of tags" [value]="i.formDefinitionTagId">{{i.tag}}</ng-option>
+            </ng-select>
+            <div *ngIf="submitted && f.tag.errors" class="invalid-feedback">
+              <div *ngIf="f.tag.errors.required">Etiket seçilmelidir.</div>
+            </div>
+            <!--<select name="tag" id="tag" formControlName="tag" class="form-select" (ngModelChange)="tagChanged($event)">
               <option value="">Seçiniz</option>
               <option [value]="i.formDefinitionTagId" *ngFor="let i of tags">{{i.tag}}</option>
-            </select>
+            </select>-->
           </div>
         </div>
         <div class="col-4">
           <div class="form-group">
             <label for="form">Form</label>
-            <select name="form" id="form" formControlName="form" class="form-select"
+            <ng-select id="form" formControlName="form" notFoundText="Bulunamadı!" [clearable]="false"
+                       (ngModelChange)="formChanged($event)"
+                       [ngClass]="{ 'is-invalid': submitted && f.form.invalid }">
+              <ng-option value="">Seçiniz</ng-option>
+              <ng-option *ngFor="let i of formDropdown" [value]="i.formDefinitionId">{{i.name}}</ng-option>
+            </ng-select>
+            <div *ngIf="submitted && f.form.errors" class="invalid-feedback">
+              <div *ngIf="f.form.errors.required">Form seçilmelidir.</div>
+            </div>
+            <!--<select name="form" id="form" formControlName="form" class="form-select"
                     (ngModelChange)="formChanged($event)">
               <option value="">Seçiniz</option>
               <option [value]="i.formDefinitionId" *ngFor="let i of formDropdown">{{i.name}}</option>
-            </select>
+            </select>-->
           </div>
         </div>
         <!--<div class="col">

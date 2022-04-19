@@ -1,3 +1,4 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
 @import "~ngx-smart-modal/ngx-smart-modal";
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
@@ -7,6 +8,15 @@
 app-root {
   color: #464646;
 
+  .ng-select.ng-select-single .ng-select-container {
+    height: 38px;
+  }
+
+  .ng-select.is-invalid {
+    .ng-select-container {
+      border-color: #dc3545;
+    }
+  }
 
   .formio-component {
     .formio-error-wrapper {
