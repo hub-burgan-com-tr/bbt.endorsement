@@ -31,6 +31,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   personName;
   dropdownData: any;
   formDropdown: any;
+  tags: any;
 
   constructor(private fb: FormBuilder,
               private modal: NgxSmartModalService,
@@ -38,10 +39,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router, private commonService: CommonService) {
     this.formGroup = this.fb.group({
-      process: ['', [Validators.required]],
-      state: [''],
+      tag: [''],
+      form: [''],
       processNo: ['', [Validators.required]],
-      form: ['']
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.formDefinitionId = params['formDefinitionId'];
@@ -49,22 +49,44 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
-      this.dropdownData = res.data;
+    this.commonService.getTags().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.tags = res.data;
     });
-    this.newOrderFormService.getForm().pipe(takeUntil(this.destroy$)).subscribe(res => {
-      this.formDropdown = res && res.data;
-    })
+    /* this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
+       this.dropdownData = res.data;
+     });
+     this.newOrderFormService.getForm().pipe(takeUntil(this.destroy$)).subscribe(res => {
+       this.formDropdown = res && res.data;
+     });*/
   }
-  formChanged(val){
-    if (val){
-      this.newOrderFormService.getFormContent(val).pipe(takeUntil(this.destroy$)).subscribe(res => {
+
+  tagChanged(val) {
+    if (val) {
+      this.commonService.getTagsFormName(val).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        this.formDropdown = res && res.data;
+      });
+    } else {
+      this.form = undefined;
+      this.formDropdown = undefined;
+      this.formGroup.patchValue({
+        form: ''
+      })
+    }
+  }
+
+  formChanged(val) {
+    if (val) {
+      this.formDefinitionId = val;
+      this.newOrderFormService.getFormContent(this.formDefinitionId).pipe(takeUntil(this.destroy$)).subscribe(res => {
         const {data} = res;
         this.form = data && JSON.parse(data.content);
         this.formTitle = data && data.title;
       });
+    } else {
+      this.formDefinitionId = null;
     }
   }
+
   ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.complete();
@@ -94,9 +116,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         first: this.person.first,
         last: this.person.last
       }, JSON.stringify(e.data), this.formDefinitionId, <IReference>{
-        process: this.f.process.value,
         processNo: this.f.processNo.value,
-        state: this.f.state.value
+        tagId: this.f.tag.value,
+        formId: this.f.form.value,
       }, this.formTitle);
       this.newOrderFormService.save(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.modal.open('success');

@@ -16,4 +16,6 @@ export enum ApiPaths {
   CancelOrder = 'Endorsement/cancel-order',
   PersonSearch = 'Person/person-search',
   GetProcessAndState = 'Forms/GetProcessAndState',
+  GetTags = 'Forms/GetTags',
+  GetTagsFormName = 'Forms/GetTagsFormName',
 }
