@@ -20,3 +20,6 @@ spec:
         image: burganbank/bbt.endorsement:latest
         ports:
         - containerPort: 5070
+        env:
+        - name: TZ
+          value: Europe/Istanbul
