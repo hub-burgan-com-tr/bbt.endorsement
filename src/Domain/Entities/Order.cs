@@ -17,6 +17,8 @@ namespace Domain.Entities
         [MaxLength(36)]
         public string CustomerId { get; set; }
 
+        [MaxLength(36)]
+        public string DocumentSystemId { get; set; }
         [Required]
         [MaxLength(250)]
         public string Title { get; set; }

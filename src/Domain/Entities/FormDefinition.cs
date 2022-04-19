@@ -10,13 +10,16 @@ namespace Domain.Entities
         public FormDefinition()
         {
             Documents = new HashSet<Document>();
-            FormDefinitionTags=new HashSet<FormDefinitionTag>();
+            FormDefinitionTagMaps = new HashSet<FormDefinitionTagMap>();
             FormDefinitionActions = new HashSet<FormDefinitionAction>();
         }
 
         [Key]
         [MaxLength(36)]
         public string FormDefinitionId { get; set; }
+        [MaxLength(36)]
+        public string DocumentSystemId { get; set; }
+
         [MaxLength(250)]
         public string Name { get; set; }
         public string Label { get; set; }
@@ -35,7 +38,7 @@ namespace Domain.Entities
         [Required]
         public int MaxRetryCount { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
-        public virtual ICollection<FormDefinitionTag> FormDefinitionTags { get; set; }
+        public virtual ICollection<FormDefinitionTagMap> FormDefinitionTagMaps { get; set; }
         public virtual ICollection<FormDefinitionAction> FormDefinitionActions { get; set; }
     }
 }
