@@ -129,8 +129,6 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
 
   next() {
     this.submitted = true;
-    this.formGroup.valid;
-    console.log(this.formGroup);
     if (this.formio) {
       this.formio.formio.emit('submitButton');
     }
