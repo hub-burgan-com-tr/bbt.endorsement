@@ -30,6 +30,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<Customer> Customers { get; set; }
     public virtual DbSet<Parameter> Parameters { get; set; }
     public virtual DbSet<ParameterType> ParameterTypes { get; set; }
+    public virtual DbSet<FormDefinitionTagMap> FormDefinitionTagMaps { get; set; }
 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    [Table("FormDefinition", Schema = "form")]
+    [Table("FormDefinitionTagMap", Schema = "form")]
 
     public class FormDefinitionTagMap 
     {
+        [MaxLength(36)]
+        [Key]
+        public string FormDefinitionTagMapId { get; set; }
         [MaxLength(36)]
         public string FormDefinitionId { get; set; }
         [MaxLength(36)]

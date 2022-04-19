@@ -72,6 +72,7 @@ namespace Worker.App.Infrastructure.Services
                     RetryFrequence = x.RetryFrequence,
                     MaxRetryCount = x.MaxRetryCount,
                     Type = x.Type,
+                    DocumentSystemId=x.DocumentSystemId,
                     Actions = x.FormDefinitionActions.Select(y => new FormDefinitionActionDto
                     {
                         Title = y.Title,
