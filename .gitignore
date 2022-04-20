@@ -352,3 +352,4 @@ MigrationBackup/
 /src/Api/appsettings.Development.json
 /src/Infrastructure/Migrations
 
+/tests/Application.IntegrationTests/appsettings.Development.json
