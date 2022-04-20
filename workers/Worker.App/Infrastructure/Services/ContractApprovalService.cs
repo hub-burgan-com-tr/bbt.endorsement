@@ -316,8 +316,7 @@ public class ContractApprovalService : IContractApprovalService
             Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
             try
             {
-                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                foreach (var item in variables.Documents)
+                 foreach (var item in variables.Documents)
                 {
                     var document = _mediator.Send(new UpdateDocumentActionCommand
                     {
@@ -354,6 +353,7 @@ public class ContractApprovalService : IContractApprovalService
                         Description = ""
                     });
                 }
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
             catch (Exception ex)
             {
