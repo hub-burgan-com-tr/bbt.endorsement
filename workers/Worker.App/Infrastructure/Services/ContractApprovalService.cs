@@ -346,6 +346,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     variables.Completed = true;
                     variables.Approved = true;
+                    variables.IsProcess = true;
                     await _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
