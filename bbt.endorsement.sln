@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.IntegrationTests", "tests\Application.IntegrationTests\Application.IntegrationTests.csproj", "{1BA1A49E-1D43-4715-8628-72D384EF87CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration.Console.App", "migration\Migration.Console.App\Migration.Console.App.csproj", "{D8117FA0-2C34-4C53-B5F4-0BC2E8AF5C46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migration.Console.App", "migration\Migration.Console.App\Migration.Console.App.csproj", "{D8117FA0-2C34-4C53-B5F4-0BC2E8AF5C46}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migrations", "migrations", "{75EE84B5-773B-41E1-9085-717E95BA3DCA}"
 EndProject

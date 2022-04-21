@@ -5,5 +5,6 @@
         public long CitizenshipNumber { get; set; }
         public string First { get; set; }
         public string Last { get; set; }
+        public long ClientNumber { get; internal set; }
     }
 }

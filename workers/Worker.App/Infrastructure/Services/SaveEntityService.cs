@@ -37,6 +37,7 @@ namespace Worker.App.Infrastructure.Services
             {
                 CustomerId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = approver.CitizenshipNumber,
+                ClientNumber=approver.ClientNumber,
                 FirstName = approver.First,
                 LastName = approver.Last,
                 Created = _dateTime.Now,
