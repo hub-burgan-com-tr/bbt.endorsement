@@ -65,9 +65,6 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
-      this.dropdownData = res.data;
-    });
   }
 
   ngOnDestroy() {

@@ -53,12 +53,6 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     this.commonService.getTags().pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.tags = res.data;
     });
-    /* this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
-       this.dropdownData = res.data;
-     });
-     this.newOrderFormService.getForm().pipe(takeUntil(this.destroy$)).subscribe(res => {
-       this.formDropdown = res && res.data;
-     });*/
   }
 
   tagChanged(val) {

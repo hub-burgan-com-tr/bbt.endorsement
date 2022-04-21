@@ -39,9 +39,6 @@ export class TracingComponent implements OnInit {
   }
 
   initData() {
-    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
-      this.dropdownData = res.data;
-    });
     const model = localStorage.getItem('tracingForm') ? JSON.parse(localStorage.getItem('tracingForm')) : null;
     this.formGroup.patchValue({...model});
     if (model) {
