@@ -104,12 +104,11 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.formGroup.valid) {
-      //@TODO
-      //Ad Soyad servisten çekilip gönderilecek
       const model = new NewApprovalOrderForm(<IApprover>{
         citizenshipNumber: this.person.citizenshipNumber,
         first: this.person.first,
-        last: this.person.last
+        last: this.person.last,
+        clientNumber: this.person.clientNumber
       }, JSON.stringify(e.data), this.formDefinitionId, <IReference>{
         processNo: this.f.processNo.value,
         tagId: this.f.tag.value,

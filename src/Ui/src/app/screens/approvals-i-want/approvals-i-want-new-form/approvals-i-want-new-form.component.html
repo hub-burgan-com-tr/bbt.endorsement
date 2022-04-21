@@ -15,6 +15,7 @@
           <div class="form-group">
             <label for="tag">Etiket</label>
             <ng-select id="tag" formControlName="tag" [clearable]="false" (ngModelChange)="tagChanged($event)"
+                       [addTag]="true" addTagText="Yeni Ekle"
                        [ngClass]="{ 'is-invalid': submitted && f.tag.invalid }"
             >
               <ng-option value="">Seçiniz</ng-option>
