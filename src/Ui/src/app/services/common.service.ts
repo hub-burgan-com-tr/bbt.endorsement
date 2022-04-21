@@ -12,12 +12,6 @@ export class CommonService {
 
   constructor(private httpClient: HttpClient) {
   }
-
-  getProcessAndState() {
-    const url = `${this.baseUrl}/${ApiPaths.GetProcessAndState}`;
-    return this.httpClient.get<ApiBaseResponseModel>(url);
-  }
-
   getTags() {
     const url = `${this.baseUrl}/${ApiPaths.GetTags}`;
     return this.httpClient.get<ApiBaseResponseModel>(url);

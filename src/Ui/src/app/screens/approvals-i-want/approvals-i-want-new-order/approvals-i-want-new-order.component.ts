@@ -36,9 +36,6 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.commonService.getProcessAndState().pipe(takeUntil(this.destroy$)).subscribe(res => {
-      this.dropdownData = res.data;
-    });
   }
 
   get f() {
