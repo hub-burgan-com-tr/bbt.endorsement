@@ -28,7 +28,7 @@ namespace Domain.Entities
         public string FileType { get; set; }
         [MaxLength(50)]
         public string State { get; set; }
-        [MaxLength(50)]
+        [MaxLength(250)]
         public string MimeType { get; set; }
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
