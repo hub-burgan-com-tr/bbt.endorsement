@@ -2,9 +2,6 @@
 using Application.Endorsements.Commands.NewOrderForms;
 using Application.OrderForms.Queries.GetFormContents;
 using Application.OrderForms.Queries.GetForms;
-using Application.OrderForms.Queries.GetProcess;
-using Application.OrderForms.Queries.GetProcessAndState;
-using Application.OrderForms.Queries.GetStates;
 using Application.OrderForms.Queries.GetTags;
 using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
@@ -93,47 +90,6 @@ namespace Api.Controllers
             var list = await Mediator.Send(new GetFormContentQuery { FormDefinitionId = formDefinitionId });
             return Ok(list);
         }
-        [SwaggerOperation(
-          Summary = "Get state by name",
-          Description = "Returns state by name"
-      )]
-        [Route("GetState")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, state is returned successfully.", typeof(List<GetStateDto>))]
-        [SwaggerResponse(404, "State not found.", typeof(void))]
-        public async Task<IActionResult> GetStateAsync()
-        {
-            var list = await Mediator.Send(new GetStateQuery { ParameterTypeId=(int)ParameterType.State});
-            return Ok(list);
-        }
-
-        [SwaggerOperation(
-          Summary = "Get process by name",
-          Description = "Returns process by name"
-      )]
-        [Route("GetProcess")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, Process is returned successfully.", typeof(List<GetProcessDto>))]
-        [SwaggerResponse(404, "Process not found.", typeof(void))]
-        public async Task<IActionResult> GetProcessAsync()
-        {
-            var list = await Mediator.Send(new GetProcessQuery {ParameterTypeId=(int)ParameterType.Process});
-            return Ok(list);
-        }
-
-        [SwaggerOperation(
-       Summary = "Get process and state by name",
-       Description = "Returns process and state by name")]
-        [Route("GetProcessAndState")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, Process And State is returned successfully.", typeof(GetProcessAndStateDto))]
-        [SwaggerResponse(404, "Process And State not found.", typeof(void))]
-        public async Task<IActionResult> GetProcessAndStateAsync()
-        {
-            var list = await Mediator.Send(new GetProcessAndStateQuery { ProcessParameterTypeId = (int)ParameterType.Process,StateParameterTypeId=(int)ParameterType.State });
-            return Ok(list);
-        }
-
         [SwaggerOperation(
       Summary = "Get process and tags by name",
       Description = "Returns process and tags by name")]

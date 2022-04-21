@@ -20,21 +20,35 @@ namespace Worker.App.Infrastructure.InternalsServices
 
         public async Task<Response<PersonResponse>> GetPersonById(long id)
         {
-            var restClient = new RestClient(internalsUrl);
-            var restRequest = new RestRequest("/Person/" + id, Method.Get);
-            var response = restClient.ExecuteAsync(restRequest).Result;
-            var data = JsonConvert.DeserializeObject<PersonResponse>(response.Content);
-            return Response<PersonResponse>.Success(data, 200);
+            try
+            {
+                var restClient = new RestClient(internalsUrl);
+                var restRequest = new RestRequest("/Person/" + id, Method.Get);
+                var response = restClient.ExecuteAsync(restRequest).Result;
+                var data = JsonConvert.DeserializeObject<PersonResponse>(response.Content);
+                return Response<PersonResponse>.Success(data, 200);
+            }
+            catch (Exception ex)
+            {
+                return Response<PersonResponse>.Fail(ex.Message, 201);
+            }
         }
 
         public async Task<Response<List<PersonResponse>>> GetPersonSearch(string name)
         {
-            var restClient = new RestClient(internalsUrl);
-            var restRequest = new RestRequest("/Person", Method.Get);
-            restRequest.AddParameter("name", name, ParameterType.QueryString);
-            var response = restClient.ExecuteAsync(restRequest).Result;
-            var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
-            return Response<List<PersonResponse>>.Success(data, 200);
+            try
+            {
+                var restClient = new RestClient(internalsUrl);
+                var restRequest = new RestRequest("/Person", Method.Get);
+                restRequest.AddParameter("name", name, ParameterType.QueryString);
+                var response = restClient.ExecuteAsync(restRequest).Result;
+                var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
+                return Response<List<PersonResponse>>.Success(data, 200);
+            }
+            catch (Exception ex)
+            {
+                return Response<List<PersonResponse>>.Fail(ex.Message, 201);
+            }
         }
     }
 }

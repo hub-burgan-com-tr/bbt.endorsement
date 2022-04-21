@@ -32,7 +32,7 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
             };
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });          
             var response = await _zeebe.SendMessage(model.InstanceId.ToString(), "ApproveData", payload);
-            return Response<bool>.Success(200);
+            return Response<bool>.Success(true, 200);
         }
     }
 }
