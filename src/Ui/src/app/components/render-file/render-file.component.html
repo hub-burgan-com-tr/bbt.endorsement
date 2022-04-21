@@ -1,4 +1,4 @@
-<div class="mb-4" *ngIf="detail.content">
+<div class="mb-4" *ngIf="detail&&detail.content">
   <ng-container [ngSwitch]="detail.type">
     <ng-template ngSwitchCase="Image">
       <img class="mw-100" [src]="detail.content">
