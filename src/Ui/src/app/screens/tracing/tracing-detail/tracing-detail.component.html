@@ -1,26 +1,5 @@
 <ngx-smart-modal #document identifier="document" [customClass]="'custom-modal'">
-  <ng-container *ngIf="modalDetail?.type==='File';else second">
-    <img [src]="modalDetail?.content" *ngIf="modalDetail?.content.indexOf('data:image')>-1;else fileContent">
-    <ng-template #fileContent>
-      {{modalDetail?.content}}
-    </ng-template>
-  </ng-container>
-  <ng-template #second>
-    <ng-container *ngIf="modalDetail?.type==='PDF';else third">
-      <iframe [src]="modalDetail?.content | safe"
-              width="100%"
-              height="500"></iframe>
-    </ng-container>
-  </ng-template>
-  <ng-template #third>
-    <ng-container *ngIf="modalDetail?.type==='HTML';else normalContent">
-      <iframe [srcdoc]="modalDetail?.content | safeHtml" width="100%"
-              height="500"></iframe>
-    </ng-container>
-  </ng-template>
-  <ng-template #normalContent>
-    {{modalDetail?.content}}
-  </ng-template>
+  <app-render-file [detail]="modalDetail"></app-render-file>
 </ngx-smart-modal>
 <app-main-content blockTitle="İzleme" [subTitle]="data&&data.title">
   <div right class="d-flex justify-content-end">

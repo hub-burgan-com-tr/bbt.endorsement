@@ -4,8 +4,6 @@
 </div>
 <ul class="list-unstyled" id="personList">
   <li *ngFor="let p of persons" (click)="selectPerson(p)"
-      [ngClass]="selectedPerson.citizenshipNumber===p.citizenshipNumber?'selected':''">{{p.first}} {{p.last}}
-    ({{p.citizenshipNumber}}
-    )
+      [ngClass]="selectedPerson.citizenshipNumber===p.citizenshipNumber?'selected':''">{{p.first}} {{p.last}} ({{p.citizenshipNumber}})
   </li>
 </ul>
