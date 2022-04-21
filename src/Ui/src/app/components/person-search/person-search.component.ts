@@ -16,7 +16,8 @@ export class PersonSearchComponent implements OnInit {
   selectedPerson = {
     first: '',
     last: '',
-    citizenshipNumber: ''
+    citizenshipNumber: '',
+    clientNumber: ''
   };
 
   constructor(private personService: PersonService) {

@@ -171,6 +171,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
+            var customerId = GetCustomerId(startRequest.Approver);
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
@@ -180,7 +181,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = GetCustomerId(startRequest.Approver),
+                CustomerId = customerId,
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
