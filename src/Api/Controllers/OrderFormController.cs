@@ -1,6 +1,9 @@
 ﻿using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrderForms;
+using Application.OrderForms.Commands.NewTagForms;
+using Application.OrderForms.Commands.UpdateFormInformations;
 using Application.OrderForms.Queries.GetFormContents;
+using Application.OrderForms.Queries.GetFormInformations;
 using Application.OrderForms.Queries.GetForms;
 using Application.OrderForms.Queries.GetTags;
 using Application.OrderForms.Queries.GetTagsFormName;
@@ -32,7 +35,7 @@ namespace Api.Controllers
             request.Id = Guid.NewGuid();
 
             var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
-            if(form.Data != null)
+            if (form.Data != null)
                 request.Content = form.Data.Content;
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, FormType = Form.FormOrder });
@@ -51,18 +54,18 @@ namespace Api.Controllers
             return Ok();
         }
 
-    //    [SwaggerOperation(
-    //Summary = "Get form by name",
-    //Description = "Returns form by name"
-    //     )]
-    //    [Route("{GetForm}")]
-    //    [HttpGet]
-    //    [SwaggerResponse(200, "Success, form is returned successfully.", typeof(FormDefinition))]
-    //    [SwaggerResponse(404, "Form not found.", typeof(void))]
-    //    public async Task<IActionResult> GetFormAsync([FromRoute] string name)
-    //    {
-    //        return Ok();
-    //    }
+        //    [SwaggerOperation(
+        //Summary = "Get form by name",
+        //Description = "Returns form by name"
+        //     )]
+        //    [Route("{GetForm}")]
+        //    [HttpGet]
+        //    [SwaggerResponse(200, "Success, form is returned successfully.", typeof(FormDefinition))]
+        //    [SwaggerResponse(404, "Form not found.", typeof(void))]
+        //    public async Task<IActionResult> GetFormAsync([FromRoute] string name)
+        //    {
+        //        return Ok();
+        //    }
 
         [SwaggerOperation(
            Summary = "Get form by name",
@@ -102,8 +105,6 @@ namespace Api.Controllers
             var list = await Mediator.Send(new GetTagsQuery());
             return Ok(list);
         }
-
-
         [SwaggerOperation(
 Summary = "Get process and tags Form by name",
 Description = "Returns process and tags form by name")]
@@ -113,9 +114,59 @@ Description = "Returns process and tags form by name")]
         [SwaggerResponse(404, "Process And Tags form name  not found.", typeof(void))]
         public async Task<IActionResult> GetTagsFormName([FromQuery] string formDefinitionTagId)
         {
-            var list = await Mediator.Send(new GetTagsFormNameQuery { FormDefinitionTagId=formDefinitionTagId});
+            var list = await Mediator.Send(new GetTagsFormNameQuery { FormDefinitionTagId = formDefinitionTagId });
             return Ok(list);
         }
+
+        [SwaggerOperation(
+            Summary = "updates form definition",
+            Description = "Form definitons update config information"
+        )]
+        [Route("UpdateFormInformation")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
+        public async Task<Response<bool>> UpdateFormInformation([FromBody] UpdateFormInformationCommand request)
+        {
+            return await Mediator.Send(request);
+          
+        }
+        [SwaggerOperation(
+  Summary = "Get process and form information",
+  Description = "Returns process and form information")]
+        [Route("GetFormInformation")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process And Form is returned successfully.", typeof(List<GetFormInformationDto>))]
+        [SwaggerResponse(404, "Process And form not found.", typeof(void))]
+        public async Task<IActionResult> GetFormInformation()
+        {
+            var list = await Mediator.Send(new GetFormInformationQuery());
+            return Ok(list);
+        }
+
+        [SwaggerOperation(
+        Summary = "created tags",
+        Description = "created tags"
+    )]
+        [Route("CreatedTag")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, tag is created successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, tag is created successfully.", typeof(bool))]
+        public async Task<Response<bool>> CreatedTag([FromBody] NewTagCommand request)
+        {
+            return await Mediator.Send(request);
+
+        }
+
+
+
+
+
+
+
+
+
+
 
     }
 }

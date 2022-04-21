@@ -25,7 +25,8 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
             {
                 CitizenshipNumber = x.CitizenshipNumber,
                 First = x.Name.First,
-                Last = x.Name.Last
+                Last = x.Name.Last,
+                ClientNumber=x.ClientNumber
             });
             return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
         }
