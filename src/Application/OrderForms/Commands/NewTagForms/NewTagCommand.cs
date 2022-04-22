@@ -37,7 +37,7 @@ namespace Application.OrderForms.Commands.NewTagForms
                 throw new Exception("Aynı Etiket Daha Önce Eklenmiştir");
             }
             int result = 0;
-            _context.FormDefinitionTags.Add(new Domain.Entities.FormDefinitionTag { FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = request.Tag,Created=DateTime.Now});         
+            _context.FormDefinitionTags.Add(new Domain.Entities.FormDefinitionTag { FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = request.Tag,Created= _dateTime.Now});         
             result = _context.SaveChanges();
             return Response<bool>.Success(result > 0 ? true : false, 200);
         }

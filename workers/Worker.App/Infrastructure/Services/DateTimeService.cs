@@ -4,5 +4,5 @@ namespace Worker.App.Infrastructure.Services;
 
 public class DateTimeService : IDateTime
 {
-    public DateTime Now => DateTime.UtcNow;
+    public DateTime Now => DateTime.Now;
 }

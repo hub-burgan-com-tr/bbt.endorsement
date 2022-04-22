@@ -17,10 +17,12 @@ public class CreateOrderHistoryCommand : IRequest<Response<bool>>
 public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHistoryCommand, Response<bool>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IDateTime _dateTime;
 
-    public CreateOrderHistoryCommandHandler(IApplicationDbContext context)
+    public CreateOrderHistoryCommandHandler(IApplicationDbContext context, IDateTime dateTime)
     {
         _context = context;
+        _dateTime = dateTime;
     }
 
     public async Task<Response<bool>> Handle(CreateOrderHistoryCommand request, CancellationToken cancellationToken)
@@ -32,7 +34,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             DocumentId = request.DocumentId,
             State = request.State,
             Description = request.Description,
-            Created = DateTime.Now
+            Created = _dateTime.Now
         });
         var result = _context.SaveChanges();
         return Response<bool>.Success(result > 0 ? true : false, 200);
