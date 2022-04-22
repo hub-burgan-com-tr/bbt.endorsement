@@ -41,7 +41,7 @@ public class Response<T>
         };
     }
 
-    public static Response<T> NotFoundException(string name, object key, int statusCode)
+    public static Response<T> NotFoundException(string name, string key, int statusCode)
     {
         return new Response<T>
         {

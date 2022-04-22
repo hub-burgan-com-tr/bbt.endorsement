@@ -28,7 +28,7 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
                 .Where(x => x.OrderId == request.InstanceId.ToString())
                 .FirstOrDefault();
             if (order == null)
-                return Response<LoadContactInfoResponse>.NotFoundException("Kayıt bulunamadı",404);
+                return Response<LoadContactInfoResponse>.NotFoundException("Order not found", 404);
 
             var response = await _internalsService.GetPersonById(order.Customer.CitizenshipNumber);
             return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Person = response.Data }, 200);

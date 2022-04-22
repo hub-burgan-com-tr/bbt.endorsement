@@ -1,5 +1,4 @@
 ﻿using Domain.Enums;
-using System.Text.Json.Serialization;
 
 namespace Domain.Models;
 
@@ -19,7 +18,7 @@ public class ContractModel
 
     public bool Approved { get; set; }
     public bool Completed { get; set; }
-    public bool IsProcess { get; set; }
+    public bool IsProcess { get; set; } = true;
     public bool RetryEnd { get; set; }
     public int Limit { get; set; }
 

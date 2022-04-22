@@ -14,6 +14,7 @@ using Worker.App.Application.Workers.Commands.LoadContactInfos;
 using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Application.Workers.Commands.UpdateEntities;
 using Worker.App.Application.Workers.Queries.GetOrderConfigs;
+using Worker.App.Application.Workers.Queries.GetOrderStates;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -50,22 +51,10 @@ public class ContractApprovalService : IContractApprovalService
         UpdateEntity();
         DeleteEntity();
         ErrorHandler();
-    }
 
-    private void ErrorHandler()
-    {
-        //Log.Information("ErrorHandler Worker registered");
-
-        CreateWorker("ErrorHandler", async (jobClient, job) =>
-        {
-            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.Information($"ErrorEntity data");
-
-            await jobClient.NewCompleteJobCommand(job.Key)
-                .Variables("{\"Approve\":\"" + false + "\"}")
-                .Send();
-        });
+        CustomerSendSms();
+        CustomerSendMail();
+        CheckAllApproved();
     }
 
     private void SaveEntity()
@@ -346,19 +335,6 @@ public class ContractApprovalService : IContractApprovalService
                         });
                     }
                 }
-
-                if (orderState.Data.OrderState == OrderState.Reject || orderState.Data.OrderState == OrderState.Approve)
-                {
-                    variables.Completed = true;
-                    variables.Approved = true;
-                    variables.IsProcess = true;
-                    await _mediator.Send(new CreateOrderHistoryCommand
-                    {
-                        OrderId = variables.InstanceId.ToString(),
-                        State = "Workflow tamamlandı",
-                        Description = ""
-                    });
-                }
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
             catch (Exception ex)
@@ -424,6 +400,134 @@ public class ContractApprovalService : IContractApprovalService
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
 
+        });
+    }
+
+    private void CheckAllApproved()
+    {
+        CreateWorker("CheckAllApproved", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+            try
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Information($"CheckAllApproved");
+
+                variables.IsProcess = true;
+                var response = await _mediator.Send(new GetOrderStateCommand { OrderId = variables.InstanceId.ToString() });
+
+                if (response.Data.OrderState == OrderState.Reject || response.Data.OrderState == OrderState.Approve)
+                {
+                    variables.Completed = true;
+                    variables.Approved = true;
+                    await _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        State = "Workflow tamamlandı",
+                        Description = ""
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+            }
+
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
+        });
+    }
+
+    private void CustomerSendMail()
+    {
+        CreateWorker("CustomerSendMail", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+
+            if (variables != null)
+                variables.Limit += 1;
+            variables.IsProcess = true;
+
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+            try
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Information($"CustomerSendMail");
+
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Müşteri Bilgilendirme Mesajı (Email Notification)",
+                    Description = ""
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+            }
+
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
+        });
+    }
+
+    private void CustomerSendSms()
+    {
+        CreateWorker("CustomerSendSms", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+
+            if (variables != null)
+                variables.Limit += 1;
+            variables.IsProcess = true;
+
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+            try
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Information($"CustomerSendSms");
+
+                var history = _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = variables.InstanceId.ToString(),
+                    State = "Müşteri Bilgilendirme Mesajı (Sms Notification)",
+                    Description = ""
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+            }
+
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
+        });
+    }
+
+    private void ErrorHandler()
+    {
+        //Log.Information("ErrorHandler Worker registered");
+
+        CreateWorker("ErrorHandler", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            Log.Information($"ErrorEntity data");
+
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables("{\"Approve\":\"" + false + "\"}")
+                .Send();
         });
     }
 
