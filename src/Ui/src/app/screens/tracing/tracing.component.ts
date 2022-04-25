@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {TracingService} from "../../services/tracing.service";
 import {Subject, takeUntil} from "rxjs";
 import {CommonService} from "../../services/common.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-tracing',
@@ -21,7 +22,7 @@ export class TracingComponent implements OnInit {
   hasPreviousPage = true;
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder, private tracingService: TracingService, private commonService: CommonService) {
+  constructor(private router: Router, private route: ActivatedRoute, private fb: FormBuilder, private tracingService: TracingService, private commonService: CommonService) {
     this.formGroup = this.fb.group({
       customer: '',
       approver: '',
@@ -78,7 +79,12 @@ export class TracingComponent implements OnInit {
     };
   };
 
-  getWatchApproval() {
+  redirect(row) {
+    this.setModel();
+    this.router.navigate(['./detail'], {queryParams: {orderId: row.orderId}, relativeTo: this.route})
+  }
+
+  setModel() {
     const model = {
       customer: this.formGroup.get('customer')?.value,
       approver: this.formGroup.get('approver')?.value,
@@ -89,7 +95,11 @@ export class TracingComponent implements OnInit {
       pageSize: this.pageSize
     };
     localStorage.setItem('tracingForm', JSON.stringify(model));
-    this.tracingService.getWatchApproval(model).pipe(takeUntil(this.destroy$)).subscribe({
+    return model;
+  }
+
+  getWatchApproval() {
+    this.tracingService.getWatchApproval(this.setModel()).pipe(takeUntil(this.destroy$)).subscribe({
       next: res => {
         if (res.data) {
           this.data = res.data.items;

@@ -78,8 +78,7 @@
       </thead>
       <tbody>
       <tr class="c-pointer"
-          *ngFor="let row of data"
-          [routerLink]="['./detail']" [queryParams]="{orderId:row.orderId}">
+          *ngFor="let row of data" (click)="redirect(row)">
         <td class="col-auto">{{row.title}}</td>
         <td class="col-auto">{{row.customer}}</td>
         <td class="col-auto">{{row.approver}}</td>
