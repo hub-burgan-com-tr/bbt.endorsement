@@ -21,7 +21,6 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
     public class GetWatchApprovalDetailsQueryHandler : IRequestHandler<GetWatchApprovalDetailsQuery, Response<GetWatchApprovalDetailsDto>>
     {
         private IApplicationDbContext _context;
-
         public GetWatchApprovalDetailsQueryHandler(IApplicationDbContext context)
         {
             _context = context;
