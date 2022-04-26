@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Application.Endorsements.Queries.GetWatchApprovals;
+using Application.IntegrationTests.Services;
 using NUnit.Framework;
 using static Application.IntegrationTests.Testing;
 namespace Application.IntegrationTests.Endorsements.Queries.GetWatchApprovals
 {
     public class GetWatchApprovalQueryTests:TestBase
     {
-        [Test]
-        [TestCase("fa5bac5d-4f61-4637-a8cf-40e51d5de75c")]
-        public async Task GetWatchApprovalQueryTestAsync()
+        [TestCaseSource(typeof(EndorsementService), nameof(EndorsementService.GetWatchApprovalQueryData))]
+
+        public async Task GetWatchApprovalQueryTestAsync(GetWatchApprovalQuery command)
         {
-            var command = new GetWatchApprovalQuery
-            {
-                Customer="Uğur Karataş",
-
-
-            };
+           
             var response = await SendAsync(command);
             Assert.IsNotNull(response);
         }

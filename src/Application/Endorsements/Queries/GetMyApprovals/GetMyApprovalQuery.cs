@@ -22,12 +22,10 @@ namespace Application.Endorsements.Queries.GetMyApprovals
     public class GetMyApprovalQueryHandler : IRequestHandler<GetMyApprovalQuery, Response<PaginatedList<GetMyApprovalDto>>>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IMapper _mapper;
 
         public GetMyApprovalQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)

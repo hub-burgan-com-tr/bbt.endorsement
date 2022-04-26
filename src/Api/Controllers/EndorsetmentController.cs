@@ -10,7 +10,6 @@ using Application.Endorsements.Commands.CancelOrders;
 using Application.Endorsements.Queries.GetOrderDocuments;
 using Application.Endorsements.Queries.GetApprovals;
 using Application.Endorsements.Queries.GetApprovalsDetails;
-using Application.Endorsements.Queries.GetApprovalsDocumentList;
 using Application.Endorsements.Queries.GetMyApprovals;
 using Application.Endorsements.Queries.GetMyApprovalsDetails;
 using Application.Endorsements.Queries.GetWantApprovals;
@@ -214,28 +213,7 @@ namespace Api.Controllers
             var result = await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
             return Ok(result);
         }
-        /// <summary>
-        ///  Onayımdakiler  Belge Listesi
-        /// </summary>
-        /// <param name="orderId"></param>
-        /// <returns></returns>
-        /// <response code="404">If the item is null</response>
-        [SwaggerOperation(
-            Summary = "Query endorsement approval  document list.",
-            Tags = new[] { "Endorsement" }
-        )]
-        [Route("approval-document-list")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, approval  document list is returned successfully.", typeof(List<GetApprovalDocumentListDto>))]
-        [SwaggerResponse(404, "Approval  document list is not found.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetApprovalDocumentListAsync([FromQuery] string orderId)
-        {
-            var result = await Mediator.Send(new GetApprovalDocumentListQuery() { OrderId = orderId });
-            return Ok(result);
-        }
-
+       
 
         /// <summary>
         ///  Onayladıklarım Listesi
