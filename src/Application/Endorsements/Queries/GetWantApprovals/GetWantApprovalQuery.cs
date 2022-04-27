@@ -26,7 +26,7 @@ namespace Application.Endorsements.Queries.GetWantApprovals
         }
         public async Task<Response<PaginatedList<GetWantApprovalDto>>> Handle(GetWantApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = await _context.Orders.Where(x => x.State != OrderState.Cancel.ToString()).Include(x=>x.Documents).Include(x=>x.Customer).OrderByDescending(x => x.Created).Select(x => new GetWantApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString() && x.FormDefinitionId == null),NameAndSurname=x.Customer.FirstName+" "+x.Customer.LastName+", "+x.Reference.ProcessNo,State=x.State,Date= x.Created.ToString("dd.MM.yyyy")
+            var list = await _context.Orders.Include(x=>x.Documents).Include(x=>x.Customer).OrderByDescending(x => x.Created).Select(x => new GetWantApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString() && x.FormDefinitionId == null),NameAndSurname=x.Customer.FirstName+" "+x.Customer.LastName+", "+x.Reference.ProcessNo,State=x.State,Date= x.Created.ToString("dd.MM.yyyy")
             }).PaginatedListAsync(request.PageNumber, request.PageSize);
             return Response<PaginatedList<GetWantApprovalDto>>.Success(list, 200);
         }

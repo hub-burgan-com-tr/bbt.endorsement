@@ -40,9 +40,9 @@ namespace Application.Endorsements.Commands.NewOrders
             RuleFor(v => v.Title).NotEmpty().WithMessage("Başlık girilmelidir.");
             RuleFor(v => v.Reference.Process).NotEmpty().WithMessage("İşlem bilgisi girilmelidir.");
             RuleFor(v => v.Reference.ProcessNo).NotEmpty().WithMessage("İşlem no bilgisi girilmelidir.");
-            RuleFor(v => v.Config.ExpireInMinutes).NotEmpty().WithMessage("Geçerlilik girilmelidir.");
-            RuleFor(v => v.Config.RetryFrequence).NotEmpty().WithMessage("Hatırlatma frekansı girilmelidir.");
-            RuleFor(v => v.Config.MaxRetryCount).NotEmpty().WithMessage("Hatırlatma Sayısı girilmelidir.");
+            RuleFor(v => v.Config.ExpireInMinutes).GreaterThan(-1).WithMessage("Geçerlilik girilmelidir.");
+            RuleFor(v => v.Config.RetryFrequence).GreaterThan(-1).WithMessage("Hatırlatma frekansı girilmelidir.");
+            RuleFor(v => v.Config.MaxRetryCount).GreaterThan(-1).WithMessage("Hatırlatma Sayısı girilmelidir.");
             RuleFor(v => v.Approver.First).NotEmpty().WithMessage("Ad girilmelidir.");
             RuleFor(v => v.Approver.Last).NotEmpty().WithMessage("Soyad girilmelidir.");
             RuleFor(v => v.Approver.CitizenshipNumber.ToString()).MaximumLength(11).MinimumLength(11).WithMessage("TCKN 11 haneli olmalıdır.");

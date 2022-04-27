@@ -27,7 +27,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
         }
         public async Task<Response<GetWatchApprovalDetailsDto>> Handle(GetWatchApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = await _context.Orders.Where(x => x.State != OrderState.Cancel.ToString()).Include(x=>x.Customer).Include(x=>x.OrderHistories).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetWatchApprovalDetailsDto 
+            var response = await _context.Orders.Include(x=>x.Customer).Include(x=>x.OrderHistories).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Where(x => x.OrderId == request.OrderId).Select(x => new GetWatchApprovalDetailsDto 
             { 
                 OrderId = x.OrderId, 
                 Title = x.Title,
