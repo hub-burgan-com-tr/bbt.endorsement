@@ -19,7 +19,7 @@ public static class FormDefinitionSeed
             var label = File.ReadAllText(path, Encoding.Default);
             var formdefinition = context.FormDefinitions.Add(new FormDefinition
             {
-                FormDefinitionId = "b25635e8-1abd-4768-ab97-e1285999a62a",
+                FormDefinitionId = "b25635e8-1abd-4768-ab97-e1285999a61a",
                 DocumentSystemId= "b25635e8-1abd-4768-ab97-e1285999a62b",
                 Name = "Sigorta Başvuru Formu",
                 Label = label.ToString(),
@@ -43,16 +43,17 @@ public static class FormDefinitionSeed
             formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Hazine  Formları" });
             formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Mevduat Formları" });
             formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Sigorta Formları" });
-            foreach (var item in formDefinitionTags)
+            var formdefinitiontag =context.FormDefinitionTags.AddRangeAsync(formDefinitionTags);
+            if (formdefinitiontag!=null)
             {
-                if (item.Tag== "Sigorta Formları")
+                foreach (var item in formDefinitionTags)
                 {
-                    formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = item.FormDefinitionTagId });
+                    if (item.Tag == "Sigorta Formları")
+                    {
+                        formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = item.FormDefinitionTagId });
+                    }
                 }
-      
-               
             }
-
             await context.SaveChangesAsync();
         }
     }
