@@ -56,6 +56,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   tagChanged(val) {
+    this.formGroup.patchValue({
+      form: ''
+    })
     if (val) {
       this.commonService.getTagsFormName(val).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.formDropdown = res && res.data;
@@ -63,9 +66,6 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     } else {
       this.form = undefined;
       this.formDropdown = undefined;
-      this.formGroup.patchValue({
-        form: ''
-      })
     }
   }
 

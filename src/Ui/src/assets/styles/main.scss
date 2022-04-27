@@ -267,6 +267,11 @@ app-root {
       &.selected {
         background: #0099d8;
         color: #fff;
+
+        i {
+          font-size: 24px;
+          line-height: normal;
+        }
       }
     }
   }

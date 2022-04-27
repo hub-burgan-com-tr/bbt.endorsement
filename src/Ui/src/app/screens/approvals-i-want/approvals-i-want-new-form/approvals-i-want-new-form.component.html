@@ -13,7 +13,7 @@
       <div class="row mt-3">
         <div class="col-4">
           <div class="form-group">
-            <label for="tag">Etiket</label>
+            <label for="tag">Form Türü</label>
             <ng-select id="tag" formControlName="tag" [clearable]="false" (ngModelChange)="tagChanged($event)"
                        [addTag]="true" addTagText="Yeni Ekle"
                        [ngClass]="{ 'is-invalid': submitted && f.tag.invalid }"
@@ -84,13 +84,13 @@
         </div>
 
       </div>
-      <div class="box-title mt-5 p-0 no-border">Onaycı Ekle</div>
+      <div class="box-title mt-5 p-0 no-border">Müşteri Ekle</div>
       <div class="row mt-3">
         <div class="col-4">
           <app-person-search (returnListEvent)="getPersonFromChild($event)"
                              [hasError]="submitted && !person"></app-person-search>
           <small *ngIf="submitted && !person" class="text-danger">
-            Onaycı seçilmelidir.
+            Müşteri seçilmelidir.
           </small>
         </div>
       </div>

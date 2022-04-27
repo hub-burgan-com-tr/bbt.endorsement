@@ -80,7 +80,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   initModel() {
     this.model = this.newOrderService.getModel();
     this.model.documents = this.model.documents.filter(i => i.type != 1);
-    this.approvalButtonText = this.model.approver && this.model.approver.first ? 'Güncelle' : 'Onaycı Ekle';
+    this.approvalButtonText = this.model.approver && this.model.approver.first ? 'Güncelle' : 'Müşteri Ekle';
     this.newOrderService.setModel(this.model);
   }
 
@@ -219,7 +219,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       return;
     }
     if (!this.person) {
-      this.errorMessage = 'Onaycı eklemeden ilerleyemezsiniz.';
+      this.errorMessage = 'Müşteri eklemeden ilerleyemezsiniz.';
       this.modal.open('error');
       return;
     }
