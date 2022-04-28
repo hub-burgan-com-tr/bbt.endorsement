@@ -20,6 +20,6 @@ export class CommonService {
 
   getTagsFormName(tags: any) {
     const url = `${this.baseUrl}/${ApiPaths.GetTagsFormName}`;
-    return this.httpClient.post<ApiBaseResponseModel>(url, tags);
+    return this.httpClient.post<ApiBaseResponseModel>(url, {formDefinitionTagsId: tags});
   }
 }
