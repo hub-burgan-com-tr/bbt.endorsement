@@ -29,8 +29,8 @@ namespace Migration.Console.App.Seed
                     StateType= "Teklif Formu",
 
                 });
-                orderdefinition.Entity.OrderDefinitionActions.Add(new Domain.Entities.OrderDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", OrderDefinitionActionId = Guid.NewGuid().ToString() });
-                orderdefinition.Entity.OrderDefinitionActions.Add(new Domain.Entities.OrderDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", OrderDefinitionActionId = Guid.NewGuid().ToString() });
+                context.OrderDefinitionActions.Add(new Domain.Entities.OrderDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", OrderDefinitionActionId = Guid.NewGuid().ToString() });
+                context.OrderDefinitionActions.Add(new Domain.Entities.OrderDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", OrderDefinitionActionId = Guid.NewGuid().ToString() });
 
                 await context.SaveChangesAsync();
             }

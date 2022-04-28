@@ -24,6 +24,5 @@ namespace Domain.Entities
         public int Choice { get; set; }
         [MaxLength(36)]
         public string OrderDefinitionId { get; set; }
-        public virtual OrderDefinition OrderDefinition { get; set; }
     }
 }

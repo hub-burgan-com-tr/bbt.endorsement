@@ -13,10 +13,7 @@ namespace Domain.Entities
 
     public class OrderDefinition : AuditableEntity
     {
-        public OrderDefinition()
-        {
-            OrderDefinitionActions=new HashSet<OrderDefinitionAction>();
-        }
+      
 
         [Key]
         [MaxLength(36)]
@@ -35,8 +32,6 @@ namespace Domain.Entities
         public string ProcessType { get; set; }
         [Required]
         public string StateType { get; set; }
-
-        public virtual ICollection<OrderDefinitionAction> OrderDefinitionActions { get; set; }
 
     }
 }
