@@ -16,7 +16,9 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
   formGroup: FormGroup;
   model: NewApprovalOrder;
   private destroy$ = new Subject();
-  dropdownData: any;
+  titles;
+  process;
+  states;
 
   constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private commonService: CommonService) {
     this.model = new NewApprovalOrder();
@@ -28,14 +30,21 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
         processNo: ['', Validators.required],
       }),
       config: this.fb.group({
-        expireInMinutes: ['', Validators.required],
-        retryFrequence: ['', Validators.required],
-        maxRetryCount: ['', Validators.required],
+        expireInMinutes: ['60', Validators.required],
+        retryFrequence: ['15', Validators.required],
+        maxRetryCount: ['3', Validators.required],
       })
     })
   }
 
   ngOnInit(): void {
+    this.newOrderService.getOrderFormParameters().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      if (res && res.data) {
+        this.titles = res.data.titles;
+        this.process = res.data.process;
+        this.states = res.data.states;
+      }
+    });
   }
 
   get f() {
@@ -57,5 +66,9 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
       this.newOrderService.setModel(this.model);
       this.router.navigate(['../new-order-detail'], {relativeTo: this.route});
     }
+  }
+
+  addTag(tag: string) {
+    return tag;
   }
 }

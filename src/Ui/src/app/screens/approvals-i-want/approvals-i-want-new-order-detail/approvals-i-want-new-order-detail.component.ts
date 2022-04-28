@@ -32,7 +32,9 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   selectedDocumentIndex: number;
   approvalButtonText: string = 'Kaydet';
   person;
-  dropdownData: any;
+  titles;
+  process;
+  states;
 
   constructor(private newOrderService: NewOrderService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private modal: NgxSmartModalService, private commonService: CommonService) {
     this.initModel();
@@ -65,6 +67,13 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
+    this.newOrderService.getOrderFormParameters().pipe(takeUntil(this.destroy$)).subscribe(res => {
+      if (res && res.data) {
+        this.titles = res.data.titles;
+        this.process = res.data.process;
+        this.states = res.data.states;
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -313,5 +322,9 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
         });
       };
     }
+  }
+
+  addTag(tag: string) {
+    return tag;
   }
 }
