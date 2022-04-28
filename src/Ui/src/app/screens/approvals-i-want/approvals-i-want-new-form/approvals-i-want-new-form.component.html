@@ -23,7 +23,7 @@
               <ng-option *ngFor="let i of tags" [value]="i.formDefinitionTagId">{{i.tag}}</ng-option>
             </ng-select>
             <div *ngIf="submitted && f.tag.errors" class="invalid-feedback">
-              <div *ngIf="f.tag.errors.required">Etiket seçilmelidir.</div>
+              <div *ngIf="f.tag.errors.required">Form Türü seçilmelidir.</div>
             </div>
             <!--<select name="tag" id="tag" formControlName="tag" class="form-select" (ngModelChange)="tagChanged($event)">
               <option value="">Seçiniz</option>
