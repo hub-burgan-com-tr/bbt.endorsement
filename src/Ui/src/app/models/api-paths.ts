@@ -17,4 +17,5 @@ export enum ApiPaths {
   PersonSearch = 'Person/person-search',
   GetTags = 'Forms/GetTags',
   GetTagsFormName = 'Forms/GetTagsFormName',
+  GetOrderFormParameters = 'Forms/GetOrderFormParameters',
 }

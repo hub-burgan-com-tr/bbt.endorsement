@@ -12,13 +12,14 @@ export class CommonService {
 
   constructor(private httpClient: HttpClient) {
   }
+
   getTags() {
     const url = `${this.baseUrl}/${ApiPaths.GetTags}`;
     return this.httpClient.get<ApiBaseResponseModel>(url);
   }
 
-  getTagsFormName(formDefinitionTagId: any) {
-    const url = `${this.baseUrl}/${ApiPaths.GetTagsFormName}?formDefinitionTagId=${formDefinitionTagId}`;
-    return this.httpClient.get<ApiBaseResponseModel>(url);
+  getTagsFormName(tags: any) {
+    const url = `${this.baseUrl}/${ApiPaths.GetTagsFormName}`;
+    return this.httpClient.post<ApiBaseResponseModel>(url, tags);
   }
 }
