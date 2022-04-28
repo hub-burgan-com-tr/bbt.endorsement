@@ -144,11 +144,19 @@
               <div class="row">
                 <div class="col-4">
                   <div class="form-group">
-                    <label for="addChoice">Yeni Seçenek Ekle</label>
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control form-control-sm" id="addChoice" name="addChoice"
-                             formControlName="choiceText">
-                      <div class="input-group-append">
+                    <label for="choiceText">Yeni Seçenek Ekle</label>
+                    <div class="row">
+                      <div class="col">
+                        <ng-select id="choiceText" formControlName="choiceText"
+                                   [clearable]="false"
+                                   addTagText="Yeni Ekle"
+                                   [addTag]="addTag"
+                        >
+                          <ng-option value="">Seçiniz</ng-option>
+                          <ng-option *ngFor="let i of addDocumentDd" [value]="i.title">{{i.title}}</ng-option>
+                        </ng-select>
+                      </div>
+                      <div class="col-auto">
                         <button class="btn btn-primary input-button" type="button" (click)="addChoice()">Ekle</button>
                       </div>
                     </div>

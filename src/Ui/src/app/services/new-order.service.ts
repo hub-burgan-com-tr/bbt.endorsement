@@ -34,4 +34,9 @@ export class NewOrderService {
     const url = `${this.baseUrl}/${ApiPaths.GetOrderFormParameters}`;
     return this.httpClient.get<ApiBaseResponseModel>(url);
   }
+
+  getOrderFormTag() {
+    const url = `${this.baseUrl}/${ApiPaths.GetOrderFormTag}`;
+    return this.httpClient.get<ApiBaseResponseModel>(url);
+  }
 }

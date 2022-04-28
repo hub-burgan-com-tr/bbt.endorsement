@@ -18,4 +18,5 @@ export enum ApiPaths {
   GetTags = 'Forms/GetTags',
   GetTagsFormName = 'Forms/GetTagsFormName',
   GetOrderFormParameters = 'Forms/GetOrderFormParameters',
+  GetOrderFormTag = 'Forms/GetOrderFormTag',
 }
