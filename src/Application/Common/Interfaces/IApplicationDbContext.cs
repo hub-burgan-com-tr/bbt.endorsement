@@ -20,6 +20,8 @@ namespace Application.Common.Interfaces
         DbSet<ParameterType> ParameterTypes { get; }
         DbSet<Parameter> Parameters { get; }
         DbSet<FormDefinitionTagMap> FormDefinitionTagMaps { get; }
+        DbSet<OrderDefinition> OrderDefinitions { get; }
+        DbSet<OrderDefinitionAction> OrderDefinitionActions { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         int SaveChanges();

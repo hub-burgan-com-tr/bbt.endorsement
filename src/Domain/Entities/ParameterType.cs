@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    [Table("ParameterType", Schema = "order")]
+    [Table("ParameterType", Schema = "parameter")]
 
     public class ParameterType : AuditableEntity
     {
