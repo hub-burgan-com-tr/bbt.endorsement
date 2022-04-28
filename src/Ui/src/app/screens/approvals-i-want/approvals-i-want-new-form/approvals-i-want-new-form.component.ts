@@ -55,12 +55,12 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  tagChanged(val) {
+  tagChanged(tags) {
     this.formGroup.patchValue({
       form: ''
     })
-    if (val) {
-      this.commonService.getTagsFormName(val).pipe(takeUntil(this.destroy$)).subscribe(res => {
+    if (tags.length) {
+      this.commonService.getTagsFormName(tags).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.formDropdown = res && res.data;
       });
     } else {

@@ -5,6 +5,8 @@ using Application.OrderForms.Commands.UpdateFormInformations;
 using Application.OrderForms.Queries.GetFormContents;
 using Application.OrderForms.Queries.GetFormInformations;
 using Application.OrderForms.Queries.GetForms;
+using Application.OrderForms.Queries.GetOrderFormParameters;
+using Application.OrderForms.Queries.GetOrderFormTags;
 using Application.OrderForms.Queries.GetTags;
 using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
@@ -109,12 +111,12 @@ namespace Api.Controllers
 Summary = "Get process and tags Form by name",
 Description = "Returns process and tags form by name")]
         [Route("GetTagsFormName")]
-        [HttpGet]
+        [HttpPost]
         [SwaggerResponse(200, "Success, Process And Tags form name is returned successfully.", typeof(List<GetTagsDto>))]
         [SwaggerResponse(404, "Process And Tags form name  not found.", typeof(void))]
-        public async Task<IActionResult> GetTagsFormName([FromQuery] string formDefinitionTagId)
+        public async Task<IActionResult> GetTagsFormName([FromBody] GetTagsFormNameQuery request)
         {
-            var list = await Mediator.Send(new GetTagsFormNameQuery { FormDefinitionTagId = formDefinitionTagId });
+            var list = await Mediator.Send(request);
             return Ok(list);
         }
 
@@ -158,10 +160,32 @@ Description = "Returns process and tags form by name")]
 
         }
 
+        [SwaggerOperation(
+ Summary = "Get process and Order definion parameter name Process,State,Title",
+ Description = "Returns process and Order definion parameter name Process,State,Title")]
+        [Route("GetOrderFormParameters")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process And Form Definion Parameter Process,State,Title is returned successfully.", typeof(GetOrderFormParameterDto))]
+        [SwaggerResponse(404, "Process And Tags not found.", typeof(GetOrderFormParameterDto))]
+        public async Task<IActionResult> GetOrderFormParameters()
+        {
+            var list = await Mediator.Send(new GetOrderFormParameterQuery());
+            return Ok(list);
+        }
 
 
-
-
+        [SwaggerOperation(
+Summary = "Get process and Order form tag",
+Description = "Returns process and Order form tags")]
+        [Route("GetOrderFormTag")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process And Order Form Tags.", typeof(List<GetOrderFormTagDto>))]
+        [SwaggerResponse(404, "Process And Tags not found.", typeof(List<GetOrderFormTagDto>))]
+        public async Task<IActionResult> GetOrderFormTag()
+        {
+            var list = await Mediator.Send(new GetOrderFormTagQuery());
+            return Ok(list);
+        }
 
 
 

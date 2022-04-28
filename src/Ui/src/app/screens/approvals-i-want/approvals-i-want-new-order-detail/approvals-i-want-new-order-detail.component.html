@@ -144,11 +144,19 @@
               <div class="row">
                 <div class="col-4">
                   <div class="form-group">
-                    <label for="addChoice">Yeni Seçenek Ekle</label>
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control form-control-sm" id="addChoice" name="addChoice"
-                             formControlName="choiceText">
-                      <div class="input-group-append">
+                    <label for="choiceText">Yeni Seçenek Ekle</label>
+                    <div class="row">
+                      <div class="col">
+                        <ng-select id="choiceText" formControlName="choiceText"
+                                   [clearable]="false"
+                                   addTagText="Yeni Ekle"
+                                   [addTag]="addTag"
+                        >
+                          <ng-option value="">Seçiniz</ng-option>
+                          <ng-option *ngFor="let i of addDocumentDd" [value]="i.title">{{i.title}}</ng-option>
+                        </ng-select>
+                      </div>
+                      <div class="col-auto">
                         <button class="btn btn-primary input-button" type="button" (click)="addChoice()">Ekle</button>
                       </div>
                     </div>
@@ -191,9 +199,15 @@
     <div class="box p-5 mb-4">
       <div class="form-group">
         <label for="title">Başlık</label>
-        <input type="text" class="form-control" id="title" name="title"
-               formControlName="title"
-               [ngClass]="{ 'is-invalid': submitted && f.title.invalid }">
+        <ng-select id="title" formControlName="title"
+                   [clearable]="false"
+                   [ngClass]="{ 'is-invalid': submitted && f.title.invalid }"
+                   addTagText="Yeni Ekle"
+                   [addTag]="addTag"
+        >
+          <ng-option value="">Seçiniz</ng-option>
+          <ng-option *ngFor="let i of titles" [value]="i.title">{{i.title}}</ng-option>
+        </ng-select>
         <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
           <div *ngIf="f.title.errors.required">Başlık girilmelidir.</div>
         </div>
@@ -204,12 +218,15 @@
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="process">İşlem</label>
-              <input class="form-control" type="text" name="process" id="process" formControlName="process">
-              <!--<select name="process" id="process" formControlName="process" class="form-select"
-                      [ngClass]="{ 'is-invalid': submitted && fr.process.invalid }">
-                <option value="">Seçiniz</option>
-                <option [value]="i.id" *ngFor="let i of dropdownData?.process">{{i.text}}</option>
-              </select>-->
+              <ng-select id="process" formControlName="process"
+                         [clearable]="false"
+                         [ngClass]="{ 'is-invalid': submitted && fr.process.invalid }"
+                         addTagText="Yeni Ekle"
+                         [addTag]="addTag"
+              >
+                <ng-option value="">Seçiniz</ng-option>
+                <ng-option *ngFor="let i of process" [value]="i.text">{{i.text}}</ng-option>
+              </ng-select>
               <div *ngIf="submitted && fr.process.errors" class="invalid-feedback">
                 <div *ngIf="fr.process.errors.required">İşlem bilgisi girilmelidir.</div>
               </div>
@@ -218,11 +235,14 @@
           <div class="col-md col-sm-12">
             <div class="form-group">
               <label for="state">Aşama</label>
-              <input class="form-control" type="text" name="state" id="state" formControlName="state">
-              <!--<select name="state" id="state" formControlName="state" class="form-select">
-                <option value="">Seçiniz</option>
-                <option [value]="i.id" *ngFor="let i of dropdownData?.state">{{i.text}}</option>
-              </select>-->
+              <ng-select id="state" formControlName="state"
+                         [clearable]="false"
+                         addTagText="Yeni Ekle"
+                         [addTag]="addTag"
+              >
+                <ng-option value="">Seçiniz</ng-option>
+                <ng-option *ngFor="let i of states" [value]="i.text">{{i.text}}</ng-option>
+              </ng-select>
             </div>
           </div>
           <div class="col-md col-sm-12">

@@ -276,6 +276,16 @@ app-root {
     }
   }
 
+  .ng-select {
+    .ng-select-container {
+      .ng-value-container {
+        .ng-placeholder {
+          color: #000000;
+        }
+      }
+    }
+  }
+
   .c-pointer {
     cursor: pointer;
   }

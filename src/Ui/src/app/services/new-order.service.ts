@@ -3,6 +3,7 @@ import {NewApprovalOrder} from "../models/new-approval-order";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {ApiPaths} from "../models/api-paths";
+import {ApiBaseResponseModel} from "../models/api-base-response.model";
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,15 @@ export class NewOrderService {
     if (model)
       return JSON.parse(model);
     return undefined;
+  }
+
+  getOrderFormParameters() {
+    const url = `${this.baseUrl}/${ApiPaths.GetOrderFormParameters}`;
+    return this.httpClient.get<ApiBaseResponseModel>(url);
+  }
+
+  getOrderFormTag() {
+    const url = `${this.baseUrl}/${ApiPaths.GetOrderFormTag}`;
+    return this.httpClient.get<ApiBaseResponseModel>(url);
   }
 }

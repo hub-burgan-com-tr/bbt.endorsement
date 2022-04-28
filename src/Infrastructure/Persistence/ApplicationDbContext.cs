@@ -31,6 +31,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<Parameter> Parameters { get; set; }
     public virtual DbSet<ParameterType> ParameterTypes { get; set; }
     public virtual DbSet<FormDefinitionTagMap> FormDefinitionTagMaps { get; set; }
+    public virtual DbSet<OrderDefinition> OrderDefinitions { get; set; }
+    public virtual DbSet<OrderDefinitionAction> OrderDefinitionActions { get; set; }
+
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
@@ -111,7 +114,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 .HasOne(s => s.Reference)
                 .WithOne(ad => ad.Order)
                 .HasForeignKey<Reference>(ad => ad.OrderId);
-
+   
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
     }
