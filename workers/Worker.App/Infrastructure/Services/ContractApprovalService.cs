@@ -459,12 +459,6 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"CustomerSendMail");
 
-                var history = _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Müşteri Bilgilendirme Mesajı (Email Notification)",
-                    Description = ""
-                });
             }
             catch (Exception ex)
             {
@@ -495,12 +489,6 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"CustomerSendSms");
 
-                var history = _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Müşteri Bilgilendirme Mesajı (Sms Notification)",
-                    Description = ""
-                });
             }
             catch (Exception ex)
             {
