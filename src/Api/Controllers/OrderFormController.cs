@@ -6,6 +6,7 @@ using Application.OrderForms.Queries.GetFormContents;
 using Application.OrderForms.Queries.GetFormInformations;
 using Application.OrderForms.Queries.GetForms;
 using Application.OrderForms.Queries.GetOrderFormParameters;
+using Application.OrderForms.Queries.GetOrderFormTags;
 using Application.OrderForms.Queries.GetTags;
 using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
@@ -173,7 +174,18 @@ Description = "Returns process and tags form by name")]
         }
 
 
-
+        [SwaggerOperation(
+Summary = "Get process and Order form tag",
+Description = "Returns process and Order form tags")]
+        [Route("GetOrderFormTag")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success, Process And Order Form Tags.", typeof(List<GetOrderFormTagDto>))]
+        [SwaggerResponse(404, "Process And Tags not found.", typeof(List<GetOrderFormTagDto>))]
+        public async Task<IActionResult> GetOrderFormTag()
+        {
+            var list = await Mediator.Send(new GetOrderFormTagQuery());
+            return Ok(list);
+        }
 
 
 
