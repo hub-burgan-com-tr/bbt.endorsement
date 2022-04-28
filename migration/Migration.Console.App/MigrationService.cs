@@ -23,6 +23,8 @@ namespace Migration.Console.App
             _context.Database.EnsureCreated();
             FormDefinitionSeed.SeedFormDefinitionsAsync(_context).Wait();
             ParamaterSeed.SeedFormDefinitionsAsync(_context).Wait();
+            OrderDefinionSeed.SeedFormDefinitionsAsync(_context).Wait();
+
         }
     }
 }
