@@ -5,7 +5,10 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from "./screens/login/login.component";
 import {DefaultLayoutComponent} from "./layouts/default-layout/default-layout.component";
 import {HeaderComponent} from "./components/header/header.component";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {FormsModule} from "@angular/forms";
+import {ErrorInterceptor} from "./_helpers/error.interceptor";
+import {JwtInterceptor} from "./_helpers/jwt.interceptor";
 
 @NgModule({
   declarations: [
@@ -17,9 +20,13 @@ import {HttpClientModule} from "@angular/common/http";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+  ],
   exports: [],
   bootstrap: [AppComponent]
 })

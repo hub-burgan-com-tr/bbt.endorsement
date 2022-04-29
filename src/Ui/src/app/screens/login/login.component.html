@@ -16,7 +16,11 @@
         </div>
         <div class="row mt-5 mb-5">
           <div class="col">
-            <a [routerLink]="['/']" class="btn btn-primary w-100">İnternet Bankacılığına Giriş Yap</a>
+            <div class="form-group">
+              <input type="text" id="name" name="name" class="form-control" [(ngModel)]="name" placeholder="Ad Soyad">
+            </div>
+            <small class="text-danger" *ngIf="submitted&&!name">Lütfen Ad Soyad giriniz.</small>
+            <a class="btn btn-primary w-100 mt-3" (click)="login()">İnternet Bankacılığına Giriş Yap</a>
           </div>
         </div>
       </div>
