@@ -85,7 +85,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 FormDefinitionId = startFormRequest.FormId
             });
 
-            var customerId = GetCustomerId(startFormRequest.Customer);
+            var customerId = ""; // GetCustomerId(startFormRequest.Customer);
             var approverId = ""; // GetApproveId(startFormRequest.Approver);
             var order = new Order
             {
@@ -97,8 +97,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = customerId,
-                ApproverId = approverId,
+                //CustomerId = customerId,
+                //ApproverId = approverId,
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
@@ -182,7 +182,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
-            var customerId = GetCustomerId(startRequest.Customer);
+            var customerId = ""; // GetCustomerId(startRequest.Customer);
             var approverId = ""; // GetApproveId(startRequest.Approver);
             var order = new Order
             {
@@ -193,8 +193,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = customerId,
-                ApproverId = approverId,
+                //CustomerId = customerId,
+                //ApproverId = approverId,
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
