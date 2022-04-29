@@ -73,7 +73,7 @@ namespace Api.Controllers
                 new UserModel { CitizenshipNumber = 70189942774, ClientNumber = 4362433, Name = new UserModel.NameClass { First = "Mehmet Ali", Last = "Çokyaşar" }, IsCustomer = true },
                 
                 // Personel Yetki
-                new UserModel { CitizenshipNumber = 21216850128, ClientNumber = 4830830, Name = new UserModel.NameClass { First = "Yetki", Last = "Yok" }, IsCustomer = false,StatusCode=401, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = false, IsNewFormCreator = false, IsReadyFormCreator = false, }},
+                new UserModel { CitizenshipNumber = 21216850128, ClientNumber = 4830830, Name = new UserModel.NameClass { First = "Yetki", Last = "Yok" }, IsCustomer = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = false, IsNewFormCreator = false, IsReadyFormCreator = false, }},
                 
                 // Personel                
                 new UserModel { CitizenshipNumber = 55871259316, ClientNumber = 1340653, Name = new UserModel.NameClass { First = "Yetki", Last = "1" }, IsCustomer = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
@@ -93,10 +93,7 @@ namespace Api.Controllers
 
         public class UserModel
         {
-            public UserModel()
-            {
-                StatusCode= 200;
-            }
+        
             public long ClientNumber { get; set; }
             public long CitizenshipNumber { get; set; }
             public string Token { get; set; }
@@ -108,7 +105,6 @@ namespace Api.Controllers
             }
 
             public bool IsCustomer { get; set; }
-            public int StatusCode { get; set; }
             public AuthoryModel Authory { get; set; }
 
             public class AuthoryModel
