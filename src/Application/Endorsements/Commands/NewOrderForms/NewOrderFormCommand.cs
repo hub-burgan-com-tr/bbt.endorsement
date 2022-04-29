@@ -13,6 +13,7 @@ namespace Application.Endorsements.Commands.NewOrderForms
     public class NewOrderFormCommand : IRequest<Response<NewOrderFormResponse>>
     {
         public StartFormRequest Request { get; set; }
+        public OrderPerson Person { get; set; }
         public Form FormType { get; set; }
     }
 
@@ -51,6 +52,7 @@ namespace Application.Endorsements.Commands.NewOrderForms
                 ExpireInMinutes = expireInMinutes,
                 RetryFrequence = retryFrequence,
                 MaxRetryCount = config.MaxRetryCount,
+                Person = request.Person
             };
             
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
