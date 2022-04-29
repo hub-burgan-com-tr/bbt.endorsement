@@ -15,9 +15,9 @@ public class TokenHandler
         Configuration = configuration;
     }
 
-    public TokenModel CreateAccessToken(UserModel user)
+    public Token CreateAccessToken(UserModel user)
     {
-        var tokenInstance = new TokenModel();
+        var tokenInstance = new Token();
         var claims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),
                 new Claim("CitizenshipNumber",user.CitizenshipNumber.ToString()),
@@ -65,7 +65,7 @@ public class TokenHandler
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
         //Token üretiyoruz.
-        tokenInstance.Token = tokenHandler.WriteToken(securityToken);
+        tokenInstance.AccessToken = tokenHandler.WriteToken(securityToken);
 
         //Refresh Token üretiyoruz.
         tokenInstance.RefreshToken = CreateRefreshToken();
@@ -83,9 +83,9 @@ public class TokenHandler
     }
 }
 
-public class TokenModel
+public class Token
 {
-    public string Token { get; set; }
+    public string AccessToken { get; set; }
     public DateTime Expiration { get; set; }
     public string RefreshToken { get; set; }
 }

@@ -25,7 +25,7 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<TokenModel> Login(string name)
+        public async Task<UserModel> Login(string name)
         {
             var users = GetUsers();
             var user = users.FirstOrDefault(x => (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase));
@@ -33,9 +33,9 @@ namespace Api.Controllers
             if (user != null)
             {
                 TokenHandler tokenHandler = new TokenHandler(_configuration);
-                TokenModel token = tokenHandler.CreateAccessToken(user);
-
-                return token;
+                Token token = tokenHandler.CreateAccessToken(user);
+                user.Token = token.AccessToken;
+                return user;
             }
             return null;
         }
@@ -97,6 +97,7 @@ namespace Api.Controllers
             }
             public long ClientNumber { get; set; }
             public long CitizenshipNumber { get; set; }
+            public string Token { get; set; }
             public NameClass Name { get; set; }
             public class NameClass
             {
