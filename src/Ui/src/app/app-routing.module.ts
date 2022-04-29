@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from "./screens/login/login.component";
 import {DefaultLayoutComponent} from "./layouts/default-layout/default-layout.component";
+import {AuthGuard} from "./_helpers/auth.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'my-approval', pathMatch: 'full'},
@@ -24,7 +25,8 @@ const routes: Routes = [
         path: 'tracing',
         loadChildren: () => import('./screens/tracing/tracing.module').then(m => m.TracingModule)
       }
-    ]
+    ],
+    canActivate: [AuthGuard]
   },
   {
     path: 'login', component: LoginComponent
