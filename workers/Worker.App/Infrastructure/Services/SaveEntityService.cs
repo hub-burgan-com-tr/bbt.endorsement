@@ -22,7 +22,7 @@ namespace Worker.App.Infrastructure.Services
             {
                 ApproverId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = approver.CitizenshipNumber,
-                //ClientNumber = approver.ClientNumber,
+                ClientNumber = approver.ClientNumber,
                 FirstName = approver.First,
                 LastName = approver.Last,
                 Created = _dateTime.Now,
