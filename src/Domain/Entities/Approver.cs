@@ -8,11 +8,11 @@ namespace Domain.Entities
     /// approvers belgelere onay verecek kullanıcıların TCKN numarasını içeririr
     /// </summary>
     [Table("Approver", Schema = "approval")]
-    public class Approver : AuditableEntity
+    public class Person : AuditableEntity
     {
         [Key]
         [MaxLength(36)]
-        public string ApproverId { get; set; }
+        public string PersonId { get; set; }
         [MaxLength(250)]
         public string FirstName { get; set; }
         [MaxLength(250)]
