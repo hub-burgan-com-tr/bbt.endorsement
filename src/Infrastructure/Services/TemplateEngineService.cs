@@ -47,6 +47,8 @@ namespace Infrastructure.Services
         {
             var data = content.Replace(@"\""", String.Empty);
             data = data.Replace("\"", String.Empty);
+            data = data.Replace(@"\r\n", String.Empty);
+            data = data.Replace(@"\t", String.Empty);
             data = data.Replace("True", "X");
             data = data.Replace("False", String.Empty);
             return data;

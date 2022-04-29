@@ -97,8 +97,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = customerId,
-                ApproverId = approverId,
+                //CustomerId = customerId,
+                //ApproverId = approverId,
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
