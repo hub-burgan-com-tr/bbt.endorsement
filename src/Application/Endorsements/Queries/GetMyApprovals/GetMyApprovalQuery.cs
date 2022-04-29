@@ -1,9 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
-using Application.Endorsements.Commands.NewOrders;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +10,7 @@ namespace Application.Endorsements.Queries.GetMyApprovals
 {
     public class GetMyApprovalQuery : IRequest<Response<PaginatedList<GetMyApprovalDto>>>
     {
+        public long CitizenshipNumber { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
@@ -30,7 +29,10 @@ namespace Application.Endorsements.Queries.GetMyApprovals
 
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
         {
-            var list = await _context.Orders.Where(x => x.State != OrderState.Pending.ToString()&&x.State!=OrderState.Cancel.ToString())
+            var customer = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == request.CitizenshipNumber);
+
+            var list = await _context.Orders
+                .Where(x => x.CustomerId == customer.CustomerId && x.State != OrderState.Pending.ToString()&&x.State!=OrderState.Cancel.ToString())
                 .Include(x => x.Documents)
                 .OrderByDescending(x => x.Created)
                 .Select(x => new GetMyApprovalDto

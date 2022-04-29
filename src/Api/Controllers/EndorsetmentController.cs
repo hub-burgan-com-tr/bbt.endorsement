@@ -245,7 +245,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var data = await Mediator.Send(new GetMyApprovalQuery { PageNumber = pageNumber, PageSize = pageSize });
+            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            var data = await Mediator.Send(new GetMyApprovalQuery { CitizenshipNumber = citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(data);
         }
         /// <summary>
