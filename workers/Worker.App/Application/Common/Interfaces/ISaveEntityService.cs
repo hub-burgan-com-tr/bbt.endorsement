@@ -7,8 +7,8 @@ namespace Worker.App.Application.Common.Interfaces
     {
         Task<string> GetCustomerAsync(long citizenshipNumber);
         Task<string> CustomerSaveAsync(OrderCustomer customer);
-        Task<string> GetApproverAsync(long citizenshipNumber);
-        Task<string> ApproverSaveAsync(OrderApprover approver);
+        Task<string> GetPersonAsync(long citizenshipNumber);
+        Task<string> PersonSaveAsync(OrderPerson person);
         Task<FormDefinitionDto> GetFormDefinition(string formId);
     }
 }

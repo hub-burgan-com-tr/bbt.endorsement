@@ -13,7 +13,7 @@ namespace Domain.Entities
         public string OrderId { get; set; }
 
         [MaxLength(36)]
-        public string ApproverId { get; set; }
+        public string PersonId { get; set; }
         [MaxLength(36)]
         public string CustomerId { get; set; }
 
@@ -45,7 +45,7 @@ namespace Domain.Entities
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
         public virtual Reference Reference { get; set; }
         public virtual Config Config { get; set; }
-        public virtual Approver Approver { get; set; }
+        public virtual Person Person { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<OrderHistory> OrderHistories { get; set; }

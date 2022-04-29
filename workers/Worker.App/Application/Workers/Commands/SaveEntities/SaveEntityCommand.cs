@@ -30,9 +30,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         {
             var response = new SaveEntityResponse();
             if(request.Model.FormType == Form.Order)
-                response = OrderCreate(request.Model.StartRequest, request.ProcessInstanceKey);
+                response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
             else if (request.Model.FormType == Form.FormOrder)
-                response = FormOrderCreate(request.Model.StartFormRequest, request.ProcessInstanceKey);
+                response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey);
 
             var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
             var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
@@ -44,7 +44,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return Response<SaveEntityResponse>.Success(response, 200);
         }
 
-        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest, long processInstanceKey)
+        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest, OrderPerson person, long processInstanceKey)
         {
             if (startFormRequest == null) return null;
 
@@ -85,8 +85,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 FormDefinitionId = startFormRequest.FormId
             });
 
-            var customerId = GetCustomerId(startFormRequest.Customer);
-            var approverId =  GetApproveId(startFormRequest.Approver);
+            var customerId = GetCustomerId(startFormRequest.Approver);
+            var personId = GetPersonId(person);
             var order = new Order
             {
                 OrderId = startFormRequest.Id.ToString(),
@@ -97,8 +97,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                //CustomerId = customerId,
-                //ApproverId = approverId,
+                CustomerId = customerId,
+                PersonId = personId,
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
@@ -128,15 +128,15 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return customerId;
         }
 
-        private string GetApproveId(OrderApprover approver)
+        private string GetPersonId(OrderPerson person)
         {
-            var customerId = _saveEntityService.GetApproverAsync(approver.CitizenshipNumber).Result;
+            var customerId = _saveEntityService.GetPersonAsync(person.CitizenshipNumber).Result;
             if (customerId == null)
-                customerId = _saveEntityService.ApproverSaveAsync(approver).Result;
+                customerId = _saveEntityService.PersonSaveAsync(person).Result;
             return customerId;
         }
 
-        private SaveEntityResponse OrderCreate(StartRequest startRequest, long processInstanceKey)
+        private SaveEntityResponse OrderCreate(StartRequest startRequest, OrderPerson person, long processInstanceKey)
         {
             if (startRequest == null) return null;
 
@@ -182,8 +182,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
-            var customerId = GetCustomerId(startRequest.Customer);
-            var approverId = ""; // GetApproveId(startRequest.Approver);
+            var customerId = GetCustomerId(startRequest.Approver);
+            var personId = GetPersonId(person);
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
@@ -194,7 +194,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Created = _dateTime.Now,
                 Config = config,
                 CustomerId = customerId,
-                ApproverId = approverId,
+                PersonId = personId,
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,

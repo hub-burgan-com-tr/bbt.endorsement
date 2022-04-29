@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace Api.Controllers
@@ -7,19 +10,56 @@ namespace Api.Controllers
     [Route("[controller]")]
     [ApiController]
     public class HomeController : ApiControllerBase
-    {  
+    {
+        private readonly IConfiguration _configuration;
+
+        public HomeController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+
         [Route("login")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(UserModel))]
         [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Login(string name)
+        public async Task<UserModel> Login(string name)
         {
             var users = GetUsers();
-            var response = users.FirstOrDefault(x => (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase));
-            return Ok(response);
+            var user = users.FirstOrDefault(x => (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase));
+
+            if (user != null)
+            {
+                TokenHandler tokenHandler = new TokenHandler(_configuration);
+                Token token = tokenHandler.CreateAccessToken(user);
+                user.Token = token.AccessToken;
+                return user;
+            }
+            return null;
         }
+
+
+        //[HttpGet("decode-token")]
+        //public JwtSecurityToken DecodeToken(string token)
+        //{
+        //    var handler = new JwtSecurityTokenHandler();
+        //    var jsonToken = handler.ReadToken(token);
+        //    var tokenS = jsonToken as JwtSecurityToken;
+
+        //    return tokenS;
+        //}
+
+        //[Authorize]
+        //[HttpGet("get")]
+        //public int Get()
+        //{
+        //    var rng = new Random();
+        //    var user = User.Claims.FirstOrDefault(c => c.Type == "First").Value;
+        //    return rng.Next(-20, 55);
+
+        //}
 
         private List<UserModel> GetUsers()
         {
@@ -59,6 +99,7 @@ namespace Api.Controllers
             }
             public long ClientNumber { get; set; }
             public long CitizenshipNumber { get; set; }
+            public string Token { get; set; }
             public NameClass Name { get; set; }
             public class NameClass
             {

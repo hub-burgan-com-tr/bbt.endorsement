@@ -24,7 +24,6 @@ namespace Migration.Console.App
             FormDefinitionSeed.SeedFormDefinitionsAsync(_context).Wait();
             ParamaterSeed.SeedFormDefinitionsAsync(_context).Wait();
             OrderDefinionSeed.SeedFormDefinitionsAsync(_context).Wait();
-
         }
     }
 }

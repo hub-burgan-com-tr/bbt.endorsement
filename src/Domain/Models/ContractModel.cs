@@ -11,6 +11,7 @@ public class ContractModel
 
     public StartRequest StartRequest { get; set; }
     public StartFormRequest StartFormRequest { get; set; }
+    public OrderPerson Person { get; set; }
     public Form FormType { get; set; }
 
     public Guid InstanceId { get; set; }
@@ -48,11 +49,10 @@ public class StartRequest
     public OrderConfig Config { get; set; }
     public OrderReference Reference { get; set; }
     public List<OrderDocument> Documents { get; set; }
-    public OrderApprover Approver { get; set; }
-    public OrderCustomer Customer { get; set; }
+    public OrderCustomer Approver { get; set; }
 }
 
-public class OrderApprover
+public class OrderCustomer
 {
     public long CitizenshipNumber { get; set; }
     public string First { get; set; }
@@ -60,7 +60,7 @@ public class OrderApprover
     public long ClientNumber { get; set; }
 }
 
-public class OrderCustomer
+public class OrderPerson
 {
     public long CitizenshipNumber { get; set; }
     public string First { get; set; }
@@ -117,8 +117,7 @@ public class StartFormRequest
     public string FormId { get; set; }
     public string Content { get; set; }
     public OrderReference Reference { get; set; }
-    public OrderApprover Approver { get; set; }
-    public OrderCustomer Customer { get; set; }
+    public OrderCustomer Approver { get; set; }
 }
 
 public class FormDefinitionClass

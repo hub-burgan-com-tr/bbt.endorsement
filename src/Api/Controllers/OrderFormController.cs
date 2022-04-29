@@ -12,6 +12,7 @@ using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
 using Domain.Enums;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -20,6 +21,7 @@ namespace Api.Controllers
     /// <summary>
     /// Form İşlemleri 
     /// </summary>
+    [Authorize]
     [Route("Forms")]
     [ApiController]
     public class FormController : ApiControllerBase
@@ -40,7 +42,15 @@ namespace Api.Controllers
             if (form.Data != null)
                 request.Content = form.Data.Content;
 
-            return await Mediator.Send(new NewOrderFormCommand { Request = request, FormType = Form.FormOrder });
+            var person = new OrderPerson
+            {
+                CitizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value),
+                ClientNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "ClientNumber").Value),
+                First = User.Claims.FirstOrDefault(c => c.Type == "First").Value,
+                Last = User.Claims.FirstOrDefault(c => c.Type == "Last").Value
+            };
+
+            return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
         }
 
         [SwaggerOperation(
