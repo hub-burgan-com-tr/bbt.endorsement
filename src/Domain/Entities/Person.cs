@@ -7,7 +7,7 @@ namespace Domain.Entities
     /// <summary>
     /// approvers belgelere onay verecek kullanıcıların TCKN numarasını içeririr
     /// </summary>
-    [Table("Approver", Schema = "approval")]
+    [Table("Person", Schema = "approval")]
     public class Person : AuditableEntity
     {
         [Key]
