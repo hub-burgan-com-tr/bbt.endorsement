@@ -28,7 +28,7 @@ namespace Api.Controllers
                 new UserModel { CitizenshipNumber = 56906430700, ClientNumber = 1309912, Name = new UserModel.NameClass { First = "Ahmet", Last = "Güler" }, IsCustomer = true },
                 new UserModel { CitizenshipNumber = 77120263424, ClientNumber = 3063809, Name = new UserModel.NameClass { First = "Hüseyin", Last = "Töremen" }, IsCustomer = true },
                 new UserModel { CitizenshipNumber = 69967514210, ClientNumber = 3580693, Name = new UserModel.NameClass { First = "Gizem", Last = "Ünal" }, IsCustomer = true },
-                new UserModel { CitizenshipNumber = 58542320728, ClientNumber = 1324223, Name = new UserModel.NameClass { First = "Tolgahan", Last = "Örnek" }, IsCustomer = true },
+                new UserModel { CitizenshipNumber = 58542320728, ClientNumber = 1324223, Name = new UserModel.NameClass { First = "Tolgahan", Last = "Özgür" }, IsCustomer = true },
                 new UserModel { CitizenshipNumber = 17556080776, ClientNumber = 5142508, Name = new UserModel.NameClass { First = "Merve", Last = "Aydın" }, IsCustomer = true },
                 new UserModel { CitizenshipNumber = 70189942774, ClientNumber = 4362433, Name = new UserModel.NameClass { First = "Mehmet Ali", Last = "Çokyaşar" }, IsCustomer = true },
                 
@@ -46,7 +46,6 @@ namespace Api.Controllers
                 new UserModel { CitizenshipNumber = 59976413048, ClientNumber = 4788897, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "2" }, IsCustomer = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = false, IsNewFormCreator = true, IsReadyFormCreator = false }},
                 new UserModel { CitizenshipNumber = 31971649998, ClientNumber = 2977276, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "3" }, IsCustomer = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = false, IsNewFormCreator = false, IsReadyFormCreator = true }},
                 new UserModel { CitizenshipNumber = 48324769968, ClientNumber = 4135519, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "4" }, IsCustomer = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = false, IsNewFormCreator = true, IsReadyFormCreator = true }},
-
             };
             return users;
         }

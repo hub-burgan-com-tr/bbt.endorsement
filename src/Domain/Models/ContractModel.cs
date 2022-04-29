@@ -49,9 +49,18 @@ public class StartRequest
     public OrderReference Reference { get; set; }
     public List<OrderDocument> Documents { get; set; }
     public OrderApprover Approver { get; set; }
+    public OrderCustomer Customer { get; set; }
 }
 
 public class OrderApprover
+{
+    public long CitizenshipNumber { get; set; }
+    public string First { get; set; }
+    public string Last { get; set; }
+    public long ClientNumber { get; set; }
+}
+
+public class OrderCustomer
 {
     public long CitizenshipNumber { get; set; }
     public string First { get; set; }
@@ -109,7 +118,7 @@ public class StartFormRequest
     public string Content { get; set; }
     public OrderReference Reference { get; set; }
     public OrderApprover Approver { get; set; }
-
+    public OrderCustomer Customer { get; set; }
 }
 
 public class FormDefinitionClass

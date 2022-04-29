@@ -85,6 +85,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 FormDefinitionId = startFormRequest.FormId
             });
 
+            var customerId = GetCustomerId(startFormRequest.Customer);
+            var approverId = ""; // GetApproveId(startFormRequest.Approver);
             var order = new Order
             {
                 OrderId = startFormRequest.Id.ToString(),
@@ -95,7 +97,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Title = startFormRequest.Title,
                 Created = _dateTime.Now,
                 Config = config,
-                CustomerId = GetCustomerId(startFormRequest.Approver),
+                CustomerId = customerId,
+                ApproverId = approverId,
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
@@ -117,11 +120,19 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             };
         }
 
-        private string GetCustomerId(OrderApprover approver)
+        private string GetCustomerId(OrderCustomer customer)
         {
-            var customerId = _saveEntityService.GetCustomerAsync(approver.CitizenshipNumber).Result;
+            var customerId = _saveEntityService.GetCustomerAsync(customer.CitizenshipNumber).Result;
             if (customerId == null)
-                customerId = _saveEntityService.CustomerSaveAsync(approver).Result;
+                customerId = _saveEntityService.CustomerSaveAsync(customer).Result;
+            return customerId;
+        }
+
+        private string GetApproveId(OrderApprover approver)
+        {
+            var customerId = _saveEntityService.GetApproverAsync(approver.CitizenshipNumber).Result;
+            if (customerId == null)
+                customerId = _saveEntityService.ApproverSaveAsync(approver).Result;
             return customerId;
         }
 
@@ -171,7 +182,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
 
-            var customerId = GetCustomerId(startRequest.Approver);
+            var customerId = GetCustomerId(startRequest.Customer);
+            var approverId = ""; // GetApproveId(startRequest.Approver);
             var order = new Order
             {
                 OrderId = startRequest.Id.ToString(),
@@ -182,6 +194,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Created = _dateTime.Now,
                 Config = config,
                 CustomerId = customerId,
+                ApproverId = approverId,
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,

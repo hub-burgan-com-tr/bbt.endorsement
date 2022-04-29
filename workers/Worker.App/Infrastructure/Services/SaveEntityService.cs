@@ -16,14 +16,15 @@ namespace Worker.App.Infrastructure.Services
             _dateTime = dateTime;
         }
 
-        public async Task<string> ApproverSaveAsync(long citizenshipNumber, string firstName, string lastName)
+        public async Task<string> ApproverSaveAsync(OrderApprover approver)
         {
             var entity = _context.Approvers.Add(new Approver
             {
                 ApproverId = Guid.NewGuid().ToString(),
-                CitizenshipNumber = citizenshipNumber,
-                FirstName = firstName,
-                LastName = lastName,
+                CitizenshipNumber = approver.CitizenshipNumber,
+                //ClientNumber = approver.ClientNumber,
+                FirstName = approver.First,
+                LastName = approver.Last,
                 Created = _dateTime.Now,
             }).Entity;
 
@@ -31,15 +32,15 @@ namespace Worker.App.Infrastructure.Services
             return entity.ApproverId;
         }
 
-        public async Task<string> CustomerSaveAsync(OrderApprover approver)
+        public async Task<string> CustomerSaveAsync(OrderCustomer customer)
         {
             var entity = _context.Customers.Add(new Customer
             {
                 CustomerId = Guid.NewGuid().ToString(),
-                CitizenshipNumber = approver.CitizenshipNumber,
-                ClientNumber=approver.ClientNumber,
-                FirstName = approver.First,
-                LastName = approver.Last,
+                CitizenshipNumber = customer.CitizenshipNumber,
+                ClientNumber= customer.ClientNumber,
+                FirstName = customer.First,
+                LastName = customer.Last,
                 Created = _dateTime.Now,
             }).Entity;
 
