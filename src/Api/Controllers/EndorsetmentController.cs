@@ -17,13 +17,14 @@ using Application.Endorsements.Queries.GetWantApprovalsDetails;
 using Application.Endorsements.Queries.GetWatchApprovals;
 using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
-using Domain.Enum;
 using Domain.Models;
 using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
 
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class EndorsementController : ApiControllerBase
@@ -42,7 +43,16 @@ namespace Api.Controllers
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
             request.Id = Guid.NewGuid();
-            return await Mediator.Send(new NewOrderCommand { StartRequest = request, FormType = Form.Order });
+
+            var person = new OrderPerson
+            {
+                CitizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value),
+                ClientNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "ClientNumber").Value),
+                First = User.Claims.FirstOrDefault(c => c.Type == "First").Value,
+                Last = User.Claims.FirstOrDefault(c => c.Type == "Last").Value
+            };
+            
+            return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
         }
 
         [SwaggerOperation(

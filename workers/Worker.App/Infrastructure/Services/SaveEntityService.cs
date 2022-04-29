@@ -16,20 +16,13 @@ namespace Worker.App.Infrastructure.Services
             _dateTime = dateTime;
         }
 
-        public async Task<string> ApproverSaveAsync(OrderApprover approver)
-        {
-            var entity = _context.Approvers.Add(new Approver
-            {
-                ApproverId = Guid.NewGuid().ToString(),
-                CitizenshipNumber = approver.CitizenshipNumber,
-                ClientNumber = approver.ClientNumber,
-                FirstName = approver.First,
-                LastName = approver.Last,
-                Created = _dateTime.Now,
-            }).Entity;
 
-            _context.SaveChanges();
-            return entity.ApproverId;
+        public async Task<string> GetCustomerAsync(long citizenshipNumber)
+        {
+            var response = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == citizenshipNumber);
+            if (response == null)
+                return null;
+            return response.CustomerId;
         }
 
         public async Task<string> CustomerSaveAsync(OrderCustomer customer)
@@ -38,7 +31,7 @@ namespace Worker.App.Infrastructure.Services
             {
                 CustomerId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = customer.CitizenshipNumber,
-                ClientNumber= customer.ClientNumber,
+                ClientNumber = customer.ClientNumber,
                 FirstName = customer.First,
                 LastName = customer.Last,
                 Created = _dateTime.Now,
@@ -48,20 +41,28 @@ namespace Worker.App.Infrastructure.Services
             return entity.CustomerId;
         }
 
-        public async Task<string> GetApproverAsync(long citizenshipNumber)
+        public async Task<string> GetPersonAsync(long citizenshipNumber)
         {
             var response = _context.Approvers.FirstOrDefault(x => x.CitizenshipNumber == citizenshipNumber);
-            if (response == null)   
+            if (response == null)
                 return null;
             return response.ApproverId;
         }
 
-        public async Task<string> GetCustomerAsync(long citizenshipNumber)
+        public async Task<string> PersonSaveAsync(OrderPerson customer)
         {
-            var response = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == citizenshipNumber);
-            if (response == null)
-                return null;
-            return response.CustomerId;
+            var entity = _context.Approvers.Add(new Approver
+            {
+                ApproverId = Guid.NewGuid().ToString(),
+                CitizenshipNumber = customer.CitizenshipNumber,
+                ClientNumber = customer.ClientNumber,
+                FirstName = customer.First,
+                LastName = customer.Last,
+                Created = _dateTime.Now,
+            }).Entity;
+
+            _context.SaveChanges();
+            return entity.ApproverId;
         }
 
         public async Task<FormDefinitionDto> GetFormDefinition(string formId)

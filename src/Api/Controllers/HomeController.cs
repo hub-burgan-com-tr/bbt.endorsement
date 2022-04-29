@@ -57,6 +57,8 @@ namespace Api.Controllers
         {
             var rng = new Random();
             return rng.Next(-20, 55);
+
+            var user = User.Claims.FirstOrDefault(c => c.Type == "First").Value;
         }
 
         private List<UserModel> GetUsers()
