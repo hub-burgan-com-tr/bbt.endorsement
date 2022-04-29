@@ -41,25 +41,25 @@ namespace Api.Controllers
         }
 
 
-        [HttpGet("decode-token")]
-        public JwtSecurityToken DecodeToken(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token);
-            var tokenS = jsonToken as JwtSecurityToken;
+        //[HttpGet("decode-token")]
+        //public JwtSecurityToken DecodeToken(string token)
+        //{
+        //    var handler = new JwtSecurityTokenHandler();
+        //    var jsonToken = handler.ReadToken(token);
+        //    var tokenS = jsonToken as JwtSecurityToken;
 
-            return tokenS;
-        }
+        //    return tokenS;
+        //}
 
-        [Authorize]
-        [HttpGet("get")]
-        public int Get()
-        {
-            var rng = new Random();
-            return rng.Next(-20, 55);
+        //[Authorize]
+        //[HttpGet("get")]
+        //public int Get()
+        //{
+        //    var rng = new Random();
+        //    var user = User.Claims.FirstOrDefault(c => c.Type == "First").Value;
+        //    return rng.Next(-20, 55);
 
-            var user = User.Claims.FirstOrDefault(c => c.Type == "First").Value;
-        }
+        //}
 
         private List<UserModel> GetUsers()
         {
