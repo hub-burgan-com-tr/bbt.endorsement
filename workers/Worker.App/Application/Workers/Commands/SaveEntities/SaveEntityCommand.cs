@@ -86,7 +86,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             });
 
             var customerId = GetCustomerId(startFormRequest.Customer);
-            var approverId = ""; // GetApproveId(startFormRequest.Approver);
+            var approverId =  GetApproveId(startFormRequest.Approver);
             var order = new Order
             {
                 OrderId = startFormRequest.Id.ToString(),

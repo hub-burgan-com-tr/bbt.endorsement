@@ -19,6 +19,7 @@ namespace Domain.Entities
         public string LastName { get; set; }
         [MaxLength(11)]
         public long CitizenshipNumber { get; set; }
+        public long ClientNumber { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }
