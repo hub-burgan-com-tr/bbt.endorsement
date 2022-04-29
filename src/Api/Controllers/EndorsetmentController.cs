@@ -221,7 +221,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalDetailAsync([FromQuery] string orderId)
         {
-            var result = await Mediator.Send(new GetApprovalDetailsQuery() { OrderId = orderId });
+            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+
+            var result = await Mediator.Send(new GetApprovalDetailsQuery() { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
         }
        
@@ -269,7 +271,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalDetailAsync([FromQuery] string orderId)
         {
-            var result = await Mediator.Send(new GetMyApprovalDetailsQuery { OrderId = orderId });
+            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+
+            var result = await Mediator.Send(new GetMyApprovalDetailsQuery { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
         }
 

@@ -32,9 +32,9 @@ namespace Application.Endorsements.Queries.GetApprovals
         {
             try
             {
-                var list = await _context.Orders
+                var list = await _context.Orders.Include(x => x.Documents)
                     .Where(x => x.Customer.CitizenshipNumber == request.CitizenshipNumber && x.State == OrderState.Pending.ToString())
-                    .Include(x => x.Documents)
+                    
                     .OrderByDescending(x => x.Created)
                     .Select(x => new GetApprovalDto
                     {

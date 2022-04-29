@@ -12,6 +12,8 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
         /// Onay Id
         /// </summary>
         public string OrderId { get; set; }
+        public long CitizenshipNumber { get; set; }
+
     }
     /// <summary>
     /// Onayimdakiler Detay Sayfasi
@@ -26,7 +28,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 
         public async Task<Response<GetApprovalDetailsDto>> Handle(GetApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Orders.Where(x => x.State == OrderState.Pending.ToString()).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Customer).Include(x => x.Documents).ThenInclude(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Where(x => x.OrderId == request.OrderId)
+            var response = _context.Orders.Where(x => x.State == OrderState.Pending.ToString()&&x.Customer.CitizenshipNumber==request.CitizenshipNumber).Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Customer).Include(x => x.Documents).ThenInclude(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).Where(x => x.OrderId == request.OrderId)
                 .Select(x => new GetApprovalDetailsDto
                 {
                     Title = x.Title,
