@@ -29,10 +29,8 @@ namespace Application.Endorsements.Queries.GetMyApprovals
 
         public async Task<Response<PaginatedList<GetMyApprovalDto>>> Handle(GetMyApprovalQuery request, CancellationToken cancellationToken)
         {
-            var customer = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == request.CitizenshipNumber);
-
             var list = await _context.Orders
-                .Where(x => x.CustomerId == customer.CustomerId && x.State != OrderState.Pending.ToString()&&x.State!=OrderState.Cancel.ToString())
+                .Where(x => x.Customer.CitizenshipNumber == request.CitizenshipNumber && x.State != OrderState.Pending.ToString() && x.State != OrderState.Cancel.ToString())
                 .Include(x => x.Documents)
                 .OrderByDescending(x => x.Created)
                 .Select(x => new GetMyApprovalDto
@@ -43,8 +41,8 @@ namespace Application.Endorsements.Queries.GetMyApprovals
                     State = x.State,
                 })
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
-            return Response<PaginatedList<GetMyApprovalDto>>.Success(list, 200);
 
+            return Response<PaginatedList<GetMyApprovalDto>>.Success(list, 200);
         }
     }
 

@@ -1,7 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Mappings;
 using Application.Common.Models;
-using Application.Endorsements.Commands.NewOrders;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Endorsements.Queries.GetApprovals
 {
     public class GetApprovalQuery : IRequest<Response<PaginatedList<GetApprovalDto>>>
-    {/// <summary>
-    /// Instance Id
-    /// </summary>
+    {
+        /// <summary>
+        /// Instance Id
+        /// </summary>
+        public long CitizenshipNumber { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
@@ -31,8 +32,19 @@ namespace Application.Endorsements.Queries.GetApprovals
         {
             try
             {
-                var list = await _context.Orders.Where(x => x.State == OrderState.Pending.ToString()).Include(x => x.Documents).OrderByDescending(x => x.Created).Select(x => new GetApprovalDto { OrderId = x.OrderId, Title = x.Title, IsDocument = x.Documents.Any(x => x.Type!=ContentType.PlainText.ToString()&&x.FormDefinitionId==null) }).PaginatedListAsync(request.PageNumber, request.PageSize);
+                var list = await _context.Orders
+                    .Where(x => x.Customer.CitizenshipNumber == request.CitizenshipNumber && x.State == OrderState.Pending.ToString())
+                    .Include(x => x.Documents)
+                    .OrderByDescending(x => x.Created)
+                    .Select(x => new GetApprovalDto
+                    {
+                        OrderId = x.OrderId,
+                        Title = x.Title,
+                        IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString() && x.FormDefinitionId == null)
+                    })
+                    .PaginatedListAsync(request.PageNumber, request.PageSize);
                 return Response<PaginatedList<GetApprovalDto>>.Success(list, 200);
+
             }
             catch (Exception ex)
             {
