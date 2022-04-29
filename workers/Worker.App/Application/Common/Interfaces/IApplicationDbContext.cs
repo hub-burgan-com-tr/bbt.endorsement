@@ -15,7 +15,7 @@ namespace Worker.App.Application.Common.Interfaces
         DbSet<DocumentAction> DocumentActions { get; }
         DbSet<Document> Documents { get; }
         DbSet<OrderHistory> OrderHistories { get; }
-        DbSet<Approver> Approvers { get; }
+        DbSet<Person> Persons { get; }
         DbSet<Customer> Customers { get; }
         DbSet<ParameterType> ParameterTypes { get; }
         DbSet<Parameter> Parameters { get; }

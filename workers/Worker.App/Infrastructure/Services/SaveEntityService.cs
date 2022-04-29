@@ -43,17 +43,17 @@ namespace Worker.App.Infrastructure.Services
 
         public async Task<string> GetPersonAsync(long citizenshipNumber)
         {
-            var response = _context.Approvers.FirstOrDefault(x => x.CitizenshipNumber == citizenshipNumber);
+            var response = _context.Persons.FirstOrDefault(x => x.CitizenshipNumber == citizenshipNumber);
             if (response == null)
                 return null;
-            return response.ApproverId;
+            return response.PersonId;
         }
 
         public async Task<string> PersonSaveAsync(OrderPerson customer)
         {
-            var entity = _context.Approvers.Add(new Approver
+            var entity = _context.Persons.Add(new Person
             {
-                ApproverId = Guid.NewGuid().ToString(),
+                PersonId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = customer.CitizenshipNumber,
                 ClientNumber = customer.ClientNumber,
                 FirstName = customer.First,
@@ -62,7 +62,7 @@ namespace Worker.App.Infrastructure.Services
             }).Entity;
 
             _context.SaveChanges();
-            return entity.ApproverId;
+            return entity.PersonId;
         }
 
         public async Task<FormDefinitionDto> GetFormDefinition(string formId)

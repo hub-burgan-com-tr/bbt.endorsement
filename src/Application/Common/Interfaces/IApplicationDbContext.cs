@@ -14,7 +14,7 @@ namespace Application.Common.Interfaces
         DbSet<FormDefinitionTag> FormDefinitionTags { get; }
         DbSet<DocumentAction> DocumentActions { get; }
         DbSet<Document> Documents { get; }
-        DbSet<Approver> Approvers { get; }
+        DbSet<Person> Persons { get; }
         DbSet<Customer> Customers { get; }
         DbSet<OrderHistory> OrderHistories { get; }
         DbSet<ParameterType> ParameterTypes { get; }

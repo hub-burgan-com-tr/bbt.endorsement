@@ -26,7 +26,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public virtual DbSet<DocumentAction> DocumentActions { get; set; }
     public virtual DbSet<OrderHistory> OrderHistories { get; set; }
     public virtual DbSet<FormDefinitionAction> FormDefinitionActions { get; set; }
-    public virtual DbSet<Approver> Approvers { get; set; }
+    public virtual DbSet<Person> Persons { get; set; }
     public virtual DbSet<Customer> Customers { get; set; }
     public virtual DbSet<Parameter> Parameters { get; set; }
     public virtual DbSet<ParameterType> ParameterTypes { get; set; }
