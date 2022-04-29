@@ -6,7 +6,8 @@ export interface User {
     "first": string,
     "last": string
   },
-  "isSube": boolean,
+  "isCustomer": boolean,
+  "statusCode": number,
   "authory": {
     "isReadyFormCreator": boolean,
     "isNewFormCreator": boolean,
