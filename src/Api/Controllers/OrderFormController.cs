@@ -36,7 +36,7 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
-            request.Id = Guid.NewGuid();
+            request.Id = Guid.NewGuid().ToString();
 
             var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
             if (form.Data != null)

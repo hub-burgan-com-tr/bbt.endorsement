@@ -42,7 +42,7 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
-            request.Id = Guid.NewGuid();
+            request.Id = Guid.NewGuid().ToString();
 
             var person = new OrderPerson
             {
@@ -300,7 +300,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var result = await Mediator.Send(new GetWantApprovalQuery { PageNumber = pageNumber, PageSize = pageSize });
+            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+
+            var result = await Mediator.Send(new GetWantApprovalQuery {CitizenshipNumber=citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(result);
         }
 
@@ -322,7 +324,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
-            var result = await Mediator.Send(new GetWantApprovalDetailsQuery() { OrderId = orderId });
+            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+
+            var result = await Mediator.Send(new GetWantApprovalDetailsQuery() {CitizenshipNumber=citizenshipNumber, OrderId = orderId });
             return Ok(result);
         }
 

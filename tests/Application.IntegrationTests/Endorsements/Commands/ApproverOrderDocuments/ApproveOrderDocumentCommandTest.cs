@@ -1,4 +1,5 @@
 ﻿using Application.Endorsements.Commands.ApproveOrderDocuments;
+using Application.IntegrationTests.Services;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,15 @@ namespace Application.IntegrationTests.Endorsements.Commands.ApproverOrderDocume
     using static Testing;
     public class ApproveOrderDocumentCommandTest : TestBase
     {
-        [Test]
-        [TestCase("1beecf76-5529-4309-97fe-39df9e917bd3")]
-        public async Task ApproveOrderDocumentTest(Guid id)
+        [TestCaseSource(typeof(EndorsementService), nameof(EndorsementService.ApproveOrderDocumentTestData))]
+
+        public async Task ApproveOrderDocumentTest(ApproveOrderDocumentCommand request)
         {
-            ApproveOrderDocumentCommand model = new ApproveOrderDocumentCommand();
-            var response = await SendAsync(model);
-            Assert.IsNotNull(id);
+            var response = await SendAsync(request);
+            Assert.IsNotNull(response.Data);
         }
     }
 }
+
+
+

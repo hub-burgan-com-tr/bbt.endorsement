@@ -14,7 +14,7 @@ public class ContractModel
     public OrderPerson Person { get; set; }
     public Form FormType { get; set; }
 
-    public Guid InstanceId { get; set; }
+    public string OrderId { get; set; }
     public bool Device { get; set; }
 
     public bool Approved { get; set; }
@@ -44,7 +44,7 @@ public class StartRequest
     /// <summary>
     /// Unique Id of order. Id is corrolation key of workflow also. 
     /// </summary>
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public string Title { get; set; }
     public OrderConfig Config { get; set; }
     public OrderReference Reference { get; set; }
@@ -112,7 +112,7 @@ public class OrderConfig
 
 public class StartFormRequest
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public string Title { get; set; }
     public string FormId { get; set; }
     public string Content { get; set; }

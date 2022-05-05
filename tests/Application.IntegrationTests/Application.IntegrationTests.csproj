@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="OrderForm\**" />
+    <EmbeddedResource Remove="OrderForm\**" />
+    <None Remove="OrderForm\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.5.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
@@ -27,7 +33,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Endorsements\Commands\NewOrders\" />
-    <Folder Include="OrderForm\Commands\" />
   </ItemGroup>
 
 </Project>

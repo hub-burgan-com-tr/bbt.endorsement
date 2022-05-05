@@ -12,6 +12,8 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
         /// <summary>
         /// Onay Id
         /// </summary>
+        public long CitizenshipNumber { get; set; }
+
         public string OrderId { get; set; }
     }
 
@@ -28,7 +30,7 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
         }
         public async Task<Response<GetWantApprovalDetailsDto>> Handle(GetWantApprovalDetailsQuery request, CancellationToken cancellationToken)
         {
-            var response = await _context.Orders.Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto 
+            var response = await _context.Orders.Where(x => x.Customer.CitizenshipNumber == request.CitizenshipNumber).Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto 
             {
                 OrderId = x.OrderId,
                 Title = x.Title,

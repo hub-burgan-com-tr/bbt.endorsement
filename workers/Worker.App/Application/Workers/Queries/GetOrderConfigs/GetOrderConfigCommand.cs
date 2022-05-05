@@ -11,7 +11,7 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
 {
     public class GetOrderConfigCommand : IRequest<Response<GetOrderConfigResponse>>
     {
-        public Guid OrderId { get; set; }
+        public string OrderId { get; set; }
     }
 
     public class GetOrderConfigCommandHandler : IRequestHandler<GetOrderConfigCommand, Response<GetOrderConfigResponse>>

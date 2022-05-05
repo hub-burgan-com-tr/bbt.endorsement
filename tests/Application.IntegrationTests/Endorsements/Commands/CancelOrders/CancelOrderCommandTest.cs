@@ -1,4 +1,5 @@
 ﻿using Application.Endorsements.Commands.CancelOrders;
+using Application.IntegrationTests.Services;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ namespace Application.IntegrationTests.Endorsements.Commands.CancelOrders
 
     public class CancelOrderCommandTest:TestBase
     {
-        [Test]
-        [TestCase("1beecf76-5529-4309-97fe-39df9e917bd3")]
-        public async Task CancelOrderTest(string orderId)
+        [TestCaseSource(typeof(EndorsementService), nameof(EndorsementService.CancelOrderTestData))]
+
+        public async Task CancelOrderTest(CancelOrderCommand request)
         {
-            var response = await SendAsync(new CancelOrderCommand { orderId = orderId });
-            Assert.IsNotNull(orderId);
+            var response = await SendAsync(request);
+            Assert.IsNotNull(response.Data);
         }
     }
 }

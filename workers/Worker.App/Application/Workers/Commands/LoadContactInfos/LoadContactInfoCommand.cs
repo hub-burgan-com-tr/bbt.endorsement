@@ -7,7 +7,7 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
 {
     public class LoadContactInfoCommand : IRequest<Response<LoadContactInfoResponse>>
     {
-        public Guid InstanceId { get; set; }
+        public string InstanceId { get; set; }
     }
 
     public class LoadContactInfoCommandHandler : IRequestHandler<LoadContactInfoCommand, Response<LoadContactInfoResponse>>
@@ -25,7 +25,7 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
         {
             var order = _context.Orders
                 .Include(x => x.Customer)
-                .Where(x => x.OrderId == request.InstanceId.ToString())
+                .Where(x => x.OrderId == request.InstanceId)
                 .FirstOrDefault();
             if (order == null)
                 return Response<LoadContactInfoResponse>.NotFoundException("Order not found", 404);

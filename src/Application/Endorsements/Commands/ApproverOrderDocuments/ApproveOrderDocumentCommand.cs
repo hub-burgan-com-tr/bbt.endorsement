@@ -9,7 +9,7 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
 {
     public class ApproveOrderDocumentCommand : IRequest<Response<bool>>
     {
-        public Guid OrderId { get; set; }
+        public string OrderId { get; set; }
 
         public List<ApproveOrderDocument> Documents { get; set; }
     }
@@ -27,11 +27,11 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
         {
             var model = new ContractModel
             {
-                InstanceId = request.OrderId,
+                OrderId = request.OrderId,
                 Documents = request.Documents               
             };
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });          
-            var response = await _zeebe.SendMessage(model.InstanceId.ToString(), "ApproveData", payload);
+            var response = await _zeebe.SendMessage(model.OrderId, "ApproveData", payload);
             return Response<bool>.Success(true, 200);
         }
     }

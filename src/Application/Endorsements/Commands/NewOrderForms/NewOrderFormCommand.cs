@@ -33,7 +33,7 @@ namespace Application.Endorsements.Commands.NewOrderForms
             NewOrderFormCommandValidator validator = new NewOrderFormCommandValidator();
             ValidationResult result = validator.Validate(request);
             validator.ValidateAndThrow(request);
-            var instanceId = request.Request.Id;
+            var orderId = request.Request.Id;
 
             var config = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == request.Request.FormId);
 
@@ -48,7 +48,7 @@ namespace Application.Endorsements.Commands.NewOrderForms
                 StartFormRequest = request.Request,
                 FormType = request.FormType,
                 Device = false,
-                InstanceId = instanceId,
+                OrderId = orderId,
                 ExpireInMinutes = expireInMinutes,
                 RetryFrequence = retryFrequence,
                 MaxRetryCount = config.MaxRetryCount,
@@ -56,9 +56,9 @@ namespace Application.Endorsements.Commands.NewOrderForms
             };
             
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            var response = await _zeebe.SendMessage(instanceId.ToString(), "contact_approval_contract_new", payload);
+            var response = await _zeebe.SendMessage(orderId, "contact_approval_contract_new", payload);
 
-            return Response<NewOrderFormResponse>.Success(new NewOrderFormResponse { InstanceId = instanceId }, 200);
+            return Response<NewOrderFormResponse>.Success(new NewOrderFormResponse { InstanceId = orderId }, 200);
 
         }
     }
