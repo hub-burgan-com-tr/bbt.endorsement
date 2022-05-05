@@ -14,13 +14,27 @@ import {ApprovalsIWantNewFormComponent} from './approvals-i-want-new-form/approv
 import {FormioAppConfig, FormioModule} from "@formio/angular";
 import {AppConfig} from "../../../../formio-config";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {AuthoryGuard} from "../../_helpers/authory.guard";
 
 const routes: Routes = [
   {path: '', component: ApprovalsIWantComponent},
   {path: 'detail', component: ApprovalsIWantDetailComponent},
-  {path: 'new-order', component: ApprovalsIWantNewOrderComponent},
-  {path: 'new-order-detail', component: ApprovalsIWantNewOrderDetailComponent},
-  {path: 'new-form', component: ApprovalsIWantNewFormComponent},
+  {
+    path: 'new-order', component: ApprovalsIWantNewOrderComponent,
+    data: {role: 'isNewFormCreator'},
+    canActivate: [AuthoryGuard]
+  },
+  {
+    path: 'new-order-detail', component: ApprovalsIWantNewOrderDetailComponent,
+    data: {role: 'isNewFormCreator'},
+    canActivate: [AuthoryGuard]
+  },
+  {
+    path: 'new-form',
+    component: ApprovalsIWantNewFormComponent,
+    data: {role: 'isReadyFormCreator'},
+    canActivate: [AuthoryGuard]
+  },
 ]
 
 @NgModule({
@@ -31,16 +45,16 @@ const routes: Routes = [
     ApprovalsIWantNewOrderDetailComponent,
     ApprovalsIWantNewFormComponent
   ],
-    imports: [
-        SharedModule,
-        CommonModule,
-        RouterModule.forChild(routes),
-        NgxSmartModalModule.forRoot(),
-        FormsModule,
-        ReactiveFormsModule,
-        FormioModule,
-        NgSelectModule
-    ],
+  imports: [
+    SharedModule,
+    CommonModule,
+    RouterModule.forChild(routes),
+    NgxSmartModalModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule,
+    FormioModule,
+    NgSelectModule
+  ],
   providers: [
     {provide: FormioAppConfig, useValue: AppConfig}
   ]

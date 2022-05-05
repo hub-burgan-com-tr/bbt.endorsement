@@ -16,6 +16,7 @@ import {DownloadLinkComponent} from "../components/download-link/download-link.c
 import {RenderFileComponent} from "../components/render-file/render-file.component";
 import {PersonSearchComponent} from "../components/person-search/person-search.component";
 import {FormsModule} from "@angular/forms";
+import {HighOrderComponent} from "../components/high-order/high-order.component";
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {FormsModule} from "@angular/forms";
     StateClassPipe,
     DownloadLinkComponent,
     RenderFileComponent,
-    PersonSearchComponent
+    PersonSearchComponent,
+    HighOrderComponent
   ],
   imports: [CommonModule, RouterModule, FormsModule],
   exports: [
@@ -46,7 +48,8 @@ import {FormsModule} from "@angular/forms";
     StateClassPipe,
     DownloadLinkComponent,
     RenderFileComponent,
-    PersonSearchComponent
+    PersonSearchComponent,
+    HighOrderComponent
   ]
 })
 export class SharedModule {

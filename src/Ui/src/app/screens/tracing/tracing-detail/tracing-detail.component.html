@@ -26,9 +26,13 @@
   <div class="box mb-4 py-3" *ngIf="data">
     <div class="px-15px">
       <div class="row">
-        <div class="col-8">
+        <div class="col">
           <div>Başlık</div>
           <p class="fs-18 fw-600">{{data.title}}</p>
+        </div>
+        <div class="col">
+          <div>Onay İsteyen</div>
+          <p class="fs-18 fw-600">{{data.approver}}</p>
         </div>
         <div class="col">
           <div>Müşteri</div>

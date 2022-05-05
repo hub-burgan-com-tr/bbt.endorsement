@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NewOrderFormService} from "../../services/new-order-form.service";
 import {Subject, takeUntil} from "rxjs";
+import {AuthService} from "../../services/auth.service";
+import {User} from "../../models/user";
 
 @Component({
   selector: 'app-main-content-button-group',
@@ -10,8 +12,10 @@ import {Subject, takeUntil} from "rxjs";
 export class MainContentButtonGroupComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   data;
+  user: User;
 
-  constructor(private newOrderFormService: NewOrderFormService) {
+  constructor(private newOrderFormService: NewOrderFormService, private authService: AuthService) {
+    this.user = this.authService.currentUserValue;
   }
 
   ngOnInit(): void {

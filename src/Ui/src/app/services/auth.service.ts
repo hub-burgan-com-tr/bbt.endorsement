@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {ApiPaths} from "../models/api-paths";
-import {ApiBaseResponseModel} from "../models/api-base-response.model";
 import {BehaviorSubject, map, Observable} from "rxjs";
 import {User} from "../models/user";
 
@@ -31,9 +30,10 @@ export class AuthService {
       return user;
     }));
   }
+
   logout() {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
-    window.location.reload();
+    location.reload();
   }
 }
