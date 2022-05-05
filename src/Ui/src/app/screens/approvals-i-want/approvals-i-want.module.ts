@@ -14,7 +14,7 @@ import {ApprovalsIWantNewFormComponent} from './approvals-i-want-new-form/approv
 import {FormioAppConfig, FormioModule} from "@formio/angular";
 import {AppConfig} from "../../../../formio-config";
 import {NgSelectModule} from "@ng-select/ng-select";
-import {AuthGuard} from "../../_helpers/auth.guard";
+import {AuthoryGuard} from "../../_helpers/authory.guard";
 
 const routes: Routes = [
   {path: '', component: ApprovalsIWantComponent},
@@ -22,18 +22,18 @@ const routes: Routes = [
   {
     path: 'new-order', component: ApprovalsIWantNewOrderComponent,
     data: {role: 'isNewFormCreator'},
-    canActivate: [AuthGuard]
+    canActivate: [AuthoryGuard]
   },
   {
     path: 'new-order-detail', component: ApprovalsIWantNewOrderDetailComponent,
     data: {role: 'isNewFormCreator'},
-    canActivate: [AuthGuard]
+    canActivate: [AuthoryGuard]
   },
   {
     path: 'new-form',
     component: ApprovalsIWantNewFormComponent,
     data: {role: 'isReadyFormCreator'},
-    canActivate: [AuthGuard]
+    canActivate: [AuthoryGuard]
   },
 ]
 

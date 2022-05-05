@@ -12,7 +12,7 @@ import {AuthService} from "../services/auth.service";
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthoryGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {
   }
 
@@ -20,9 +20,18 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const currentUser = this.authService.currentUserValue;
-    if (currentUser)
-      return true;
-    this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
-    return false;
+    let hasAuthory = true;
+    if (route.data.role) {
+      for (let name in currentUser.authory) {
+        if (name.indexOf(route.data.role) === 0) {
+          hasAuthory = currentUser.authory[name];
+        }
+      }
+    }
+    if (!hasAuthory) {
+      this.router.navigate(['/']);
+      return false;
+    }
+    return true;
   }
 }
