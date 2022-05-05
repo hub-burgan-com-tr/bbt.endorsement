@@ -14,7 +14,7 @@ public class ContractModel
     public OrderPerson Person { get; set; }
     public Form FormType { get; set; }
 
-    public string OrderId { get; set; }
+    public string InstanceId { get; set; }
     public bool Device { get; set; }
 
     public bool Approved { get; set; }

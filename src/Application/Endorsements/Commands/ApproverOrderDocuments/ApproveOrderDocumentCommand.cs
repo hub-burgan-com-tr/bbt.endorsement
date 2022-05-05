@@ -27,11 +27,11 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
         {
             var model = new ContractModel
             {
-                OrderId = request.OrderId,
+                InstanceId = request.OrderId,
                 Documents = request.Documents               
             };
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });          
-            var response = await _zeebe.SendMessage(model.OrderId, "ApproveData", payload);
+            var response = await _zeebe.SendMessage(model.InstanceId, "ApproveData", payload);
             return Response<bool>.Success(true, 200);
         }
     }

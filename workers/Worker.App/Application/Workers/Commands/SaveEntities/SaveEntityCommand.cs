@@ -186,7 +186,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var personId = GetPersonId(person);
             var order = new Order
             {
-                OrderId = startRequest.Id.ToString(),
+                OrderId = startRequest.Id,
                 DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999a62b",
                 ProcessInstanceKey = processInstanceKey,
                 State = OrderState.Pending.ToString(),
