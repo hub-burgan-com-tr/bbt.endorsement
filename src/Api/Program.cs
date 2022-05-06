@@ -24,6 +24,22 @@ if (environment.EnvironmentName == "Development")
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
+else if (environment.EnvironmentName == "Prod")
+    Configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+else if (environment.EnvironmentName == "Test")
+    Configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
 else
     Configuration = builder
         .Configuration
