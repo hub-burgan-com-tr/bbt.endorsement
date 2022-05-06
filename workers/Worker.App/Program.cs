@@ -28,6 +28,34 @@ if (environment.EnvironmentName == "Development")
        .ReadFrom.Configuration(configuration)
        .CreateLogger();
 }
+else if (environment.EnvironmentName == "Prod")
+{
+    var configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(configuration)
+       .CreateLogger();
+}
+else if (environment.EnvironmentName == "Test")
+{
+    var configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+       .ReadFrom.Configuration(configuration)
+       .CreateLogger();
+}
 else
 {
     var configuration = builder
