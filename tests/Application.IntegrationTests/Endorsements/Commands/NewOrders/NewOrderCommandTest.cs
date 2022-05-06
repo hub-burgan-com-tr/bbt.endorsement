@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 using static Application.IntegrationTests.Testing;
 
-public class NewOrderCommandTests : TestBase
+public class NewOrderCommandTest : TestBase
 {
     [TestCaseSource(typeof(EndorsementService), nameof(EndorsementService.NewOrderTestData))]
 
