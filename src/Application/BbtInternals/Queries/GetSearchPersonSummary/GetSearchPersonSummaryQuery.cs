@@ -26,7 +26,9 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
                 CitizenshipNumber = x.CitizenshipNumber,
                 First = x.Name.First,
                 Last = x.Name.Last,
-                ClientNumber=x.ClientNumber
+                ClientNumber=x.ClientNumber,
+                IsCustomer=x.IsCustomer,
+             Authory=x.IsCustomer==false?new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval=x.Authory.IsBranchApproval,IsReadyFormCreator=x.Authory.IsReadyFormCreator,IsNewFormCreator=x.Authory.IsNewFormCreator,IsFormReader=x.Authory.IsFormReader,IsBranchFormReader=x.Authory.IsBranchFormReader}:null,
             });
             return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
         }

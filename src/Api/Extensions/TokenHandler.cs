@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -15,15 +16,15 @@ public class TokenHandler
         Configuration = configuration;
     }
 
-    public Token CreateAccessToken(UserModel user)
+    public Token CreateAccessToken(GetSearchPersonSummaryDto user)
     {
         var tokenInstance = new Token();
         var claims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),
                 new Claim("CitizenshipNumber",user.CitizenshipNumber.ToString()),
                 new Claim("ClientNumber",user.ClientNumber.ToString()),
-                new Claim("First",user.Name.First.ToString()),
-                new Claim("Last",user.Name.Last.ToString()),
+                new Claim("First",user.First.ToString()),
+                new Claim("Last",user.Last.ToString()),
                 new Claim("IsCustomer",user.IsCustomer.ToString())
             };
 
@@ -33,8 +34,8 @@ public class TokenHandler
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),
                 new Claim("CitizenshipNumber",user.CitizenshipNumber.ToString()),
                 new Claim("ClientNumber",user.ClientNumber.ToString()),
-                new Claim("First",user.Name.First.ToString()),
-                new Claim("Last",user.Name.Last.ToString()),
+                new Claim("First",user.First.ToString()),
+                new Claim("Last",user.Last.ToString()),
                 new Claim("IsCustomer",user.IsCustomer.ToString()),
                 new Claim("IsBranchApproval",user.Authory.IsBranchApproval.ToString()),
                 new Claim("IsBranchFormReader",user.Authory.IsBranchFormReader.ToString()),

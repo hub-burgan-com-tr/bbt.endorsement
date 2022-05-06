@@ -12,6 +12,10 @@ namespace Application.BbtInternals.Models
 
         [JsonProperty("name")]
         public Name Name { get; set; }
+        [JsonProperty("iscustomer")]
+        public bool IsCustomer { get; set; }
+        [JsonProperty("authory")]
+        public AuthoryModel Authory { get; set; }
 
         [JsonProperty("gsmPhones")]
         public GsmPhone[] GsmPhones { get; set; }
@@ -52,4 +56,18 @@ namespace Application.BbtInternals.Models
         [JsonProperty("last")]
         public string Last { get; set; }
     }
+    public class AuthoryModel
+    {
+        [JsonProperty("isreadyformcreator")]
+        public bool IsReadyFormCreator { get; set; } // Form ile Emir Oluşturma
+        [JsonProperty("isnewformcreator")]
+        public bool IsNewFormCreator { get; set; } //Yeni Onay Emri Oluşturma
+        [JsonProperty("isformreader")]
+        public bool IsFormReader { get; set; } // Tüm Onay Emirlerini İzleyebilir
+        [JsonProperty("isbranchformreader")]
+        public bool IsBranchFormReader { get; set; } //Farklı Şube Onay İsteme
+        [JsonProperty("isbranchapproval")]
+        public bool IsBranchApproval { get; set; } //Farklı Şube Onay Listeleme
+    }
+
 }

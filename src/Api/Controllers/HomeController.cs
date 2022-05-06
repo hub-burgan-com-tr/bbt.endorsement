@@ -1,4 +1,5 @@
 ﻿using Api.Extensions;
+using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -25,17 +26,19 @@ namespace Api.Controllers
         [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<UserModel> Login(string name)
+        public async Task<GetSearchPersonSummaryDto> Login(string name)
         {
-            var users = GetUsers();
-            var user = users.FirstOrDefault(x => (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase));
 
-            if (user != null)
+            var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
+      
+            if (response != null&&response.Data.Persons.Any())
             {
+                var result = response.Data.Persons.Select(x => new GetSearchPersonSummaryDto {ClientNumber=x.ClientNumber,Token="", First = x.First, Last = x.Last, CitizenshipNumber = x.CitizenshipNumber, IsCustomer = x.IsCustomer, Authory = x.Authory }).FirstOrDefault();
                 TokenHandler tokenHandler = new TokenHandler(_configuration);
-                Token token = tokenHandler.CreateAccessToken(user);
-                user.Token = token.AccessToken;
-                return user;
+                Token token = tokenHandler.CreateAccessToken(result);
+                result.Token = token.AccessToken;
+                return result;
+                
             }
             return null;
         }
@@ -114,6 +117,7 @@ namespace Api.Controllers
                 public bool IsFormReader { get; set; } // Tüm Onay Emirlerini İzleyebilir
                 public bool IsBranchFormReader { get; set; } //Farklı Şube Onay İsteme
                 public bool IsBranchApproval { get; set; } //Farklı Şube Onay Listeleme
-            } }
+            }
+        }
     }
 }
