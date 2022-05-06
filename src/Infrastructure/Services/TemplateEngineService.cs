@@ -45,6 +45,7 @@ namespace Infrastructure.Services
 
         private string HtmlReplace(string content)
         {
+
             var data = content.Replace(@"\""", String.Empty);
             data = data.Replace("\"", String.Empty);
             data = data.Replace(@"\r\n", String.Empty);
