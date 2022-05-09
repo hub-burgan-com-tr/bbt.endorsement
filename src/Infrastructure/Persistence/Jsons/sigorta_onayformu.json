@@ -84,37 +84,37 @@
       "values": [
         {
           "label": "Konut Eþya",
-          "value": "esya",
+          "value": "data.sigortaTuru.esya",
           "shortcut": ""
         },
         {
           "label": "Konut",
-          "value": "konut",
+          "value": "data.sigortaTuru.konut",
           "shortcut": ""
         },
         {
           "label": "DASK",
-          "value": "dask",
+          "value": "data.sigortaTuru.dask",
           "shortcut": ""
         },
         {
           "label": "Kasko",
-          "value": "kasko",
+          "value": "data.sigortaTuru.kasko",
           "shortcut": ""
         },
         {
           "label": "Trafik",
-          "value": "trafik",
+          "value": "data.sigortaTuru.trafik",
           "shortcut": ""
         },
         {
           "label": "Ýþyeri",
-          "value": "isyeri",
+          "value": "data.sigortaTuru.isyeri",
           "shortcut": ""
         },
         {
           "label": "Diðer",
-          "value": "diger",
+          "value": "data.sigortaTuru.diger",
           "shortcut": ""
         }
       ],
