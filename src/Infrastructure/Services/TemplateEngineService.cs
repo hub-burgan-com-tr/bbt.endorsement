@@ -41,14 +41,11 @@ namespace Infrastructure.Services
         }
         private string PDFReplace(string content)
         {
-
-            var data = content.Replace("", String.Empty);
-           
+            var data = content.Replace("", String.Empty);          
             return data;
         }
         private string HtmlReplace(string content)
         {
-
             var data = content.Replace(@"\""", String.Empty);
             data = data.Replace("\"", String.Empty);
             data = data.Replace(@"\r\n", String.Empty);
