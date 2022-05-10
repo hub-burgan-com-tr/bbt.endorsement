@@ -23,6 +23,8 @@ namespace Domain.Entities
         [MaxLength(250)]
         [Required]
         public string Description { get; set; }
+        [Required]
+        public bool IsCustomer { get; set; }
         public virtual Document Document { get; set; }
         public virtual Order Order { get; set; }
     }

@@ -99,6 +99,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
+                InsuranceType=startFormRequest.InsuranceType,
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
