@@ -31,7 +31,9 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         var html = "";
         if(form.Type == ContentType.HTML.ToString())
         {
-            var response = await _templateEngineService.HtmlRender(form.TemplateName, request.Content);
+            //var response = await _templateEngineService.HtmlRender(form.TemplateName, request.Content);
+            var response = await _templateEngineService.PdfRender(form.TemplateName, request.Content);
+
             html = response.Data;
         }
         else if(form.Type == ContentType.PDF.ToString())
