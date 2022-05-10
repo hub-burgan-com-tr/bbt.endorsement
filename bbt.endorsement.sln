@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dms", "dms", "{E1C34C94-069
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dms.Integration.Infrastructure", "dms\Dms.Integration.Infrastructure\Dms.Integration.Infrastructure.csproj", "{A4F7B619-1F4D-480C-AB51-03CCC05F89C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dms.Integration.Api", "dms\Dms.Integration.Api\Dms.Integration.Api.csproj", "{49FDD8E1-D278-48E2-B669-D1CCC1DBB74A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{A4F7B619-1F4D-480C-AB51-03CCC05F89C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4F7B619-1F4D-480C-AB51-03CCC05F89C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4F7B619-1F4D-480C-AB51-03CCC05F89C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49FDD8E1-D278-48E2-B669-D1CCC1DBB74A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49FDD8E1-D278-48E2-B669-D1CCC1DBB74A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49FDD8E1-D278-48E2-B669-D1CCC1DBB74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49FDD8E1-D278-48E2-B669-D1CCC1DBB74A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{1BA1A49E-1D43-4715-8628-72D384EF87CB} = {237589C1-E38D-4A7A-AF9E-0AB7826E4DA4}
 		{D8117FA0-2C34-4C53-B5F4-0BC2E8AF5C46} = {75EE84B5-773B-41E1-9085-717E95BA3DCA}
 		{A4F7B619-1F4D-480C-AB51-03CCC05F89C8} = {E1C34C94-0698-47B7-A637-BA6890383791}
+		{49FDD8E1-D278-48E2-B669-D1CCC1DBB74A} = {E1C34C94-0698-47B7-A637-BA6890383791}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FAD96C16-3097-4716-BF8A-C3E97C0C2501}

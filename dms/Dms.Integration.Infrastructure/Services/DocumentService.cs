@@ -1,6 +1,8 @@
 ﻿using Dms.Integration.Infrastructure.Document;
 using Dms.Integration.Infrastructure.DocumentServices;
+using Dms.Integration.Infrastructure.Extensions;
 using DmsIntegrationService;
+using Microsoft.Extensions.Configuration;
 using System.Text;
 
 namespace Dms.Integration.Infrastructure.Services;
@@ -18,9 +20,16 @@ public interface IDocumentService
 
 public class DocumentService : IDocumentService
 {
-    private readonly PdfConverterService _pdfConverterService;
+    private readonly IPdfConverterService _pdfConverterService;
     private readonly ServiceCaller _caller;
     private readonly string _url;
+
+    public DocumentService(IConfigurationRoot config, ServiceCaller caller, IPdfConverterService pdfConverterService)
+    {
+        _caller = caller;
+        _pdfConverterService = pdfConverterService;
+        _url = config.GetDMSServiceUrl();
+    }
 
     public string CreateDMSDocument(DocumentInfo document)
     {
