@@ -37,10 +37,16 @@ namespace Infrastructure.Services
             restRequest.AddHeader("Accept", "application/json");
             restRequest.AddStringBody(jsonData, DataFormat.Json);
             var response = await restClient.ExecutePostAsync(restRequest);
-            var responseContent = "data:application/pdf;base64," + response.Content;
+            var responseContent = "data:application/pdf;base64," + PDFReplace(response.Content);
             return Response<string>.Success(responseContent, 200);
         }
-    
+        private string PDFReplace(string content)
+        {
+
+            var data = content.Replace("", String.Empty);
+           
+            return data;
+        }
         private string HtmlReplace(string content)
         {
 
