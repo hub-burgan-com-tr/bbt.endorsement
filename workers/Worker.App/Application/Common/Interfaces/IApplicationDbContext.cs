@@ -13,7 +13,7 @@ namespace Worker.App.Application.Common.Interfaces
         DbSet<FormDefinitionAction> FormDefinitionActions { get; }
         DbSet<FormDefinitionTag> FormDefinitionTags { get; }
         DbSet<DocumentAction> DocumentActions { get; }
-        DbSet<Document> Documents { get; }
+        DbSet<Domain.Entities.Document> Documents { get; }
         DbSet<OrderHistory> OrderHistories { get; }
         DbSet<Person> Persons { get; }
         DbSet<Customer> Customers { get; }

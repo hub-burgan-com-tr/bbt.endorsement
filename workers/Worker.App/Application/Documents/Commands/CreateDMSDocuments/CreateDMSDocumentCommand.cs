@@ -82,7 +82,11 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
                 if(dmsRefId != null)
                 {
-
+                    var documentUpdate = _context.Documents.FirstOrDefault(x => x.DocumentId == document.DocumentId);
+                    if(documentUpdate != null)
+                    {
+                        
+                    }
                 }
             }
         }
