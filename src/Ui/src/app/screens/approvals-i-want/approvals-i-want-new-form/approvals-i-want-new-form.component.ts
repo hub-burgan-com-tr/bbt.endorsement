@@ -107,7 +107,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       iTypes = Object.keys(e.data.sigortaTuru).map(k => {
         return {text: k, data: e.data.sigortaTuru[k]};
       }).filter(i => i.data == true).map(m => {
-        return m.text + ':' + m.data;
+        return m.text;
       }).join(',');
       if (!this.person) {
         return;
