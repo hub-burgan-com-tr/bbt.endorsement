@@ -62,11 +62,10 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
                     },
                     Contents = new List<DocumentContent>()
                 };
+
                 var data = document.Content.Split(',');
                 var content = data[1];
-
-                var contentBtye = System.Convert.FromBase64String(content);
-                //var content = System.Text.Encoding.UTF8.GetString(contentBtye);
+                var contentBtye = Convert.FromBase64String(content);
                 dmsDocument.Contents.Add(new DocumentContent
                 {
                     Content = contentBtye,
