@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Dms.Integration.Infrastructure.Models;
 
-public class DocumentModel : DocumentBase
+public class DmsDocument : DocumentBase
 {
     [MaxLength(36)]
     public string DocumentId { get; set; }
@@ -33,6 +33,6 @@ public class DocumentModel : DocumentBase
     /// </summary>
     public string PhysicalFileDeliverNote { get; set; }
 
-    public PersonModel Owner { get; set; }
+    public DmsPerson Owner { get; set; }
 }
 
