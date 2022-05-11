@@ -33,8 +33,16 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         if(form.Type == ContentType.HTML.ToString())
         {
             var response = await _templateEngineService.HtmlRender(form.TemplateName, request.Content);
-            byte[] contentBytes = Encoding.ASCII.GetBytes(response.Data);
-            html = Convert.ToBase64String(contentBytes);
+
+            var plainTextBytes = Encoding.UTF8.GetBytes(response.Data);
+            var encode = Convert.ToBase64String(plainTextBytes);
+
+            var base64EncodedBytes = System.Convert.FromBase64String(encode);
+            var decode = Encoding.UTF8.GetString(base64EncodedBytes);
+
+            var data = "data:text/html;base64," + encode;
+
+            html = data;
         }
         else if(form.Type == ContentType.PDF.ToString())
         {
