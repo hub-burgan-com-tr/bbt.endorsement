@@ -29,7 +29,7 @@ public static class FormDefinitionSeed
                 RetryFrequence = 15,
                 Mode = "Completed",
                 Url = "",
-                Type = ContentType.PDF.ToString(),
+                Type = ContentType.HTML.ToString(),
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
 
