@@ -40,11 +40,7 @@ namespace Infrastructure.Services
             var responseContent = "data:application/pdf;base64," + response.Content;
             return Response<string>.Success(responseContent, 200);
         }
-        private string PDFReplace(string content)
-        {
-            var data = content.Replace("\"", String.Empty);
-            return data;
-        }
+      
         private string HtmlReplace(string content)
         {
             var data = content.Replace(@"\""", String.Empty);
