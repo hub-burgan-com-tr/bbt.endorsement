@@ -24,8 +24,7 @@ namespace Domain.Entities
         public string Title { get; set; }
         [MaxLength(50)]
         public string State { get; set; }
-        [MaxLength(500)]
-        public string InsuranceType { get; set; }
+      
         public long ProcessInstanceKey { get; set; }
 
 

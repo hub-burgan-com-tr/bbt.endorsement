@@ -30,6 +30,12 @@ namespace Domain.Entities
         public string State { get; set; }
         [MaxLength(250)]
         public string MimeType { get; set; }
+        [MaxLength(500)]
+        public string InsuranceType { get; set; }
+        [MaxLength(50)]
+        public string DmsReferenceId { get; set; }
+
+
         public virtual FormDefinition FormDefinition { get; set; }
         public virtual Order Order { get; set; }
 
