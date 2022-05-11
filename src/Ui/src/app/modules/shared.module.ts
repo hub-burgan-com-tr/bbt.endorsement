@@ -9,7 +9,6 @@ import {
 import {RouterModule} from "@angular/router";
 import {OnlyNumberDirective} from "../directives/only-number.directive";
 import {SafePipe} from "../pipes/safe.pipe";
-import {SafeHtmlPipe} from "../pipes/safe-html.pipe";
 import {StatePipe} from "../pipes/state.pipe";
 import {StateClassPipe} from "../pipes/state-class.pipe";
 import {DownloadLinkComponent} from "../components/download-link/download-link.component";
@@ -27,7 +26,6 @@ import {HighOrderComponent} from "../components/high-order/high-order.component"
     MainContentButtonGroupComponent,
     OnlyNumberDirective,
     SafePipe,
-    SafeHtmlPipe,
     StatePipe,
     StateClassPipe,
     DownloadLinkComponent,
@@ -43,7 +41,6 @@ import {HighOrderComponent} from "../components/high-order/high-order.component"
     MainContentButtonGroupComponent,
     OnlyNumberDirective,
     SafePipe,
-    SafeHtmlPipe,
     StatePipe,
     StateClassPipe,
     DownloadLinkComponent,
