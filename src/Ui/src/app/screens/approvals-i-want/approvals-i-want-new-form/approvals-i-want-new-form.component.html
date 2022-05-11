@@ -101,7 +101,7 @@
       </div>
     </div>
     <div class="button-group d-flex align-items-center justify-content-center mt-5">
-      <button class="btn btn-primary px-5" (click)="next()">Kaydet</button>
+      <button class="btn btn-primary px-5" (click)="next()" [disabled]="sending">Kaydet</button>
     </div>
   </form>
 </app-main-content>

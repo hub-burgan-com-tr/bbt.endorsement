@@ -33,6 +33,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   dropdownData: any;
   formDropdown: any;
   tags: any;
+  sending: boolean = false;
 
   constructor(private fb: FormBuilder,
               private modal: NgxSmartModalService,
@@ -100,8 +101,17 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   submitForm(e) {
-    if (!this.person) {
-      return;
+    this.sending = true;
+    let iTypes = '';
+    if (e.data.sigortaTuru) {
+      iTypes = Object.keys(e.data.sigortaTuru).map(k => {
+        return {text: k, data: e.data.sigortaTuru[k]};
+      }).filter(i => i.data == true).map(m => {
+        return m.text + ':' + m.data;
+      }).join(',');
+      if (!this.person) {
+        return;
+      }
     }
     if (this.formGroup.valid) {
       const model = new NewApprovalOrderForm(<IApprover>{
@@ -113,9 +123,10 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         processNo: this.f.processNo.value,
         tagId: this.f.tag.value,
         formId: this.f.form.value,
-      }, this.formTitle);
+      }, this.formTitle, iTypes);
       this.newOrderFormService.save(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.modal.open('success');
+        this.sending = false;
       })
     }
   }
