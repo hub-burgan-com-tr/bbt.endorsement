@@ -2,6 +2,7 @@
 using Application.Common.Models;
 using Domain.Enums;
 using MediatR;
+using System.Text;
 
 namespace Application.TemplateEngines.Commands.Renders;
 
@@ -31,10 +32,9 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         var html = "";
         if(form.Type == ContentType.HTML.ToString())
         {
-            //var response = await _templateEngineService.HtmlRender(form.TemplateName, request.Content);
-            var response = await _templateEngineService.PdfRender(form.TemplateName, request.Content);
-
-            html = response.Data;
+            var response = await _templateEngineService.HtmlRender(form.TemplateName, request.Content);
+            byte[] contentBytes = Encoding.ASCII.GetBytes(response.Data);
+            html = Convert.ToBase64String(contentBytes);
         }
         else if(form.Type == ContentType.PDF.ToString())
         {

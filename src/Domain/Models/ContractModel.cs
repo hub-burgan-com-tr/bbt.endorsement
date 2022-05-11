@@ -84,20 +84,20 @@ public class DocumentActionClass
     public ActionType Type { get; set; }
 }
 
-
 public class OrderReference
 {
     public string Process { get; set; }
     public string State { get; set; }
     public string ProcessNo { get; set; }
     public CallbackClass Callback { get; set; }
-
 }
+
 public class CallbackClass
 {
     public CalbackMode Mode { get; set; }
     public string URL { get; set; }
 }
+
 public class OrderConfig
 {
     public int MaxRetryCount { get; set; }
@@ -108,7 +108,6 @@ public class OrderConfig
     public string RenotifyMessageSMS { get; set; }
     public string RenotifyMessagePush { get; set; }
 }
-
 
 public class StartFormRequest
 {
