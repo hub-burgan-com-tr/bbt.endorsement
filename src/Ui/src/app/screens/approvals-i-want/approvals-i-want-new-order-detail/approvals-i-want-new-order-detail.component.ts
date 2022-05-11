@@ -89,7 +89,6 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
 
   getPersonFromChild(person) {
     this.person = JSON.parse(person);
-    console.log(this.person);
   }
 
   initModel() {
