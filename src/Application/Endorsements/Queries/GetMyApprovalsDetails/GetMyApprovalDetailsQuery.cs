@@ -4,6 +4,7 @@ using Application.Endorsements.Commands.NewOrders;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace Application.Endorsements.Queries.GetMyApprovalsDetails
 {
@@ -33,7 +34,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                 {
                     Title = x.Title,
                     Documents=x.Documents.OrderByDescending(x=>x.Created).Select(x=>new OrderDocument { Name=x.Name,
-                    Content=x.Content,
+                    Content=x.Type==ContentType.PlainText.ToString()? DecodeBase64(x.Content): x.Content,
                     OrderState=x.Order.State,
                     MimeType=x.MimeType,
                     State=x.State== ActionType.Approve.ToString()?true:false,
@@ -41,10 +42,18 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                        Actions=x.DocumentActions.Where(x=>x.IsSelected).Select(y=>new Action { Checked = y.IsSelected, Title = y.Title, DocumentId = x.DocumentId }).FirstOrDefault()}).ToList(),
                     History = x.OrderHistories.OrderByDescending(x=>x.Created).Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
 
-                }).FirstOrDefault();
+                }).ToList();
 
 
-            return Response<GetMyApprovalDetailsDto>.Success(response, 200);
+            return Response<GetMyApprovalDetailsDto>.Success(response.FirstOrDefault(), 200);
+        }
+        public  string DecodeBase64(string plainText)
+        {
+            var text = plainText.Replace("data:text/plain;base64,", String.Empty);
+            var valueBytes = System.Convert.FromBase64String(text);
+            return Encoding.UTF8.GetString(valueBytes);
+
+
         }
     }
 }
