@@ -2,7 +2,7 @@
 
 namespace Dms.Integration.Infrastructure.Models;
 
-public class PersonModel
+public class DmsPerson
 {
     [MaxLength(36)]
     public string PersonId { get; set; }
