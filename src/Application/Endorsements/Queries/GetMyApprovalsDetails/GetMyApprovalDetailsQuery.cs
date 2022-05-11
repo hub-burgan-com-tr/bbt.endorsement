@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Application.Services;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                 {
                     Title = x.Title,
                     Documents=x.Documents.OrderByDescending(x=>x.Created).Select(x=>new OrderDocument { Name=x.Name,
-                    Content=x.Type==ContentType.PlainText.ToString()? DecodeBase64(x.Content): x.Content,
+                    Content=x.Type==ContentType.PlainText.ToString()? DecodeBase64Services.DecodeBase64(x.Content): x.Content,
                     OrderState=x.Order.State,
                     MimeType=x.MimeType,
                     State=x.State== ActionType.Approve.ToString()?true:false,
@@ -44,16 +45,8 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
 
                 }).ToList();
 
-
             return Response<GetMyApprovalDetailsDto>.Success(response.FirstOrDefault(), 200);
         }
-        public  string DecodeBase64(string plainText)
-        {
-            var text = plainText.Replace("data:text/plain;base64,", String.Empty);
-            var valueBytes = System.Convert.FromBase64String(text);
-            return Encoding.UTF8.GetString(valueBytes);
-
-
-        }
+       
     }
 }

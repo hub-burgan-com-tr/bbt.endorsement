@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrders;
+using Application.Services;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
                 ExpireInMinutes = x.Config.ExpireInMinutes,
                 OrderState=x.State,
                 History = x.OrderHistories.OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
-                Documents = x.Documents.OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name,MimeType=x.MimeType, TypeName = x.Type ==ContentType.PlainText.ToString() ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.IsSelected).Title, Content = x.Content, Type = x.FileType }).ToList() }).FirstOrDefaultAsync();
+                Documents = x.Documents.OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name,MimeType=x.MimeType, TypeName = x.Type ==ContentType.PlainText.ToString() ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.IsSelected).Title, Content = x.Type == ContentType.PlainText.ToString() ? DecodeBase64Services.DecodeBase64(x.Content) : x.Content, Type = x.FileType }).ToList() }).FirstOrDefaultAsync();
             return Response<GetWatchApprovalDetailsDto>.Success(response, 200);
         }
     }

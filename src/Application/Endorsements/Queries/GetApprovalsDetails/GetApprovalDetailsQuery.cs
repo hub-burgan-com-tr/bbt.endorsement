@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Services;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
 
                     Documents = x.Documents.OrderByDescending(x => x.Created).Where(x => x.State == null).Select(y => new OrderDocument
                     {
-                        Content = y.Type == ContentType.PlainText.ToString() ? DecodeBase64(y.Content) : y.Content,
+                        Content = y.Type == ContentType.PlainText.ToString() ? DecodeBase64Services.DecodeBase64(y.Content) : y.Content,
                         Link = y.Name,
                         Name=y.Name,
                         Type=y.FileType,  
@@ -52,13 +53,6 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
             return Response<GetApprovalDetailsDto>.Success(response, 200);
         }
 
-        public static string DecodeBase64(string plainText)
-        {
-            var text = plainText.Replace("data:text/plain;base64,", String.Empty);
-            var valueBytes = System.Convert.FromBase64String(text);
-           return Encoding.UTF8.GetString(valueBytes);
-
-                    
-        }
+       
     }
 }
