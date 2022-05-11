@@ -80,6 +80,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Type = formDefinition.Type.ToString(),
                 FileType=formDefinition.Type.ToString(),
                 MimeType=formDefinition.Type.ToString()==ContentType.HTML.ToString()? "text/html": "application/pdf",
+                InsuranceType=startFormRequest.InsuranceType,
                 Created = _dateTime.Now,
                 DocumentActions = actions,
                 FormDefinitionId = startFormRequest.FormId
@@ -99,7 +100,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
-                InsuranceType=startFormRequest.InsuranceType,
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
