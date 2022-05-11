@@ -37,8 +37,8 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
             var plainTextBytes = Encoding.UTF8.GetBytes(response.Data);
             var encode = Convert.ToBase64String(plainTextBytes);
 
-            var base64EncodedBytes = System.Convert.FromBase64String(encode);
-            var decode = Encoding.UTF8.GetString(base64EncodedBytes);
+            //var base64EncodedBytes = System.Convert.FromBase64String(encode);
+            //var decode = Encoding.UTF8.GetString(base64EncodedBytes);
 
             var data = "data:text/html;base64," + encode;
 

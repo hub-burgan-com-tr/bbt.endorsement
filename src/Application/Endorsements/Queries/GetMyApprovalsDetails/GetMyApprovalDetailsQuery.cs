@@ -42,6 +42,8 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                     History = x.OrderHistories.OrderByDescending(x=>x.Created).Select(x => new GetMyApprovalDetailHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList()
 
                 }).FirstOrDefault();
+
+
             return Response<GetMyApprovalDetailsDto>.Success(response, 200);
         }
     }

@@ -4,6 +4,7 @@ using Worker.App.Application.Common.Interfaces;
 using Domain.Models;
 using Domain.Entities;
 using Domain.Enums;
+using System.Text;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -48,7 +49,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         {
             if (startFormRequest == null) return null;
 
-            var documents = new List<Document>();
+            var documents = new List<Domain.Entities.Document>();
 
             var formDefinition = _saveEntityService.GetFormDefinition(startFormRequest.FormId).Result;
             var config = new Config
@@ -72,7 +73,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 });
             }
 
-            documents.Add(new Document
+            documents.Add(new Domain.Entities.Document
             {
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
@@ -141,7 +142,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         {
             if (startRequest == null) return null;
 
-            var documents = new List<Document>();
+            var documents = new List<Domain.Entities.Document>();
             foreach (var item in startRequest.Documents)
             {
                 var actions = new List<DocumentAction>();
@@ -162,10 +163,17 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
                 string type = Enum.GetName(typeof(ContentType), item.Type);
 
-                documents.Add(new Document
+                var content = item.Content;
+                if(item.Type.ToString() == ((int)ContentType.PlainText).ToString())
+                {
+                    var plainTextBytes = Encoding.UTF8.GetBytes(content);
+                    content = "data:text/plain;base64," + Convert.ToBase64String(plainTextBytes);
+                }
+
+                documents.Add(new Domain.Entities.Document
                 {
                     DocumentId = Guid.NewGuid().ToString(),
-                    Content = item.Content,
+                    Content = content,
                     Name = item.Title,
                     Type = type,
                     FileType = item.Type.ToString() == ((int)ContentType.PlainText).ToString() ? ContentType.PlainText.ToString() : GetFileType(item.FileType),
