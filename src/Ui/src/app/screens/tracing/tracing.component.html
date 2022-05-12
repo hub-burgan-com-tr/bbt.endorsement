@@ -6,6 +6,9 @@
     <div class="alert alert-danger"
          *ngIf="ngForm.submitted &&formGroup.hasError('atLeastOneValueRequired')">Kriter girilmelidir
     </div>
+    <div class="alert alert-danger"
+         *ngIf="ngForm.submitted &&data && data.length===0&&!formGroup.hasError('atLeastOneValueRequired')">Listeleme için uygun kayıt bulunamadı.
+    </div>
     <form [formGroup]="formGroup" #ngForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col">
