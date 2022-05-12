@@ -34,7 +34,7 @@ public class DmsController : ControllerBase
             document.MimeType = "text/html";
         }
 
-        if (true)
+        if (false)
         {
             document.Content = "data:text/plain;base64,VGhlIOKAnFRleHQgdG8gQmFzZTY04oCdIGNvbnZlcnRlciBpcyBhIHNpbXBsZSBlbmNvZGVyIHRvb2wgdGhhdCBhbGxvd3MgeW91IHRvIGNvbnZlcnQgb25saW5lIHRleHQgdG8gQmFzZTY0ICh0aGF0IGlzLCBpdCBlbmNvZGVzIGFueSB0ZXh0dWFsIGNoYXJhY3RlcnMgaW50byBhIGJhc2ljIEFTQ0lJIHN0cmluZykuIElmIHlvdSBuZWVkIG1vcmUgZmVhdHVyZXMgYW5kIGJldHRlciBjdXN0b21pemF0aW9uIGZvciBlbmNvZGluZyB0ZXh0IHRvIEJhc2U2NCwgcGxlYXNlIHVzZSB0aGUgQmFzZTY0IGVuY29kZXIu";
             document.MimeType = "text/plain";
@@ -49,8 +49,8 @@ public class DmsController : ControllerBase
         };
         var customer = new CustomerModel
         {
-            CitizenshipNumber = 41002547834,
-            ClientNumber= 66360216
+            CitizenshipNumber = 31435279914,
+            ClientNumber= 60378298
         };
 
         var channelReferenceId = "";
@@ -60,7 +60,7 @@ public class DmsController : ControllerBase
 
         document.Definition = new DocumentDefinition
         {
-            DmsReferenceId = "1617",
+            DmsReferenceId = "1565",
             Key = DocumentDefinitionType.None
         };
 
