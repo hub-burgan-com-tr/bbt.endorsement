@@ -37,7 +37,9 @@ namespace Infrastructure.Services
             restRequest.AddStringBody(jsonData, DataFormat.Json);
             var response = await restClient.ExecutePostAsync(restRequest);
 
-            var responseContent = "data:application/pdf;base64," + response.Content;
+            var data = PDFReplace(response.Content);
+
+            var responseContent = "data:application/pdf;base64," + data;
             return Response<string>.Success(responseContent, 200);
         }
       
@@ -52,6 +54,14 @@ namespace Infrastructure.Services
             data = data.Replace("True", "X");
             data = data.Replace("false", String.Empty);
             data = data.Replace("False", String.Empty);
+            return data;
+        }
+
+
+        private string PDFReplace(string content)
+        {
+            var data = content.Replace(@"\""", String.Empty);
+            data = data.Replace("\"", String.Empty);
             return data;
         }
 

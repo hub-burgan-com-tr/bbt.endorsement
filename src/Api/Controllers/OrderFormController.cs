@@ -38,7 +38,12 @@ namespace Api.Controllers
         {
             request.Id = Guid.NewGuid().ToString();
 
-            var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
+            var content = request.Content.Replace("true", "\"X\"");
+            content = content.Replace("True", "\"X\"");
+            content = content.Replace("false", "\"\"");
+            content = content.Replace("False", "\"\"");
+
+            var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = content });
             if (form.Data != null)
                 request.Content = form.Data.Content;
 
