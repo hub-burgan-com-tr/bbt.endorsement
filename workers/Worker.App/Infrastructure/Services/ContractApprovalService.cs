@@ -15,6 +15,8 @@ using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Application.Workers.Commands.UpdateEntities;
 using Worker.App.Application.Workers.Queries.GetOrderConfigs;
 using Worker.App.Application.Workers.Queries.GetOrderStates;
+using Worker.App.Infrastructure.Services;
+using Worker.App.Models;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -32,12 +34,14 @@ public class ContractApprovalService : IContractApprovalService
     private static readonly string WorkerName = Environment.MachineName;
     private IServiceProvider _provider = null!;
     private ISender _mediator = null!;
+    private IMessagingService _messagingService = null!;
 
-    public ContractApprovalService(IZeebeService zeebeService, IServiceProvider provider)
+    public ContractApprovalService(IZeebeService zeebeService, IServiceProvider provider, IMessagingService messagingService = null)
     {
         _zeebeService = zeebeService;
         _provider = provider;
         _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
+        _messagingService = messagingService;
     }
 
     public void StartWorkers()
@@ -197,6 +201,43 @@ public class ContractApprovalService : IContractApprovalService
                 string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
+
+                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                if (person.Data.Person != null)
+                {
+                    if (person.Data.Person.Devices.Any())
+                    {
+                        var device = person.Data.Person.Devices.FirstOrDefault();
+                    }
+                    else
+                    {
+                        var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                        var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
+
+                        var messageRequest = new MessagingRequest
+                        {
+                            headerInfo = new HeaderInfo
+                            {
+                                sender = "AutoDetect"
+                            },
+                            content = @"Değerli Müşterimiz, ""belgeonay.burgan.com.tr"" linkine giriş yapıp, başvurunuza ilişkin belgeleri ""Onayımdakiler"" adımından onaylamanızı rica ederiz. Detaylı bilgi için 0 850 222 8 222 numaralı telefonumuzdan bizi arayabilirsiniz.  Mersis : 0140003231000116",
+                            contentType = "Private",
+                            phone = new Phone
+                            {
+                                countryCode = 90, // gsmPhone.County,
+                                prefix = 542, // gsmPhone.Prefix,
+                                number = 4729390, // gsmPhone.Number
+                            },
+                            customerNo = person.Data.Person.ClientNumber,
+                            smsType = "Fast",
+                            process = new Process
+                            {
+                                name = "Zeebe - Contract Approval - SendOtp"
+                            }
+                        };
+                        await _messagingService.SendSmsMessageAsync(messageRequest);
+                    }
+                }
 
                 var history = _mediator.Send(new CreateOrderHistoryCommand
                 {

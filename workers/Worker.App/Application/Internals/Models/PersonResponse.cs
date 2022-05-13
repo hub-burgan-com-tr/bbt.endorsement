@@ -5,7 +5,7 @@ namespace Worker.App.Application.Internals.Models
     public partial class PersonResponse
     {
         [JsonProperty("clientNumber")]
-        public long ClientNumber { get; set; }
+        public int ClientNumber { get; set; }
 
         [JsonProperty("citizenshipNumber")]
         public long CitizenshipNumber { get; set; }
