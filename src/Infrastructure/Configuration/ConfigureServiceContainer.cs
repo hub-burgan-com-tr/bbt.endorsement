@@ -3,6 +3,7 @@ using Infrastructure.InternalsServices;
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
+using Infrastructure.SsoServices;
 using Infrastructure.ZeebeServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,6 +44,7 @@ public static class ConfigureServiceContainer
         services.AddSingleton<IZeebeService, ZeebeService>();
         services.AddSingleton<IInternalsService, InternalsService>();
         services.AddSingleton<ITemplateEngineService, TemplateEngineService>();
+        services.AddSingleton<ISsoService, SsoService>();
     }
 
     public static void AddServices(this IServiceCollection services)
