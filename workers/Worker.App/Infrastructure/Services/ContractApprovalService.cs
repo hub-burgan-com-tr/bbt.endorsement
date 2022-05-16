@@ -222,7 +222,7 @@ public class ContractApprovalService : IContractApprovalService
                             },
                             content = @"Değerli Müşterimiz, ""belgeonay.burgan.com.tr"" linkine giriş yapıp, başvurunuza ilişkin belgeleri ""Onayımdakiler"" adımından onaylamanızı rica ederiz. Detaylı bilgi için 0 850 222 8 222 numaralı telefonumuzdan bizi arayabilirsiniz.  Mersis : 0140003231000116",
                             contentType = "Private",
-                            phone = new Phone
+                            phone = new SmsPhone
                             {
                                 countryCode = 90, // gsmPhone.County,
                                 prefix = 542, // gsmPhone.Prefix,
@@ -230,7 +230,7 @@ public class ContractApprovalService : IContractApprovalService
                             },
                             customerNo = person.Data.Person.ClientNumber,
                             smsType = "Fast",
-                            process = new Process
+                            process = new SmsProcess
                             {
                                 name = "Zeebe - Contract Approval - SendOtp"
                             }
