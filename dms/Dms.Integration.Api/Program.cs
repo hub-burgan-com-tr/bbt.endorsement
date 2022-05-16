@@ -1,3 +1,4 @@
+using Dms.Integration.Api.Services;
 using Document.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IConfigurationRoot>(provider => Configuration);
 
 builder.Services.AddInfrastructure(Configuration);
+
+builder.Services.AddSingleton<IMessagingService, MessagingService>();
 
 var app = builder.Build();
 
