@@ -1,6 +1,6 @@
 ﻿namespace Worker.App.Models;
 
-public class MessagingRequest
+public class SendSmsRequest
 {
     public HeaderInfo headerInfo { get; set; }
     public int customerNo { get; set; }
@@ -8,8 +8,8 @@ public class MessagingRequest
     public string contentType { get; set; }
     public string smsType { get; set; } //Alabileceği değerler Fast,Bulk 
     public string id { get; set; }
-    public Phone phone { get; set; }
-    public Process process { get; set; }
+    public SmsPhone phone { get; set; }
+    public SmsProcess process { get; set; }
 }
 
 public class HeaderInfo
@@ -24,14 +24,14 @@ public class HeaderInfo
 }
 
 
-public class Phone
+public class SmsPhone
 {
     public int countryCode { get; set; } //ülke kodu 90
     public int prefix { get; set; } //Gsm prefix 553,533 etc
     public int number { get; set; } // Telefon numarası
 }
 
-public class Process
+public class SmsProcess
 {
     public string name { get; set; } //İşlem programatik tetikleniyorsa program bilgisi
     public string itemId { get; set; }
@@ -39,7 +39,7 @@ public class Process
     public string identity { get; set; } //İşlemi bir kullanıcı tetikliyorsa user code bilgisi
 }
 
-public class MessagingResponse
+public class SendSmsResponse
 {
     public string txnId { get; set; }
     public string status { get; set; }

@@ -214,7 +214,7 @@ public class ContractApprovalService : IContractApprovalService
                         var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
                         var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
 
-                        var messageRequest = new MessagingRequest
+                        var messageRequest = new SendSmsRequest
                         {
                             headerInfo = new HeaderInfo
                             {
