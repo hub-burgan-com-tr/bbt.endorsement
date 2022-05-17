@@ -14,7 +14,7 @@ public static class FormDefinitionSeed
             return;
         if (!context.FormDefinitions.Any())
         {
-            var templateName = "sigorta_basvuruformu.txt";
+            var templateName = "tr-sigorta-basvuru-formu.txt";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
             var label = File.ReadAllText(path, Encoding.Default);
             var formdefinition = context.FormDefinitions.Add(new FormDefinition
@@ -32,6 +32,8 @@ public static class FormDefinitionSeed
                 Type = ContentType.PDF.ToString(),
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
+                DependecyRules = false,
+                DependencyFormId = Guid.NewGuid().ToString(),
 
             });                    
             formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });

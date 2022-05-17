@@ -16,11 +16,7 @@ namespace Domain.Entities
         public string PersonId { get; set; }
         [MaxLength(36)]
         public string CustomerId { get; set; }
-        [MaxLength(36)]
-        [Required]
-        public string DependencyFormId { get; set; }
-        [Required]
-        public bool DependecyRules { get; set; }
+   
 
         [MaxLength(36)]
         public string DocumentSystemId { get; set; }
@@ -29,7 +25,8 @@ namespace Domain.Entities
         public string Title { get; set; }
         [MaxLength(50)]
         public string State { get; set; }
-      
+       
+
         public long ProcessInstanceKey { get; set; }
 
 
