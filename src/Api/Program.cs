@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using Api.Extensions;
 using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
@@ -137,6 +138,9 @@ builder.Services.AddInfrastructure(builder);
 //builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 //builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
+
+StaticValuesExtensions.SetStaticValues(settings);
+
 var app = builder.Build();
 
 
