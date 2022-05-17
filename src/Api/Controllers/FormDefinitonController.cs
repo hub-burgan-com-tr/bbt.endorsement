@@ -1,5 +1,6 @@
 ﻿
 using Application.Common.Models;
+using Application.OrderForms.Commands.CreateFormInformations;
 using Application.OrderForms.Commands.UpdateFormInformations;
 using Application.OrderForms.Queries.GetFormInformations;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +17,22 @@ namespace Api.Controllers
     [ApiController]
     public class FormDefinitonController : ApiControllerBase
     {
+
+
+        [SwaggerOperation(
+          Summary = "cerate form definition",
+          Description = "Form definitons create form information"
+      )]
+        [Route("CreateFormInformation")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
+        public async Task<Response<bool>> CreateFormInformation([FromBody] CreateFormInformationCommand request)
+        {
+            return await Mediator.Send(request);
+
+        }
+
 
 
         [SwaggerOperation(

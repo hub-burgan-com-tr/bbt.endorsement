@@ -19,7 +19,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
         public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
-        public List<FormDefinitionTag> FormDefinitionTags { get; set; }
+        public List<string> FormDefinitionTags { get; set; }
     }
 
     public class CreateFormInformationCommandHandler : IRequestHandler<CreateFormInformationCommand, Response<bool>>
@@ -69,26 +69,32 @@ namespace Application.OrderForms.Commands.CreateFormInformations
 
                 foreach (var item in request.FormDefinitionTags)
                 {
-                    var IsTags = _context.FormDefinitionTags.Any(x => x.Tag == item.Tag);
-                    if (!IsTags)
+                    var IsTag = _context.FormDefinitionTags.FirstOrDefault(x => x.Tag == item);
+                    if (IsTag==null)
                     {
-                        var tag = new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = item.Tag };
-                        _context.FormDefinitionTags.Add(tag);
-                        foreach (var item2 in tag.FormDefinitionTagMaps)
-                        {
-                            formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = item2.FormDefinitionTagId });
-
-                        }
+                        var tag =_context.FormDefinitionTags.Add (new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = item });
+                      
+                            formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = tag.Entity.FormDefinitionTagId });                           
+                        
                     }
+                    else
+                    {                                        
+                                var tagmap = _context.FormDefinitionTagMaps.Any(x => x.FormDefinitionId == formdefinition.Entity.FormDefinitionId && x.FormDefinitionTagId == IsTag.FormDefinitionTagId);
+                                if (!tagmap)
+                                {
+                                    formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = IsTag.FormDefinitionTagId });
+                                }                              
+                    }
+             
 
                 }
 
                 result = _context.SaveChanges();
             }
            
-
             return Response<bool>.Success(result > 0 ? true : false, 200);
         }
     }
 
+ 
 }
