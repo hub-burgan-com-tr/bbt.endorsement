@@ -19,7 +19,7 @@ public static class FormDefinitionSeed
             var label = File.ReadAllText(path, Encoding.Default);
             var formdefinition = context.FormDefinitions.Add(new FormDefinition
             {
-                FormDefinitionId = "b25635e8-1abd-4768-ab97-e1285999a61a",
+                FormDefinitionId = Guid.NewGuid().ToString(),
                 DocumentSystemId= "b25635e8-1abd-4768-ab97-e1285999a62b",
                 Name = "Sigorta Başvuru Formu",
                 Label = label.ToString(),
@@ -29,7 +29,7 @@ public static class FormDefinitionSeed
                 RetryFrequence = 15,
                 Mode = "Completed",
                 Url = "",
-                Type = ContentType.HTML.ToString(),
+                Type = ContentType.PDF.ToString(),
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
 

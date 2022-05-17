@@ -46,6 +46,8 @@ public class StartRequest
     /// </summary>
     public string Id { get; set; }
     public string Title { get; set; }
+    public string DependencyFormId { get; set; }
+    public bool DependecyRules { get; set; } = false;
     public OrderConfig Config { get; set; }
     public OrderReference Reference { get; set; }
     public List<OrderDocument> Documents { get; set; }
@@ -116,6 +118,9 @@ public class StartFormRequest
     public string FormId { get; set; }
     public string Content { get; set; }
     public string InsuranceType { get; set; }
+  
+    public string DependencyFormId { get; set; }
+    public bool DependecyRules { get; set; }=false;
     public OrderReference Reference { get; set; }
     public OrderCustomer Approver { get; set; }
 }

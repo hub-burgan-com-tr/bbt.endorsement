@@ -16,6 +16,11 @@ namespace Domain.Entities
         public string PersonId { get; set; }
         [MaxLength(36)]
         public string CustomerId { get; set; }
+        [MaxLength(36)]
+        [Required]
+        public string DependencyFormId { get; set; }
+        [Required]
+        public bool DependecyRules { get; set; }
 
         [MaxLength(36)]
         public string DocumentSystemId { get; set; }
