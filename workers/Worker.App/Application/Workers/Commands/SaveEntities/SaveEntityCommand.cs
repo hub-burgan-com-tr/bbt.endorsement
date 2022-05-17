@@ -101,6 +101,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
+                DependecyRules = startFormRequest.DependecyRules,
+                DependencyFormId=startFormRequest.DependencyFormId?? Guid.NewGuid().ToString(),
+           
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
@@ -204,6 +207,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
+                DependecyRules = startRequest.DependecyRules,
+                DependencyFormId = startRequest.DependencyFormId ?? Guid.NewGuid().ToString(),
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
