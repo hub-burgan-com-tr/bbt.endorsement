@@ -27,6 +27,9 @@ public class ContractModel
     public string RetryFrequence { get; set; }
     public string ExpireInMinutes { get; set; }
 
+    public string DependencyFormId { get; set; }
+    public bool DependecyRules { get; set; }
+
     public string Error { get; set; }
 
     public ApproveOrderDocument Document { get; set; }

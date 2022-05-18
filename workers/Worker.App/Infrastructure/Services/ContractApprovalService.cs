@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
+using Worker.App.Application.Orders.Queries.CheckOrderDependecyRules;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.LoadContactInfos;
@@ -78,6 +79,11 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (variables != null)
                 {
+                    var dependecyRules = _mediator.Send(new CheckOrderDependecyRulesQuery
+                    {
+                        Model = variables
+                    });
+
                     var response = await _mediator.Send(new SaveEntityCommand
                     {
                         Model = variables,
@@ -92,7 +98,8 @@ public class ContractApprovalService : IContractApprovalService
                         {
                             OrderId = variables.InstanceId.ToString(),
                             State = "Yeni Onay Emri Oluşturuldu",
-                            Description = ""
+                            Description = "",
+                            IsCustomer = true
                         });
 
                         foreach (var document in response.Data.Documents)
@@ -243,7 +250,8 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     OrderId = variables.InstanceId.ToString(),
                     State = "Hatırlatma Mesajı (Sms)",
-                    Description = ""
+                    Description = "",
+                    IsCustomer = true
                 });
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
@@ -281,7 +289,8 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     OrderId = variables.InstanceId.ToString(),
                     State = "Hatırlatma Mesajı (Push Notification)",
-                    Description = ""
+                    Description = "",
+                    IsCustomer = true
                 });
             }
             catch (Exception ex)
@@ -317,7 +326,8 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         OrderId = variables.InstanceId,
                         State = "Yeni Onay Emri Zaman Aşımına Uğradı",
-                        Description = ""
+                        Description = "",
+                        IsCustomer = true
                     });
                 }
 
@@ -372,7 +382,8 @@ public class ContractApprovalService : IContractApprovalService
                             OrderId = variables.InstanceId,
                             DocumentId = item.DocumentId,
                             State = item.ActionTitle,
-                            Description = item.DocumentName
+                            Description = item.DocumentName,
+                            IsCustomer = true
                         });
                     }
                 }
@@ -409,7 +420,8 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     OrderId = variables.InstanceId.ToString(),
                     State = "Emir iptal edildi",
-                    Description = ""
+                    Description = "",
+                    IsCustomer = true
                 });
             }
 
@@ -466,7 +478,8 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         OrderId = variables.InstanceId,
                         State = "Workflow tamamlandı",
-                        Description = ""
+                        Description = "",
+                        IsCustomer = true
                     });
                 }
 

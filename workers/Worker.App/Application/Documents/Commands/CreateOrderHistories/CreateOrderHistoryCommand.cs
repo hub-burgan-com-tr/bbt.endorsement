@@ -36,12 +36,9 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             State = request.State,
             Description = request.Description,
             Created = _dateTime.Now,
-            IsCustomer=request.IsCustomer
+            IsCustomer = request.IsCustomer
         });
         var result = _context.SaveChanges();
         return Response<bool>.Success(result > 0 ? true : false, 200);
     }
 }
-
-
-
