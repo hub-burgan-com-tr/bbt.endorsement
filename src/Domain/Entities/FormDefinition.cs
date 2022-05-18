@@ -37,6 +37,11 @@ namespace Domain.Entities
         public int RetryFrequence { get; set; }
         [Required]
         public int MaxRetryCount { get; set; }
+        [MaxLength(36)]
+        [Required]
+        public string DependencyFormId { get; set; }
+        [Required]
+        public bool DependecyReuse { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FormDefinitionTagMap> FormDefinitionTagMaps { get; set; }
         public virtual ICollection<FormDefinitionAction> FormDefinitionActions { get; set; }
