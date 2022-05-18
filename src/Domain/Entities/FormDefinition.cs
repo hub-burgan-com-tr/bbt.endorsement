@@ -41,7 +41,7 @@ namespace Domain.Entities
         [Required]
         public string DependencyFormId { get; set; }
         [Required]
-        public bool DependecyRules { get; set; }
+        public bool DependecyReuse { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FormDefinitionTagMap> FormDefinitionTagMaps { get; set; }
         public virtual ICollection<FormDefinitionAction> FormDefinitionActions { get; set; }

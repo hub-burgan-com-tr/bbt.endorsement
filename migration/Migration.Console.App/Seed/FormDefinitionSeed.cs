@@ -32,7 +32,7 @@ public static class FormDefinitionSeed
                 Type = ContentType.PDF.ToString(),
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
-                DependecyRules = false,
+                DependecyReuse = false,
                 DependencyFormId = Guid.NewGuid().ToString(),
 
             });                    
@@ -60,7 +60,7 @@ public static class FormDefinitionSeed
                 Type = ContentType.PDF.ToString(),
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
-                DependecyRules = false,
+                DependecyReuse = false,
                 DependencyFormId = Guid.NewGuid().ToString(),
 
             });
