@@ -117,11 +117,10 @@
           <div class="row mt-3">
             <div class="col-12">
               <ng-select id="dependencyOrderId" formControlName="dependencyOrderId" name="dependencyOrderId"
-                         [multiple]="true"
-                         placeholder="Seçiniz"
                          notFoundText="Bulunamadı"
                          [ngClass]="{ 'is-invalid': submitted && f.dependencyOrderId.invalid }"
               >
+                <ng-option value="">Seçiniz</ng-option>
                 <ng-option *ngFor="let i of applicationForms" [value]="i.orderId">{{i.orderName}}</ng-option>
               </ng-select>
               <div *ngIf="submitted && f.dependencyOrderId.errors" class="invalid-feedback">
