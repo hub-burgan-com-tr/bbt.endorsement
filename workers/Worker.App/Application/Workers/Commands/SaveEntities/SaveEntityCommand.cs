@@ -73,15 +73,19 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 });
             }
 
+            var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
+            if (startFormRequest.Source == "file")            
+                mimeType = GetFileType(formDefinition.Type);
+            
             documents.Add(new Domain.Entities.Document
             {
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
                 Name = startFormRequest.Title,
                 Type = formDefinition.Type.ToString(),
-                FileType=formDefinition.Type.ToString(),
-                MimeType=formDefinition.Type.ToString()==ContentType.HTML.ToString()? "text/html": "application/pdf",
-                InsuranceType=startFormRequest.InsuranceType,
+                FileType = formDefinition.Type.ToString(),
+                MimeType = mimeType,
+                InsuranceType = startFormRequest.InsuranceType,
                 Created = _dateTime.Now,
                 DocumentActions = actions,
                 FormDefinitionId = startFormRequest.FormId

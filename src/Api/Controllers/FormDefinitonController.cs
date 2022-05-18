@@ -1,9 +1,8 @@
-﻿
-using Application.Common.Models;
+﻿using Application.Common.Models;
 using Application.OrderForms.Commands.CreateFormInformations;
 using Application.OrderForms.Commands.UpdateFormInformations;
 using Application.OrderForms.Queries.GetFormInformations;
-using Microsoft.AspNetCore.Authorization;
+using Application.Orders.Queries.GetOrderByFormIds;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -33,8 +32,6 @@ namespace Api.Controllers
 
         }
 
-
-
         [SwaggerOperation(
             Summary = "updates form definition",
             Description = "Form definitons update config information"
@@ -48,6 +45,7 @@ namespace Api.Controllers
             return await Mediator.Send(request);
 
         }
+
         [SwaggerOperation(
   Summary = "Get process and form information",
   Description = "Returns process and form information")]
@@ -63,9 +61,21 @@ namespace Api.Controllers
 
 
 
-
-
-
-
+        [SwaggerOperation(
+  Summary = "Get orders",
+  Description = "Returns orders")]
+        [Route("GetOrderByFormId")]
+        [HttpGet]
+        [SwaggerResponse(200, "Orders is returned successfully.", typeof(List<GetOrderByFormIdResponse>))]
+        [SwaggerResponse(404, "Orders not found.", typeof(void))]
+        public async Task<IActionResult> GetOrderByFormId(string formId, long citizenshipNumber)
+        {
+            var list = await Mediator.Send(new GetOrderByFormIdQuery
+            {
+                FormDefinitionId = formId,
+                CitizenshipNumber = citizenshipNumber
+            });
+            return Ok(list);
+        }
     }
 }

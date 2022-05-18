@@ -29,10 +29,15 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         if (form == null)
             return new Response<RenderResponse>();
 
+        var content = request.Content.Replace("true", "\"X\"");
+        content = content.Replace("True", "\"X\"");
+        content = content.Replace("false", "\"\"");
+        content = content.Replace("False", "\"\"");
+
         var html = "";
         if(form.Type == ContentType.HTML.ToString())
         {
-            var response = await _templateEngineService.HtmlRender(form.TemplateName, request.Content);
+            var response = await _templateEngineService.HtmlRender(form.TemplateName, content);
 
             var plainTextBytes = Encoding.UTF8.GetBytes(response.Data);
             var encode = Convert.ToBase64String(plainTextBytes);
@@ -46,7 +51,7 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         }
         else if(form.Type == ContentType.PDF.ToString())
         {
-            var response = await _templateEngineService.PdfRender(form.TemplateName, request.Content);
+            var response = await _templateEngineService.PdfRender(form.TemplateName, content);
             html = response.Data;
         }
 
