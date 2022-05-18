@@ -148,7 +148,7 @@ public class ContractApprovalService : IContractApprovalService
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                if (person.Data.Person != null)
+                if (person.Data != null)
                 {
                     if (person.Data.Person.Devices.Any())
                     {

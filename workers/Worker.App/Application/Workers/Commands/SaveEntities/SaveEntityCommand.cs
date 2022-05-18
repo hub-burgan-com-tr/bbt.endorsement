@@ -134,10 +134,10 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             }
             else
             {
-                var orderGroup = new OrderGroup { IsCompleted = false };
+                var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
                 if (orderGroup != null)
                 {
-                    orderGroup.OrderMaps.Add(new OrderMap { Order = order });
+                    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
                     var entity = _context.OrderGroups.Add(orderGroup).Entity;
                 }
             }
@@ -246,8 +246,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Documents = documents,
             };
 
-            var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>() };
-            orderGroup.OrderMaps.Add(new OrderMap { Order = order });
+            var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
+            orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
 
             var entity = _context.OrderGroups.Add(orderGroup).Entity;
             _context.SaveChanges();
