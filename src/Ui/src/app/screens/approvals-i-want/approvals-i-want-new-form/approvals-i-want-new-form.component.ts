@@ -81,11 +81,12 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         const {data} = res;
         this.form = data && JSON.parse(data.content);
         this.source = data && data.source;
-        if (this.source === 'file')
-          this.formGroup.controls['file'].setValidators(Validators.required);
-        else
-          this.formGroup.controls['file'].setValidators(null);
-
+        if (this.source === 'file') {
+          this.f.file.addValidators(Validators.required);
+        } else {
+          this.f.file.clearValidators();
+        }
+        this.f.file.updateValueAndValidity();
         this.formTitle = data && data.title;
         this.setFormIoData();
         this.getOrderByFormId();
@@ -140,14 +141,26 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   getOrderByFormId() {
+    debugger;
     if (this.f.form.value && this.person && this.person.citizenshipNumber && this.source === 'file') {
-      this.newOrderFormService.getOrderByFormId(this.f.form.value, this.person.citizenshipNumber).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.f.dependencyOrderId.addValidators(Validators.required);
+      const model = {
+        formDefinitionId: this.f.form.value,
+        citizenshipNumber: this.person.citizenshipNumber,
+        approver: {
+          citizenshipNumber: this.person.citizenshipNumber,
+          first: this.person.first,
+          last: this.person.last,
+          clientNumber: this.person.clientNumber
+        }
+      };
+      this.newOrderFormService.getOrderByFormId(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.applicationForms = res.data;
-        this.formGroup.controls['dependencyOrderId'].setValidators(Validators.required);
       })
     } else {
-      this.formGroup.controls['dependencyOrderId'].setValidators(null);
+      this.f.dependencyOrderId.clearValidators();
     }
+    this.f.dependencyOrderId.updateValueAndValidity();
   }
 
   submitForm(e) {

@@ -98,7 +98,7 @@
             </div>
           </div>
         </div>
-        <div class="col-4" *ngIf="source=='file'">
+        <div class="col-4" [hidden]="source!='file'">
           <div class="box-title mt-5 p-0 no-border">Dosya</div>
           <div class="row mt-3">
             <div class="col-12">
@@ -112,13 +112,16 @@
             </div>
           </div>
         </div>
-        <div class="col-4" *ngIf="source=='file'&&person">
+        <div class="col-4" [hidden]="source!='file'||!person">
           <div class="box-title mt-5 p-0 no-border">Başvuru Formu</div>
           <div class="row mt-3">
             <div class="col-12">
-              <ng-select id="dependencyOrderId" formControlName="dependencyOrderId" [clearable]="false"
-                         [ngClass]="{ 'is-invalid': submitted && f.dependencyOrderId.invalid }">
-                <ng-option value="">Seçiniz</ng-option>
+              <ng-select id="dependencyOrderId" formControlName="dependencyOrderId" name="dependencyOrderId"
+                         [multiple]="true"
+                         placeholder="Seçiniz"
+                         notFoundText="Bulunamadı"
+                         [ngClass]="{ 'is-invalid': submitted && f.dependencyOrderId.invalid }"
+              >
                 <ng-option *ngFor="let i of applicationForms" [value]="i.orderId">{{i.orderName}}</ng-option>
               </ng-select>
               <div *ngIf="submitted && f.dependencyOrderId.errors" class="invalid-feedback">
