@@ -118,7 +118,9 @@ public class StartFormRequest
     public string Title { get; set; }
     public string FormId { get; set; }
     public string Content { get; set; }
+    public string Source { get; set; }
     public string InsuranceType { get; set; }
+    public string DependencyOrderId { get; set; }
   
     public string DependencyFormId { get; set; }
     public bool DependecyRules { get; set; }=false;

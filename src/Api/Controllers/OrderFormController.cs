@@ -37,9 +37,13 @@ namespace Api.Controllers
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
             request.Id = Guid.NewGuid().ToString();
-            var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
-            if (form.Data != null)
-                request.Content = form.Data.Content;
+
+            if (request.Source == "formio")
+            {
+                var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
+                if (form.Data != null)
+                    request.Content = form.Data.Content;
+            }
 
             var person = new OrderPerson
             {
