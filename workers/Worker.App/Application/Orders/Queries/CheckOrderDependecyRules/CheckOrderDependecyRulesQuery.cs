@@ -8,7 +8,6 @@ namespace Worker.App.Application.Orders.Queries.CheckOrderDependecyRules;
 
 public class CheckOrderDependecyRulesQuery : IRequest<Response<bool>>
 {
-
     public ContractModel Model { get; set; }
 }
 
@@ -31,18 +30,19 @@ public class CheckOrderDependecyRulesQueryHandler : IRequestHandler<CheckOrderDe
         var model = request.Model;
 
         var citizenshipNumber = model.FormType == Form.Order ? model.StartRequest.Approver.CitizenshipNumber : model.StartFormRequest.Approver.CitizenshipNumber;
-        var dependencyFormId = model.FormType == Form.Order ? model.StartRequest.DependencyFormId : model.StartFormRequest.DependencyFormId;
-        var dependecyRules = model.FormType == Form.Order ? model.StartRequest.DependecyRules : model.StartFormRequest.DependecyRules;
+        //var formDefinitionId = model.FormType == Form.Order ? model.StartRequest.Documents: model.StartFormRequest.Approver.CitizenshipNumber;
+        ////var dependencyFormId = model.FormType == Form.Order ? model.StartRequest.DependencyFormId : model.StartFormRequest.DependencyFormId;
+        ////var dependecyRules = model.FormType == Form.Order ? model.StartRequest.DependecyRules : model.StartFormRequest.DependecyRules;
 
-        if (dependecyRules == false)
-        {
-            var customerId = _saveEntityService.GetCustomerAsync(citizenshipNumber).Result;
-            var order = _context.Orders.FirstOrDefault(x => x.CustomerId == customerId && x.DependencyFormId == dependencyFormId);
+        //if (dependecyRules == false)
+        //{
+        //    var customerId = _saveEntityService.GetCustomerAsync(citizenshipNumber).Result;
+        //    var order = _context.Orders.FirstOrDefault(x => x.CustomerId == customerId && x.DependencyFormId == dependencyFormId);
 
-            dependecyRules = order == null ? true : false;
-        }
+        //    dependecyRules = order == null ? true : false;
+        //}
 
-        return Response<bool>.Success(dependecyRules, 200);
+        return Response<bool>.Success(true, 200);
 
     }
 }
