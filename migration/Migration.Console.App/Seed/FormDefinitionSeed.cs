@@ -17,9 +17,11 @@ public static class FormDefinitionSeed
             var templateName = "tr-sigorta-basvuru-formu.txt";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
             var label = File.ReadAllText(path, Encoding.Default);
+
+            var formDefinitionId = "fd95116e-e7e0-4cdf-b734-11c414c3a471";
             var formdefinition = context.FormDefinitions.Add(new FormDefinition
             {
-                FormDefinitionId = Guid.NewGuid().ToString(),
+                FormDefinitionId = formDefinitionId,
                 DocumentSystemId= "b25635e8-1abd-4768-ab97-e1285999a62b",
                 Name = "Sigorta Başvuru Formu",
                 Label = label.ToString(),
@@ -33,21 +35,19 @@ public static class FormDefinitionSeed
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
                 DependecyReuse = false,
-                DependencyFormId = Guid.NewGuid().ToString(),
+                Source = "formio"
 
             });                    
             formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
             formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
-          
-     
-
-
+            
             var templateName2 = "tr-sigorta-teklif-formu.txt";
             var path2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName2);
             var label2 = File.ReadAllText(path2, Encoding.Default);
             var formdefinition2 = context.FormDefinitions.Add(new FormDefinition
             {
-                FormDefinitionId = Guid.NewGuid().ToString(),
+                FormDefinitionId = "04619ad5-5bf0-4651-a7cd-ca6ffa39512c",
+                DependencyFormId = formDefinitionId,
                 DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999a62b",
                 Name = "Sigorta Teklif Formu",
                 Label = label2.ToString(),
@@ -60,9 +60,7 @@ public static class FormDefinitionSeed
                 Type = ContentType.PDF.ToString(),
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
-                DependecyReuse = false,
-                DependencyFormId = Guid.NewGuid().ToString(),
-
+                Source = "file"
             });
             formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
             formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
