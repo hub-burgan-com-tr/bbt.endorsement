@@ -7,7 +7,7 @@
       [ngClass]="selectedPerson.citizenshipNumber===p.citizenshipNumber?'selected':''"
       class="d-flex justify-content-between align-items-center">
     <span>{{p.first}} {{p.last}}
-      ({{p.citizenshipNumber}})</span>
+      ({{p.citizenshipNumber}} - {{p.clientNumber}})</span>
     <i class="bi bi-check" *ngIf="selectedPerson.citizenshipNumber===p.citizenshipNumber"></i>
   </li>
 </ul>
