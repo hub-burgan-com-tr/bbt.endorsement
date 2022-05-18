@@ -176,6 +176,10 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
           return;
         }
       }
+      if (e && e.data.sigortaEttirenIleSigortaliAyniKisidir) {
+        e.data.SigortaEttirenAd = e.data.FormInstance_Approver_Fullname;
+        e.data.SigortaEttirenVKN = e.data.FormInstance_Approver_CitizenshipNumber;
+      }
       const model = new NewApprovalOrderForm(<IApprover>{
         citizenshipNumber: this.person.citizenshipNumber,
         first: this.person.first,
