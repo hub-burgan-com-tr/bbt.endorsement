@@ -77,9 +77,21 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         const {data} = res;
         this.form = data && JSON.parse(data.content);
         this.formTitle = data && data.title;
+        this.setFormIoData();
       });
     } else {
       this.formDefinitionId = null;
+    }
+  }
+
+  processNoChange(e) {
+    this.formio.formio.getComponent('FormInstance_Transaction_Id').setValue(e.target.value);
+  }
+
+  setFormIoData() {
+    if (this.formio) {
+      this.formio.formio.getComponent('FormInstance_Approver_Fullname').setValue(`${this.person.first} ${this.person.last}`);
+      this.formio.formio.getComponent('FormInstance_Approver_CitizenshipNumber').setValue(this.person.citizenshipNumber);
     }
   }
 
@@ -90,6 +102,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
 
   getPersonFromChild(person) {
     this.person = JSON.parse(person);
+    this.setFormIoData();
   }
 
   get f() {
