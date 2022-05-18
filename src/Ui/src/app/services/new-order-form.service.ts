@@ -24,9 +24,9 @@ export class NewOrderFormService {
     return this.httpClient.get(url);
   }
 
-  getOrderByFormId(formId, citizenshipNumber): Observable<any> {
-    const url = `${this.baseUrl}/${ApiPaths.GetOrderByFormId}?formId=${formId}&citizenshipNumber=${citizenshipNumber}`;
-    return this.httpClient.get(url);
+  getOrderByFormId(model): Observable<any> {
+    const url = `${this.baseUrl}/${ApiPaths.GetOrderByFormId}`;
+    return this.httpClient.post(url, model);
   }
 
   save(data: NewApprovalOrderForm) {
