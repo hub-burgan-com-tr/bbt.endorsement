@@ -85,17 +85,50 @@
         </div>
 
       </div>
-      <div class="box-title mt-5 p-0 no-border">Müşteri Ekle</div>
-      <div class="row mt-3">
+      <div class="row">
         <div class="col-4">
-          <app-person-search (returnListEvent)="getPersonFromChild($event)"
-                             [hasError]="submitted && !person"></app-person-search>
-          <small *ngIf="submitted && !person" class="text-danger">
-            Müşteri seçilmelidir.
-          </small>
+          <div class="box-title mt-5 p-0 no-border">Müşteri Ekle</div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <app-person-search (returnListEvent)="getPersonFromChild($event)"
+                                 [hasError]="submitted && !person"></app-person-search>
+              <small *ngIf="submitted && !person" class="text-danger">
+                Müşteri seçilmelidir.
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="col-4" *ngIf="source=='file'">
+          <div class="box-title mt-5 p-0 no-border">Dosya</div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <input type="file" class="form-control" id="file" name="file" formControlName="file"
+                     (change)="convertFileToBase64($event)"
+
+                     [ngClass]="{ 'is-invalid': submitted && f.file.invalid }">
+              <div *ngIf="submitted && f.file.errors" class="invalid-feedback">
+                <div *ngIf="f.file.errors.required">Dosya seçilmelidir.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4" *ngIf="source=='file'&&person">
+          <div class="box-title mt-5 p-0 no-border">Başvuru Formu</div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <ng-select id="dependencyOrderId" formControlName="dependencyOrderId" [clearable]="false"
+                         [ngClass]="{ 'is-invalid': submitted && f.dependencyOrderId.invalid }">
+                <ng-option value="">Seçiniz</ng-option>
+                <ng-option *ngFor="let i of applicationForms" [value]="i.orderId">{{i.orderName}}</ng-option>
+              </ng-select>
+              <div *ngIf="submitted && f.dependencyOrderId.errors" class="invalid-feedback">
+                <div *ngIf="f.dependencyOrderId.errors.required">Başvuru Formu seçilmelidir.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div *ngIf="form">
+      <div *ngIf="form&&source=='formio'">
         <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>
         <formio [form]="form" [options]="options" (submit)="submitForm($event)"></formio>
       </div>

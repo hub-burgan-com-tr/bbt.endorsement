@@ -20,4 +20,5 @@ export enum ApiPaths {
   GetOrderFormParameters = 'Forms/GetOrderFormParameters',
   GetOrderFormTag = 'Forms/GetOrderFormTag',
   Login = 'Home/Login',
+  GetOrderByFormId = 'FormDefiniton/GetOrderByFormId',
 }
