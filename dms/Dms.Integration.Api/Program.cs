@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IConfigurationRoot>(provider => Configuration);
 
-builder.Services.AddInfrastructure(Configuration);
+builder.Services.AddDmsInfrastructure(Configuration);
 
 builder.Services.AddSingleton<IMessagingService, MessagingService>();
 

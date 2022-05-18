@@ -6,11 +6,11 @@ namespace Document.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDmsInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<IPdfConverterService, PdfConverterService>();
         services.AddSingleton<ServiceCaller, ServiceCaller>();
-        services.AddSingleton<IDocumentService, DocumentService>();
+        services.AddScoped<IDocumentService, DocumentService>();
         return services;
     }
 }

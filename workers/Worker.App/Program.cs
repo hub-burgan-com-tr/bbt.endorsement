@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Document.Infrastructure;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -79,6 +80,8 @@ builder.Host.UseSerilog();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddDmsInfrastructure(builder.Configuration);
+builder.Services.AddSingleton<IConfigurationRoot>(provider => builder.Configuration);
 
 
 builder.Services.AddHostedService<ZeebeWorkService>();
