@@ -66,13 +66,9 @@ namespace Api.Controllers
         [HttpGet]
         [SwaggerResponse(200, "Orders is returned successfully.", typeof(List<GetOrderByFormIdResponse>))]
         [SwaggerResponse(404, "Orders not found.", typeof(void))]
-        public async Task<IActionResult> GetOrderByFormId(string formId, long citizenshipNumber)
+        public async Task<IActionResult> GetOrderByFormId([FromBody] GetOrderByFormIdQuery request)
         {
-            var list = await Mediator.Send(new GetOrderByFormIdQuery
-            {
-                FormDefinitionId = formId,
-                CitizenshipNumber = citizenshipNumber
-            });
+            var list = await Mediator.Send(request);
             return Ok(list);
         }
     }

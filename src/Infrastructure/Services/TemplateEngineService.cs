@@ -39,7 +39,6 @@ namespace Infrastructure.Services
             var response = await restClient.ExecutePostAsync(restRequest);
 
             var data = PDFReplace(response.Content);
-
             var responseContent = "data:application/pdf;base64," + data;
             return Response<string>.Success(responseContent, 200);
         }
