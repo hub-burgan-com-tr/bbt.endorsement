@@ -1,9 +1,9 @@
 ﻿using Api.Extensions;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
-using Microsoft.AspNetCore.Authorization;
+using Infrastructure.SsoServices;
+using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace Api.Controllers
@@ -13,10 +13,19 @@ namespace Api.Controllers
     public class HomeController : ApiControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly ISsoService _ssoService;
 
         public HomeController(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        [Route("AccessToken")]
+        [HttpGet]
+        public async Task<AccessToken> AccessToken(string code, string state)
+        {
+            var response = await _ssoService.AccessToken(code, state);
+            return response;
         }
 
 

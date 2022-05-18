@@ -42,6 +42,7 @@ namespace Infrastructure.Configuration
             services.AddSingleton<IZeebeService, ZeebeService>();
             services.AddSingleton<IContractApprovalService, ContractApprovalService>();
             services.AddSingleton<IInternalsService, InternalsService>();
+            services.AddSingleton<IMessagingService, MessagingService>();
         }
     }
 }

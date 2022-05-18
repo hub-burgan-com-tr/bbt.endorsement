@@ -101,6 +101,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
+               
+           
                 Reference = new Reference
                 {
                     ProcessNo = startFormRequest.Reference.ProcessNo,
@@ -204,6 +206,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
+               
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
