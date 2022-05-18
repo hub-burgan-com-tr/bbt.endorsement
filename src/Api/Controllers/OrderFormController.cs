@@ -37,13 +37,7 @@ namespace Api.Controllers
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
             request.Id = Guid.NewGuid().ToString();
-
-            var content = request.Content.Replace("true", "\"X\"");
-            content = content.Replace("True", "\"X\"");
-            content = content.Replace("false", "\"\"");
-            content = content.Replace("False", "\"\"");
-
-            var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = content });
+            var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
             if (form.Data != null)
                 request.Content = form.Data.Content;
 

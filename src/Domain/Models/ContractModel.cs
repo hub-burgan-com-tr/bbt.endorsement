@@ -32,7 +32,6 @@ public class ContractModel
 
     public string Error { get; set; }
 
-    public ApproveOrderDocument Document { get; set; }
     public List<ApproveOrderDocument> Documents { get; set; }
 }
 
