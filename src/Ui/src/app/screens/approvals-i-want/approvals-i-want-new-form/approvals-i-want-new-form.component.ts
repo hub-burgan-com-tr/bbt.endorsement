@@ -141,7 +141,6 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   getOrderByFormId() {
-    debugger;
     if (this.f.form.value && this.person && this.person.citizenshipNumber && this.source === 'file') {
       this.f.dependencyOrderId.addValidators(Validators.required);
       const model = {
