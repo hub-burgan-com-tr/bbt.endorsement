@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using RestSharp;
+using System.Text;
 
 namespace Infrastructure.Services
 {
@@ -73,6 +74,22 @@ namespace Infrastructure.Services
                             "\"render-data\": " + content + "," +
                             "\"render-data-for-log\":  " + content +
           "}";
+        }
+
+        private string HtmlEncode()
+        {
+
+            var templateName = "sigorta_onay_formu.txt";
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
+            var data = File.ReadAllText(path, Encoding.Default);
+
+            var jsonString = data.Replace("\r\n", string.Empty);
+
+            jsonString = jsonString.Replace(@"\""", String.Empty);
+            jsonString = jsonString.Replace("\"", String.Empty);
+            jsonString = jsonString.Replace("\t", string.Empty);
+            return jsonString;
+
         }
     }
 }

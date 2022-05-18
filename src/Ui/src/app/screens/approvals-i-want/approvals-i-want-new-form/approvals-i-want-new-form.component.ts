@@ -21,6 +21,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   person;
   form;
+  source;
   formTitle;
   formDefinitionId;
   @ViewChild(FormioComponent, {static: false}) formio: FormioComponent;
@@ -30,8 +31,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     disableAlerts: true,
   }
   personName;
-  dropdownData: any;
+  fileBase64: any;
   formDropdown: any;
+  applicationForms: any;
   tags: any;
   sending: boolean = false;
 
@@ -44,6 +46,8 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       tag: ['', [Validators.required]],
       form: ['', [Validators.required]],
       processNo: ['', [Validators.required]],
+      file: [''],
+      dependencyOrderId: ['']
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.formDefinitionId = params['formDefinitionId'];
@@ -76,8 +80,15 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       this.newOrderFormService.getFormContent(this.formDefinitionId).pipe(takeUntil(this.destroy$)).subscribe(res => {
         const {data} = res;
         this.form = data && JSON.parse(data.content);
+        this.source = data && data.source;
+        if (this.source === 'file')
+          this.formGroup.controls['file'].setValidators(Validators.required);
+        else
+          this.formGroup.controls['file'].setValidators(null);
+
         this.formTitle = data && data.title;
         this.setFormIoData();
+        this.getOrderByFormId();
       });
     } else {
       this.formDefinitionId = null;
@@ -85,11 +96,12 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   processNoChange(e) {
-    this.formio.formio.getComponent('FormInstance_Transaction_Id').setValue(e.target.value);
+    if (this.formio && this.source != 'file')
+      this.formio.formio.getComponent('FormInstance_Transaction_Id').setValue(e.target.value);
   }
 
   setFormIoData() {
-    if (this.formio) {
+    if (this.formio && this.source != 'file') {
       this.formio.formio.getComponent('FormInstance_Approver_Fullname').setValue(`${this.person.first} ${this.person.last}`);
       this.formio.formio.getComponent('FormInstance_Approver_CitizenshipNumber').setValue(this.person.citizenshipNumber);
     }
@@ -103,6 +115,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   getPersonFromChild(person) {
     this.person = JSON.parse(person);
     this.setFormIoData();
+    this.getOrderByFormId();
   }
 
   get f() {
@@ -113,33 +126,62 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     this.router.navigate(['approvals-i-want']);
   }
 
-  submitForm(e) {
-    this.sending = true;
-    let iTypes = '';
-    if (e.data.sigortaTuru) {
-      iTypes = Object.keys(e.data.sigortaTuru).map(k => {
-        return {text: k, data: e.data.sigortaTuru[k]};
-      }).filter(i => i.data == true).map(m => {
-        return m.text;
-      }).join(',');
-      if (!this.person) {
-        return;
-      }
+  convertFileToBase64(event: any) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.fileBase64 = reader.result;
+      };
+    } else {
+      this.fileBase64 = '';
     }
+  }
+
+  getOrderByFormId() {
+    if (this.f.form.value && this.person && this.person.citizenshipNumber && this.source === 'file') {
+      this.newOrderFormService.getOrderByFormId(this.f.form.value, this.person.citizenshipNumber).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        this.applicationForms = res.data;
+        this.formGroup.controls['dependencyOrderId'].setValidators(Validators.required);
+      })
+    } else {
+      this.formGroup.controls['dependencyOrderId'].setValidators(null);
+    }
+  }
+
+  submitForm(e) {
     if (this.formGroup.valid) {
+      this.sending = true;
+      let iTypes = '';
+      if (e && e.data.sigortaTuru) {
+        iTypes = Object.keys(e.data.sigortaTuru).map(k => {
+          return {text: k, data: e.data.sigortaTuru[k]};
+        }).filter(i => i.data == true).map(m => {
+          return m.text;
+        }).join(',');
+        if (!this.person) {
+          return;
+        }
+      }
       const model = new NewApprovalOrderForm(<IApprover>{
         citizenshipNumber: this.person.citizenshipNumber,
         first: this.person.first,
         last: this.person.last,
         clientNumber: this.person.clientNumber
-      }, JSON.stringify(e.data), this.formDefinitionId, <IReference>{
+      }, this.source === 'file' ? this.fileBase64 : JSON.stringify(e.data), this.formDefinitionId, <IReference>{
         processNo: this.f.processNo.value,
         tagId: this.f.tag.value,
         formId: this.f.form.value,
-      }, this.formTitle, iTypes);
-      this.newOrderFormService.save(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        this.modal.open('success');
-        this.sending = false;
+      }, this.formTitle, iTypes, this.source, this.f.dependencyOrderId.value);
+      this.newOrderFormService.save(model).pipe(takeUntil(this.destroy$)).subscribe({
+        next: () => {
+          this.modal.open('success');
+          this.sending = false;
+        },
+        error: () => {
+          this.sending = false;
+        }
       })
     }
   }
@@ -148,6 +190,8 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     this.submitted = true;
     if (this.formio) {
       this.formio.formio.emit('submitButton');
+    } else {
+      this.submitForm(null);
     }
   }
 }
