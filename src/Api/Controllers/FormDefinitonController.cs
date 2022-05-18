@@ -63,7 +63,7 @@ namespace Api.Controllers
   Summary = "Get orders",
   Description = "Returns orders")]
         [Route("GetOrderByFormId")]
-        [HttpGet]
+        [HttpPost]
         [SwaggerResponse(200, "Orders is returned successfully.", typeof(List<GetOrderByFormIdResponse>))]
         [SwaggerResponse(404, "Orders not found.", typeof(void))]
         public async Task<IActionResult> GetOrderByFormId([FromBody] GetOrderByFormIdQuery request)
