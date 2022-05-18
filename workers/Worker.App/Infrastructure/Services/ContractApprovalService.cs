@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
+using Worker.App.Application.Orders.Queries.CheckOrderDependecyRules;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.LoadContactInfos;
@@ -78,6 +79,11 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (variables != null)
                 {
+                    var dependecyRules = _mediator.Send(new CheckOrderDependecyRulesQuery
+                    {
+                        Model = variables
+                    });
+
                     var response = await _mediator.Send(new SaveEntityCommand
                     {
                         Model = variables,
