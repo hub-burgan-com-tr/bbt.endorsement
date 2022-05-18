@@ -5,6 +5,7 @@ using Domain.Models;
 using Domain.Entities;
 using Domain.Enums;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -116,12 +117,36 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 },
                 Documents = documents,
             };
-            var entity = _context.Orders.Add(order).Entity;
+
+            if(string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
+            {
+                var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.OrderId == startFormRequest.DependencyOrderId));
+                if (orderGroup != null)
+                {
+                    var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.OrderGroupId == orderGroup.OrderGroupId && 
+                                                                           x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
+                    if (orderMaps != null)
+                    {
+                        orderGroup.OrderMaps.Add(new OrderMap { Order = order });
+                        var entity = _context.OrderGroups.Add(orderGroup).Entity;
+                    }
+                }
+            }
+            else
+            {
+                var orderGroup = new OrderGroup { IsCompleted = false };
+                if (orderGroup != null)
+                {
+                    orderGroup.OrderMaps.Add(new OrderMap { Order = order });
+                    var entity = _context.OrderGroups.Add(orderGroup).Entity;
+                }
+            }
+
             _context.SaveChanges();
 
             return new SaveEntityResponse
             {
-                OrderId = entity.OrderId,
+                OrderId = order.OrderId,
                 ExpireInMinutes = order.Config.ExpireInMinutes,
                 MaxRetryCount = order.Config.MaxRetryCount,
                 RetryFrequence = order.Config.RetryFrequence
@@ -220,12 +245,16 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 },
                 Documents = documents,
             };
-            var entity = _context.Orders.Add(order).Entity;
+
+            var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>() };
+            orderGroup.OrderMaps.Add(new OrderMap { Order = order });
+
+            var entity = _context.OrderGroups.Add(orderGroup).Entity;
             _context.SaveChanges();
 
             return new SaveEntityResponse
             {
-                OrderId = entity.OrderId,
+                OrderId = order.OrderId,
                 ExpireInMinutes = order.Config.ExpireInMinutes,
                 MaxRetryCount = order.Config.MaxRetryCount,
                 RetryFrequence= order.Config.RetryFrequence
