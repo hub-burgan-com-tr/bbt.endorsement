@@ -52,7 +52,7 @@ namespace Domain.Entities
         public virtual Customer Customer { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<OrderHistory> OrderHistories { get; set; }
-
+        public virtual ICollection<OrderMap> OrderMaps { get; set; }
 
     }
 }
