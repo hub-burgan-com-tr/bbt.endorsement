@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
+using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 
@@ -9,6 +10,7 @@ public class GetOrderByFormIdQuery : IRequest<Response<List<GetOrderByFormIdResp
 {
     public string FormDefinitionId { get; set; }
     public long CitizenshipNumber { get; set; }
+    public OrderCustomer Approver { get; set; }
 }
 
 public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuery, Response<List<GetOrderByFormIdResponse>>>
@@ -28,6 +30,20 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
         if (formDefinition != null && formDefinition.DependencyFormId != null && formDefinition.Source == "file")
         {
             var customer = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == request.CitizenshipNumber);
+            if(customer == null)
+            {
+                var entity = _context.Customers.Add(new Customer
+                {
+                    CustomerId = Guid.NewGuid().ToString(),
+                    CitizenshipNumber = request.Approver.CitizenshipNumber,
+                    ClientNumber = request.Approver.ClientNumber,
+                    FirstName = request.Approver.First,
+                    LastName = request.Approver.Last,
+                    Created = _dateTime.Now,
+                }).Entity;
+
+                _context.SaveChanges();
+            }
             var dependencyForm = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == formDefinition.DependencyFormId);
 
             var orders = _context.Orders
@@ -46,4 +62,12 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
         return Response<List<GetOrderByFormIdResponse>>.Success(404);
     }
 
+}
+
+public class OrderCustomer
+{
+    public long CitizenshipNumber { get; set; }
+    public string First { get; set; }
+    public string Last { get; set; }
+    public long ClientNumber { get; set; }
 }
