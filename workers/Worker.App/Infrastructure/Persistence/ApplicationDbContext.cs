@@ -17,8 +17,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _domainEventService = domainEventService;
     }
     public virtual DbSet<Order> Orders { get; set; }
-    public virtual DbSet<OrderGroup> OrderGroups { get; }
-    public virtual DbSet<OrderMap> OrderMaps { get; }
+    public virtual DbSet<OrderGroup> OrderGroups { get; set; }
+    public virtual DbSet<OrderMap> OrderMaps { get; set; }
     public virtual DbSet<Reference> References { get; set; }
     public virtual DbSet<Callback> Callbacks { get; set; }
     public virtual DbSet<Config> Configs { get; set; }
