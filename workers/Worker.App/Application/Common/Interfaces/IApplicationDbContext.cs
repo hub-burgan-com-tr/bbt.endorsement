@@ -6,6 +6,8 @@ namespace Worker.App.Application.Common.Interfaces
     public interface IApplicationDbContext
     {
         DbSet<Order> Orders { get; }
+        DbSet<OrderGroup> OrderGroups { get; }
+        DbSet<OrderMap> OrderMaps { get; }
         DbSet<Reference> References { get; }
         DbSet<Callback> Callbacks { get; }
         DbSet<Config> Configs { get; }
