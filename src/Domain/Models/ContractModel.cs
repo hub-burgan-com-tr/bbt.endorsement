@@ -120,6 +120,8 @@ public class StartFormRequest
     public string Content { get; set; }
     public string Source { get; set; }
     public string InsuranceType { get; set; }
+    public string FileType { get; set; }
+
     public string DependencyOrderId { get; set; }
   
     public string DependencyFormId { get; set; }

@@ -216,7 +216,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Name = item.Title,
                     Type = type,
                     FileType = item.Type.ToString() == ((int)ContentType.PlainText).ToString() ? ContentType.PlainText.ToString() : GetFileType(item.FileType),
-                    MimeType = GetMimeType(item.FileType),
+                    MimeType = item.FileType,
                     Created = _dateTime.Now,
                     DocumentActions = actions
                 });
