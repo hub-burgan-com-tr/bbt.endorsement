@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Enums;
+using MediatR;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 
@@ -25,7 +26,13 @@ public class UpdateOrderGroupCommandHandler : IRequestHandler<UpdateOrderGroupCo
         var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.OrderId == request.OrderId));
         if(orderGroup != null)
         {
-            var orders = "";
+            var orders = _context.Orders
+                .Where(x=> x.OrderMaps.Any(y => y.OrderGroupId == orderGroup.OrderGroupId && 
+                                                y.Order.State == OrderState.Approve.ToString() &&
+                                                y.Order.Documents.Any(z => z.FormDefinition != null)));
+
+            var documents = _context.Documents.Where(x => x.Order.OrderMaps.Any(y => y.OrderGroupId == orderGroup.OrderGroupId));
+
         }
         throw new NotImplementedException();
     }

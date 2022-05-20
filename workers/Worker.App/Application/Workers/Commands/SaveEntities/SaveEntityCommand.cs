@@ -50,7 +50,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         {
             if (startFormRequest == null) return null;
 
-            var documents = new List<Domain.Entities.Document>();
 
             var formDefinition = _saveEntityService.GetFormDefinition(startFormRequest.FormId).Result;
             var config = new Config
@@ -77,8 +76,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
             if (startFormRequest.Source == "file")            
                 mimeType = GetMimeType(formDefinition.Type);
-            
-            documents.Add(new Domain.Entities.Document
+
+            var document = new Domain.Entities.Document
             {
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
@@ -90,7 +89,12 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Created = _dateTime.Now,
                 DocumentActions = actions,
                 FormDefinitionId = startFormRequest.FormId
-            });
+            };
+
+            var documents = new List<Domain.Entities.Document>
+            {
+                document
+            };
 
             var customerId = GetCustomerId(startFormRequest.Approver);
             var personId = GetPersonId(person);
