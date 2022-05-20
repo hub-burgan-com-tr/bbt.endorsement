@@ -27,7 +27,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
     public async Task<Response<List<GetOrderByFormIdResponse>>> Handle(GetOrderByFormIdQuery request, CancellationToken cancellationToken)
     {
         var formDefinition = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == request.FormDefinitionId);
-        if (formDefinition != null && formDefinition.DependencyFormId != null && formDefinition.Source == "file")
+        if (formDefinition != null && !string.IsNullOrEmpty(formDefinition.DependencyFormId) && formDefinition.Source == "file")
         {
             var customer = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == request.CitizenshipNumber);
             if(customer == null)
@@ -46,22 +46,46 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
             }
             var dependencyForm = _context.FormDefinitions.FirstOrDefault(x => x.FormDefinitionId == formDefinition.DependencyFormId);
 
-            var orders = _context.Orders
-                .Where(x => x.CustomerId == customer.CustomerId &&
-                            x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
-                            x.State == OrderState.Approve.ToString())
-                .Select(x => new GetOrderByFormIdResponse
+            if(dependencyForm != null)
+            {
+                if(dependencyForm.DependecyReuse == false)
                 {
-                    OrderId = x.OrderId,
-                    OrderName = x.Title
-                })
-                .ToList();
+                    var orders = _context.Orders
+                        .Where(x => x.CustomerId == customer.CustomerId && 
+                                    x.OrderMaps.Any(y => 
+                                                    y.Order.Documents.Any(z => z.FormDefinitionId != formDefinition.FormDefinitionId || 
+                                                                               (z.FormDefinitionId == formDefinition.FormDefinitionId && z.Order.State != OrderState.Approve.ToString())
+                                                    )) &&
+                                    x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
+                                    x.State == OrderState.Approve.ToString())
+                        .Select(x => new GetOrderByFormIdResponse
+                        {
+                            OrderId = x.OrderId,
+                            OrderName = x.Title
+                        })
+                        .ToList();
 
-            return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
+                    return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
+                }
+                else
+                {
+                    var orders = _context.Orders
+                        .Where(x => x.CustomerId == customer.CustomerId &&
+                                    x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
+                                    x.State == OrderState.Approve.ToString())
+                        .Select(x => new GetOrderByFormIdResponse
+                        {
+                            OrderId = x.OrderId,
+                            OrderName = x.Title
+                        })
+                        .ToList();
+
+                    return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
+                }
+            }
         }
         return Response<List<GetOrderByFormIdResponse>>.Success(404);
     }
-
 }
 
 public class OrderCustomer
