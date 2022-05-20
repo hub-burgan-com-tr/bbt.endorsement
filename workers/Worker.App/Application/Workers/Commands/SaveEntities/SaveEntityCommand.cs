@@ -213,7 +213,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Name = item.Title,
                     Type = type,
                     FileType = item.Type.ToString() == ((int)ContentType.PlainText).ToString() ? ContentType.PlainText.ToString() : GetFileType(item.FileType),
-                    MimeType = item.FileType,
+                    MimeType = GetMimeType(item.FileType),
                     Created = _dateTime.Now,
                     DocumentActions = actions
                 });
@@ -294,15 +294,15 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         {
             if (fileType.Contains("image"))
             {
-                return FileType.Image.ToString();
+                return "image/png";
             }
             else if (fileType.ToLower().Contains("pdf"))
             {
                 return "application/pdf";
             }
-            if (fileType.Contains("html"))
+           else if (fileType.Contains("html"))
             {
-                return FileType.HTML.ToString();
+                return "text/html";
             }
             else
             {
