@@ -251,10 +251,12 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Documents = documents,
             };
 
-            var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
-            orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
+            //var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
+            //orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
+            //var entity = _context.OrderGroups.Add(orderGroup).Entity;
 
-            var entity = _context.OrderGroups.Add(orderGroup).Entity;
+            var entity = _context.Orders.Add(order).Entity;
+
             _context.SaveChanges();
 
             return new SaveEntityResponse
