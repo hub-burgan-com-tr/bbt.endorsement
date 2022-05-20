@@ -105,8 +105,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Created = _dateTime.Now,
                 Config = config,
                 CustomerId = customerId,
-                PersonId = personId,
-               
+                PersonId = personId,            
            
                 Reference = new Reference
                 {
@@ -118,17 +117,22 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Documents = documents,
             };
 
-            if(string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
+            if(!string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
             {
-                var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.OrderId == startFormRequest.DependencyOrderId));
+                var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.Order.CustomerId == customerId && y.OrderId == startFormRequest.DependencyOrderId));
                 if (orderGroup != null)
                 {
-                    var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.OrderGroupId == orderGroup.OrderGroupId && 
+                    var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
+                                                                           x.OrderGroupId == orderGroup.OrderGroupId && 
                                                                            x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
-                    if (orderMaps != null)
+                    if (orderMaps == null)
                     {
-                        orderGroup.OrderMaps.Add(new OrderMap { Order = order });
-                        var entity = _context.OrderGroups.Add(orderGroup).Entity;
+                        var orderMap = _context.OrderMaps.Add(new OrderMap
+                        {
+                            OrderGroupId = orderGroup.OrderGroupId,
+                            Order = order,
+                        }).Entity;
+                        var entity = _context.OrderMaps.Add(orderMap).Entity;
                     }
                 }
             }
@@ -267,7 +271,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             {
                 return FileType.Image.ToString();
             }
-            else if (fileType.Contains("pdf"))
+            else if (fileType.ToLower().Contains("pdf"))
             {
                 return FileType.PDF.ToString();
             }
