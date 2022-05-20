@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
+using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
 using Worker.App.Application.Orders.Queries.CheckOrderDependecyRules;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
@@ -474,6 +475,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     variables.Completed = true;
                     variables.Approved = true;
+                    variables.IsProcess = true;
                     await _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId,
@@ -481,6 +483,14 @@ public class ContractApprovalService : IContractApprovalService
                         Description = "",
                         IsCustomer = true
                     });
+
+                    if(response.Data.OrderState == OrderState.Approve)
+                    {
+                        await _mediator.Send(new UpdateOrderGroupCommand
+                        {
+                            OrderId = variables.InstanceId
+                        });
+                    }
                 }
 
             }
