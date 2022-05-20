@@ -35,7 +35,7 @@ namespace Infrastructure.ZeebeServices
 
         public async Task<string> SendMessage(string instanceId, string messageName, string payload)
         {
-            _logger.LogInformation("instanceId: " + instanceId);
+            _logger.LogInformation("instanceId: " + instanceId + " - messageName: " + messageName + " - payload: " + payload);
             await client.NewPublishMessageCommand()
                 .MessageName(messageName)
                 .CorrelationKey(instanceId)
