@@ -76,7 +76,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
             var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
             if (startFormRequest.Source == "file")            
-                mimeType = GetFileType(formDefinition.Type);
+                mimeType = GetMimeType(formDefinition.Type);
             
             documents.Add(new Domain.Entities.Document
             {
@@ -277,6 +277,28 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             else if (fileType.ToLower().Contains("pdf"))
             {
                 return FileType.PDF.ToString();
+            }
+            if (fileType.Contains("html"))
+            {
+                return FileType.HTML.ToString();
+            }
+            else
+            {
+                return FileType.File.ToString();
+            }
+
+        }
+
+
+        private string GetMimeType(string fileType)
+        {
+            if (fileType.Contains("image"))
+            {
+                return FileType.Image.ToString();
+            }
+            else if (fileType.ToLower().Contains("pdf"))
+            {
+                return "application/pdf";
             }
             if (fileType.Contains("html"))
             {
