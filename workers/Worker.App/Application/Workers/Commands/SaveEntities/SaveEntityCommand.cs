@@ -129,6 +129,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     {
                         var orderMap = _context.OrderMaps.Add(new OrderMap
                         {
+                            OrderMapId = Guid.NewGuid().ToString(),
                             OrderGroupId = orderGroup.OrderGroupId,
                             Order = order,
                         }).Entity;
