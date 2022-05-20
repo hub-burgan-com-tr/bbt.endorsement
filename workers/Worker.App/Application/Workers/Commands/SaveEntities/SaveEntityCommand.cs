@@ -123,18 +123,17 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 if (orderGroup != null)
                 {
                     var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
-                                                                           x.OrderGroupId == orderGroup.OrderGroupId && 
+                                                                           x.OrderGroupId == orderGroup.OrderGroupId &&
                                                                            x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
-                    if (orderMaps == null)
+
+                    var orderMap = _context.OrderMaps.Add(new OrderMap
                     {
-                        var orderMap = _context.OrderMaps.Add(new OrderMap
-                        {
-                            OrderMapId = Guid.NewGuid().ToString(),
-                            OrderGroupId = orderGroup.OrderGroupId,
-                            Order = order,
-                        }).Entity;
-                        var entity = _context.OrderMaps.Add(orderMap).Entity;
-                    }
+                        OrderMapId = Guid.NewGuid().ToString(),
+                        OrderGroupId = orderGroup.OrderGroupId,
+                        Order = order,
+                    }).Entity;
+                    var entity = _context.OrderMaps.Add(orderMap).Entity;
+
                 }
             }
             else

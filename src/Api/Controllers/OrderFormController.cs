@@ -45,6 +45,9 @@ namespace Api.Controllers
                     request.Content = form.Data.Content;
             }
 
+            if(User.Claims.Count() == 0)
+                return Response<NewOrderFormResponse>.Fail("Kullanıcı bulunamadu", 404);
+
             var person = new OrderPerson
             {
                 CitizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value),
