@@ -45,6 +45,8 @@ namespace Infrastructure.Services
       
         private string HtmlReplace(string content)
         {
+            if (string.IsNullOrEmpty(content))
+                return "";
             var data = content.Replace(@"\""", String.Empty);
             data = data.Replace("\"", String.Empty);
             data = data.Replace(@"\r\n", String.Empty);
@@ -60,6 +62,8 @@ namespace Infrastructure.Services
 
         private string PDFReplace(string content)
         {
+            if (string.IsNullOrEmpty(content))
+                return "";
             var data = content.Replace(@"\""", String.Empty);
             data = data.Replace("\"", String.Empty);
             return data;
