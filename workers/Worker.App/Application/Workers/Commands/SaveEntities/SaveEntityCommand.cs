@@ -50,7 +50,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         {
             if (startFormRequest == null) return null;
 
-            var documents = new List<Domain.Entities.Document>();
 
             var formDefinition = _saveEntityService.GetFormDefinition(startFormRequest.FormId).Result;
             var config = new Config
@@ -75,10 +74,17 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             }
 
             var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
+<<<<<<< HEAD
             if (startFormRequest.Source == "file")
                 mimeType = startFormRequest.FileType;
             
             documents.Add(new Domain.Entities.Document
+=======
+            if (startFormRequest.Source == "file")            
+                mimeType = GetMimeType(formDefinition.Type);
+
+            var document = new Domain.Entities.Document
+>>>>>>> 0c39bdbc8bcf8dd1680d648474ffbcb9cf67ce99
             {
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
@@ -90,9 +96,20 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Created = _dateTime.Now,
                 DocumentActions = actions,
                 FormDefinitionId = startFormRequest.FormId
-            });
+            };
 
-            var customerId = GetCustomerId(startFormRequest.Approver);
+            var documents = new List<Domain.Entities.Document>
+            {
+                document
+            };
+
+            var customer = GetCustomerId(startFormRequest.Approver);
+            if(customer.StatusCode != 200)
+            {
+                customer = GetCustomerId(startFormRequest.Approver);
+            }
+
+            var customerId = customer.Data;
             var personId = GetPersonId(person);
             var order = new Order
             {
@@ -117,6 +134,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Documents = documents,
             };
 
+            _context.Orders.Add(order);
+
             if(!string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
             {
                 var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.Order.CustomerId == customerId && y.OrderId == startFormRequest.DependencyOrderId));
@@ -130,7 +149,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     {
                         OrderMapId = Guid.NewGuid().ToString(),
                         OrderGroupId = orderGroup.OrderGroupId,
-                        Order = order,
+                        OrderId = order.OrderId,
+                        DocumentId = document.DocumentId
                     }).Entity;
                     var entity = _context.OrderMaps.Add(orderMap).Entity;
 
@@ -141,7 +161,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
                 if (orderGroup != null)
                 {
-                    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
+                    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order, DocumentId = document.DocumentId });
                     var entity = _context.OrderGroups.Add(orderGroup).Entity;
                 }
             }
@@ -157,12 +177,19 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             };
         }
 
-        private string GetCustomerId(OrderCustomer customer)
+        private Response<string> GetCustomerId(OrderCustomer customer)
         {
-            var customerId = _saveEntityService.GetCustomerAsync(customer.CitizenshipNumber).Result;
-            if (customerId == null)
-                customerId = _saveEntityService.CustomerSaveAsync(customer).Result;
-            return customerId;
+            try
+            {
+                var customerId = _saveEntityService.GetCustomerAsync(customer.CitizenshipNumber).Result;
+                if (customerId == null)
+                    customerId = _saveEntityService.CustomerSaveAsync(customer).Result;
+                return Response<string>.Success(customerId, 200);
+            }
+            catch (Exception ex)
+            {
+                return Response<string>.Fail(ex.Message, 201);
+            }
         }
 
         private string GetPersonId(OrderPerson person)
@@ -225,8 +252,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.RetryFrequence = startRequest.Config.RetryFrequence;
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
+            var customer = GetCustomerId(startRequest.Approver);
+            if (customer.StatusCode != 200)
+            {
+                customer = GetCustomerId(startRequest.Approver);
+            }
 
-            var customerId = GetCustomerId(startRequest.Approver);
+            var customerId = customer.Data;
             var personId = GetPersonId(person);
             var order = new Order
             {

@@ -847,7 +847,7 @@ app-root {
   }
 }
 
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(lg) {
   app-root {
     #navbarSupportedContent {
       background: #0061af;
