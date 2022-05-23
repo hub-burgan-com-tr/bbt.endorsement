@@ -245,8 +245,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.RetryFrequence = startRequest.Config.RetryFrequence;
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
             }
+            var customer = GetCustomerId(startRequest.Approver);
+            if (customer.StatusCode != 200)
+            {
+                customer = GetCustomerId(startRequest.Approver);
+            }
 
-            var customerId = GetCustomerId(startRequest.Approver);
+            var customerId = customer.Data;
             var personId = GetPersonId(person);
             var order = new Order
             {
