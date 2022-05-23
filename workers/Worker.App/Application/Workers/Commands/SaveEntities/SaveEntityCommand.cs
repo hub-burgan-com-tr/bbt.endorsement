@@ -96,7 +96,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 document
             };
 
-            var customerId = GetCustomerId(startFormRequest.Approver);
+            var customer = GetCustomerId(startFormRequest.Approver);
+            if(customer.StatusCode != 200)
+            {
+                customer = GetCustomerId(startFormRequest.Approver);
+            }
+
+            var customerId = customer.Data;
             var personId = GetPersonId(person);
             var order = new Order
             {
@@ -164,12 +170,19 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             };
         }
 
-        private string GetCustomerId(OrderCustomer customer)
+        private Response<string> GetCustomerId(OrderCustomer customer)
         {
-            var customerId = _saveEntityService.GetCustomerAsync(customer.CitizenshipNumber).Result;
-            if (customerId == null)
-                customerId = _saveEntityService.CustomerSaveAsync(customer).Result;
-            return customerId;
+            try
+            {
+                var customerId = _saveEntityService.GetCustomerAsync(customer.CitizenshipNumber).Result;
+                if (customerId == null)
+                    customerId = _saveEntityService.CustomerSaveAsync(customer).Result;
+                return Response<string>.Success(customerId, 200);
+            }
+            catch (Exception ex)
+            {
+                return Response<string>.Fail(ex.Message, 201);
+            }
         }
 
         private string GetPersonId(OrderPerson person)
