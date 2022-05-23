@@ -48,7 +48,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
 
             if(dependencyForm != null)
             {
-                if(dependencyForm.DependecyReuse == false)
+                if(dependencyForm.DependecyReuse == true)
                 {
                     var orders = _context.Orders
                         .Where(x => x.OrderMaps.Any(y => y.OrderGroup.IsCompleted == false) &&
