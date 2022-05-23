@@ -163,7 +163,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
                 if (orderGroup != null)
                 {
-                    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order, DocumentId = document.DocumentId });
+                    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, OrderId = order.OrderId, DocumentId = document.DocumentId });
                     var entity = _context.OrderGroups.Add(orderGroup).Entity;
                 }
             }
