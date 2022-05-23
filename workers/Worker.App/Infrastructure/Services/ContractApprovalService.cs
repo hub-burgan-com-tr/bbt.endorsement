@@ -144,10 +144,9 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             if (variables != null)
                 variables.RetryEnd = true;
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             try
             {
-                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
                 if (person.Data != null)
                 {
@@ -172,21 +171,19 @@ public class ContractApprovalService : IContractApprovalService
                 //    State = "Müşteri Bilgileri",
                 //    Description = ""
                 //});
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
+                variables.IsProcess = true;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
-                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
         });
     }
     private void SendOtp()
@@ -196,17 +193,14 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("SendOtp", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             try
             {
                 var contractApprovalData = new ContractModel();
-                //var customer = contractApprovalData.Request.Customer;
-
 
                 if (variables != null)
                     variables.Limit += 1;
                 variables.IsProcess = true;
-
-                string data = System.Text.Json.JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
@@ -263,6 +257,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
             }
         });
@@ -278,7 +273,6 @@ public class ContractApprovalService : IContractApprovalService
 
             if (variables != null)
                 variables.Limit += 1;
-            variables.IsProcess = true;
 
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
@@ -293,12 +287,15 @@ public class ContractApprovalService : IContractApprovalService
                     Description = "",
                     IsCustomer = true
                 });
+                variables.IsProcess = true;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
             await jobClient.NewCompleteJobCommand(job.Key)
@@ -413,17 +410,29 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"DeleteEntity");
 
-            var response = await _mediator.Send(new DeleteEntityCommand { OrderId = variables.InstanceId.ToString() });
-
-            if (response != null && response.Data.OrderState == OrderState.Cancel && response.Data.IsUpdated)
+            try
             {
-                var history = _mediator.Send(new CreateOrderHistoryCommand
+                var response = await _mediator.Send(new DeleteEntityCommand { OrderId = variables.InstanceId.ToString() });
+
+                if (response != null && response.Data.OrderState == OrderState.Cancel && response.Data.IsUpdated)
                 {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Emir iptal edildi",
-                    Description = "",
-                    IsCustomer = true
-                });
+                    var history = _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        State = "Emir iptal edildi",
+                        Description = "",
+                        IsCustomer = true
+                    });
+                }
+                variables.IsProcess = true;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
             await jobClient.NewCompleteJobCommand(job.Key)
@@ -499,6 +508,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
             await jobClient.NewCompleteJobCommand(job.Key)
@@ -529,6 +539,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
             await jobClient.NewCompleteJobCommand(job.Key)
@@ -559,6 +570,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
             await jobClient.NewCompleteJobCommand(job.Key)
