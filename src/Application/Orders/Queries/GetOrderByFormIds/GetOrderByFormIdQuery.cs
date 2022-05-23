@@ -58,7 +58,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                         .Select(x => new GetOrderByFormIdResponse
                         {
                             OrderId = x.OrderId,
-                            OrderName = x.Title //+ " - " + x.Reference.ProcessNo
+                            OrderName = x.Title + " - " + x.Reference.ProcessNo
                         })
                         .ToList();
 
