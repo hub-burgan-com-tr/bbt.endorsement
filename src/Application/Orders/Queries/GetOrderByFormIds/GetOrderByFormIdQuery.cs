@@ -73,7 +73,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                                     x.OrderMaps.Count() == 1)
                         .Select(x => new
                         {
-                            Orders = x.OrderMaps.Select(y => new GetOrderByFormIdResponse
+                            Orders = x.OrderMaps.Where(x => x.Document.FormDefinitionId == dependencyForm.FormDefinitionId).Select(y => new GetOrderByFormIdResponse
                             {
                                 OrderId = y.OrderId,
                                 OrderName = y.Order.Title + " - " + y.Order.Reference.ProcessNo
