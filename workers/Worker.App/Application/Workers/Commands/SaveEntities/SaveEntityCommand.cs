@@ -130,8 +130,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             };
 
             _context.Orders.Add(order);
+            _context.SaveChanges();
 
-            if(!string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
+            if (!string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
             {
                 var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.Order.CustomerId == customerId && y.OrderId == startFormRequest.DependencyOrderId));
                 if (orderGroup != null)
@@ -148,7 +149,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                         DocumentId = document.DocumentId
                     }).Entity;
                     var entity = _context.OrderMaps.Add(orderMap).Entity;
-
                 }
             }
             else
