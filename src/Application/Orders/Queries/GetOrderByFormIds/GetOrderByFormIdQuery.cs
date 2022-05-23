@@ -68,6 +68,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                 {
                     var orders = _context.Orders
                         .Where(x => x.OrderMaps.Any(y => y.OrderGroup.IsCompleted == false) &&
+                                    x.OrderMaps.Count(y => y.Document.FormDefinitionId == dependencyForm.DependencyFormId) == 0 &&
                                     x.CustomerId == customer.CustomerId &&
                                     x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
                                     x.State == OrderState.Approve.ToString())
@@ -75,8 +76,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                         {
                             OrderId = x.OrderId,
                             OrderName = x.Title //+ " - " + x.Reference.ProcessNo
-                        })
-                        .ToList();
+                        }).ToList();
 
                     return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
                 }
