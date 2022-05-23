@@ -30,7 +30,7 @@ public class UpdateOrderGroupCommandHandler : IRequestHandler<UpdateOrderGroupCo
                 .Where(x => x.DocumentId != null && 
                             x.OrderGroupId == orderGroup.OrderGroupId &&
                             x.Document.Order.State == OrderState.Approve.ToString() &&
-                            x.Document.FormDefinition.DependencyFormId != null)
+                            x.Document.FormDefinition.DependencyFormId == null)
                 .Select(x => new
                 {
                     x.Document.FormDefinitionId
@@ -58,7 +58,7 @@ public class UpdateOrderGroupCommandHandler : IRequestHandler<UpdateOrderGroupCo
                         orderGroup.IsCompleted = true;
                         _context.OrderGroups.Update(orderGroup);
                         _context.SaveChanges();
-                        return Response<bool>.Success(200);
+                        return Response<bool>.Success(true, 200);
                     }
                 }
             }

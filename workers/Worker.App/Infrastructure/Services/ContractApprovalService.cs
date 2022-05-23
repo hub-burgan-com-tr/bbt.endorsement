@@ -473,9 +473,6 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (response.Data.OrderState == OrderState.Reject || response.Data.OrderState == OrderState.Approve)
                 {
-                    variables.Completed = true;
-                    variables.Approved = true;
-                    variables.IsProcess = true;
                     await _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId,
@@ -483,13 +480,17 @@ public class ContractApprovalService : IContractApprovalService
                         Description = "",
                         IsCustomer = true
                     });
+                    variables.IsProcess = true;
+                    variables.Approved = true;
 
-                    if(response.Data.OrderState == OrderState.Approve)
+                    if (response.Data.OrderState == OrderState.Approve)
                     {
-                        await _mediator.Send(new UpdateOrderGroupCommand
+                        var updateOrderGroup = await _mediator.Send(new UpdateOrderGroupCommand
                         {
                             OrderId = variables.InstanceId
                         });
+                        if (updateOrderGroup.Data == true)
+                            variables.Completed = true;                        
                     }
                 }
 
