@@ -66,17 +66,21 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                 }
                 else
                 {
-                    var orders = _context.Orders
-                        .Where(x => x.OrderMaps.Any(y => y.OrderGroup.IsCompleted == false) &&
-                                    x.OrderMaps.Count(y => y.Document.FormDefinitionId == dependencyForm.DependencyFormId) == 0 &&
-                                    x.CustomerId == customer.CustomerId &&
-                                    x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
-                                    x.State == OrderState.Approve.ToString())
-                        .Select(x => new GetOrderByFormIdResponse
+                    var data = _context.OrderGroups
+                        .Where(x => x.IsCompleted == false &&
+                                    x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId &&
+                                                         y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && z.Order.State == OrderState.Approve.ToString())) &&
+                                    x.OrderMaps.Count() == 1)
+                        .Select(x => new
                         {
-                            OrderId = x.OrderId,
-                            OrderName = x.Title //+ " - " + x.Reference.ProcessNo
+                            Orders = x.OrderMaps.Select(y => new GetOrderByFormIdResponse
+                            {
+                                OrderId = y.OrderId,
+                                OrderName = y.Order.Title + " - " + y.Order.Reference.ProcessNo
+                            })
                         }).ToList();
+
+                    var orders = data.FirstOrDefault().Orders.ToList();
 
                     return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
                 }
