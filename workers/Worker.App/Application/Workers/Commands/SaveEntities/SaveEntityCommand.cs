@@ -31,17 +31,24 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
             var response = new SaveEntityResponse();
-            if(request.Model.FormType == Form.Order)
-                response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
-            else if (request.Model.FormType == Form.FormOrder)
-                response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey);
+            try
+            {
+                if (request.Model.FormType == Form.Order)
+                    response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
+                else if (request.Model.FormType == Form.FormOrder)
+                    response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey);
 
-            var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
-            var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
-            foreach (var item in documentList)
-                saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
+                var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
+                var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
+                foreach (var item in documentList)
+                    saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
 
-            response.Documents = saveEntityDocuments;
+                response.Documents = saveEntityDocuments;
+            }
+            catch (Exception ex)
+            {
+                return Response<SaveEntityResponse>.Fail(ex.Message, 201);
+            }
 
             return Response<SaveEntityResponse>.Success(response, 200);
         }
