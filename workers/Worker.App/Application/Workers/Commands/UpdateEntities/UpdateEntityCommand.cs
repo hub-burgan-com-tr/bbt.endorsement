@@ -25,7 +25,7 @@ namespace Worker.App.Application.Workers.Commands.UpdateEntities
         {
             var order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
             if (order == null)
-                return new Response<UpdateEntityResponse>();
+                return Response<UpdateEntityResponse>.NotFoundException("Order bulunamadı", 404);
 
             if (order.State != OrderState.Pending.ToString())
             {

@@ -48,29 +48,14 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
 
             if(dependencyForm != null)
             {
-                if(dependencyForm.DependecyReuse == true)
-                {
-                    var orders = _context.Orders
-                        .Where(x => x.OrderMaps.Any(y => y.OrderGroup.IsCompleted == false) &&
-                                    x.CustomerId == customer.CustomerId &&
-                                    x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
-                                    x.State == OrderState.Approve.ToString())
-                        .Select(x => new GetOrderByFormIdResponse
-                        {
-                            OrderId = x.OrderId,
-                            OrderName = x.Title + " - " + x.Reference.ProcessNo
-                        })
-                        .ToList();
-
-                    return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
-                }
-                else
+                // Eğer DependecyReuse false seçilmiş ise onaylayıcının daha önce onayladığı ve ilişkilendirilmişmiş kayıtlar seçilemeyecek.
+                if (dependencyForm.DependecyReuse == false)
                 {
                     var data = _context.OrderGroups
                         .Where(x => x.IsCompleted == false &&
                                     x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId &&
                                                          y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && z.Order.State == OrderState.Approve.ToString())) &&
-                                    x.OrderMaps.Count() == 1)
+                                    x.OrderMaps.Count(y => y.DocumentId == formDefinition.FormDefinitionId && y.Order.State == OrderState.Cancel.ToString()) == 1)
                         .Select(x => new
                         {
                             Orders = x.OrderMaps.Where(x => x.Document.FormDefinitionId == dependencyForm.FormDefinitionId).Select(y => new GetOrderByFormIdResponse
@@ -88,6 +73,21 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                             orders.Add(order);
                         }
                     }
+                   
+                    return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
+                }
+                else
+                {
+                    var orders = _context.Orders
+                          .Where(x => x.CustomerId == customer.CustomerId &&
+                                      x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
+                                      x.State == OrderState.Approve.ToString())
+                          .Select(x => new GetOrderByFormIdResponse
+                          {
+                              OrderId = x.OrderId,
+                              OrderName = x.Title + " - " + x.Reference.ProcessNo
+                          })
+                          .ToList();
 
                     return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
                 }
