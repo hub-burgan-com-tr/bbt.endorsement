@@ -90,35 +90,44 @@ public class ContractApprovalService : IContractApprovalService
                         Model = variables,
                         ProcessInstanceKey = job.ProcessInstanceKey
                     });
-                    variables.IsProcess = true;
-                    variables.Device = true;
 
-                    if(response != null)
+                    if (response.StatusCode != 200)
                     {
-                        var history = _mediator.Send(new CreateOrderHistoryCommand
-                        {
-                            OrderId = variables.InstanceId.ToString(),
-                            State = "Yeni Onay Emri Oluşturuldu",
-                            Description = "",
-                            IsCustomer = true
-                        });
+                        variables.Error = "SaveEntity - SaveEntityCommand :" + response.Message;
+                        variables.IsProcess = false;
+                    }
+                    else
+                    {
+                        variables.IsProcess = true;
+                        variables.Device = true;
 
-                        foreach (var document in response.Data.Documents)
+                        if (response.StatusCode == 200)
                         {
-                            await _mediator.Send(new CreateOrderHistoryCommand
+                            var history = _mediator.Send(new CreateOrderHistoryCommand
                             {
-                                OrderId = variables.InstanceId,
-                                State = "Onay Belgesi Geldi",
-                                Description  = document.Name
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "Yeni Onay Emri Oluşturuldu",
+                                Description = "",
+                                IsCustomer = true
                             });
+
+                            foreach (var document in response.Data.Documents)
+                            {
+                                await _mediator.Send(new CreateOrderHistoryCommand
+                                {
+                                    OrderId = variables.InstanceId,
+                                    State = "Onay Belgesi Geldi",
+                                    Description = document.Name
+                                });
+                            }
                         }
                     }
-                }
-                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                    string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
+                    await jobClient.NewCompleteJobCommand(job.Key)
+                        .Variables(data)
+                        .Send();
+                }
             }
             catch (Exception ex)
             {
