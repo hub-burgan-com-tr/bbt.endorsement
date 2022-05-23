@@ -318,7 +318,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
                 var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId });
-                if (response != null)
+                if (response.StatusCode == 200)
                 {
                     var history = _mediator.Send(new CreateOrderHistoryCommand
                     {
