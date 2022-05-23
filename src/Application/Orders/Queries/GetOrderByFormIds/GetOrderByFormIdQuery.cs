@@ -51,11 +51,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                 if(dependencyForm.DependecyReuse == false)
                 {
                     var orders = _context.Orders
-                        .Where(x => x.CustomerId == customer.CustomerId && 
-                                    x.OrderMaps.Any(y => 
-                                                    y.Order.Documents.Any(z => z.FormDefinitionId != formDefinition.FormDefinitionId || 
-                                                                               (z.FormDefinitionId == formDefinition.FormDefinitionId && z.Order.State != OrderState.Approve.ToString())
-                                                    )) &&
+                        .Where(x => x.CustomerId == customer.CustomerId &&
                                     x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
                                     x.State == OrderState.Approve.ToString())
                         .Select(x => new GetOrderByFormIdResponse

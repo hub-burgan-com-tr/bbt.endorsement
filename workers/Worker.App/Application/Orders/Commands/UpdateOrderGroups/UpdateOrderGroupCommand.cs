@@ -21,19 +21,48 @@ public class UpdateOrderGroupCommandHandler : IRequestHandler<UpdateOrderGroupCo
         _dateTime = dateTime;
     }
 
-    public Task<Response<bool>> Handle(UpdateOrderGroupCommand request, CancellationToken cancellationToken)
+    public async Task<Response<bool>> Handle(UpdateOrderGroupCommand request, CancellationToken cancellationToken)
     {
-        var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.OrderId == request.OrderId));
+        var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.OrderId == request.OrderId && y.Order.State == OrderState.Approve.ToString()));
         if(orderGroup != null)
         {
-            var orders = _context.Orders
-                .Where(x=> x.OrderMaps.Any(y => y.OrderGroupId == orderGroup.OrderGroupId && 
-                                                y.Order.State == OrderState.Approve.ToString() &&
-                                                y.Order.Documents.Any(z => z.FormDefinition != null)));
+            var dependencyOrderMap = _context.OrderMaps
+                .Where(x => x.DocumentId != null && 
+                            x.OrderGroupId == orderGroup.OrderGroupId &&
+                            x.Document.Order.State == OrderState.Approve.ToString() &&
+                            x.Document.FormDefinition.DependencyFormId != null)
+                .Select(x => new
+                {
+                    x.Document.FormDefinitionId
+                }).FirstOrDefault();
 
-            var documents = _context.Documents.Where(x => x.Order.OrderMaps.Any(y => y.OrderGroupId == orderGroup.OrderGroupId));
+            if(dependencyOrderMap != null)
+            {
+                var formDefinition = _context.FormDefinitions.FirstOrDefault(x=> x.DependencyFormId == dependencyOrderMap.FormDefinitionId);
+                if(formDefinition != null)
+                {
+                    var formOrderMap = _context.OrderMaps
+                        .Where(x => x.DocumentId != null &&
+                                    x.OrderGroupId == orderGroup.OrderGroupId &&
+                                    x.Document.Order.State == OrderState.Approve.ToString() &&
+                                    x.Document.FormDefinition.FormDefinitionId == formDefinition.FormDefinitionId)
+                        .FirstOrDefault();
 
+                    //var document = _context.Documents
+                    //    .Where(x => x.Order.OrderMaps.Any(y => y.OrderGroupId == orderGroup.OrderGroupId) &&
+                    //                x.FormDefinition.FormDefinitionId == formDefinition.FormDefinitionId &&
+                    //                x.Order.State == OrderState.Approve.ToString());
+
+                    if(formOrderMap != null)
+                    {
+                        orderGroup.IsCompleted = true;
+                        _context.OrderGroups.Update(orderGroup);
+                        _context.SaveChanges();
+                        return Response<bool>.Success(200);
+                    }
+                }
+            }
         }
-        throw new NotImplementedException();
+        return Response<bool>.NotFoundException("Kayıt bulunamadı", 404);
     }
 }
