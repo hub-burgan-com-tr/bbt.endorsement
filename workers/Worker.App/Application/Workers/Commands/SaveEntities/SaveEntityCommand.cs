@@ -175,7 +175,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 OrderId = order.OrderId,
                 ExpireInMinutes = order.Config.ExpireInMinutes,
                 MaxRetryCount = order.Config.MaxRetryCount,
-                RetryFrequence = order.Config.RetryFrequence
+                RetryFrequence = order.Config.RetryFrequence,
+                Documents = order.Documents.Select(x => new SaveEntityDocumentResponse { DocumentId = x.DocumentId, Name = x.Name}).ToList()
             };
         }
 
@@ -297,7 +298,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 OrderId = order.OrderId,
                 ExpireInMinutes = order.Config.ExpireInMinutes,
                 MaxRetryCount = order.Config.MaxRetryCount,
-                RetryFrequence= order.Config.RetryFrequence
+                RetryFrequence= order.Config.RetryFrequence,
+                Documents = order.Documents.Select(x => new SaveEntityDocumentResponse { DocumentId = x.DocumentId, Name = x.Name }).ToList()
             };
         }
 
