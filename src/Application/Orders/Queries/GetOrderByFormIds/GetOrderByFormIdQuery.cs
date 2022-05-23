@@ -80,7 +80,14 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                             })
                         }).ToList();
 
-                    var orders = data.FirstOrDefault().Orders.ToList();
+                    var orders = new List<GetOrderByFormIdResponse>();
+                    foreach (var item in data)
+                    {
+                        foreach (var order in item.Orders)
+                        {
+                            orders.Add(order);
+                        }
+                    }
 
                     return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
                 }
