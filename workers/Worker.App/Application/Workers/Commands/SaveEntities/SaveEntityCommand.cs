@@ -74,8 +74,10 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             }
 
             var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
-            if (startFormRequest.Source == "file")            
-                mimeType = GetMimeType(formDefinition.Type);
+            if (startFormRequest.Source == "file")
+                mimeType = startFormRequest.FileType;
+            
+            
 
             var document = new Domain.Entities.Document
             {
@@ -313,26 +315,5 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
         }
 
-
-        private string GetMimeType(string fileType)
-        {
-            if (fileType.Contains("image"))
-            {
-                return "image/png";
-            }
-            else if (fileType.ToLower().Contains("pdf"))
-            {
-                return "application/pdf";
-            }
-           else if (fileType.Contains("html"))
-            {
-                return "text/html";
-            }
-            else
-            {
-                return FileType.File.ToString();
-            }
-
-        }
     }
 }
