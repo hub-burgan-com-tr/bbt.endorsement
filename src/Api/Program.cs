@@ -14,7 +14,6 @@ using Microsoft.OpenApi.Models;
 IConfiguration Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
-
 IWebHostEnvironment environment = builder.Environment;
 
 if (environment.EnvironmentName == "Development")
