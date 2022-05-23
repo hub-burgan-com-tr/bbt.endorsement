@@ -47,6 +47,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       form: ['', [Validators.required]],
       processNo: ['', [Validators.required]],
       file: [''],
+      fileType: [''],
       dependencyOrderId: ['']
     });
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
@@ -134,9 +135,15 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.fileBase64 = reader.result;
+        this.formGroup.patchValue({
+          fileType: file.type
+        });
       };
     } else {
       this.fileBase64 = '';
+      this.formGroup.patchValue({
+        fileType: ''
+      });
     }
   }
 
@@ -185,7 +192,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         first: this.person.first,
         last: this.person.last,
         clientNumber: this.person.clientNumber
-      }, this.source === 'file' ? this.fileBase64 : JSON.stringify(e.data), this.formDefinitionId, <IReference>{
+      }, this.source === 'file' ? this.fileBase64 : JSON.stringify(e.data), this.f.fileType.value, this.formDefinitionId, <IReference>{
         processNo: this.f.processNo.value,
         tagId: this.f.tag.value,
         formId: this.f.form.value,

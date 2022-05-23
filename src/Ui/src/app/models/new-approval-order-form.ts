@@ -14,15 +14,17 @@ export default class NewApprovalOrderForm implements INewApprovalOrderForm {
   insuranceType: string;
   approver: Approver;
   content: string;
+  fileType: string;
   formId: string;
   reference: Reference;
   title: string;
   source: string;
   dependencyOrderId: string;
 
-  constructor(approver, content, formId, reference, title, insuranceType, source, dependencyOrderId) {
+  constructor(approver, content, fileType, formId, reference, title, insuranceType, source, dependencyOrderId) {
     this.approver = approver;
     this.content = content;
+    this.fileType = fileType;
     this.formId = formId;
     this.reference = reference;
     this.title = title;
