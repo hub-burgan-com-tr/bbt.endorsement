@@ -482,15 +482,14 @@ public class ContractApprovalService : IContractApprovalService
                     });
                     variables.IsProcess = true;
                     variables.Approved = true;
+                    variables.Completed = true;
 
                     if (response.Data.OrderState == OrderState.Approve)
                     {
-                        var updateOrderGroup = await _mediator.Send(new UpdateOrderGroupCommand
+                        await _mediator.Send(new UpdateOrderGroupCommand
                         {
                             OrderId = variables.InstanceId
-                        });
-                        if (updateOrderGroup.Data == true)
-                            variables.Completed = true;                        
+                        });               
                     }
                 }
 
