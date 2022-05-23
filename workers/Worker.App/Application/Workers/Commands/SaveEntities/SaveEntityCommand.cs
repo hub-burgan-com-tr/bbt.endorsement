@@ -74,17 +74,12 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             }
 
             var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
-<<<<<<< HEAD
             if (startFormRequest.Source == "file")
                 mimeType = startFormRequest.FileType;
             
-            documents.Add(new Domain.Entities.Document
-=======
-            if (startFormRequest.Source == "file")            
-                mimeType = GetMimeType(formDefinition.Type);
+            
 
             var document = new Domain.Entities.Document
->>>>>>> 0c39bdbc8bcf8dd1680d648474ffbcb9cf67ce99
             {
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
