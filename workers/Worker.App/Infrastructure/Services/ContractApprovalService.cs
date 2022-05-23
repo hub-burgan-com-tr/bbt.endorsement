@@ -492,7 +492,7 @@ public class ContractApprovalService : IContractApprovalService
                         });               
                     }
                 }
-
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
             catch (Exception ex)
             {
