@@ -136,7 +136,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Documents = documents,
             };
 
-            _context.Orders.Add(order);
+            order = _context.Orders.Add(order).Entity;
             _context.SaveChanges();
 
             if (!string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
