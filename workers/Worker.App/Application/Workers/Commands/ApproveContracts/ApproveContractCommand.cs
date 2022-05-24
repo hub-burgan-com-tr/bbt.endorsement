@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 
@@ -37,7 +38,7 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
                  {
                      DocumentId = x.DocumentId,
                      State = x.State
-                 }).AsEnumerable();
+                 }).ToListAsync().Result;
 
             var reject = documents.FirstOrDefault(x => x.State == ActionType.Reject.ToString());
             if(reject != null)
@@ -66,7 +67,7 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
                     DocumentId = x.DocumentId,
                     DocumentName = x.Name,
                     ActionTitle = x.DocumentActions.FirstOrDefault(x => x.IsSelected) != null ? x.DocumentActions.FirstOrDefault(x => x.IsSelected).Title : ""
-                }).ToList();
+                }).ToListAsync().Result;
 
             return Response<ApproveContractResponse>.Success(new ApproveContractResponse { OrderState = orderState, Documents = approveContractDocuments }, 200);
         }
