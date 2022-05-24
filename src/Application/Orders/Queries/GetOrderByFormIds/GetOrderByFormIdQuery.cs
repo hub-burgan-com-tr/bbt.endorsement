@@ -55,13 +55,17 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                         .Where(x => x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId && 
                                                          y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && 
                                                                                     z.State == OrderState.Approve.ToString())));
-
+                    var orderIds = new List<int>();
                     foreach (var orderGroup in orderGroups)
                     {
-                        var orderMaps = _context.OrderMaps.Where(x => x.OrderGroupId == orderGroup.OrderGroupId);
+                        var orderMaps = _context.OrderMaps.Where(x => x.OrderGroupId == orderGroup.OrderGroupId && 
+                                                                      (((x.Document.State == OrderState.Cancel.ToString() || x.Document.State == null) &&
+                                                                      x.Document.FormDefinitionId == formDefinition.FormDefinitionId) || 
+                                                                      x.Document.FormDefinitionId != formDefinition.FormDefinitionId)
+                                                                      );
                         foreach (var orderMap in orderMaps)
                         {
-
+                              
                         }
                     }
 
