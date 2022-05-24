@@ -24,7 +24,7 @@ namespace Infrastructure.Configuration
                     {
                         configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
                         configure.EnableRetryOnFailure();
-                    }), ServiceLifetime.Transient);
+                    }), ServiceLifetime.Scoped);
         }
 
         public static void AddScopedServices(this IServiceCollection services)
