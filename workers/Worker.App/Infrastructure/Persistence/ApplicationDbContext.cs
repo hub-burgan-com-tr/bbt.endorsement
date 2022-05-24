@@ -88,7 +88,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 .Where(domainEvent => !domainEvent.IsPublished)
                 .ToArray();
 
-        var result = base.SaveChanges();
+        var result = base.SaveChangesAsync().Result;
         _ = DispatchEvents(events);
         return result;
     }

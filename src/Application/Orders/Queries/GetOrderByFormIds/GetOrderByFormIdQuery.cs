@@ -52,7 +52,14 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                 if (dependencyForm.DependecyReuse == false)
                 {
                     var orderGroups = _context.OrderGroups
-                        .Where(x => x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId && y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && z.State == OrderState.Approve.ToString())));
+                        .Where(x => x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId && 
+                                                         y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && 
+                                                                                    z.State == OrderState.Approve.ToString())));
+
+                    foreach (var orderGroup in orderGroups)
+                    {
+
+                    }
 
 
                     var data = _context.OrderGroups

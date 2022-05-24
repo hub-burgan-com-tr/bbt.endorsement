@@ -270,7 +270,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 string type = Enum.GetName(typeof(ContentType), item.Type);
 
                 var content = item.Content;
-                if(item.Type.ToString() == ((int)ContentType.PlainText).ToString())
+                if (item.Type.ToString() == ((int)ContentType.PlainText).ToString())
                 {
                     var plainTextBytes = Encoding.UTF8.GetBytes(content);
                     content = "data:text/plain;base64," + Convert.ToBase64String(plainTextBytes);
@@ -315,7 +315,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
-               
+
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
@@ -330,8 +330,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             //orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
             //var entity = _context.OrderGroups.Add(orderGroup).Entity;
 
-            var entity = _context.Orders.Add(order).Entity;
-
+            _context.Orders.Add(order);
             _context.SaveChanges();
 
             return new SaveEntityResponse
@@ -339,7 +338,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 OrderId = order.OrderId,
                 ExpireInMinutes = order.Config.ExpireInMinutes,
                 MaxRetryCount = order.Config.MaxRetryCount,
-                RetryFrequence= order.Config.RetryFrequence,
+                RetryFrequence = order.Config.RetryFrequence,
                 Documents = order.Documents.Select(x => new SaveEntityDocumentResponse { DocumentId = x.DocumentId, Name = x.Name }).ToList()
             };
         }
