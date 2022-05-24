@@ -51,6 +51,10 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                 // Eğer DependecyReuse false seçilmiş ise onaylayıcının daha önce onayladığı ve ilişkilendirilmişmiş kayıtlar seçilemeyecek.
                 if (dependencyForm.DependecyReuse == false)
                 {
+                    var orderGroups = _context.OrderGroups
+                        .Where(x => x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId && y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && z.State == OrderState.Approve.ToString())));
+
+
                     var data = _context.OrderGroups
                         .Where(x => x.IsCompleted == false &&
                                     x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId &&

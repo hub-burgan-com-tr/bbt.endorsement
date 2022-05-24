@@ -119,14 +119,15 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.Order.CustomerId == customerId && y.OrderId == startFormRequest.DependencyOrderId));
                 if (orderGroup != null)
                 {
-                    var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
-                                                                           x.OrderGroupId == orderGroup.OrderGroupId &&
-                                                                           x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
+                    //var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
+                    //                                                       x.OrderGroupId == orderGroup.OrderGroupId &&
+                    //                                                       x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
 
                     var orderMap = _context.OrderMaps.Add(new OrderMap
                     {
                         OrderMapId = Guid.NewGuid().ToString(),
                         OrderGroupId = orderGroup.OrderGroupId,
+                        OrderId = startFormRequest.Id.ToString(),
                         Order = new Order
                         {
                             OrderId = startFormRequest.Id.ToString(),
@@ -204,7 +205,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 var entity = _context.OrderGroups.Add(orderGroup).Entity;
             }
 
-            _context.SaveChanges();
+           var i = _context.SaveChanges();
 
             var order = _context.Orders
                 .Where(x => x.OrderId == startFormRequest.Id)
