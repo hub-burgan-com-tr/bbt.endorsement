@@ -369,17 +369,17 @@ public class ContractApprovalService : IContractApprovalService
             Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
             try
             {
-                 foreach (var item in variables.Documents)
-                {
-                    var document = _mediator.Send(new UpdateDocumentActionCommand
-                    {
-                        OrderId = variables.InstanceId,
-                        DocumentId = item.DocumentId,
-                        ActionId = item.ActionId
-                    });
-                }
+                // foreach (var item in variables.Documents)
+                //{
+                //    var document = _mediator.Send(new UpdateDocumentActionCommand
+                //    {
+                //        OrderId = variables.InstanceId,
+                //        DocumentId = item.DocumentId,
+                //        ActionId = item.ActionId
+                //    });
+                //}
 
-                var orderState = await _mediator.Send(new ApproveContractCommand { OrderId = variables.InstanceId });
+                var orderState = await _mediator.Send(new ApproveContractCommand { Model = variables, OrderId = variables.InstanceId });
                 if(orderState.Data.OrderState != OrderState.Pending)
                 {
                     foreach (var item in orderState.Data.Documents)

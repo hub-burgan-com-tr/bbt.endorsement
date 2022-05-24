@@ -75,7 +75,7 @@
         <div class="col-4">
           <div class="form-group">
             <label for="processNo">İşlem No</label>
-            <input type="text" class="form-control" id="processNo" name="processNo" (change)="processNoChange($event)"
+            <input type="text" class="form-control" id="processNo" name="processNo" (change)="processNoChange()"
                    formControlName="processNo"
                    [ngClass]="{ 'is-invalid': submitted && f.processNo.invalid }">
             <div *ngIf="submitted && f.processNo.errors" class="invalid-feedback">
@@ -132,7 +132,7 @@
       </div>
       <div *ngIf="form&&source=='formio'">
         <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>
-        <formio [form]="form" [options]="options" (submit)="submitForm($event)"></formio>
+        <formio [form]="form" [options]="options" (submit)="submitForm($event)" (submissionLoad)="formLoaded()"></formio>
       </div>
     </div>
     <div class="button-group d-flex align-items-center justify-content-center mt-5">

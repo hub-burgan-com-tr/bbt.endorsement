@@ -16,6 +16,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _dateTime = dateTime;
         _domainEventService = domainEventService;
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+    }
+
     public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<OrderGroup> OrderGroups { get; set; }
     public virtual DbSet<OrderMap> OrderMaps { get; set; }
