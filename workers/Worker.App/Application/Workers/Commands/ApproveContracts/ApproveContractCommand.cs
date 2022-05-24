@@ -34,7 +34,7 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
                                     .FirstOrDefault(x => x.Document.OrderId == request.OrderId &&
                                                          x.DocumentId == item.DocumentId &&
                                                          x.DocumentActionId == item.ActionId);
-                if (action == null)
+                if (action != null)
                 {
                     action.IsSelected = true;
                     if (action.Choice == (int)ActionType.Approve)
