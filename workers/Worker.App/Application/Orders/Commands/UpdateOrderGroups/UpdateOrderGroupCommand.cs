@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 
@@ -34,7 +35,7 @@ public class UpdateOrderGroupCommandHandler : IRequestHandler<UpdateOrderGroupCo
                 .Select(x => new
                 {
                     x.Document.FormDefinitionId
-                }).FirstOrDefault();
+                }).FirstOrDefaultAsync().Result;
 
             if(dependencyOrderMap != null)
             {
@@ -46,7 +47,7 @@ public class UpdateOrderGroupCommandHandler : IRequestHandler<UpdateOrderGroupCo
                                     x.OrderGroupId == orderGroup.OrderGroupId &&
                                     x.Document.Order.State == OrderState.Approve.ToString() &&
                                     x.Document.FormDefinition.FormDefinitionId == formDefinition.FormDefinitionId)
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync().Result;
 
                     //var document = _context.Documents
                     //    .Where(x => x.Order.OrderMaps.Any(y => y.OrderGroupId == orderGroup.OrderGroupId) &&
