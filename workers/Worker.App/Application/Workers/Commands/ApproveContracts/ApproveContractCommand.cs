@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
@@ -9,6 +10,8 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
     public class ApproveContractCommand : IRequest<Response<ApproveContractResponse>>
     {
         public string OrderId { get; set; }
+
+        public ContractModel Model { get; set; }
     }
 
     public class ApproveContractCommandHandler : IRequestHandler<ApproveContractCommand, Response<ApproveContractResponse>>
@@ -24,6 +27,26 @@ namespace Worker.App.Application.Workers.Commands.ApproveContracts
 
         public async Task<Response<ApproveContractResponse>> Handle(ApproveContractCommand request, CancellationToken cancellationToken)
         {
+            foreach (var item in request.Model.Documents)
+            {
+                var action = _context.DocumentActions
+                                    .Include(x => x.Document)
+                                    .FirstOrDefault(x => x.Document.OrderId == request.OrderId &&
+                                                         x.DocumentId == item.DocumentId &&
+                                                         x.DocumentActionId == item.ActionId);
+                if (action == null)
+                {
+                    action.IsSelected = true;
+                    if (action.Choice == (int)ActionType.Approve)
+                        action.Document.State = ActionType.Approve.ToString();
+                    else if (action.Choice == (int)ActionType.Reject)
+                        action.Document.State = ActionType.Reject.ToString();
+
+                    _context.DocumentActions.Update(action);
+                }
+            }
+            _context.SaveChanges();
+
             var order = _context.Orders.FirstOrDefault(x=> x.OrderId == request.OrderId);
 
             if (order == null && order.State != OrderState.Pending.ToString())
