@@ -34,6 +34,14 @@ namespace Worker.App.Application.Workers.Commands.DeleteEntities
             order.State = OrderState.Cancel.ToString();
             order.LastModified = _dateTime.Now;
             order = _context.Orders.Update(order).Entity;
+
+            var documents = order.Documents.Where(x => x.OrderId == order.OrderId);
+            foreach (var document in documents)
+            {
+                document.State = OrderState.Cancel.ToString();
+                _context.Documents.Update(document);
+            }
+
             _context.SaveChanges();
 
             var orderState = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());

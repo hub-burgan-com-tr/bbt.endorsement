@@ -58,7 +58,11 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
 
                     foreach (var orderGroup in orderGroups)
                     {
+                        var orderMaps = _context.OrderMaps.Where(x => x.OrderGroupId == orderGroup.OrderGroupId);
+                        foreach (var orderMap in orderMaps)
+                        {
 
+                        }
                     }
 
 
