@@ -59,10 +59,14 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                     foreach (var orderGroup in orderGroups)
                     {
                         var orderMaps = _context.OrderMaps.Where(x => x.OrderGroupId == orderGroup.OrderGroupId && 
-                                                                      (((x.Document.State == OrderState.Cancel.ToString() || x.Document.State == null) &&
-                                                                      x.Document.FormDefinitionId == formDefinition.FormDefinitionId) || 
-                                                                      x.Document.FormDefinitionId != formDefinition.FormDefinitionId)
-                                                                      );
+                                                                      x.Document.FormDefinitionId == formDefinition.FormDefinitionId);
+
+
+                     
+                        var _orderMaps = _context.OrderMaps.Where(x => x.OrderGroupId == orderGroup.OrderGroupId && 
+                                                                       x.Document.FormDefinitionId == formDefinition.FormDefinitionId &&
+                                                                       (x.Document.State == OrderState.Cancel.ToString() || x.Document.State == null));
+
                         foreach (var orderMap in orderMaps)
                         {
                               

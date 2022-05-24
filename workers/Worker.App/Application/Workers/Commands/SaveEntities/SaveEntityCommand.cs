@@ -128,6 +128,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                         OrderMapId = Guid.NewGuid().ToString(),
                         OrderGroupId = orderGroup.OrderGroupId,
                         OrderId = startFormRequest.Id.ToString(),
+                        OrderNumber = 2, // Teklif
                         Order = new Order
                         {
                             OrderId = startFormRequest.Id.ToString(),
@@ -176,6 +177,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                             OrderMapId = Guid.NewGuid().ToString(),
                             OrderId = startFormRequest.Id.ToString(),
                             OrderGroupId= orderGroupId,
+                            OrderNumber = 1, // Başvuru
                             Order = new Order
                             {
                                 OrderId = startFormRequest.Id.ToString(),
