@@ -3,6 +3,7 @@ using Application.Common.Models;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Orders.Queries.GetOrderByFormIds;
 
@@ -48,39 +49,42 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
 
             if(dependencyForm != null)
             {
-                if(dependencyForm.DependecyReuse == false)
+                // Eğer DependecyReuse false seçilmiş ise onaylayıcının daha önce onayladığı ve ilişkilendirilmişmiş kayıtlar seçilemeyecek.
+                if (dependencyForm.DependecyReuse == false)
                 {
-                    var orders = _context.Orders
-                        .Where(x => x.OrderMaps.Any(y => y.OrderGroup.IsCompleted == false) &&
-                                    x.CustomerId == customer.CustomerId &&
-                                    x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
-                                    x.State == OrderState.Approve.ToString())
-                        .Select(x => new GetOrderByFormIdResponse
-                        {
-                            OrderId = x.OrderId,
-                            OrderName = x.Title //+ " - " + x.Reference.ProcessNo
-                        })
-                        .ToList();
+                    var orderMaps = _context.OrderMaps.Include(x => x.Order.Reference)
+                                                            .Where(x => x.OrderNumber == 1 && 
+                                                                   x.Order.CustomerId == customer.CustomerId &&
+                                                                   x.Order.State == OrderState.Approve.ToString());
 
+                    var orders = new List<GetOrderByFormIdResponse>();
+                    foreach (var orderMap in orderMaps)
+                    {
+                        var order = _context.OrderMaps.Any(x => x.OrderGroupId == orderMap.OrderGroupId && x.OrderNumber == 2 && x.Order.State != OrderState.Cancel.ToString());
+                        if(order == false)
+                        {
+                            orders.Add(new GetOrderByFormIdResponse
+                            {
+                                OrderId = orderMap.OrderId,
+                                OrderName = orderMap.Order.Title + " - " + orderMap.Order.Reference.ProcessNo
+                            });
+                        }
+                    }
+                   
                     return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
                 }
                 else
                 {
-                    var data = _context.OrderGroups
-                        .Where(x => x.IsCompleted == false &&
-                                    x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId &&
-                                                         y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && z.Order.State == OrderState.Approve.ToString())) &&
-                                    x.OrderMaps.Count() == 1)
-                        .Select(x => new
-                        {
-                            Orders = x.OrderMaps.Select(y => new GetOrderByFormIdResponse
-                            {
-                                OrderId = y.OrderId,
-                                OrderName = y.Order.Title + " - " + y.Order.Reference.ProcessNo
-                            })
-                        }).ToList();
-
-                    var orders = data.FirstOrDefault().Orders.ToList();
+                    var orders = _context.Orders
+                          .Where(x => x.CustomerId == customer.CustomerId &&
+                                      x.Documents.Any(y => y.FormDefinitionId == dependencyForm.FormDefinitionId) &&
+                                      x.State == OrderState.Approve.ToString())
+                          .Select(x => new GetOrderByFormIdResponse
+                          {
+                              OrderId = x.OrderId,
+                              OrderName = x.Title + " - " + x.Reference.ProcessNo
+                          })
+                          .ToList();
 
                     return Response<List<GetOrderByFormIdResponse>>.Success(orders, 200);
                 }

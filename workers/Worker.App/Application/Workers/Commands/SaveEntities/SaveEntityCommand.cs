@@ -31,17 +31,24 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
             var response = new SaveEntityResponse();
-            if(request.Model.FormType == Form.Order)
-                response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
-            else if (request.Model.FormType == Form.FormOrder)
-                response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey);
+            try
+            {
+                if (request.Model.FormType == Form.Order)
+                    response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
+                else if (request.Model.FormType == Form.FormOrder)
+                    response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey);
 
-            var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
-            var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
-            foreach (var item in documentList)
-                saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
+                var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
+                var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
+                foreach (var item in documentList)
+                    saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
 
-            response.Documents = saveEntityDocuments;
+                response.Documents = saveEntityDocuments;
+            }
+            catch (Exception ex)
+            {
+                return Response<SaveEntityResponse>.Fail(ex.Message, 201);
+            }
 
             return Response<SaveEntityResponse>.Success(response, 200);
         }
@@ -84,8 +91,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
                 Name = startFormRequest.Title,
-                Type = formDefinition.Type.ToString(),
-                FileType = formDefinition.Type.ToString(),
+                Type =startFormRequest.Source=="formio"?formDefinition.Type.ToString(): GetFileType(startFormRequest.FileType),
+                FileType = startFormRequest.Source == "formio" ? formDefinition.Type.ToString() : GetFileType(startFormRequest.FileType),
                 MimeType = mimeType,
                 InsuranceType = startFormRequest.InsuranceType,
                 Created = _dateTime.Now,
@@ -106,70 +113,114 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
             var customerId = customer.Data;
             var personId = GetPersonId(person);
-            var order = new Order
-            {
-                OrderId = startFormRequest.Id.ToString(),
-                ProcessInstanceKey = processInstanceKey,
-                DocumentSystemId = formDefinition.DocumentSystemId,
 
-                State = OrderState.Pending.ToString(),
-                Title = startFormRequest.Title,
-                Created = _dateTime.Now,
-                Config = config,
-                CustomerId = customerId,
-                PersonId = personId,            
-           
-                Reference = new Reference
-                {
-                    ProcessNo = startFormRequest.Reference.ProcessNo,
-                    Created = _dateTime.Now,
-                    Process = startFormRequest.Title,
-                    State = startFormRequest.Title,
-                },
-                Documents = documents,
-            };
-
-            _context.Orders.Add(order);
-
-            if(!string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
+            if (!string.IsNullOrEmpty(startFormRequest.DependencyOrderId) && startFormRequest.Source == "file")
             {
                 var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.Order.CustomerId == customerId && y.OrderId == startFormRequest.DependencyOrderId));
                 if (orderGroup != null)
                 {
-                    var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
-                                                                           x.OrderGroupId == orderGroup.OrderGroupId &&
-                                                                           x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
+                    //var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
+                    //                                                       x.OrderGroupId == orderGroup.OrderGroupId &&
+                    //                                                       x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
 
                     var orderMap = _context.OrderMaps.Add(new OrderMap
                     {
                         OrderMapId = Guid.NewGuid().ToString(),
                         OrderGroupId = orderGroup.OrderGroupId,
-                        OrderId = order.OrderId,
+                        OrderId = startFormRequest.Id.ToString(),
+                        OrderNumber = 2, // Teklif
+                        Order = new Order
+                        {
+                            OrderId = startFormRequest.Id.ToString(),
+                            ProcessInstanceKey = processInstanceKey,
+                            DocumentSystemId = formDefinition.DocumentSystemId,
+
+                            State = OrderState.Pending.ToString(),
+                            Title = startFormRequest.Title,
+                            Created = _dateTime.Now,
+                            Config = config,
+                            CustomerId = customerId,
+                            PersonId = personId,
+
+                            Reference = new Reference
+                            {
+                                ProcessNo = startFormRequest.Reference.ProcessNo,
+                                Created = _dateTime.Now,
+                                Process = startFormRequest.Title,
+                                State = startFormRequest.Title,
+                            },
+                            Documents = documents
+                        },            
                         DocumentId = document.DocumentId
                     }).Entity;
                     var entity = _context.OrderMaps.Add(orderMap).Entity;
-
                 }
             }
             else
             {
-                var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
-                if (orderGroup != null)
+                //var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
+                //if (orderGroup != null)
+                //{
+                //    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, OrderId = order.OrderId, DocumentId = document.DocumentId });
+                //    var entity = _context.OrderGroups.Add(orderGroup).Entity;
+                //}
+
+                var orderGroupId = Guid.NewGuid().ToString();
+                var orderGroup = new OrderGroup
                 {
-                    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order, DocumentId = document.DocumentId });
-                    var entity = _context.OrderGroups.Add(orderGroup).Entity;
-                }
+                    OrderGroupId = Guid.NewGuid().ToString(),
+                    IsCompleted = false,
+                    OrderMaps = new List<OrderMap>
+                    {
+                        new OrderMap
+                        {
+                            OrderMapId = Guid.NewGuid().ToString(),
+                            OrderId = startFormRequest.Id.ToString(),
+                            OrderGroupId= orderGroupId,
+                            OrderNumber = 1, // Başvuru
+                            Order = new Order
+                            {
+                                OrderId = startFormRequest.Id.ToString(),
+                                ProcessInstanceKey = processInstanceKey,
+                                DocumentSystemId = formDefinition.DocumentSystemId,
+
+                                State = OrderState.Pending.ToString(),
+                                Title = startFormRequest.Title,
+                                Created = _dateTime.Now,
+                                Config = config,
+                                CustomerId = customerId,
+                                PersonId = personId,
+
+                                Reference = new Reference
+                                {
+                                    ProcessNo = startFormRequest.Reference.ProcessNo,
+                                    Created = _dateTime.Now,
+                                    Process = startFormRequest.Title,
+                                    State = startFormRequest.Title,
+                                },
+                                Documents = documents,
+                            },
+                            DocumentId = document.DocumentId
+                        }
+                    }
+                };
+                var entity = _context.OrderGroups.Add(orderGroup).Entity;
             }
 
-            _context.SaveChanges();
+           var i = _context.SaveChanges();
 
-            return new SaveEntityResponse
-            {
-                OrderId = order.OrderId,
-                ExpireInMinutes = order.Config.ExpireInMinutes,
-                MaxRetryCount = order.Config.MaxRetryCount,
-                RetryFrequence = order.Config.RetryFrequence
-            };
+            var order = _context.Orders
+                .Where(x => x.OrderId == startFormRequest.Id)
+                .Select(x => new SaveEntityResponse
+                {
+                    OrderId = x.OrderId,
+                    ExpireInMinutes = x.Config.ExpireInMinutes,
+                    MaxRetryCount = x.Config.MaxRetryCount,
+                    RetryFrequence = x.Config.RetryFrequence,
+                    Documents = x.Documents.Select(x => new SaveEntityDocumentResponse { DocumentId = x.DocumentId, Name = x.Name }).ToList()
+                }).FirstOrDefault();
+
+            return order;
         }
 
         private Response<string> GetCustomerId(OrderCustomer customer)
@@ -221,7 +272,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 string type = Enum.GetName(typeof(ContentType), item.Type);
 
                 var content = item.Content;
-                if(item.Type.ToString() == ((int)ContentType.PlainText).ToString())
+                if (item.Type.ToString() == ((int)ContentType.PlainText).ToString())
                 {
                     var plainTextBytes = Encoding.UTF8.GetBytes(content);
                     content = "data:text/plain;base64," + Convert.ToBase64String(plainTextBytes);
@@ -266,7 +317,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 Config = config,
                 CustomerId = customerId,
                 PersonId = personId,
-               
+
                 Reference = new Reference
                 {
                     ProcessNo = startRequest.Reference.ProcessNo,
@@ -281,8 +332,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             //orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
             //var entity = _context.OrderGroups.Add(orderGroup).Entity;
 
-            var entity = _context.Orders.Add(order).Entity;
-
+            _context.Orders.Add(order);
             _context.SaveChanges();
 
             return new SaveEntityResponse
@@ -290,7 +340,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 OrderId = order.OrderId,
                 ExpireInMinutes = order.Config.ExpireInMinutes,
                 MaxRetryCount = order.Config.MaxRetryCount,
-                RetryFrequence= order.Config.RetryFrequence
+                RetryFrequence = order.Config.RetryFrequence,
+                Documents = order.Documents.Select(x => new SaveEntityDocumentResponse { DocumentId = x.DocumentId, Name = x.Name }).ToList()
             };
         }
 

@@ -90,35 +90,44 @@ public class ContractApprovalService : IContractApprovalService
                         Model = variables,
                         ProcessInstanceKey = job.ProcessInstanceKey
                     });
-                    variables.IsProcess = true;
-                    variables.Device = true;
 
-                    if(response != null)
+                    if (response.StatusCode != 200)
                     {
-                        var history = _mediator.Send(new CreateOrderHistoryCommand
-                        {
-                            OrderId = variables.InstanceId.ToString(),
-                            State = "Yeni Onay Emri Oluşturuldu",
-                            Description = "",
-                            IsCustomer = true
-                        });
+                        variables.Error = "SaveEntity - SaveEntityCommand :" + response.Message;
+                        variables.IsProcess = false;
+                    }
+                    else
+                    {
+                        variables.IsProcess = true;
+                        variables.Device = true;
 
-                        foreach (var document in response.Data.Documents)
+                        if (response.StatusCode == 200)
                         {
-                            await _mediator.Send(new CreateOrderHistoryCommand
+                            var history = _mediator.Send(new CreateOrderHistoryCommand
                             {
-                                OrderId = variables.InstanceId,
-                                State = "Onay Belgesi Geldi",
-                                Description  = document.Name
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "Yeni Onay Emri Oluşturuldu",
+                                Description = "",
+                                IsCustomer = true
                             });
+
+                            foreach (var document in response.Data.Documents)
+                            {
+                                await _mediator.Send(new CreateOrderHistoryCommand
+                                {
+                                    OrderId = variables.InstanceId,
+                                    State = "Onay Belgesi Geldi",
+                                    Description = document.Name
+                                });
+                            }
                         }
                     }
-                }
-                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                    string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
+                    await jobClient.NewCompleteJobCommand(job.Key)
+                        .Variables(data)
+                        .Send();
+                }
             }
             catch (Exception ex)
             {
@@ -318,7 +327,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
                 var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId });
-                if (response != null && response.Data.IsUpdated)
+                if (response.StatusCode == 200)
                 {
                     var history = _mediator.Send(new CreateOrderHistoryCommand
                     {
@@ -360,17 +369,17 @@ public class ContractApprovalService : IContractApprovalService
             Log.ForContext("OrderId", variables.InstanceId).Information($"ApproveContract");
             try
             {
-                 foreach (var item in variables.Documents)
-                {
-                    var document = _mediator.Send(new UpdateDocumentActionCommand
-                    {
-                        OrderId = variables.InstanceId,
-                        DocumentId = item.DocumentId,
-                        ActionId = item.ActionId
-                    });
-                }
+                // foreach (var item in variables.Documents)
+                //{
+                //    var document = _mediator.Send(new UpdateDocumentActionCommand
+                //    {
+                //        OrderId = variables.InstanceId,
+                //        DocumentId = item.DocumentId,
+                //        ActionId = item.ActionId
+                //    });
+                //}
 
-                var orderState = await _mediator.Send(new ApproveContractCommand { OrderId = variables.InstanceId });
+                var orderState = await _mediator.Send(new ApproveContractCommand { Model = variables, OrderId = variables.InstanceId });
                 if(orderState.Data.OrderState != OrderState.Pending)
                 {
                     foreach (var item in orderState.Data.Documents)

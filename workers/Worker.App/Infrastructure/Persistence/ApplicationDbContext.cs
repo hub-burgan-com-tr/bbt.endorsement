@@ -16,6 +16,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _dateTime = dateTime;
         _domainEventService = domainEventService;
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+    }
+
     public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<OrderGroup> OrderGroups { get; set; }
     public virtual DbSet<OrderMap> OrderMaps { get; set; }
@@ -88,7 +94,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 .Where(domainEvent => !domainEvent.IsPublished)
                 .ToArray();
 
-        var result = base.SaveChanges();
+        var result = base.SaveChangesAsync().Result;
         _ = DispatchEvents(events);
         return result;
     }

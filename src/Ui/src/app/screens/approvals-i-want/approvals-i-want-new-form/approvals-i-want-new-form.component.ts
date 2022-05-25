@@ -75,6 +75,11 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  formLoaded() {
+    this.setFormIoData();
+    this.processNoChange();
+  }
+
   formChanged(val) {
     if (val) {
       this.formDefinitionId = val;
@@ -89,7 +94,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         }
         this.f.file.updateValueAndValidity();
         this.formTitle = data && data.title;
-        this.setFormIoData();
+        // this.setFormIoData();
         this.getOrderByFormId();
       });
     } else {
@@ -97,13 +102,13 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  processNoChange(e) {
+  processNoChange() {
     if (this.formio && this.source != 'file')
-      this.formio.formio.getComponent('FormInstance_Transaction_Id').setValue(e.target.value);
+      this.formio.formio.getComponent('FormInstance_Transaction_Id').setValue(this.f.processNo?.value);
   }
 
   setFormIoData() {
-    if (this.formio && this.source != 'file') {
+    if (this.formio && this.source != 'file' && this.person) {
       this.formio.formio.getComponent('FormInstance_Approver_Fullname').setValue(`${this.person.first} ${this.person.last}`);
       this.formio.formio.getComponent('FormInstance_Approver_CitizenshipNumber').setValue(this.person.citizenshipNumber);
     }

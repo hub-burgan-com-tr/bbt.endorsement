@@ -16,6 +16,7 @@ namespace Domain.Entities
         public string OrderId { get; set; }
         [MaxLength(36)]
         public string DocumentId { get; set; }
+        public int OrderNumber { get; set; }
 
 
         public virtual OrderGroup OrderGroup { get; set; }
