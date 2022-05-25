@@ -19,7 +19,7 @@ namespace Migration.Console.App
 
         public void Migrate()
         {
-            _context.Database.EnsureDeleted();
+           // _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
             FormDefinitionSeed.SeedFormDefinitionsAsync(_context).Wait();
             ParamaterSeed.SeedFormDefinitionsAsync(_context).Wait();
