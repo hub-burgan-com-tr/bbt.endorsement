@@ -13,7 +13,7 @@ namespace Application.OrderForms.Commands.UpdateFormDependencyReuse
     public class UpdateFormDependencyReuseCommand : IRequest<Response<bool>>
     {
         public string TemplateName { get; set; }
-        public bool DependencyReuse { get; set; }
+        public bool? DependencyReuse { get; set; }
 
     }
 
