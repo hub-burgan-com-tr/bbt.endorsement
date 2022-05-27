@@ -43,5 +43,7 @@ namespace Domain.Entities
         public virtual ICollection<OrderHistory> OrderHistories { get; set; }
         public virtual ICollection<OrderMap> OrderMaps { get; set; }
 
+        public virtual ICollection<DocumentInsuranceType> DocumentInsuranceTypes { get; set; }
+
     }
 }
