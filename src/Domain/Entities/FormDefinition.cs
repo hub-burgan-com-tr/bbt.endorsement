@@ -40,7 +40,7 @@ namespace Domain.Entities
         [MaxLength(36)]
         public string DependencyFormId { get; set; }
         
-        public bool? DependecyReuse { get; set; }
+        public bool? DependencyReuse { get; set; }
         [MaxLength(10)]
         public string Source { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
