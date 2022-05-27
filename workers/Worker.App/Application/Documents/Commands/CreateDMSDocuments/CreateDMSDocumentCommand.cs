@@ -35,6 +35,16 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
         var customer = order.Customer;
         var documents = order.Documents;
 
+        var insuranceTypes = new List<string>();
+        foreach (var document in order.Documents)
+        {
+            var types = document.InsuranceType.Split(",");
+            for (int i = 0; i < types.Length; i++)
+            {
+                insuranceTypes.Add(types[i].Trim());
+            }
+        }
+
         try
         {
             foreach (var document in documents)
