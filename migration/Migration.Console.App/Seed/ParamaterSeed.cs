@@ -11,21 +11,26 @@ namespace Migration.Console.App.Seed
                 return;
             if (!context.ParameterTypes.Any())
             {
-               var parameterType= context.ParameterTypes.Add(new ParameterType { Id = 1, Name = "İşlem",Created=DateTime.Now});
-                parameterType.Entity.Parameters.Add(new Parameter { Id = 1, Text = "Sigorta Formları", Created = DateTime.Now });
+               var parameterType= context.ParameterTypes.Add(new ParameterType { Name = "İşlem",Created=DateTime.Now});
+                parameterType.Entity.Parameters.Add(new Parameter { Text = "Sigorta Formları", Created = DateTime.Now });
 
-                var parameterType2 = context.ParameterTypes.Add(new ParameterType { Id = 2, Name = "Aşama", Created = DateTime.Now });
-                parameterType2.Entity.Parameters.Add(new Parameter { Id = 101, Text = "Başvuru Formu", Created = DateTime.Now });
-                parameterType2.Entity.Parameters.Add(new Parameter { Id = 102, Text = "Teklif Formu", Created = DateTime.Now });
+                var parameterType2 = context.ParameterTypes.Add(new ParameterType { Name = "Aşama", Created = DateTime.Now });
+                parameterType2.Entity.Parameters.Add(new Parameter {  Text = "Başvuru Formu", Created = DateTime.Now });
+                parameterType2.Entity.Parameters.Add(new Parameter {  Text = "Teklif Formu", Created = DateTime.Now });
 
-                var dysParameter = context.ParameterTypes.Add(new ParameterType { Id = 3, Name = "Dys Form Kategorileri" }).Entity;
-                dysParameter.Parameters.Add(new Parameter { Id = 201, Text = "Konut Eşya" });
-                dysParameter.Parameters.Add(new Parameter { Id = 202, Text = "Konut" });
-                dysParameter.Parameters.Add(new Parameter { Id = 203, Text = "DASK" });
-                dysParameter.Parameters.Add(new Parameter { Id = 204, Text = "Kasko" });
-                dysParameter.Parameters.Add(new Parameter { Id = 205, Text = "Trafik" });
-                dysParameter.Parameters.Add(new Parameter { Id = 206, Text = "İşyeri" });
-                dysParameter.Parameters.Add(new Parameter { Id = 207, Text = "Diğer" });
+
+
+
+
+
+                var dysParameter = context.ParameterTypes.Add(new ParameterType {Name = "Dys Form Kategorileri" }).Entity;
+                dysParameter.Parameters.Add(new Parameter {  Text = "Konut Eşya", Created = DateTime.Now,DmsReferenceId=1 });
+                dysParameter.Parameters.Add(new Parameter {  Text = "Konut", Created = DateTime.Now,DmsReferenceId=2 });
+                dysParameter.Parameters.Add(new Parameter {  Text = "DASK", Created = DateTime.Now,DmsReferenceId=3 });
+                dysParameter.Parameters.Add(new Parameter {  Text = "Kasko", Created = DateTime.Now,DmsReferenceId=4 });
+                dysParameter.Parameters.Add(new Parameter {  Text = "Trafik", Created = DateTime.Now,DmsReferenceId=5 });
+                dysParameter.Parameters.Add(new Parameter {  Text = "İşyeri", Created = DateTime.Now,DmsReferenceId=6 });
+                dysParameter.Parameters.Add(new Parameter {  Text = "Diğer", Created = DateTime.Now,DmsReferenceId=7 });
 
                 await context.SaveChangesAsync();
             }
