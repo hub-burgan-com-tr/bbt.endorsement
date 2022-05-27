@@ -62,7 +62,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                     {
                         var order = _context.OrderMaps.Any(x => x.OrderGroupId == orderMap.OrderGroupId && 
                                                                 x.Document.FormDefinitionId == formDefinition.FormDefinitionId && 
-                                                                x.Order.State != OrderState.Cancel.ToString());
+                                                                x.Order.State != OrderState.Cancel.ToString()); //  && x.Order.State != OrderState.Reject.ToString()
                         if(order == false)
                         {
                             orders.Add(new GetOrderByFormIdResponse
