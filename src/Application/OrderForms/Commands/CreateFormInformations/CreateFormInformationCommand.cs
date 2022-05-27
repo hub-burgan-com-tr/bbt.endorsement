@@ -60,7 +60,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     Type = ContentType.PDF.ToString(),
                     ExpireInMinutes = request.ExpireInMinutes,
                     MaxRetryCount = request.MaxRetryCount,
-                    DependecyReuse = false,
+                    DependencyReuse = false,
                     DependencyFormId= Guid.NewGuid().ToString(),    
 
                 });

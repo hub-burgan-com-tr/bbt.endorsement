@@ -37,7 +37,7 @@ namespace Application.OrderForms.Commands.UpdateFormDependencyReuse
             var form = _context.FormDefinitions.FirstOrDefault(x => x.TemplateName == request.TemplateName.Trim());
             if (form != null)
             {
-                form.DependecyReuse = request.DependencyReuse;
+                form.DependencyReuse = request.DependencyReuse;
                 form.Created = _dateTime.Now;
                 _context.FormDefinitions.Update(form);
                 result = _context.SaveChanges();
