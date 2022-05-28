@@ -5,7 +5,6 @@ using Domain.Models;
 using Domain.Entities;
 using Domain.Enums;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {

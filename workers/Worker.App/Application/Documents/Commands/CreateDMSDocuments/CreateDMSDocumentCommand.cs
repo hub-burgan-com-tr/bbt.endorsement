@@ -14,7 +14,7 @@ namespace Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 public class CreateDMSDocumentCommand : IRequest<Response<string>>
 {
     public ApproveOrderDocument Document { get; set; }
-    public Guid InstanceId { get; set; }
+    public string InstanceId { get; set; }
 }
 
 public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocumentCommand, Response<string>>
@@ -110,4 +110,3 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
         return Response<string>.Success(200);
     }
 }
-
