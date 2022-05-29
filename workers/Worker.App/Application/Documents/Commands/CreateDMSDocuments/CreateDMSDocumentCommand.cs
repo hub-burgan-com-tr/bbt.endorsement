@@ -99,6 +99,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
                         {
                             _context.DocumentDmses.Add(new Domain.Entities.DocumentDms
                             {
+                                DocumentDmsId = Guid.NewGuid().ToString(),
                                 DocumentId = document.DocumentId,   
                                 DmsReferenceId = dmsRefId,
                             });
