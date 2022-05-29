@@ -18,4 +18,5 @@ public class Entegration
     public string TemplateEngine { get; set; }
     public string Sso { get; set; }
     public string DMSService { get; set; }
+    public string MessagingGateway { get; set; }
 }

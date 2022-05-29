@@ -11,6 +11,7 @@ public static class StaticValuesExtensions
         StaticValues.Internals = settings.Entegration.Internals;
         StaticValues.DMSService = settings.Entegration.DMSService;
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
+        StaticValues.MessagingGateway = settings.Entegration.MessagingGateway;
     }
 }
 
