@@ -1,8 +1,10 @@
-﻿namespace Application.BbtInternals.Queries.GetSearchPersonSummary
+﻿using Application.BbtInternals.Models;
+
+namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 {
     public class GetSearchPersonSummaryDto
     {
-        public long CitizenshipNumber { get; set; }
+        public string CitizenshipNumber { get; set; }
         public string First { get; set; }
         public string Last { get; set; }
         public long ClientNumber { get;  set; }
@@ -10,14 +12,15 @@
         public bool IsCustomer { get; set; }
         public AuthoryModel Authory { get; set; }
         public string[] Emails { get; set; }
-        public Models.GsmPhone[] GsmPhones { get;  set; }
+        public GsmPhone[] GsmPhones { get;  set; }
 
-        public class GsmPhone
-        {
-            public int County { get; set; }
-            public long Prefix { get; set; }
-            public long Number { get; set; }
-        }
+
+
+        public bool IsPersonel { get; set; }
+        public string Email { get; set; }
+        public GsmPhone GsmPhone { get; set; }
+
+
         public class AuthoryModel
         {
             public bool IsReadyFormCreator { get; set; } // Form ile Emir Oluşturma

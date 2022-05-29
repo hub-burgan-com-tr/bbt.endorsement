@@ -1,4 +1,6 @@
-﻿using Application.BbtInternals.Queries.GetPersonSummary;
+﻿using Application.BbtInternals.Models;
+using Application.BbtInternals.Queries.GetCustomers;
+using Application.BbtInternals.Queries.GetPersonSummary;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -10,6 +12,18 @@ namespace Api.Controllers
     [ApiController]
     public class PersonController : ApiControllerBase
     {
+        [Route("customer-search")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
+        [SwaggerResponse(404, "Success but there is no person search  available for the query.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> CustomerSearch([FromBody] CustomerRequest customer)
+        {
+            var response = await Mediator.Send(new GetCustomerQuery { Customer = customer });
+            return Ok(response);
+        }
+
         [Route("person-search")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
@@ -21,6 +35,7 @@ namespace Api.Controllers
             var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
             return Ok(response);
         }
+
         [Route("person-get")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried person get are returned successfully.", typeof(GetSearchPersonSummaryDto))]
