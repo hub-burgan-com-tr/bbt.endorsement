@@ -91,11 +91,17 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
                     if (dmsRefId != null)
                     {
-                        var documentUpdate = _context.Documents.FirstOrDefault(x => x.DocumentId == document.DocumentId);
-                        if (documentUpdate != null)
+                        var documentDms = _context.DocumentDmses
+                                                    .FirstOrDefault(x => x.Document.OrderId == request.InstanceId && 
+                                                                         x.DocumentId == document.DocumentId && 
+                                                                         x.DmsReferenceId == dmsRefId);
+                        if (documentDms == null)
                         {
-                            documentUpdate.DmsReferenceId = dmsRefId;
-                            _context.Documents.Update(documentUpdate);
+                            _context.DocumentDmses.Add(new Domain.Entities.DocumentDms
+                            {
+                                DocumentId = document.DocumentId,   
+                                DmsReferenceId = dmsRefId,
+                            });
                             _context.SaveChanges();
                         }
                     }

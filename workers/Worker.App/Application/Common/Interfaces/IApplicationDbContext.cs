@@ -16,6 +16,7 @@ namespace Worker.App.Application.Common.Interfaces
         DbSet<FormDefinitionTag> FormDefinitionTags { get; }
         DbSet<DocumentAction> DocumentActions { get; }
         DbSet<Domain.Entities.Document> Documents { get; }
+        DbSet<DocumentDms> DocumentDmses { get; }
         DbSet<DocumentInsuranceType> DocumentInsuranceTypes { get; }
         DbSet<OrderHistory> OrderHistories { get; }
         DbSet<Person> Persons { get; }

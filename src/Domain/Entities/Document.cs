@@ -32,8 +32,6 @@ namespace Domain.Entities
         public string MimeType { get; set; }
         [MaxLength(500)]
         public string InsuranceType { get; set; }
-        [MaxLength(50)]
-        public string DmsReferenceId { get; set; }
 
 
         public virtual FormDefinition FormDefinition { get; set; }
@@ -44,6 +42,7 @@ namespace Domain.Entities
         public virtual ICollection<OrderMap> OrderMaps { get; set; }
 
         public virtual ICollection<DocumentInsuranceType> DocumentInsuranceTypes { get; set; }
+        public virtual ICollection<DocumentDms> DocumentDms { get; set; }
 
     }
 }
