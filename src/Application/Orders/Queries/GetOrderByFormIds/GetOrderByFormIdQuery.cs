@@ -95,11 +95,3 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
         return Response<List<GetOrderByFormIdResponse>>.Success(404);
     }
 }
-
-public class OrderCustomer
-{
-    public long CitizenshipNumber { get; set; }
-    public string First { get; set; }
-    public string Last { get; set; }
-    public long ClientNumber { get; set; }
-}
