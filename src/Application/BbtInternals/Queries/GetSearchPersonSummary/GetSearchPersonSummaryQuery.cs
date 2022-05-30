@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 {
-    public class GetSearchPersonSummaryQuery :IRequest<Response<GetSearchPersonSummaryResponse>>
+    public class GetSearchPersonSummaryQuery : IRequest<Response<GetSearchPersonSummaryResponse>>
     {
         public string Name { get; set; }
     }
@@ -23,17 +23,16 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
             var response = await _internalsService.GetPersonSearch(request.Name);
             var persons = response.Data.Select(x => new GetSearchPersonSummaryDto
             {
-                CitizenshipNumber = x.CitizenshipNumber,
+                CitizenshipNumber = x.CitizenshipNumber.ToString(),
                 First = x.Name.First,
                 Last = x.Name.Last,
-                ClientNumber=x.ClientNumber,
-                IsCustomer=x.IsCustomer,
-                Emails=x.Emails,
-                GsmPhones=x.GsmPhones,
-                Authory =x.IsCustomer==false&&x.Authory!=null?new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval=x.Authory.IsBranchApproval,IsReadyFormCreator=x.Authory.IsReadyFormCreator,IsNewFormCreator=x.Authory.IsNewFormCreator,IsFormReader=x.Authory.IsFormReader,IsBranchFormReader=x.Authory.IsBranchFormReader}:null,
+                ClientNumber = x.ClientNumber,
+                IsCustomer = x.IsCustomer,
+                Emails = x.Emails,
+                GsmPhones = x.GsmPhones,
+                Authory = x.IsCustomer == false && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
             });
             return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
         }
     }
-
 }

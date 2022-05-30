@@ -1,8 +1,6 @@
 ﻿using Application.BbtInternals.Models;
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Infrastructure.Configuration.Options;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -10,12 +8,23 @@ namespace Infrastructure.InternalsServices
 {
     public class InternalsService : IInternalsService
     {
-        private readonly AppSettings _appSetting;
         private readonly string internalsUrl;
-        public InternalsService(IOptions<AppSettings> appSetting)
+        public InternalsService()
         {
-            _appSetting = appSetting.Value;
-            internalsUrl = "http://20.31.226.131:5000"; // _appSetting.Entegration.Internals;
+            internalsUrl = StaticValues.Internals;
+        }
+        public async Task<Response<CustomerResponse>> GetCustomerSearch(CustomerRequest person)
+        {
+            var restClient = new RestClient(internalsUrl);
+            var restRequest = new RestRequest("/Customer", Method.Post);
+            restRequest.AddHeader("Content-Type", "application/json");
+            restRequest.AddHeader("Accept", "text/plain");
+
+            restRequest.AddBody(person);
+            var response = await restClient.ExecutePostAsync(restRequest);
+
+            var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
+            return Response<CustomerResponse>.Success(data, 200);
         }
 
         public async Task<Response<PersonResponse>> GetPersonById(long id)

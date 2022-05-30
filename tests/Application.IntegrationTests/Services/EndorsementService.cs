@@ -7,6 +7,7 @@ using Domain.Models;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace Application.IntegrationTests.Services;
@@ -100,7 +101,11 @@ public static class EndorsementService
 
     public static ApproveOrderDocumentCommand ApproveOrderDocumentTestData()
     {
-        IApplicationDbContext _context = new ApplicationDbContext(null, null, null);
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        IApplicationDbContext _context = new ApplicationDbContext(optionsBuilder.Options, null, null);
+
+
         var order = _context.Orders.Include(x => x.Documents).ThenInclude(x => x.DocumentActions).Include(x => x.Documents).ThenInclude(x => x.FormDefinition).ThenInclude(x => x.FormDefinitionActions).FirstOrDefault(x => x.State != OrderState.Cancel.ToString());
         ApproveOrderDocumentCommand approveOrderDocument = new ApproveOrderDocumentCommand
         {

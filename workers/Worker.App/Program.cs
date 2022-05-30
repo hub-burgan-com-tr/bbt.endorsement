@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Worker.App.Application;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Extensions;
 using Worker.App.Infrastructure;
 using Worker.App.Infrastructure.Configuration;
 using Worker.App.Infrastructure.Configuration.Options;
@@ -87,6 +88,9 @@ builder.Services.AddSingleton<IConfigurationRoot>(provider => builder.Configurat
 builder.Services.AddHostedService<ZeebeWorkService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
+
+StaticValuesExtensions.SetStaticValues(settings);
+
 var app = builder.Build();
 
 app.AddUseMiddleware();

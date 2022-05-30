@@ -7,6 +7,7 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
 using Worker.App.Application.Orders.Queries.CheckOrderDependecyRules;
@@ -80,10 +81,10 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (variables != null)
                 {
-                    var dependecyRules = _mediator.Send(new CheckOrderDependecyRulesQuery
-                    {
-                        Model = variables
-                    });
+                    //var dependecyRules = _mediator.Send(new CheckOrderDependecyRulesQuery
+                    //{
+                    //    Model = variables
+                    //});
 
                     var response = await _mediator.Send(new SaveEntityCommand
                     {
@@ -118,6 +119,19 @@ public class ContractApprovalService : IContractApprovalService
                                     OrderId = variables.InstanceId,
                                     State = "Onay Belgesi Geldi",
                                     Description = document.Name
+                                });
+                            }
+
+                            if (variables.FormType == Form.FormOrder)
+                            {
+                                var document = response.Data.Documents.FirstOrDefault();
+                                var dms = _mediator.Send(new CreateDMSDocumentCommand
+                                {
+                                    InstanceId = variables.InstanceId,
+                                    Document = new ApproveOrderDocument
+                                    {
+                                        DocumentId = document.DocumentId
+                                    }
                                 });
                             }
                         }

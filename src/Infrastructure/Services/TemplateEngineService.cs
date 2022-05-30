@@ -10,7 +10,7 @@ namespace Infrastructure.Services
         private readonly string _templateEngineUrl;
         public TemplateEngineService()
         {
-            _templateEngineUrl = "http://20.126.170.150:5000";
+            _templateEngineUrl = StaticValues.TemplateEngine;
         }
 
         public async Task<Response<string>> HtmlRender(string templateName, string content)

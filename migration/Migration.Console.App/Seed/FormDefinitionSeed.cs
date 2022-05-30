@@ -34,7 +34,7 @@ public static class FormDefinitionSeed
                 Type = ContentType.PDF.ToString(),
                 ExpireInMinutes = 60,
                 MaxRetryCount = 3,
-                DependecyReuse = false,
+                DependencyReuse = false,
                 Source = "formio"
 
             });                    

@@ -3,6 +3,7 @@ using Application.Common.Models;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Orders.Queries.GetOrderByFormIds;
 
@@ -48,52 +49,27 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
 
             if(dependencyForm != null)
             {
-                // Eğer DependecyReuse false seçilmiş ise onaylayıcının daha önce onayladığı ve ilişkilendirilmişmiş kayıtlar seçilemeyecek.
-                if (dependencyForm.DependecyReuse == false)
+                // Eğer DependencyReuse false seçilmiş ise onaylayıcının daha önce onayladığı ve ilişkilendirilmişmiş kayıtlar seçilemeyecek.
+                if (dependencyForm.DependencyReuse == false)
                 {
-                    var orderGroups = _context.OrderGroups
-                        .Where(x => x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId && 
-                                                         y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && 
-                                                                                    z.State == OrderState.Approve.ToString())));
-                    var orderIds = new List<int>();
-                    foreach (var orderGroup in orderGroups)
-                    {
-                        var orderMaps = _context.OrderMaps.Where(x => x.OrderGroupId == orderGroup.OrderGroupId && 
-                                                                      x.Document.FormDefinitionId == formDefinition.FormDefinitionId);
-
-
-                     
-                        var _orderMaps = _context.OrderMaps.Where(x => x.OrderGroupId == orderGroup.OrderGroupId && 
-                                                                       x.Document.FormDefinitionId == formDefinition.FormDefinitionId &&
-                                                                       (x.Document.State == OrderState.Cancel.ToString() || x.Document.State == null));
-
-                        foreach (var orderMap in orderMaps)
-                        {
-                              
-                        }
-                    }
-
-
-                    var data = _context.OrderGroups
-                        .Where(x => x.IsCompleted == false &&
-                                    x.OrderMaps.Any(y => y.Order.CustomerId == customer.CustomerId &&
-                                                         y.Order.Documents.Any(z => z.FormDefinitionId == dependencyForm.FormDefinitionId && z.Order.State == OrderState.Approve.ToString())) &&
-                                    x.OrderMaps.Count(y => y.DocumentId == formDefinition.FormDefinitionId && y.Order.State == OrderState.Cancel.ToString()) == 1)
-                        .Select(x => new
-                        {
-                            Orders = x.OrderMaps.Where(x => x.Document.FormDefinitionId == dependencyForm.FormDefinitionId).Select(y => new GetOrderByFormIdResponse
-                            {
-                                OrderId = y.OrderId,
-                                OrderName = y.Order.Title + " - " + y.Order.Reference.ProcessNo
-                            })
-                        }).ToList();
+                    var orderMaps = _context.OrderMaps.Include(x => x.Order.Reference)
+                                                            .Where(x => x.Document.FormDefinitionId == dependencyForm.FormDefinitionId && 
+                                                                   x.Order.CustomerId == customer.CustomerId &&
+                                                                   x.Order.State == OrderState.Approve.ToString());
 
                     var orders = new List<GetOrderByFormIdResponse>();
-                    foreach (var item in data)
+                    foreach (var orderMap in orderMaps)
                     {
-                        foreach (var order in item.Orders)
+                        var order = _context.OrderMaps.Any(x => x.OrderGroupId == orderMap.OrderGroupId && 
+                                                                x.Document.FormDefinitionId == formDefinition.FormDefinitionId && 
+                                                                x.Order.State != OrderState.Cancel.ToString() && x.Order.State != OrderState.Reject.ToString());
+                        if(order == false)
                         {
-                            orders.Add(order);
+                            orders.Add(new GetOrderByFormIdResponse
+                            {
+                                OrderId = orderMap.OrderId,
+                                OrderName = orderMap.Order.Title + " - " + orderMap.Order.Reference.ProcessNo
+                            });
                         }
                     }
                    
@@ -118,12 +94,4 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
         }
         return Response<List<GetOrderByFormIdResponse>>.Success(404);
     }
-}
-
-public class OrderCustomer
-{
-    public long CitizenshipNumber { get; set; }
-    public string First { get; set; }
-    public string Last { get; set; }
-    public long ClientNumber { get; set; }
 }

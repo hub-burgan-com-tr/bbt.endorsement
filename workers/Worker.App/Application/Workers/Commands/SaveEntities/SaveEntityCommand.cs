@@ -5,7 +5,6 @@ using Domain.Models;
 using Domain.Entities;
 using Domain.Enums;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -80,24 +79,31 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 });
             }
 
+            var documentInsuranceTypes = new List<DocumentInsuranceType>();
+            foreach (var type in startFormRequest.InsuranceType.Split(","))
+            {
+                var parameter = _context.Parameters.FirstOrDefault(x => x.ParameterTypeId == 3 && x.Text.ToLower() == type.ToLower().Trim());
+               if(parameter != null)
+                    documentInsuranceTypes.Add(new DocumentInsuranceType { DocumentInsuranceTypeId = Guid.NewGuid().ToString(), ParameterId = parameter.Id});
+            }
+
             var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
             if (startFormRequest.Source == "file")
                 mimeType = startFormRequest.FileType;
-            
-            
 
             var document = new Domain.Entities.Document
             {
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
                 Name = startFormRequest.Title,
-                Type = formDefinition.Type.ToString(),
-                FileType = formDefinition.Type.ToString(),
+                Type = startFormRequest.Source == "formio" ? formDefinition.Type.ToString() : GetFileType(startFormRequest.FileType),
+                FileType = startFormRequest.Source == "formio" ? formDefinition.Type.ToString() : GetFileType(startFormRequest.FileType),
                 MimeType = mimeType,
                 InsuranceType = startFormRequest.InsuranceType,
                 Created = _dateTime.Now,
                 DocumentActions = actions,
-                FormDefinitionId = startFormRequest.FormId
+                FormDefinitionId = startFormRequest.FormId,
+                DocumentInsuranceTypes = documentInsuranceTypes
             };
 
             var documents = new List<Domain.Entities.Document>

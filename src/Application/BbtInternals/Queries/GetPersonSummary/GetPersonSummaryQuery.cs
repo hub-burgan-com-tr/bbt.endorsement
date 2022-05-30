@@ -23,7 +23,7 @@ namespace Application.BbtInternals.Queries.GetPersonSummary
             var response = await _internalsService.GetPersonById(request.Id);
             var person = new GetSearchPersonSummaryDto
             {
-                CitizenshipNumber = response.Data.CitizenshipNumber,
+                CitizenshipNumber = response.Data.CitizenshipNumber.ToString(),
                 First = response.Data.Name.First,
                 Last = response.Data.Name.Last
             };
