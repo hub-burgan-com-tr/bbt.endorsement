@@ -53,6 +53,8 @@ public class ContractApprovalService : IContractApprovalService
         ConsumeCallback();
         LoadContactInfo();
         SaveEntity();
+        CreateDMSDocument();
+
         SendOtp();
         SendPush();
         UpdateEntity();
@@ -66,7 +68,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void SaveEntity()
     {
-       // Log.Information("SaveEntity Worker registered ");
+        // Log.Information("SaveEntity Worker registered ");
 
         CreateWorker("SaveEntity", async (jobClient, job) =>
         {
@@ -124,22 +126,9 @@ public class ContractApprovalService : IContractApprovalService
 
                             if (variables.FormType == Form.FormOrder)
                             {
-                                try
-                                {
-                                    var document = response.Data.Documents.FirstOrDefault();
-                                    var dms = _mediator.Send(new CreateDMSDocumentCommand
-                                    {
-                                        InstanceId = variables.InstanceId,
-                                        Document = new ApproveOrderDocument
-                                        {
-                                            DocumentId = document.DocumentId
-                                        }
-                                    }).Result;
-                                }
-                                catch (Exception ex)
-                                {
-                                    variables.Error = ex.Message;
-                                }
+                                var document = response.Data.Documents.FirstOrDefault();
+                                if (document != null)
+                                    variables.DmsDocumentId = document.DocumentId;
                             }
                         }
                     }
@@ -155,7 +144,7 @@ public class ContractApprovalService : IContractApprovalService
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                
+
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
@@ -163,6 +152,63 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
+
+    private void CreateDMSDocument()
+    {
+        // Log.Information("SaveEntity Worker registered ");
+
+        CreateWorker("CreateDMSDocument", async (jobClient, job) =>
+        {
+            Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
+            Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            try
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Information($"CreateDMSDocument");
+
+                if (variables != null)
+                {
+                    if (variables.FormType == Form.FormOrder)
+                    {
+                        try
+                        {
+                            var dms = _mediator.Send(new CreateDMSDocumentCommand
+                            {
+                                InstanceId = variables.InstanceId,
+                                Document = new ApproveOrderDocument
+                                {
+                                    DocumentId = variables.DmsDocumentId
+                                }
+                            }).Result;
+
+                            variables.IsProcess = true;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            variables.Error = ex.Message;
+                        }
+                    }
+
+                    var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                    await jobClient.NewCompleteJobCommand(job.Key)
+                        .Variables(data)
+                        .Send();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+                await jobClient.NewCompleteJobCommand(job.Key)
+                    .Variables(data)
+                    .Send();
+            }
+        });
+    }
 
     private void LoadContactInfo()
     {
