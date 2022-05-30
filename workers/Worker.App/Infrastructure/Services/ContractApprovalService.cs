@@ -132,23 +132,23 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     if (variables.IsProcess == true)
                     {
-                        var history = _mediator.Send(new CreateOrderHistoryCommand
+                        var history = await _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
                             State = "Yeni Onay Emri Oluşturuldu",
                             Description = "",
                             IsCustomer = true
-                        }).Result;
+                        });
 
-                        var response = _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() }).Result;
+                        var response = await _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() });
                         foreach (var document in response.Data)
                         {
-                            var dHistory = _mediator.Send(new CreateOrderHistoryCommand
+                            var dHistory = await _mediator.Send(new CreateOrderHistoryCommand
                             {
                                 OrderId = variables.InstanceId,
                                 State = "Onay Belgesi Geldi",
                                 Description = document.Name
-                            }).Result;
+                            });
                         }
 
                         if (variables.FormType == Form.FormOrder)
