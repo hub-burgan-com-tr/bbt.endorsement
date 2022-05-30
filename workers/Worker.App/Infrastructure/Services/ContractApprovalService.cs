@@ -703,12 +703,12 @@ public class ContractApprovalService : IContractApprovalService
         _zeebeService.Client().NewWorker()
                .JobType(jobType)
                .Handler(handleJob)
-               .MaxJobsActive(5)
+               .MaxJobsActive(250)
                .Name(WorkerName)
                .AutoCompletion()
-               .PollInterval(TimeSpan.FromSeconds(50))
-               .PollingTimeout(TimeSpan.FromSeconds(50))
-               .Timeout(TimeSpan.FromSeconds(10))
+               .PollInterval(TimeSpan.FromSeconds(60))
+               .PollingTimeout(TimeSpan.FromSeconds(60))
+               .Timeout(TimeSpan.FromSeconds(60))
                .Open();
     }
 }
