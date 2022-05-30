@@ -24,6 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Replace ENDORSEMENTAPI Secret
+        run: |
+          sed -i -e "s/ENDORSEMENTAPI/${{ secrets.ENDORSEMENTAPI }}/g" ./src/Ui/src/environments/environment.ts
+          cat ./src/Ui/src/environments/environment.ts
+      
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/dotnet@master
         continue-on-error: false

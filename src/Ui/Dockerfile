@@ -10,7 +10,7 @@ RUN npm install \
 RUN npm uninstall @angular-devkit/build-angular 
 RUN npm install  @angular-devkit/build-angular --force
 RUN npm run build 
-
+RUN ng build --configuration=test   --project=dms --base-href / 
 ### STAGE 2: Run ###
 FROM docker.io/nginx:1.21.6-alpine
 COPY src/Ui/nginx-common.conf /etc/nginx/nginx.conf
