@@ -11,6 +11,7 @@ using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
 using Worker.App.Application.Orders.Queries.CheckOrderDependecyRules;
+using Worker.App.Application.Orders.Queries.GetOrderDocuments;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.LoadContactInfos;
@@ -52,8 +53,10 @@ public class ContractApprovalService : IContractApprovalService
         ApproveContract();
         ConsumeCallback();
         LoadContactInfo();
+
         SaveEntity();
         CreateDMSDocument();
+        SaveHistory();
 
         SendOtp();
         SendPush();
@@ -152,6 +155,71 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
+
+    private void SaveHistory()
+    {
+        // Log.Information("SaveHistory Worker registered ");
+
+        CreateWorker("SaveHistory", async (jobClient, job) =>
+        {
+            Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
+            Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            try
+            {
+                // var state = customHeaders["State"].ToString();
+
+                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveHistory");
+
+                if (variables != null)
+                {
+                    if (variables.IsProcess == true)
+                    {
+                        var history = _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Yeni Onay Emri Oluşturuldu",
+                            Description = "",
+                            IsCustomer = true
+                        }).Result;
+
+                        var response = _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() }).Result;
+                        foreach (var document in response.Data)
+                        {
+                            var dHistory = _mediator.Send(new CreateOrderHistoryCommand
+                            {
+                                OrderId = variables.InstanceId,
+                                State = "Onay Belgesi Geldi",
+                                Description = document.Name
+                            }).Result;
+                        }
+
+                        if (variables.FormType == Form.FormOrder)
+                        {
+                            var document = response.Data.FirstOrDefault();
+                            if (document != null)
+                                variables.DmsDocumentId = document.DocumentId;
+                        }
+                    }
+                    var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                    await jobClient.NewCompleteJobCommand(job.Key)
+                        .Variables(data)
+                        .Send();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+                await jobClient.NewCompleteJobCommand(job.Key)
+                    .Variables(data)
+                    .Send();
+            }
+        });
+    }
 
     private void CreateDMSDocument()
     {
