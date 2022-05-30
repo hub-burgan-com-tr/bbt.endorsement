@@ -46,6 +46,17 @@ jobs:
           sed -i -e "s/ELASTIC_SEARCH/${{ secrets.ELASTIC_SEARCH }}/g" ./workers/Worker.App/appsettings.json
           cat ./workers/Worker.App/appsettings.json
           
+      - name: Replace INTERNALS Secret
+        run: |
+          sed -i -e "s/INTERNALS/${{ secrets.INTERNALS }}/g" ./src/Api/appsettings.json
+          cat ./src/Api/appsettings.json
+                    
+      - name: Replace TEMPLATE_ENGINE Secret
+        run: |
+          sed -i -e "s/TEMPLATE_ENGINE/${{ secrets.TEMPLATE_ENGINE }}/g" ./src/Api/appsettings.json
+          cat ./src/Api/appsettings.json
+                    
+          
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/dotnet@master
