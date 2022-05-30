@@ -65,6 +65,22 @@
               ],
               "outputHashing": "all"
             },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ]
+            },
+            "uat": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.uat.ts"
+                }
+              ]
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -81,6 +97,12 @@
           "configurations": {
             "production": {
               "browserTarget": "dms:build:production"
+            },
+            "test": {
+              "browserTarget": "dms:build:test"
+            },
+            "uat": {
+              "browserTarget": "dms:build:uat"
             },
             "development": {
               "browserTarget": "dms:build:development"

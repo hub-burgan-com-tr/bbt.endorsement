@@ -26,9 +26,10 @@ export class PersonSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onChange(name) {
-    if (name && name.length >= 3) {
-      this.personService.PersonSearch(name).pipe(takeUntil(this.destroy$)).subscribe(res => {
+  search(e) {
+    e.preventDefault();
+    if (e.target.value && e.target.value.length >= 5) {
+      this.personService.PersonSearch(e.target.value).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.persons = res && res.data.persons;
       })
     }
