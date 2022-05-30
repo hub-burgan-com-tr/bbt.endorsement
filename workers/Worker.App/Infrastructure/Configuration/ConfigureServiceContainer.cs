@@ -24,9 +24,9 @@ namespace Infrastructure.Configuration
                     {
                         configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
                         configure.EnableRetryOnFailure();
-                    }), ServiceLifetime.Scoped);
-            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-            services.AddScoped<IDomainEventService, DomainEventService>();
+                    }), ServiceLifetime.Transient);
+            services.AddTransient<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+            services.AddTransient<IDomainEventService, DomainEventService>();
         }
 
         public static void AddScopedServices(this IServiceCollection services)
