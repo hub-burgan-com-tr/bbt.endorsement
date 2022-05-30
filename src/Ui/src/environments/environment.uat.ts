@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  baseUrl:'http://20.93.223.48'
+  baseUrl:'https://test-bbt-endorsementapi.apps.nonprod.ebt.bank/'
 };
