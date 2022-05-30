@@ -28,6 +28,11 @@ jobs:
         run: |
           sed -i -e "s/ENDORSEMENTAPI/${{ secrets.ENDORSEMENTAPI }}/g" ./src/Ui/src/environments/environment.ts
           cat ./src/Ui/src/environments/environment.ts
+          
+      - name: Replace ENDORSEMENTAPI Secret TEST
+        run: |
+          sed -i -e "s/ENDORSEMENTAPI/${{ secrets.ENDORSEMENTAPI }}/g" ./src/Ui/src/environments/environment.test.ts
+          cat ./src/Ui/src/environments/environment.test.ts
       
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/dotnet@master
