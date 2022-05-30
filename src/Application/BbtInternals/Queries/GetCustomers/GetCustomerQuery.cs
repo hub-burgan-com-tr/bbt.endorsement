@@ -8,7 +8,7 @@ namespace Application.BbtInternals.Queries.GetCustomers;
 
 public class GetCustomerQuery : IRequest<Response<GetSearchPersonSummaryResponse>>
 {
-    public CustomerRequest Customer { get; set; }   
+    public string Name { get; set; }
 }
 
 public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Response<GetSearchPersonSummaryResponse>>
@@ -22,7 +22,44 @@ public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Respons
 
     public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
     {
-        var response = await _internalsService.GetCustomerSearch(request.Customer);
+        var search = request.Name;
+        var customer = new CustomerRequest
+        {
+            identityNumber = "",
+            customerNumber = 0,
+            name = new CustomerName { first = "", last = ""},
+            page = 1,
+            size = 10,
+        };
+
+        if (string.IsNullOrEmpty(search))
+            return Response<GetSearchPersonSummaryResponse>.NotFoundException("Müşteri bulunamadı", 404);
+
+        search = search.Trim(); 
+
+        if (request.Name.Length == 8)
+        {
+            if (int.TryParse(search, out int customerNumber))
+                customer.customerNumber = customerNumber;
+            else
+                customer.name = new CustomerName { first = "", last = "" };
+                // customer.customerName = customerName;
+        }
+        else if (request.Name.Length == 11)
+        {
+            if (long.TryParse(search, out long identityNumber))
+                customer.identityNumber = identityNumber.ToString();
+            else
+                customer.name = new CustomerName { first = "", last = "" };
+            // customer.customerName = customerName;
+        }
+        else
+        {
+            customer.name = new CustomerName { first = "", last = "" };
+            // customer.customerName = customerName;
+        }
+
+        var response = await _internalsService.GetCustomerSearch(customer);
         if (response.Data == null)
             return Response<GetSearchPersonSummaryResponse>.NotFoundException("Müşteri bulunamadı", 404);
 

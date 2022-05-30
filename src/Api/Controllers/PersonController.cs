@@ -13,14 +13,14 @@ namespace Api.Controllers
     public class PersonController : ApiControllerBase
     {
         [Route("customer-search")]
-        [HttpPost]
+        [HttpGet]
         [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
         [SwaggerResponse(404, "Success but there is no person search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> CustomerSearch([FromBody] CustomerRequest customer)
+        public async Task<IActionResult> CustomerSearch([FromQuery] string name)
         {
-            var response = await Mediator.Send(new GetCustomerQuery { Customer = customer });
+            var response = await Mediator.Send(new GetCustomerQuery { Name = name });
             return Ok(response);
         }
 

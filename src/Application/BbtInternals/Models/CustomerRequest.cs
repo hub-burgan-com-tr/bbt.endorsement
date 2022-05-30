@@ -2,6 +2,7 @@
 
 public class CustomerRequest
 {
+    //public string customerName { get; set; }
     public CustomerName name { get; set; }
     public string identityNumber { get; set; }
     public int customerNumber { get; set; }
