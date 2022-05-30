@@ -86,11 +86,11 @@ public class ContractApprovalService : IContractApprovalService
                     //    Model = variables
                     //});
 
-                    var response = await _mediator.Send(new SaveEntityCommand
+                    var response = _mediator.Send(new SaveEntityCommand
                     {
                         Model = variables,
                         ProcessInstanceKey = job.ProcessInstanceKey
-                    });
+                    }).Result;
 
                     if (response.StatusCode != 200)
                     {
@@ -110,16 +110,16 @@ public class ContractApprovalService : IContractApprovalService
                                 State = "Yeni Onay Emri Oluşturuldu",
                                 Description = "",
                                 IsCustomer = true
-                            });
+                            }).Result;
 
                             foreach (var document in response.Data.Documents)
                             {
-                                await _mediator.Send(new CreateOrderHistoryCommand
+                                var dHistory = _mediator.Send(new CreateOrderHistoryCommand
                                 {
                                     OrderId = variables.InstanceId,
                                     State = "Onay Belgesi Geldi",
                                     Description = document.Name
-                                });
+                                }).Result;
                             }
 
                             if (variables.FormType == Form.FormOrder)
