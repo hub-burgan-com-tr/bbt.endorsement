@@ -305,7 +305,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                if (person.Data.Person != null)
+                if (person.Data != null)
                 {
                     if (person.Data.Person.Devices.Any())
                     {
@@ -338,16 +338,17 @@ public class ContractApprovalService : IContractApprovalService
                             }
                         };
                         await _messagingService.SendSmsMessageAsync(messageRequest);
+
+                        var history = _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı (Sms)",
+                            Description = "",
+                            IsCustomer = true
+                        });
                     }
                 }
 
-                var history = _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Hatırlatma Mesajı (Sms)",
-                    Description = "",
-                    IsCustomer = true
-                });
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
