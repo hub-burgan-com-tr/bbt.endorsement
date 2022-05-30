@@ -334,10 +334,11 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("UpdateEntity", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             if (variables != null)
             {
                 variables.Completed = false;
-                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
                 var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId });
@@ -351,11 +352,11 @@ public class ContractApprovalService : IContractApprovalService
                         IsCustomer = true
                     });
                 }
-
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
             }
+
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
         });
     }
 
