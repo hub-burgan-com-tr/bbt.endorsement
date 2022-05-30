@@ -22,8 +22,8 @@ namespace Infrastructure.Configuration
                     settings.ConnectionStrings.DefaultConnection,
                     configure =>
                     {
-                        //configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                        //configure.EnableRetryOnFailure();
+                        configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                        configure.EnableRetryOnFailure();
                     }), ServiceLifetime.Scoped);
             services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
             services.AddScoped<IDomainEventService, DomainEventService>();
