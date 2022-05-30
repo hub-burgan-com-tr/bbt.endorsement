@@ -134,7 +134,7 @@ public class ContractApprovalService : IContractApprovalService
                                         {
                                             DocumentId = document.DocumentId
                                         }
-                                    });
+                                    }).Result;
                                 }
                                 catch (Exception ex)
                                 {
