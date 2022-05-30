@@ -76,7 +76,7 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 // var state = customHeaders["State"].ToString();
-             
+
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
 
                 if (variables != null)
@@ -124,20 +124,26 @@ public class ContractApprovalService : IContractApprovalService
 
                             if (variables.FormType == Form.FormOrder)
                             {
-                                var document = response.Data.Documents.FirstOrDefault();
-                                var dms = _mediator.Send(new CreateDMSDocumentCommand
+                                try
                                 {
-                                    InstanceId = variables.InstanceId,
-                                    Document = new ApproveOrderDocument
+                                    var document = response.Data.Documents.FirstOrDefault();
+                                    var dms = _mediator.Send(new CreateDMSDocumentCommand
                                     {
-                                        DocumentId = document.DocumentId
-                                    }
-                                });
+                                        InstanceId = variables.InstanceId,
+                                        Document = new ApproveOrderDocument
+                                        {
+                                            DocumentId = document.DocumentId
+                                        }
+                                    });
+                                }
+                                catch (Exception ex)
+                                {
+                                    variables.Error = ex.Message;
+                                }
                             }
                         }
                     }
-                    string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-
+                    var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                     await jobClient.NewCompleteJobCommand(job.Key)
                         .Variables(data)
                         .Send();
