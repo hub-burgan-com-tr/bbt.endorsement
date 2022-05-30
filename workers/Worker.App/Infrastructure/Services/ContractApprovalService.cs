@@ -86,55 +86,12 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (variables != null)
                 {
-                    //var dependecyRules = _mediator.Send(new CheckOrderDependecyRulesQuery
-                    //{
-                    //    Model = variables
-                    //});
-
                     var response = _mediator.Send(new SaveEntityCommand
                     {
                         Model = variables,
                         ProcessInstanceKey = job.ProcessInstanceKey
                     }).Result;
 
-                    if (response.StatusCode != 200)
-                    {
-                        variables.Error = "SaveEntity - SaveEntityCommand :" + response.Message;
-                        variables.IsProcess = false;
-                    }
-                    else
-                    {
-                        variables.IsProcess = true;
-                        variables.Device = true;
-
-                        if (response.StatusCode == 200)
-                        {
-                            var history = _mediator.Send(new CreateOrderHistoryCommand
-                            {
-                                OrderId = variables.InstanceId.ToString(),
-                                State = "Yeni Onay Emri Oluşturuldu",
-                                Description = "",
-                                IsCustomer = true
-                            }).Result;
-
-                            foreach (var document in response.Data.Documents)
-                            {
-                                var dHistory = _mediator.Send(new CreateOrderHistoryCommand
-                                {
-                                    OrderId = variables.InstanceId,
-                                    State = "Onay Belgesi Geldi",
-                                    Description = document.Name
-                                }).Result;
-                            }
-
-                            if (variables.FormType == Form.FormOrder)
-                            {
-                                var document = response.Data.Documents.FirstOrDefault();
-                                if (document != null)
-                                    variables.DmsDocumentId = document.DocumentId;
-                            }
-                        }
-                    }
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                     await jobClient.NewCompleteJobCommand(job.Key)
                         .Variables(data)
