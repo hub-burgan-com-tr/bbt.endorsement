@@ -709,6 +709,7 @@ public class ContractApprovalService : IContractApprovalService
                .PollInterval(TimeSpan.FromSeconds(60))
                .PollingTimeout(TimeSpan.FromSeconds(60))
                .Timeout(TimeSpan.FromSeconds(60))
+               .AutoCompletion()
                .Open();
     }
 }
