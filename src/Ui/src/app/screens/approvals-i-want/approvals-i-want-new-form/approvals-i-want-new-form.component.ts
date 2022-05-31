@@ -45,7 +45,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     this.formGroup = this.fb.group({
       tag: ['', [Validators.required]],
       form: ['', [Validators.required]],
-      processNo: ['', [Validators.required]],
+      processNo: [''],
       file: [''],
       fileType: [''],
       dependencyOrderId: ['']

@@ -57,7 +57,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       reference: this.fb.group({
         process: [this.model.reference.process, Validators.required],
         state: [this.model.reference.state],
-        processNo: [this.model.reference.processNo, Validators.required],
+        processNo: [this.model.reference.processNo],
       }),
       config: this.fb.group({
         expireInMinutes: [this.model.config.expireInMinutes, Validators.required],
