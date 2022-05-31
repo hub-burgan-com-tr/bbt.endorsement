@@ -11,6 +11,7 @@ using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
 using Worker.App.Application.Orders.Queries.CheckOrderDependecyRules;
+using Worker.App.Application.Orders.Queries.GetOrderDocuments;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.LoadContactInfos;
@@ -52,7 +53,11 @@ public class ContractApprovalService : IContractApprovalService
         ApproveContract();
         ConsumeCallback();
         LoadContactInfo();
+
         SaveEntity();
+        CreateDMSDocument();
+        SaveHistory();
+
         SendOtp();
         SendPush();
         UpdateEntity();
@@ -66,7 +71,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void SaveEntity()
     {
-       // Log.Information("SaveEntity Worker registered ");
+        // Log.Information("SaveEntity Worker registered ");
 
         CreateWorker("SaveEntity", async (jobClient, job) =>
         {
@@ -76,68 +81,18 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 // var state = customHeaders["State"].ToString();
-             
+
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
 
                 if (variables != null)
                 {
-                    //var dependecyRules = _mediator.Send(new CheckOrderDependecyRulesQuery
-                    //{
-                    //    Model = variables
-                    //});
-
-                    var response = await _mediator.Send(new SaveEntityCommand
+                    var response = _mediator.Send(new SaveEntityCommand
                     {
                         Model = variables,
                         ProcessInstanceKey = job.ProcessInstanceKey
-                    });
+                    }).Result;
 
-                    if (response.StatusCode != 200)
-                    {
-                        variables.Error = "SaveEntity - SaveEntityCommand :" + response.Message;
-                        variables.IsProcess = false;
-                    }
-                    else
-                    {
-                        variables.IsProcess = true;
-                        variables.Device = true;
-
-                        if (response.StatusCode == 200)
-                        {
-                            var history = _mediator.Send(new CreateOrderHistoryCommand
-                            {
-                                OrderId = variables.InstanceId.ToString(),
-                                State = "Yeni Onay Emri Oluşturuldu",
-                                Description = "",
-                                IsCustomer = true
-                            });
-
-                            foreach (var document in response.Data.Documents)
-                            {
-                                await _mediator.Send(new CreateOrderHistoryCommand
-                                {
-                                    OrderId = variables.InstanceId,
-                                    State = "Onay Belgesi Geldi",
-                                    Description = document.Name
-                                });
-                            }
-
-                            if (variables.FormType == Form.FormOrder)
-                            {
-                                var document = response.Data.Documents.FirstOrDefault();
-                                var dms = _mediator.Send(new CreateDMSDocumentCommand
-                                {
-                                    InstanceId = variables.InstanceId,
-                                    Document = new ApproveOrderDocument
-                                    {
-                                        DocumentId = document.DocumentId
-                                    }
-                                });
-                            }
-                        }
-                    }
-                    string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-
+                    var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                     await jobClient.NewCompleteJobCommand(job.Key)
                         .Variables(data)
                         .Send();
@@ -149,7 +104,7 @@ public class ContractApprovalService : IContractApprovalService
                 variables.IsProcess = false;
                 variables.Error = ex.Message;
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                
+
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
@@ -157,6 +112,128 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
+
+    private void SaveHistory()
+    {
+        // Log.Information("SaveHistory Worker registered ");
+
+        CreateWorker("SaveHistory", async (jobClient, job) =>
+        {
+            Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
+            Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            try
+            {
+                // var state = customHeaders["State"].ToString();
+
+                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveHistory");
+
+                if (variables != null)
+                {
+                    if (variables.IsProcess == true)
+                    {
+                        var history = await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Yeni Onay Emri Oluşturuldu",
+                            Description = "",
+                            IsCustomer = true
+                        });
+
+                        var response = await _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() });
+                        foreach (var document in response.Data)
+                        {
+                            var dHistory = await _mediator.Send(new CreateOrderHistoryCommand
+                            {
+                                OrderId = variables.InstanceId,
+                                State = "Onay Belgesi Geldi",
+                                Description = document.Name
+                            });
+                        }
+
+                        if (variables.FormType == Form.FormOrder)
+                        {
+                            var document = response.Data.FirstOrDefault();
+                            if (document != null)
+                                variables.DmsDocumentId = document.DocumentId;
+                        }
+                    }
+                    var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                    await jobClient.NewCompleteJobCommand(job.Key)
+                        .Variables(data)
+                        .Send();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+                await jobClient.NewCompleteJobCommand(job.Key)
+                    .Variables(data)
+                    .Send();
+            }
+        });
+    }
+
+    private void CreateDMSDocument()
+    {
+        // Log.Information("SaveEntity Worker registered ");
+
+        CreateWorker("CreateDMSDocument", async (jobClient, job) =>
+        {
+            Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
+            Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            try
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Information($"CreateDMSDocument");
+
+                if (variables != null)
+                {
+                    if (variables.FormType == Form.FormOrder)
+                    {
+                        try
+                        {
+                            var dms = _mediator.Send(new CreateDMSDocumentCommand
+                            {
+                                InstanceId = variables.InstanceId,
+                                Document = new ApproveOrderDocument
+                                {
+                                    DocumentId = variables.DmsDocumentId
+                                }
+                            }).Result;
+
+                            variables.IsProcess = true;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            variables.Error = ex.Message;
+                        }
+                    }
+
+                    var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                    await jobClient.NewCompleteJobCommand(job.Key)
+                        .Variables(data)
+                        .Send();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                variables.IsProcess = false;
+                variables.Error = ex.Message;
+                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+                await jobClient.NewCompleteJobCommand(job.Key)
+                    .Variables(data)
+                    .Send();
+            }
+        });
+    }
 
     private void LoadContactInfo()
     {
@@ -228,7 +305,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                if (person.Data.Person != null)
+                if (person.Data != null)
                 {
                     if (person.Data.Person.Devices.Any())
                     {
@@ -261,16 +338,17 @@ public class ContractApprovalService : IContractApprovalService
                             }
                         };
                         await _messagingService.SendSmsMessageAsync(messageRequest);
+
+                        var history = _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı (Sms)",
+                            Description = "",
+                            IsCustomer = true
+                        });
                     }
                 }
 
-                var history = _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Hatırlatma Mesajı (Sms)",
-                    Description = "",
-                    IsCustomer = true
-                });
                 await jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
@@ -334,10 +412,11 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("UpdateEntity", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             if (variables != null)
             {
                 variables.Completed = false;
-                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).Information($"UpdateEntity");
 
                 var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId });
@@ -351,11 +430,11 @@ public class ContractApprovalService : IContractApprovalService
                         IsCustomer = true
                     });
                 }
-
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
             }
+
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
         });
     }
 
@@ -624,12 +703,13 @@ public class ContractApprovalService : IContractApprovalService
         _zeebeService.Client().NewWorker()
                .JobType(jobType)
                .Handler(handleJob)
-               .MaxJobsActive(5)
+               .MaxJobsActive(250)
                .Name(WorkerName)
                .AutoCompletion()
-               .PollInterval(TimeSpan.FromSeconds(50))
-               .PollingTimeout(TimeSpan.FromSeconds(50))
-               .Timeout(TimeSpan.FromSeconds(10))
+               .PollInterval(TimeSpan.FromSeconds(60))
+               .PollingTimeout(TimeSpan.FromSeconds(60))
+               .Timeout(TimeSpan.FromSeconds(60))
+               .AutoCompletion()
                .Open();
     }
 }

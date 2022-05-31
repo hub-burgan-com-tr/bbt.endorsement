@@ -89,7 +89,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
                     var dmsRefId = _documentService.CreateDMSDocument(documentInfo);
 
-                    if (dmsRefId != null)
+                    if (!string.IsNullOrEmpty(dmsRefId))
                     {
                         var documentDms = _context.DocumentDmses
                                                     .FirstOrDefault(x => x.Document.OrderId == request.InstanceId && 

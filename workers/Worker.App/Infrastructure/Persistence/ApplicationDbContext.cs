@@ -114,16 +114,16 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
 
-        builder.Entity<Order>()
-              .HasOne(s => s.Config)
-              .WithOne(ad => ad.Order)
-              .HasForeignKey<Config>(ad => ad.OrderId);
+        //builder.Entity<Order>()
+        //      .HasOne(s => s.Config)
+        //      .WithOne(ad => ad.Order)
+        //      .HasForeignKey<Config>(ad => ad.OrderId);
 
-        builder.Entity<Order>()
-                .HasOne(s => s.Reference)
-                .WithOne(ad => ad.Order)
-                .HasForeignKey<Reference>(ad => ad.OrderId);
-        
+        //builder.Entity<Order>()
+        //        .HasOne(s => s.Reference)
+        //        .WithOne(ad => ad.Order)
+        //        .HasForeignKey<Reference>(ad => ad.OrderId);
+
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
     }

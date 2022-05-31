@@ -16,6 +16,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _dateTime = dateTime;
         _domainEventService = domainEventService;
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+    }
+
     public virtual DbSet<Order> Orders { get; set; }
     public virtual DbSet<OrderGroup> OrderGroups { get; set; }
     public virtual DbSet<OrderMap> OrderMaps { get; set; }
@@ -109,15 +115,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<Order>()
-               .HasOne(s => s.Config)
-               .WithOne(ad => ad.Order)
-               .HasForeignKey<Config>(ad => ad.OrderId);
+        //builder.Entity<Order>()
+        //       .HasOne(s => s.Config)
+        //       .WithOne(ad => ad.Order)
+        //       .HasForeignKey<Config>(ad => ad.OrderId);
 
-        builder.Entity<Order>()
-                .HasOne(s => s.Reference)
-                .WithOne(ad => ad.Order)
-                .HasForeignKey<Reference>(ad => ad.OrderId);
+        //builder.Entity<Order>()
+        //        .HasOne(s => s.Reference)
+        //        .WithOne(ad => ad.Order)
+        //        .HasForeignKey<Reference>(ad => ad.OrderId);
    
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);

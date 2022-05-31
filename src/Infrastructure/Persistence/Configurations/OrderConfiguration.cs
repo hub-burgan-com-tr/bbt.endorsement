@@ -8,7 +8,7 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.Ignore(e => e.DomainEvents);
+           // builder.Ignore(e => e.DomainEvents);
 
             builder.Property(t => t.Title)
                 .HasMaxLength(250)

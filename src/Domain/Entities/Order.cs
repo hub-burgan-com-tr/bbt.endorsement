@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Domain.Entities
 {
     [Table("Order", Schema = "order")]
-    public class Order : AuditableEntity, IHasDomainEvent
+    public class Order : AuditableEntity
     {
         [Key]
         [MaxLength(36)]
@@ -30,22 +30,22 @@ namespace Domain.Entities
         public long ProcessInstanceKey { get; set; }
 
 
-        private bool _done;
-        public bool Done
-        {
-            get => _done;
-            set
-            {
-                if (value == true && _done == false)
-                {
-                    DomainEvents.Add(new OrderCreateEvent(this));
-                }
+        //private bool _done;
+        //public bool Done
+        //{
+        //    get => _done;
+        //    set
+        //    {
+        //        if (value == true && _done == false)
+        //        {
+        //            DomainEvents.Add(new OrderCreateEvent(this));
+        //        }
 
-                _done = value;
-            }
-        }
+        //        _done = value;
+        //    }
+        //}
 
-        public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+       // public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
         public virtual Reference Reference { get; set; }
         public virtual Config Config { get; set; }
         public virtual Person Person { get; set; }

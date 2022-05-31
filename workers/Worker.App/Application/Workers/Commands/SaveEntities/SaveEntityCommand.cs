@@ -37,12 +37,12 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 else if (request.Model.FormType == Form.FormOrder)
                     response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey);
 
-                var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
-                var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
-                foreach (var item in documentList)
-                    saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
+                //var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
+                //var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
+                //foreach (var item in documentList)
+                //    saveEntityDocuments.Add(new SaveEntityDocumentResponse { DocumentId = item.DocumentId, Name = item.Name });
 
-                response.Documents = saveEntityDocuments;
+                //response.Documents = saveEntityDocuments;
             }
             catch (Exception ex)
             {

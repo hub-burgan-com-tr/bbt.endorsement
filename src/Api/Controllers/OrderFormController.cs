@@ -46,7 +46,7 @@ namespace Api.Controllers
             }
 
             if(User.Claims.Count() == 0)
-                return Response<NewOrderFormResponse>.Fail("Kullanıcı bulunamadu", 404);
+                return Response<NewOrderFormResponse>.Fail("Kullanıcı bulunamadı", 404);
 
             var person = new OrderPerson
             {

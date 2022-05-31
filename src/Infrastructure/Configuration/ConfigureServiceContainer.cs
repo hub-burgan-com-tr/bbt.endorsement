@@ -23,7 +23,7 @@ public static class ConfigureServiceContainer
                 {
                     configure.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
                     configure.EnableRetryOnFailure();
-                }));
+                }), ServiceLifetime.Scoped);
     }
 
     public static void AddScopedServices(this IServiceCollection services)
