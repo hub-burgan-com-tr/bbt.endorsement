@@ -846,7 +846,20 @@ app-root {
     }
   }
 }
-
+.col-form-label{
+  .sr-only{
+    display: none;
+  }
+}
+.accordion-button{
+  font-weight: 600;
+  color: #0099d8;
+  font-size: 20px;
+  &:focus{
+    border-color: transparent;
+    box-shadow: none;
+  }
+}
 @include media-breakpoint-down(lg) {
   app-root {
     #navbarSupportedContent {
