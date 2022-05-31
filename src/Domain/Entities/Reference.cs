@@ -33,7 +33,6 @@ namespace Domain.Entities
         /// <summary>
         /// İşlem No
         /// </summary>
-        [Required]
         [MaxLength(250)]
         public string ProcessNo { get; set; }
 

@@ -39,7 +39,6 @@ namespace Application.Endorsements.Commands.NewOrders
         {
             RuleFor(v => v.Title).NotEmpty().WithMessage("Başlık girilmelidir.");
             RuleFor(v => v.Reference.Process).NotEmpty().WithMessage("İşlem bilgisi girilmelidir.");
-            RuleFor(v => v.Reference.ProcessNo).NotEmpty().WithMessage("İşlem no bilgisi girilmelidir.");
             RuleFor(v => v.Config.ExpireInMinutes).GreaterThan(-1).WithMessage("Geçerlilik girilmelidir.");
             RuleFor(v => v.Config.RetryFrequence).GreaterThan(-1).WithMessage("Hatırlatma frekansı girilmelidir.");
             RuleFor(v => v.Config.MaxRetryCount).GreaterThan(-1).WithMessage("Hatırlatma Sayısı girilmelidir.");
