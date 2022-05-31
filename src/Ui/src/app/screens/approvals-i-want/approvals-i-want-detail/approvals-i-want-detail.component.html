@@ -91,23 +91,24 @@
     </div>
   </div>
   <div class="box" *ngIf="data">
-    <div class="title border-0">Tarihçe</div>
-    <table class="table">
-      <thead>
-      <tr>
-        <th class="pl-15px">İşlem</th>
-        <th>Belge</th>
-        <th class="fit pr-15px">İşlem Tarihi</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let h of data.history">
-        <td class="pl-15px">{{h.state}}</td>
-        <td>{{h.description}}</td>
-        <td class="fit pr-15px">{{h.createdDate}}</td>
-      </tr>
-      </tbody>
-    </table>
+    <app-history>
+      <table class="table">
+        <thead>
+        <tr>
+          <th class="pl-15px">İşlem</th>
+          <th>Belge</th>
+          <th class="fit pr-15px">İşlem Tarihi</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let h of data.history">
+          <td class="pl-15px">{{h.state}}</td>
+          <td>{{h.description}}</td>
+          <td class="fit pr-15px">{{h.createdDate}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </app-history>
   </div>
   <!-- <div class="box pb-15px">
      <div class="title no-border">

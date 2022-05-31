@@ -43,23 +43,24 @@
     </div>-->
   </div>
   <div class="box" *ngIf="data&&data.history">
-    <div class="title border-0">Tarihçe</div>
-    <table class="table">
-      <thead>
-      <tr>
-        <th class="pl-15px">İşlem</th>
-        <th>Belge</th>
-        <th class="fit pr-15px">İşlem Tarihi</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let i of data.history">
-        <td class="pl-15px">{{i.state}}</td>
-        <td>{{i.description}}</td>
-        <td class="fit pr-15px">{{i.createdDate}}</td>
-      </tr>
-      </tbody>
-    </table>
+    <app-history>
+      <table class="table">
+        <thead>
+        <tr>
+          <th class="pl-15px">İşlem</th>
+          <th>Belge</th>
+          <th class="fit pr-15px">İşlem Tarihi</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let i of data.history">
+          <td class="pl-15px">{{i.state}}</td>
+          <td>{{i.description}}</td>
+          <td class="fit pr-15px">{{i.createdDate}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </app-history>
   </div>
   <div class="d-flex justify-content-center mt-5">
     <button class="btn btn-primary px-5" [routerLink]="['..']">
