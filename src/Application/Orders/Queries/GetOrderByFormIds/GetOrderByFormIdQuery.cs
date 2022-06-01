@@ -37,7 +37,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                 {
                     CustomerId = Guid.NewGuid().ToString(),
                     CitizenshipNumber = request.Approver.CitizenshipNumber,
-                    ClientNumber = request.Approver.ClientNumber,
+                    CustomerNumber = request.Approver.CustomerNumber,
                     FirstName = request.Approver.First,
                     LastName = request.Approver.Last,
                     Created = _dateTime.Now,

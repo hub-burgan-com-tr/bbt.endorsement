@@ -56,7 +56,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
                     var dmsPerson = new DmsPerson
                     {
                         CitizenshipNumber = person.CitizenshipNumber,
-                        ClientNumber = person.ClientNumber,
+                        CustomerNumber = person.CustomerNumber,
                         PersonId = person.PersonId,
                         FirstName = person.FirstName,
                         LastName = person.LastName,
@@ -82,7 +82,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
                     });
 
                     dmsDocument.OwnerActionType = DocumentActionType.OnlineSigned;
-                    DocumentInfo documentInfo = new BhsDocument(dmsDocument, dmsPerson, channelReferenceId, customer.ClientNumber, customer.CitizenshipNumber.ToString(), branchCode, bhsOrderNo, version)
+                    DocumentInfo documentInfo = new BhsDocument(dmsDocument, dmsPerson, channelReferenceId, customer.CustomerNumber, customer.CitizenshipNumber.ToString(), branchCode, bhsOrderNo, version)
                     {
                         DmsPrefix = "InternetBankaciligi"
                     };

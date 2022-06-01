@@ -23,14 +23,15 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
             var response = await _internalsService.GetPersonSearch(request.Name);
             var persons = response.Data.Select(x => new GetSearchPersonSummaryDto
             {
-                CitizenshipNumber = x.CitizenshipNumber.ToString(),
+                CitizenshipNumber = x.CitizenshipNumber,
                 First = x.Name.First,
                 Last = x.Name.Last,
-                ClientNumber = x.ClientNumber,
-                IsCustomer = x.IsCustomer,
-                Emails = x.Emails,
+                CustomerNumber = x.CustomerNumber,
+                IsStaff = x.IsStaff,
+                Email = x.Email,
+                TaxNo=x.TaxNo,
                 GsmPhones = x.GsmPhones,
-                Authory = x.IsCustomer == false && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
+                Authory = x.IsStaff == false && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
             });
             return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
         }

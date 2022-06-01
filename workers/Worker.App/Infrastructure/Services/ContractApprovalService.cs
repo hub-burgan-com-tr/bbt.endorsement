@@ -138,7 +138,7 @@ public class ContractApprovalService : IContractApprovalService
                             OrderId = variables.InstanceId.ToString(),
                             State = "Yeni Onay Emri Oluşturuldu",
                             Description = "",
-                            IsCustomer = true
+                            IsStaff = true
                         });
 
                         var response = await _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() });
@@ -336,7 +336,7 @@ public class ContractApprovalService : IContractApprovalService
                                     prefix = 542, // gsmPhone.Prefix,
                                     number = 4729390, // gsmPhone.Number
                                 },
-                                customerNo = person.Data.Person.ClientNumber,
+                                customerNo = person.Data.Person.CustomerNumber,
                                 smsType = "Fast",
                                 process = new SmsProcess
                                 {
@@ -350,7 +350,7 @@ public class ContractApprovalService : IContractApprovalService
                                 OrderId = variables.InstanceId.ToString(),
                                 State = "Hatırlatma Mesajı (Sms)",
                                 Description = "",
-                                IsCustomer = true
+                                IsStaff = true
                             });
                         }
                     }
@@ -393,7 +393,7 @@ public class ContractApprovalService : IContractApprovalService
                     OrderId = variables.InstanceId.ToString(),
                     State = "Hatırlatma Mesajı (Push Notification)",
                     Description = "",
-                    IsCustomer = true
+                    IsStaff = true
                 });
                 variables.IsProcess = true;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -434,7 +434,7 @@ public class ContractApprovalService : IContractApprovalService
                         OrderId = variables.InstanceId,
                         State = "Yeni Onay Emri Zaman Aşımına Uğradı",
                         Description = "",
-                        IsCustomer = true
+                        IsStaff = true
                     });
                 }
             }
@@ -490,7 +490,7 @@ public class ContractApprovalService : IContractApprovalService
                             DocumentId = item.DocumentId,
                             State = item.ActionTitle,
                             Description = item.DocumentName,
-                            IsCustomer = true
+                            IsStaff = true
                         });
                     }
                 }
@@ -530,7 +530,7 @@ public class ContractApprovalService : IContractApprovalService
                         OrderId = variables.InstanceId.ToString(),
                         State = "Emir iptal edildi",
                         Description = "",
-                        IsCustomer = true
+                        IsStaff = true
                     });
                 }
                 variables.IsProcess = true;
@@ -596,7 +596,7 @@ public class ContractApprovalService : IContractApprovalService
                         OrderId = variables.InstanceId,
                         State = "Workflow tamamlandı",
                         Description = "",
-                        IsCustomer = true
+                        IsStaff = true
                     });
                     variables.IsProcess = true;
                     variables.Approved = true;

@@ -31,7 +31,7 @@ namespace Worker.App.Infrastructure.Services
             {
                 CustomerId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = customer.CitizenshipNumber,
-                ClientNumber = customer.ClientNumber,
+                CustomerNumber = customer.CustomerNumber,
                 FirstName = customer.First,
                 LastName = customer.Last,
                 Created = _dateTime.Now,
@@ -55,7 +55,7 @@ namespace Worker.App.Infrastructure.Services
             {
                 PersonId = Guid.NewGuid().ToString(),
                 CitizenshipNumber = customer.CitizenshipNumber,
-                ClientNumber = customer.ClientNumber,
+                CustomerNumber = customer.CustomerNumber,
                 FirstName = customer.First,
                 LastName = customer.Last,
                 Created = _dateTime.Now,

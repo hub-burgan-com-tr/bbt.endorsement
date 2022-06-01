@@ -23,7 +23,7 @@ public class NewOrderCommandTest : TestBase
         var person = new OrderPerson
         {
             CitizenshipNumber = 29521547895,
-            ClientNumber = 12345678,
+            CustomerNumber = 12345678,
             First = "Mehmet",
             Last = "Güler"
         };
