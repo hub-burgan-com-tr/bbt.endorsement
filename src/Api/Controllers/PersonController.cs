@@ -1,5 +1,6 @@
 ﻿using Application.BbtInternals.Models;
 using Application.BbtInternals.Queries.GetCustomers;
+using Application.BbtInternals.Queries.GetCustomerSearchs;
 using Application.BbtInternals.Queries.GetPersonSummary;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,11 @@ using System.Net;
 
 namespace Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("")]
     [ApiController]
     public class PersonController : ApiControllerBase
     {
-        [Route("customer-search")]
+        [Route("CustomerSearch")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
         [SwaggerResponse(404, "Success but there is no person search  available for the query.", typeof(void))]
@@ -20,7 +21,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> CustomerSearch([FromQuery] string name)
         {
-            var response = await Mediator.Send(new GetCustomerQuery { Name = name });
+            var response = await Mediator.Send(new GetCustomerSearchQuery { Name = name });
             return Ok(response);
         }
 

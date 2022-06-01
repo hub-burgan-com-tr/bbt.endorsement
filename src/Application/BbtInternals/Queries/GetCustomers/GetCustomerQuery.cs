@@ -33,7 +33,7 @@ public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Respons
         };
 
         if (string.IsNullOrEmpty(search))
-            return Response<GetSearchPersonSummaryResponse>.NotFoundException("Müşteri bulunamadı", 404);
+            return Response<GetSearchPersonSummaryResponse>.NotFoundException("", 404);
 
         search = search.Trim(); 
 

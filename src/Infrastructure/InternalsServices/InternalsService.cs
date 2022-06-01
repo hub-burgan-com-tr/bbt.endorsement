@@ -27,6 +27,20 @@ namespace Infrastructure.InternalsServices
             return Response<CustomerResponse>.Success(data, 200);
         }
 
+        public async Task<Response<CustomerResponse>> GetCustomerSearchByName(CustomerSearchRequest request)
+        {
+            var restClient = new RestClient(internalsUrl);
+            var restRequest = new RestRequest("/CustomerSearch", Method.Post);
+            restRequest.AddHeader("Content-Type", "application/json");
+            restRequest.AddHeader("Accept", "text/plain");
+
+            restRequest.AddBody(request);
+            var response = await restClient.ExecutePostAsync(restRequest);
+
+            var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
+            return Response<CustomerResponse>.Success(data, 200);
+        }
+
         public async Task<Response<PersonResponse>> GetPersonById(long id)
         {
             var restClient = new RestClient(internalsUrl);

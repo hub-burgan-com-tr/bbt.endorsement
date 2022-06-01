@@ -15,3 +15,10 @@ public class CustomerName
     public string first { get; set; }
     public string last { get; set; }
 }
+
+public class CustomerSearchRequest
+{
+    public string name { get; set; }
+    public int page { get; set; } = 1;
+    public int size { get; set; } = 10;
+}
