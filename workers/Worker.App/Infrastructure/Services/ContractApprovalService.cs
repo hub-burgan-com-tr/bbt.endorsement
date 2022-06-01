@@ -248,21 +248,24 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             try
             {
-                //var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                //if (person.Data != null)
-                //{
-                //    if (person.Data.Person.Devices.Any())
-                //    {
-                //        variables.Device = true;
-                //        var device = person.Data.Person.Devices.FirstOrDefault();
-                //    }
-                //    else
-                //    {
-                //        variables.Device = false;
-                //        var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
-                //        var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
-                //    }
-                //}
+                if (false)
+                {
+                    var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                    if (person.Data != null)
+                    {
+                        if (person.Data.Person.Devices.Any())
+                        {
+                            variables.Device = true;
+                            var device = person.Data.Person.Devices.FirstOrDefault();
+                        }
+                        else
+                        {
+                            variables.Device = false;
+                            var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                            var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
+                        }
+                    }
+                }
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
 
@@ -289,7 +292,7 @@ public class ContractApprovalService : IContractApprovalService
     }
     private void SendOtp()
     {
-       // Log.Information("SendOtp Worker registered ");
+        // Log.Information("SendOtp Worker registered ");
 
         CreateWorker("SendOtp", async (jobClient, job) =>
         {
@@ -305,48 +308,51 @@ public class ContractApprovalService : IContractApprovalService
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
-                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                if (person.Data != null)
+                if (false)
                 {
-                    if (person.Data.Person.Devices.Any())
+                    var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                    if (person.Data != null)
                     {
-                        var device = person.Data.Person.Devices.FirstOrDefault();
-                    }
-                    else
-                    {
-                        var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
-                        var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
-
-                        var messageRequest = new SendSmsRequest
+                        if (person.Data.Person.Devices.Any())
                         {
-                            headerInfo = new HeaderInfo
-                            {
-                                sender = "AutoDetect"
-                            },
-                            content = @"Değerli Müşterimiz, ""belgeonay.burgan.com.tr"" linkine giriş yapıp, başvurunuza ilişkin belgeleri ""Onayımdakiler"" adımından onaylamanızı rica ederiz. Detaylı bilgi için 0 850 222 8 222 numaralı telefonumuzdan bizi arayabilirsiniz.  Mersis : 0140003231000116",
-                            contentType = "Private",
-                            phone = new SmsPhone
-                            {
-                                countryCode = 90, // gsmPhone.County,
-                                prefix = 542, // gsmPhone.Prefix,
-                                number = 4729390, // gsmPhone.Number
-                            },
-                            customerNo = person.Data.Person.ClientNumber,
-                            smsType = "Fast",
-                            process = new SmsProcess
-                            {
-                                name = "Zeebe - Contract Approval - SendOtp"
-                            }
-                        };
-                        await _messagingService.SendSmsMessageAsync(messageRequest);
-
-                        var history = _mediator.Send(new CreateOrderHistoryCommand
+                            var device = person.Data.Person.Devices.FirstOrDefault();
+                        }
+                        else
                         {
-                            OrderId = variables.InstanceId.ToString(),
-                            State = "Hatırlatma Mesajı (Sms)",
-                            Description = "",
-                            IsCustomer = true
-                        });
+                            var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                            var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
+
+                            var messageRequest = new SendSmsRequest
+                            {
+                                headerInfo = new HeaderInfo
+                                {
+                                    sender = "AutoDetect"
+                                },
+                                content = @"Değerli Müşterimiz, ""belgeonay.burgan.com.tr"" linkine giriş yapıp, başvurunuza ilişkin belgeleri ""Onayımdakiler"" adımından onaylamanızı rica ederiz. Detaylı bilgi için 0 850 222 8 222 numaralı telefonumuzdan bizi arayabilirsiniz.  Mersis : 0140003231000116",
+                                contentType = "Private",
+                                phone = new SmsPhone
+                                {
+                                    countryCode = 90, // gsmPhone.County,
+                                    prefix = 542, // gsmPhone.Prefix,
+                                    number = 4729390, // gsmPhone.Number
+                                },
+                                customerNo = person.Data.Person.ClientNumber,
+                                smsType = "Fast",
+                                process = new SmsProcess
+                                {
+                                    name = "Zeebe - Contract Approval - SendOtp"
+                                }
+                            };
+                            await _messagingService.SendSmsMessageAsync(messageRequest);
+
+                            var history = _mediator.Send(new CreateOrderHistoryCommand
+                            {
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "Hatırlatma Mesajı (Sms)",
+                                Description = "",
+                                IsCustomer = true
+                            });
+                        }
                     }
                 }
 
