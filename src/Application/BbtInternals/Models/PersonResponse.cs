@@ -58,6 +58,7 @@ namespace Application.BbtInternals.Models
         [JsonProperty("last")]
         public string Last { get; set; }
     }
+
     public class AuthoryModel
     {
         [JsonProperty("isreadyformcreator")]

@@ -20,8 +20,8 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 
         public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetSearchPersonSummaryQuery request, CancellationToken cancellationToken)
         {
-            var response = await _internalsService.GetPersonSearch(request.Name);
-            var persons = response.Data.Select(x => new GetSearchPersonSummaryDto
+            var response = await _internalsService.GetCustomerSearchByName(new Models.CustomerSearchRequest { name = request.Name , page = 1, size = 10});
+            var persons = response.Data.CustomerList.Select(x => new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = x.CitizenshipNumber,
                 First = x.Name.First,
