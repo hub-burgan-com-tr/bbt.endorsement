@@ -248,21 +248,21 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             try
             {
-                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                if (person.Data != null)
-                {
-                    if (person.Data.Person.Devices.Any())
-                    {
-                        variables.Device = true;
-                        var device = person.Data.Person.Devices.FirstOrDefault();
-                    }
-                    else
-                    {
-                        variables.Device = false;
-                        var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
-                        var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
-                    }
-                }
+                //var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                //if (person.Data != null)
+                //{
+                //    if (person.Data.Person.Devices.Any())
+                //    {
+                //        variables.Device = true;
+                //        var device = person.Data.Person.Devices.FirstOrDefault();
+                //    }
+                //    else
+                //    {
+                //        variables.Device = false;
+                //        var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                //        var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
+                //    }
+                //}
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
 
@@ -278,7 +278,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
