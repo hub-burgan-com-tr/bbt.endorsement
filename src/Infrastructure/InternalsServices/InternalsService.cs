@@ -56,8 +56,9 @@ namespace Infrastructure.InternalsServices
             var restRequest = new RestRequest("/Person", Method.Get);
             restRequest.AddParameter("name", name, ParameterType.QueryString);
             var response = await restClient.ExecuteAsync(restRequest);
-            var data = JsonConvert.DeserializeObject<List<PersonResponse>>(response.Content);
-            return Response<List<PersonResponse>>.Success(data, 200);
+            var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
+            // return Response<List<CustomerList>>.Success(data.CustomerList.ToList(), 200);
+            return null;
         }
     }
 }
