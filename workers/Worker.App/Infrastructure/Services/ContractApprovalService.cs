@@ -278,7 +278,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
