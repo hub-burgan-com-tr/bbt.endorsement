@@ -14,8 +14,6 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public string[] Emails { get; set; }
         public GsmPhone[] GsmPhones { get;  set; }
 
-
-
         public string Email { get; set; }
         public GsmPhone GsmPhone { get; set; }
 
