@@ -52,11 +52,12 @@ public class ContractApprovalService : IContractApprovalService
     {
         ApproveContract();
         ConsumeCallback();
-        LoadContactInfo();
 
         SaveEntity();
-        CreateDMSDocument();
         SaveHistory();
+        CreateDMSDocument();
+
+        LoadContactInfo();
 
         SendOtp();
         SendPush();
