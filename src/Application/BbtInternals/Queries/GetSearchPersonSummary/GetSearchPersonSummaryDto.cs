@@ -16,7 +16,6 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
 
 
 
-        public bool IsPersonel { get; set; }
         public string Email { get; set; }
         public GsmPhone GsmPhone { get; set; }
 
