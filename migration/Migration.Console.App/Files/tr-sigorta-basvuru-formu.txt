@@ -14,9 +14,27 @@
       "tableView": true,
       "defaultValue": "                              SIGORTA BASVURU FORMU",
       "clearOnHide": false,
-      "key": "textField",
+      "key": "FormDefinition_Name",
       "type": "textfield",
       "input": true
+    },
+    {
+      "label": "İşlem No",
+      "labelPosition": "left-left",
+      "labelWidth": 40,
+      "labelMargin": 1,
+      "tableView": true,
+      "key": "FormInstance_Transaction_Id",
+      "type": "textfield",
+      "input": true
+    },
+    {
+      "label": "Sigorta Ettiren ile Sigortalı Aynı Kişidir",
+      "tableView": false,
+      "key": "sigortaEttirenIleSigortaliAyniKisidir",
+      "type": "checkbox",
+      "input": true,
+      "defaultValue": false
     },
     {
       "label": "Sigortalı Adı/Ünvanı",
@@ -24,7 +42,7 @@
       "labelWidth": 40,
       "labelMargin": 1,
       "tableView": true,
-      "key": "sigortaliAdiUnvani",
+      "key": "FormInstance_Approver_Fullname",
       "type": "textfield",
       "input": true
     },
@@ -34,7 +52,7 @@
       "labelWidth": 40,
       "labelMargin": 1,
       "tableView": true,
-      "key": "sigortaliVknTckn",
+      "key": "FormInstance_Approver_CitizenshipNumber",
       "type": "textfield",
       "input": true
     },
@@ -44,7 +62,12 @@
       "labelWidth": 40,
       "labelMargin": 1,
       "tableView": true,
-      "key": "sigortaEttirenAdiUnvani",
+      "key": "SigortaEttirenAd",
+      "conditional": {
+        "show": false,
+        "when": "sigortaEttirenIleSigortaliAyniKisidir",
+        "eq": "true"
+      },
       "type": "textfield",
       "input": true
     },
@@ -54,7 +77,12 @@
       "labelWidth": 40,
       "labelMargin": 1,
       "tableView": true,
-      "key": "sigortaEttirenVknTckn",
+      "key": "SigortaEttirenVKN",
+      "conditional": {
+        "show": false,
+        "when": "sigortaEttirenIleSigortaliAyniKisidir",
+        "eq": "true"
+      },
       "type": "textfield",
       "input": true
     },
@@ -128,6 +156,9 @@
       "labelPosition": "left-left",
       "labelWidth": 40,
       "tableView": true,
+      "errors": {
+        "required": "Zorunlu alandır.Boş geçilemez"
+      },
       "key": "digerSigortaTuruBilgileri",
       "customConditional": "show = data.sigortaTuru.diger || data.sigortaTuru.diger;",
       "type": "textfield",
@@ -152,27 +183,46 @@
         {
           "label": "Adres kodu  (UAVT kodu) ",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez."
+          },
           "key": "adresKoduUavtKodu",
-          "type": "textfield",
+          "attributes": {
+            "maxlength": "10"
+          },
+          "type": "number",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
           "label": "Bina m2",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "binaM2",
-          "type": "textfield",
+          "type": "number",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
@@ -183,6 +233,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "binaSigortaDegeri",
           "type": "textfield",
@@ -197,6 +250,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "esyaSigortaDegeri",
           "type": "textfield",
           "input": true
@@ -209,6 +265,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "binaYapimYili",
           "type": "textfield",
@@ -223,6 +282,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "toplamKatAdedi",
           "type": "textfield",
           "input": true
@@ -236,6 +298,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "bulunduguKat",
           "type": "textfield",
           "input": true
@@ -248,6 +313,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "rizikoAdresi",
           "type": "textfield",
@@ -291,6 +359,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "plaka",
           "type": "textfield",
           "input": true
@@ -303,6 +374,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "textField1",
           "type": "textfield",
@@ -317,6 +391,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "aracMarkaModel",
           "type": "textfield",
           "input": true
@@ -329,6 +406,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "aracMarkaKodu",
           "type": "textfield",
@@ -343,6 +423,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "motorSaseNo",
           "type": "textfield",
           "input": true
@@ -355,6 +438,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "sigortaliAdres",
           "type": "textfield",
@@ -392,27 +478,46 @@
         {
           "label": "Adres kodu  (UAVT kodu) ",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez."
+          },
           "key": "adresKoduUavtKodu1",
-          "type": "textfield",
+          "attributes": {
+            "maxlength": "10"
+          },
+          "type": "number",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
           "label": "Bina m2",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "binaM3",
-          "type": "textfield",
+          "type": "number",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
@@ -423,6 +528,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "binaSigortaDegeri1",
           "type": "textfield",
@@ -437,6 +545,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "esyaSigortaDegeri1",
           "type": "textfield",
           "input": true
@@ -449,6 +560,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "esyaSigortaDegeri2",
           "type": "textfield",
@@ -463,6 +577,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "esyaSigortaDegeri3",
           "type": "textfield",
           "input": true
@@ -476,6 +593,9 @@
           "validate": {
             "required": true
           },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
           "key": "esyaSigortaDegeri5",
           "type": "textfield",
           "input": true
@@ -488,6 +608,9 @@
           "tableView": true,
           "validate": {
             "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "rizikoAdresi1",
           "type": "textfield",
@@ -526,7 +649,7 @@
       "hideLabel": true,
       "disabled": true,
       "tableView": true,
-      "defaultValue": "Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i mürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.",
+      "defaultValue": "Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i \nmürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.",
       "protected": true,
       "key": "textArea",
       "type": "textarea",
@@ -542,7 +665,7 @@
       "autofocus": true,
       "disabled": true,
       "tableView": true,
-      "defaultValue": "Yukarıda beyan etmiş olduğum bilgiler çerçevesinde sigorta talebimin alınmasını ve tarafıma sigorta teklifinin yapılmasını talep ederim.",
+      "defaultValue": "Yukarıda beyan etmiş olduğum bilgiler çerçevesinde sigorta talebimin alınmasını ve tarafıma sigorta teklifinin yapılmasını \ntalep ederim.",
       "key": "textArea1",
       "type": "textarea",
       "input": true
@@ -553,7 +676,7 @@
       "hideLabel": true,
       "disabled": true,
       "tableView": true,
-      "defaultValue": "Sigorta poliçesi talebiniz kapsamında paylaştığınız kişisel verilerinize ilişkin 6698 sayılı Kişisel Verilerin Korunması Kanunu hakkındaki detaylı bilgilendirmeye www.burgan.com.tr adresinden ulaşabilirsiniz.",
+      "defaultValue": "Sigorta poliçesi talebiniz kapsamında paylaştığınız kişisel verilerinize ilişkin 6698 sayılı Kişisel Verilerin Korunması Kanunu hakkındaki detaylı bilgilendirmeye \nwww.burgan.com.tr adresinden ulaşabilirsiniz.",
       "key": "textArea2",
       "type": "textarea",
       "input": true

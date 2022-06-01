@@ -27,7 +27,7 @@ export class ApprovalsIWantNewOrderComponent implements OnInit {
       reference: this.fb.group({
         process: ['', Validators.required],
         state: [''],
-        processNo: ['', Validators.required],
+        processNo: [''],
       }),
       config: this.fb.group({
         expireInMinutes: ['60', Validators.required],
