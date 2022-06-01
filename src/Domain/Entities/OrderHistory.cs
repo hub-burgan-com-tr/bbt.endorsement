@@ -24,7 +24,7 @@ namespace Domain.Entities
         [Required]
         public string Description { get; set; }
         [Required]
-        public bool IsCustomer { get; set; }
+        public bool IsStaff { get; set; }
         public virtual Document Document { get; set; }
         public virtual Order Order { get; set; }
     }

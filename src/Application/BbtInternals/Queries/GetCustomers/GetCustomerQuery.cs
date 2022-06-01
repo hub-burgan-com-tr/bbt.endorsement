@@ -68,10 +68,12 @@ public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Respons
             CitizenshipNumber = x.CitizenshipNumber,
             First = x.Name.First,
             Last = x.Name.Last,
-            ClientNumber = x.CustomerNumber,
-            IsPersonel = x.IsPersonel,
+            CustomerNumber = x.CustomerNumber,
+            IsStaff = x.IsStaff,
             Email = x.Email,
             GsmPhone = x.GsmPhone,
+            TaxNo=x.TaxNo,
+            
             // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
         });
         return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);

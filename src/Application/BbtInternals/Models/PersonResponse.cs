@@ -4,27 +4,29 @@ namespace Application.BbtInternals.Models
 {
     public partial class PersonResponse
     {
-        [JsonProperty("clientNumber")]
-        public long ClientNumber { get; set; }
-
-        [JsonProperty("citizenshipNumber")]
-        public long CitizenshipNumber { get; set; }
-
+        [JsonProperty("customerNumber")]
+        public int CustomerNumber { get; set; }
         [JsonProperty("name")]
         public Name Name { get; set; }
-        [JsonProperty("iscustomer")]
-        public bool IsCustomer { get; set; }
-        [JsonProperty("authory")]
-        public AuthoryModel Authory { get; set; }
-
+        [JsonProperty("citizenshipNumber")]
+        public string CitizenshipNumber { get; set; }
+        [JsonProperty("taxNo")]
+        public string TaxNo { get; set; }
+        [JsonProperty("isStaff")]
+        public bool IsStaff { get; set; }
         [JsonProperty("gsmPhones")]
         public GsmPhone[] GsmPhones { get; set; }
-
-        [JsonProperty("emails")]
-        public string[] Emails { get; set; }
-
+        [JsonProperty("email")]
+        public string Email { get; set; }
+        [JsonProperty("businessLine")]
+        public string BusinessLine { get; set; }
         [JsonProperty("devices")]
         public Device[] Devices { get; set; }
+
+        [JsonProperty("authory")]
+        public AuthoryModel Authory { get; set; }
+        [JsonProperty("identityNumber")]
+        public AuthoryModel IdentityNumber { get; set; }
     }
 
     public partial class Device

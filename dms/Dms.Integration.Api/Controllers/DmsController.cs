@@ -48,14 +48,14 @@ public class DmsController : ControllerBase
         var person = new DmsPerson
         {
             CitizenshipNumber = 38606229792,
-            ClientNumber = 1,
+            CustomerNumber = 1,
             FirstName = "Hüseyin",
             LastName = "TÖREMEN"
         };
         var customer = new CustomerModel
         {
             CitizenshipNumber = 31435279914,
-            ClientNumber= 60378298
+            CustomerNumber= 60378298
         };
 
         var channelReferenceId = "";
@@ -82,7 +82,7 @@ public class DmsController : ControllerBase
         });
 
         document.OwnerActionType = DocumentActionType.OnlineSigned;
-        DocumentInfo documentInfo = new BhsDocument(document, person, channelReferenceId, customer.ClientNumber, customer.CitizenshipNumber.ToString(), branchCode, bhsOrderNo, version)
+        DocumentInfo documentInfo = new BhsDocument(document, person, channelReferenceId, customer.CustomerNumber, customer.CitizenshipNumber.ToString(), branchCode, bhsOrderNo, version)
         {
             DmsPrefix = "InternetBankaciligi"
         };

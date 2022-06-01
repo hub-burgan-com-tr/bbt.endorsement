@@ -47,7 +47,7 @@ namespace Api.Controllers
             var person = new OrderPerson
             {
                 CitizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value),
-                ClientNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "ClientNumber").Value),
+                CustomerNumber = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "CustomerNumber").Value),
                 First = User.Claims.FirstOrDefault(c => c.Type == "First").Value,
                 Last = User.Claims.FirstOrDefault(c => c.Type == "Last").Value
             };

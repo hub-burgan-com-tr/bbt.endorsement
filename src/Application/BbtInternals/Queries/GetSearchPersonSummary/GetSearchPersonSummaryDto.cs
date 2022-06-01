@@ -7,15 +7,12 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public string CitizenshipNumber { get; set; }
         public string First { get; set; }
         public string Last { get; set; }
-        public long ClientNumber { get;  set; }
+        public int CustomerNumber { get;  set; }
         public string Token { get; set; }
-        public bool IsCustomer { get; set; }
+        public bool IsStaff { get; set; }
+        public string TaxNo { get; set; }
         public AuthoryModel Authory { get; set; }
-        public string[] Emails { get; set; }
         public GsmPhone[] GsmPhones { get;  set; }
-
-
-        public bool IsPersonel { get; set; }
         public string Email { get; set; }
         public GsmPhone GsmPhone { get; set; }
 

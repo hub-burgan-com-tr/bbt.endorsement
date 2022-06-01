@@ -4,8 +4,8 @@ namespace Worker.App.Application.Internals.Models
 {
     public partial class PersonResponse
     {
-        [JsonProperty("clientNumber")]
-        public int ClientNumber { get; set; }
+        [JsonProperty("customerNumber")]
+        public int CustomerNumber { get; set; }
 
         [JsonProperty("citizenshipNumber")]
         public long CitizenshipNumber { get; set; }

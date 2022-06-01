@@ -22,21 +22,21 @@ public class TokenHandler
         var claims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),
                 new Claim("CitizenshipNumber",user.CitizenshipNumber.ToString()),
-                new Claim("ClientNumber",user.ClientNumber.ToString()),
+                new Claim("CustomerNumber",user.CustomerNumber.ToString()),
                 new Claim("First",user.First.ToString()),
                 new Claim("Last",user.Last.ToString()),
-                new Claim("IsCustomer",user.IsCustomer.ToString())
+                new Claim("IsStaff",user.IsStaff.ToString())
             };
 
-        if (user.IsCustomer == false)
+        if (user.IsStaff == false)
         {
             claims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),
                 new Claim("CitizenshipNumber",user.CitizenshipNumber.ToString()),
-                new Claim("ClientNumber",user.ClientNumber.ToString()),
+                new Claim("CustomerNumber",user.CustomerNumber.ToString()),
                 new Claim("First",user.First.ToString()),
                 new Claim("Last",user.Last.ToString()),
-                new Claim("IsCustomer",user.IsCustomer.ToString()),
+                new Claim("IsStaff",user.IsStaff.ToString()),
                 new Claim("IsBranchApproval",user.Authory.IsBranchApproval.ToString()),
                 new Claim("IsBranchFormReader",user.Authory.IsBranchFormReader.ToString()),
                 new Claim("IsFormReader",user.Authory.IsFormReader.ToString()),

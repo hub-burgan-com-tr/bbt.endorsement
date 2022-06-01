@@ -11,7 +11,7 @@ public class CreateOrderHistoryCommand : IRequest<Response<bool>>
     public string DocumentId { get; set; }
     public string State { get; set; }
     public string Description { get; set; }
-    public bool IsCustomer { get; set; } = false;
+    public bool IsStaff { get; set; } = false;
 
 }
 
@@ -36,7 +36,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             State = request.State,
             Description = request.Description,
             Created = _dateTime.Now,
-            IsCustomer = request.IsCustomer
+            IsStaff = request.IsStaff
         });
         var result = _context.SaveChanges();
         return Response<bool>.Success(result > 0 ? true : false, 200);

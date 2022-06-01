@@ -40,8 +40,8 @@ public class CustomerList
     public string CitizenshipNumber { get; set; }
     [JsonProperty("taxNo")]
     public string TaxNo { get; set; }
-    [JsonProperty("isPersonel")]
-    public bool IsPersonel { get; set; }
+    [JsonProperty("isStaff")]
+    public bool IsStaff { get; set; }
     [JsonProperty("gsmPhone")]
     public GsmPhone GsmPhone { get; set; }
     [JsonProperty("email")]

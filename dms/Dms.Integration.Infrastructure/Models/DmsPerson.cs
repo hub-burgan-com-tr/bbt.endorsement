@@ -12,6 +12,6 @@ public class DmsPerson
     public string LastName { get; set; }
     [MaxLength(11)]
     public long CitizenshipNumber { get; set; }
-    public long ClientNumber { get; set; }
+    public int CustomerNumber { get; set; }
 }
 
