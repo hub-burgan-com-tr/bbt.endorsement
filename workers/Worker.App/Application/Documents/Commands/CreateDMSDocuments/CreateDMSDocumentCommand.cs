@@ -30,88 +30,81 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
     public async Task<Response<string>> Handle(CreateDMSDocumentCommand request, CancellationToken cancellationToken)
     {
-        var order = _context.Orders.Include(x=> x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString());
+        var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString());
         var document = _context.Documents.FirstOrDefault(x => x.OrderId == request.InstanceId.ToString() && x.DocumentId == request.Document.DocumentId);
-        var person = order.Person;        
+        var person = order.Person;
         var customer = order.Customer;
 
-        try
+        if (document != null)
         {
-            if(document != null)
-            {
-                var documentInsuranceTypes = _context.DocumentInsuranceTypes
-                    .Where(x => x.DocumentId == document.DocumentId)
-                    .Select(x => new
-                    {
-                        DmsReferenceId = x.Parameter.DmsReferenceId
-                    }).Distinct();
-
-                foreach (var documentInsuranceType in documentInsuranceTypes)
+            var documentInsuranceTypes = _context.DocumentInsuranceTypes
+                .Where(x => x.DocumentId == document.DocumentId)
+                .Select(x => new
                 {
-                    var channelReferenceId = "";
-                    var version = "";
-                    var branchCode = "2000";
-                    var bhsOrderNo = "";
+                    DmsReferenceId = x.Parameter.DmsReferenceId
+                }).Distinct();
 
-                    var dmsPerson = new DmsPerson
-                    {
-                        CitizenshipNumber = person.CitizenshipNumber,
-                        CustomerNumber = person.CustomerNumber,
-                        PersonId = person.PersonId,
-                        FirstName = person.FirstName,
-                        LastName = person.LastName,
-                    };
+            foreach (var documentInsuranceType in documentInsuranceTypes)
+            {
+                var channelReferenceId = "";
+                var version = "";
+                var branchCode = "2000";
+                var bhsOrderNo = "";
 
-                    var dmsDocument = new DmsDocument
+                var dmsPerson = new DmsPerson
+                {
+                    CitizenshipNumber = person.CitizenshipNumber,
+                    CustomerNumber = person.CustomerNumber,
+                    PersonId = person.PersonId,
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                };
+
+                var dmsDocument = new DmsDocument
+                {
+                    Definition = new DocumentDefinition
                     {
-                        Definition = new DocumentDefinition
+                        DmsReferenceId = documentInsuranceType.DmsReferenceId.ToString(),
+                        Key = DocumentDefinitionType.None
+                    },
+                    Contents = new List<DocumentContent>()
+                };
+
+                var data = document.Content.Split(',');
+                var content = data[1];
+                var contentBtye = Convert.FromBase64String(content);
+                dmsDocument.Contents.Add(new DocumentContent
+                {
+                    Content = contentBtye,
+                    MimeType = document.MimeType,
+                });
+
+                dmsDocument.OwnerActionType = DocumentActionType.OnlineSigned;
+                DocumentInfo documentInfo = new BhsDocument(dmsDocument, dmsPerson, channelReferenceId, customer.CustomerNumber, customer.CitizenshipNumber.ToString(), branchCode, bhsOrderNo, version)
+                {
+                    DmsPrefix = "InternetBankaciligi"
+                };
+
+                var dmsRefId = _documentService.CreateDMSDocument(documentInfo);
+
+                if (!string.IsNullOrEmpty(dmsRefId))
+                {
+                    var documentDms = _context.DocumentDmses
+                                                .FirstOrDefault(x => x.Document.OrderId == request.InstanceId &&
+                                                                     x.DocumentId == document.DocumentId &&
+                                                                     x.DmsReferenceId == dmsRefId);
+                    if (documentDms == null)
+                    {
+                        _context.DocumentDmses.Add(new Domain.Entities.DocumentDms
                         {
-                            DmsReferenceId = documentInsuranceType.DmsReferenceId.ToString(),
-                            Key = DocumentDefinitionType.None
-                        },
-                        Contents = new List<DocumentContent>()
-                    };
-
-                    var data = document.Content.Split(',');
-                    var content = data[1];
-                    var contentBtye = Convert.FromBase64String(content);
-                    dmsDocument.Contents.Add(new DocumentContent
-                    {
-                        Content = contentBtye,
-                        MimeType = document.MimeType,
-                    });
-
-                    dmsDocument.OwnerActionType = DocumentActionType.OnlineSigned;
-                    DocumentInfo documentInfo = new BhsDocument(dmsDocument, dmsPerson, channelReferenceId, customer.CustomerNumber, customer.CitizenshipNumber.ToString(), branchCode, bhsOrderNo, version)
-                    {
-                        DmsPrefix = "InternetBankaciligi"
-                    };
-
-                    var dmsRefId = _documentService.CreateDMSDocument(documentInfo);
-
-                    if (!string.IsNullOrEmpty(dmsRefId))
-                    {
-                        var documentDms = _context.DocumentDmses
-                                                    .FirstOrDefault(x => x.Document.OrderId == request.InstanceId && 
-                                                                         x.DocumentId == document.DocumentId && 
-                                                                         x.DmsReferenceId == dmsRefId);
-                        if (documentDms == null)
-                        {
-                            _context.DocumentDmses.Add(new Domain.Entities.DocumentDms
-                            {
-                                DocumentDmsId = Guid.NewGuid().ToString(),
-                                DocumentId = document.DocumentId,   
-                                DmsReferenceId = dmsRefId,
-                            });
-                            _context.SaveChanges();
-                        }
+                            DocumentDmsId = Guid.NewGuid().ToString(),
+                            DocumentId = document.DocumentId,
+                            DmsReferenceId = dmsRefId,
+                        });
+                        _context.SaveChanges();
                     }
-                }              
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            //        logger.LogError(EventIdConstants.SendDocumentToDmsException, "Döküman DMS'e atılırken bir hata oluştu.", ex);
         }
 
         return Response<string>.Success(200);
