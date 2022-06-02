@@ -22,28 +22,41 @@ public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQu
 
     public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetCustomerSearchQuery request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Name))
-            return Response<GetSearchPersonSummaryResponse>.NotFoundException("", 404);
-
-        var response = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
+        try
         {
-            name = request.Name,
-            page = 1,
-            size = 10
-        });
+            if (string.IsNullOrEmpty(request.Name))
+                return Response<GetSearchPersonSummaryResponse>.NotFoundException("", 404);
 
-        var persons = response.Data.CustomerList.Select(x => new GetSearchPersonSummaryDto
+            var response = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
+            {
+                name = request.Name,
+                page = 1,
+                size = 10
+            });
+
+            if(response.Data == null)
+                return Response<GetSearchPersonSummaryResponse>.Fail("Pesponse.Data NULL", 201);
+            if (response.Data.CustomerList == null)
+                return Response<GetSearchPersonSummaryResponse>.Fail("Pesponse.Data.CustomerList NULL", 201);
+
+
+            var persons = response.Data.CustomerList.Select(x => new GetSearchPersonSummaryDto
+            {
+                CitizenshipNumber = x.CitizenshipNumber,
+                First = x.Name.First,
+                Last = x.Name.Last,
+                CustomerNumber = x.CustomerNumber,
+                IsStaff = x.IsStaff,
+                Email = x.Email,
+                GsmPhone = x.GsmPhone,
+                // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
+            });
+
+            return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
+        }
+        catch (Exception ex)
         {
-            CitizenshipNumber = x.CitizenshipNumber,
-            First = x.Name.First,
-            Last = x.Name.Last,
-            CustomerNumber = x.CustomerNumber,
-            IsStaff = x.IsStaff,
-            Email = x.Email,
-            GsmPhone = x.GsmPhone,
-            // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
-        });
-
-        return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
+            return Response<GetSearchPersonSummaryResponse>.Fail(ex.ToString(), 201);
+        }
     }
 }
