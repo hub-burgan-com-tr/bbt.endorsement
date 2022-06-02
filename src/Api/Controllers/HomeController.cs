@@ -37,17 +37,48 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string name)
         {
-
-            var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
-      
-            if (response != null&&response.Data.Persons.Any())
+            var isState = false;
+            if (true)
             {
-                var result = response.Data.Persons.Select(x => new GetSearchPersonSummaryDto {CustomerNumber=x.CustomerNumber,Token="", First = x.First, Last = x.Last, CitizenshipNumber = x.CitizenshipNumber, IsStaff = x.IsStaff, Authory = x.Authory }).FirstOrDefault();
-                TokenHandler tokenHandler = new TokenHandler(_configuration);
-                Token token = tokenHandler.CreateAccessToken(result);
-                result.Token = token.AccessToken;
-                return result;
-                
+                var result = GetUsers()
+                    .Where(x => name.Contains(x.Name.First) || name.Contains(x.Name.Last) || name.Contains(x.Name.First + " " + x.Name.Last))
+                    .Select(x => new GetSearchPersonSummaryDto
+                    {
+                        CitizenshipNumber = x.CitizenshipNumber.ToString(),
+                        First = x.Name.First,
+                        Last = x.Name.Last,
+                        CustomerNumber = x.CustomerNumber,
+                        IsStaff = x.IsStaff,
+                    // Email = x.Email,
+                    // TaxNo = x.TaxNo,
+                    // GsmPhone = x.GsmPhone,
+                    Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
+                    }).FirstOrDefault();
+
+
+                if (result != null)
+                {
+                    TokenHandler tokenHandler = new TokenHandler(_configuration);
+                    Token token = tokenHandler.CreateAccessToken(result);
+                    result.Token = token.AccessToken;
+                    isState = true;
+                    return result;
+                }
+            }
+            
+
+            if(isState == false)
+            {
+                var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
+
+                if (response != null && response.Data.Persons.Any())
+                {
+                    var result = response.Data.Persons.Select(x => new GetSearchPersonSummaryDto { CustomerNumber = x.CustomerNumber, Token = "", First = x.First, Last = x.Last, CitizenshipNumber = x.CitizenshipNumber, IsStaff = x.IsStaff, Authory = x.Authory }).FirstOrDefault();
+                    TokenHandler tokenHandler = new TokenHandler(_configuration);
+                    Token token = tokenHandler.CreateAccessToken(result);
+                    result.Token = token.AccessToken;
+                    return result;
+                }
             }
             return null;
         }

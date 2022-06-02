@@ -8,7 +8,7 @@ namespace Infrastructure.InternalsServices
 {
     public class InternalsService : IInternalsService
     {
-        private readonly string internalsUrl;
+        private string internalsUrl;
         public InternalsService()
         {
             internalsUrl = StaticValues.Internals;
