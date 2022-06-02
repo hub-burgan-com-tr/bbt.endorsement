@@ -208,7 +208,7 @@ public class ContractApprovalService : IContractApprovalService
                             }).Result;
 
                             variables.IsProcess = true;
-
+                            variables.DmsIds = dms.Data;
                         }
                         catch (Exception ex)
                         {

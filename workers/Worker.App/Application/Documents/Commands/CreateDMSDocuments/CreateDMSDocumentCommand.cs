@@ -11,13 +11,13 @@ using Worker.App.Application.Common.Models;
 
 namespace Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 
-public class CreateDMSDocumentCommand : IRequest<Response<string>>
+public class CreateDMSDocumentCommand : IRequest<Response<List<string>>>
 {
     public ApproveOrderDocument Document { get; set; }
     public string InstanceId { get; set; }
 }
 
-public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocumentCommand, Response<string>>
+public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocumentCommand, Response<List<string>>>
 {
     private IDocumentService _documentService = null!;
     private IApplicationDbContext _context;
@@ -28,12 +28,14 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
         _context = context;
     }
 
-    public async Task<Response<string>> Handle(CreateDMSDocumentCommand request, CancellationToken cancellationToken)
+    public async Task<Response<List<string>>> Handle(CreateDMSDocumentCommand request, CancellationToken cancellationToken)
     {
         var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString());
         var document = _context.Documents.FirstOrDefault(x => x.OrderId == request.InstanceId.ToString() && x.DocumentId == request.Document.DocumentId);
         var person = order.Person;
         var customer = order.Customer;
+
+        var dmsIds= new List<string>();
 
         if (document != null)
         {
@@ -89,6 +91,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
                 if (!string.IsNullOrEmpty(dmsRefId))
                 {
+                    dmsIds.Add(dmsRefId);
                     var documentDms = _context.DocumentDmses
                                                 .FirstOrDefault(x => x.Document.OrderId == request.InstanceId &&
                                                                      x.DocumentId == document.DocumentId &&
@@ -107,6 +110,6 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
             }
         }
 
-        return Response<string>.Success(200);
+        return Response<List<string>>.Success(dmsIds, 200);
     }
 }
