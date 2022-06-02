@@ -41,7 +41,7 @@ namespace Api.Controllers
             if (true)
             {
                 var result = GetUsers()
-                    .Where(x => name.Contains(x.Name.First) || name.Contains(x.Name.Last) || name.Contains(x.Name.First + " " + x.Name.Last))
+                     .Where(x => x.Name.First.Contains(name, StringComparison.OrdinalIgnoreCase) || x.Name.Last.Contains(name, StringComparison.OrdinalIgnoreCase) || (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase) || x.CitizenshipNumber.ToString() == name || x.CustomerNumber.ToString() == name)
                     .Select(x => new GetSearchPersonSummaryDto
                     {
                         CitizenshipNumber = x.CitizenshipNumber.ToString(),
@@ -54,7 +54,6 @@ namespace Api.Controllers
                     // GsmPhone = x.GsmPhone,
                     Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
                     }).FirstOrDefault();
-
 
                 if (result != null)
                 {
