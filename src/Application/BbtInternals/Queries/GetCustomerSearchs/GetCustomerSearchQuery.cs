@@ -48,6 +48,7 @@ public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQu
                 CustomerNumber = x.CustomerNumber,
                 IsStaff = x.IsStaff,
                 Email = x.Email,
+                TaxNo=x.TaxNo,
                 GsmPhone = x.GsmPhone,
                 // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
             });

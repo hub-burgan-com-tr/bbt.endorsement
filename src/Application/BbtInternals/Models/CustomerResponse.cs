@@ -33,7 +33,7 @@ public class CustomerList
     [JsonProperty("isStaff")]
     public bool IsStaff { get; set; }
     [JsonProperty("gsmPhone")]
-    public GsmPhone GsmPhone { get; set; }
+    public GsmPhones GsmPhone { get; set; }
     [JsonProperty("email")]
     public string Email { get; set; }
     [JsonProperty("businessLine")]

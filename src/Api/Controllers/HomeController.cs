@@ -107,7 +107,7 @@ namespace Api.Controllers
         {
             var users = new List<UserModel>
             {
-                new UserModel { CitizenshipNumber = 56906430700, CustomerNumber = 1309912, Name = new UserModel.NameClass { First = "Ahmet", Last = "Güler" }, IsStaff = false },
+                new UserModel { CitizenshipNumber = 15244250036, CustomerNumber = 233615, Name = new UserModel.NameClass { First = "Mehmet", Last = "Tamer" }, IsStaff = false },
                 new UserModel { CitizenshipNumber = 77120263424, CustomerNumber = 3063809, Name = new UserModel.NameClass { First = "Hüseyin", Last = "Töremen" }, IsStaff = false },
                 new UserModel { CitizenshipNumber = 69967514210, CustomerNumber = 3580693, Name = new UserModel.NameClass { First = "Gizem", Last = "Ünal" }, IsStaff = false },
                 new UserModel { CitizenshipNumber = 58542320728, CustomerNumber = 1324223, Name = new UserModel.NameClass { First = "Tolgahan", Last = "Özgür" }, IsStaff = false },
