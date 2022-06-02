@@ -9,7 +9,7 @@ public static class StaticValuesExtensions
     {
         StaticValues.Sso = settings.Entegration.Sso;
         StaticValues.Internals = settings.Entegration.Internals;
-        StaticValues.DMSService = settings.Entegration.DMSService;
+        StaticValues.DMSService = settings.ServiceEndpoint.DMSService;
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
         StaticValues.MessagingGateway = settings.Entegration.MessagingGateway;
     }
