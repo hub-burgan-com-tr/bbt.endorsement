@@ -7,6 +7,7 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Common.Models;
 using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 using Worker.App.Application.Documents.Commands.UpdateDocumentStates;
 using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
@@ -209,6 +210,7 @@ public class ContractApprovalService : IContractApprovalService
 
                             variables.IsProcess = true;
                             variables.DmsIds = dms.Data;
+                            variables.DmsIds.Add(StaticValues.DMSService);
                         }
                         catch (Exception ex)
                         {
