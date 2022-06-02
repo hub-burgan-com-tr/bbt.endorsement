@@ -77,7 +77,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "v1",
+        Version = "v1.1",
         Title = "Contract Approval API",
         Description = "Provides validation infrastructure for contracts that customers need to approve."
     });
