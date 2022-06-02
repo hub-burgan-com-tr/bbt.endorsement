@@ -12,9 +12,8 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public bool IsStaff { get; set; }
         public string TaxNo { get; set; }
         public AuthoryModel Authory { get; set; }
-        public GsmPhone[] GsmPhones { get;  set; }
         public string Email { get; set; }
-        public GsmPhone GsmPhone { get; set; }
+        public GsmPhones GsmPhone { get; set; }
 
     }
     public class AuthoryModel

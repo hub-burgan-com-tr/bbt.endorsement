@@ -261,7 +261,7 @@ public class ContractApprovalService : IContractApprovalService
                         else
                         {
                             variables.Device = false;
-                            var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                            var gsmPhone = person.Data.Person.GsmPhone;
                             var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
                         }
                     }
@@ -319,7 +319,7 @@ public class ContractApprovalService : IContractApprovalService
                         }
                         else
                         {
-                            var gsmPhone = person.Data.Person.GsmPhones.FirstOrDefault();
+                            var gsmPhone = person.Data.Person.GsmPhone;
                             var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
 
                             var messageRequest = new SendSmsRequest
