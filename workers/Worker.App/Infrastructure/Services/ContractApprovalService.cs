@@ -63,8 +63,7 @@ public class ContractApprovalService : IContractApprovalService
         DeleteEntity();
         ErrorHandler();
 
-        CustomerSendSms();
-        CustomerSendMail();
+        PYSendMail();
         CheckAllApproved();
     }
 
@@ -624,9 +623,9 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
-    private void CustomerSendMail()
+    private void PYSendMail()
     {
-        CreateWorker("CustomerSendMail", async (jobClient, job) =>
+        CreateWorker("PYSendMail", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
 
@@ -638,7 +637,7 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"PersonSendMail");
+                Log.ForContext("OrderId", variables.InstanceId).Information($"PYSendMail");
 
                 var emailTemplateParams = new EmailTemplateParams
                 {

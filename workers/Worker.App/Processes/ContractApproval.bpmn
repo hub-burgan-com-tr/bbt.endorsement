@@ -56,16 +56,16 @@
       <bpmn:endEvent id="Event_005sint" name="End">
         <bpmn:incoming>Flow_0st7chg</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0hox6l6" sourceRef="Gateway_12a5y1i" targetRef="Activity_0jfywen">
+      <bpmn:sequenceFlow id="Flow_0hox6l6" sourceRef="Gateway_CheckAllApproved" targetRef="Activity_0jfywen">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= Approved = true and IsProcess = true</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0klllua" sourceRef="Activity_LoadContactInfo" targetRef="Gateway_LoadContractInfo" />
-      <bpmn:exclusiveGateway id="Gateway_12a5y1i" name="All Approved">
+      <bpmn:exclusiveGateway id="Gateway_CheckAllApproved" name="All Approved">
         <bpmn:incoming>Flow_0ozpbcc</bpmn:incoming>
         <bpmn:outgoing>Flow_0hox6l6</bpmn:outgoing>
         <bpmn:outgoing>Flow_1mhc32m</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:sequenceFlow id="Flow_1mhc32m" name="Approved " sourceRef="Gateway_12a5y1i" targetRef="Activity_1bfj4zy">
+      <bpmn:sequenceFlow id="Flow_1mhc32m" name="Approved " sourceRef="Gateway_CheckAllApproved" targetRef="Activity_1bfj4zy">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= Approved = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ufej76" sourceRef="Event_LimitTime" targetRef="Gateway_Limit" />
@@ -102,14 +102,14 @@
         <bpmn:incoming>Flow_1cdusfq</bpmn:incoming>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_0m40ev8" errorRef="Error_01mpbq6" />
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0hj6dor" sourceRef="Gateway_SaveEntity" targetRef="Activity_LoadContactInfo">
+      <bpmn:sequenceFlow id="Flow_0hj6dor" sourceRef="Gateway_CreateDMSDocument" targetRef="Activity_LoadContactInfo">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = true</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_1cdusfq" sourceRef="Gateway_SaveEntity" targetRef="Event_00aphdy">
+      <bpmn:sequenceFlow id="Flow_1cdusfq" sourceRef="Gateway_CreateDMSDocument" targetRef="Event_00aphdy">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0r37gwm" sourceRef="Activity_SaveEntity" targetRef="Gateway_03lmmd2" />
-      <bpmn:exclusiveGateway id="Gateway_SaveEntity">
+      <bpmn:exclusiveGateway id="Gateway_CreateDMSDocument">
         <bpmn:incoming>Flow_000ueg2</bpmn:incoming>
         <bpmn:outgoing>Flow_0hj6dor</bpmn:outgoing>
         <bpmn:outgoing>Flow_1cdusfq</bpmn:outgoing>
@@ -196,12 +196,9 @@
       </bpmn:endEvent>
       <bpmn:exclusiveGateway id="Gateway_ApproveContract">
         <bpmn:incoming>Flow_13v97lz</bpmn:incoming>
-        <bpmn:outgoing>Flow_0941ddq</bpmn:outgoing>
         <bpmn:outgoing>Flow_1wxdbxy</bpmn:outgoing>
+        <bpmn:outgoing>Flow_1y9sd3f</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:sequenceFlow id="Flow_0941ddq" sourceRef="Gateway_ApproveContract" targetRef="Gateway_0w40yxe">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = true</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
       <bpmn:serviceTask id="Activity_0jfywen" name="Consume Callback">
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="ConsumeCallback" retries="3" />
@@ -216,45 +213,23 @@
           <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">= RetryFrequence</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:boundaryEvent>
-      <bpmn:serviceTask id="Activity_CustomerSendMail" name="Customer Send Mail">
+      <bpmn:serviceTask id="Activity_PYSendMail" name="PY Send Mail">
         <bpmn:extensionElements>
-          <zeebe:taskDefinition type="CustomerSendMail" retries="3" />
+          <zeebe:taskDefinition type="PYSendMail" retries="3" />
         </bpmn:extensionElements>
-        <bpmn:incoming>Flow_07pwb5k</bpmn:incoming>
-        <bpmn:outgoing>Flow_0y2dwwj</bpmn:outgoing>
+        <bpmn:incoming>Flow_1y9sd3f</bpmn:incoming>
+        <bpmn:outgoing>Flow_0anzkkj</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_07pwb5k" sourceRef="Gateway_0w40yxe" targetRef="Activity_CustomerSendMail" />
-      <bpmn:parallelGateway id="Gateway_0w40yxe">
-        <bpmn:incoming>Flow_0941ddq</bpmn:incoming>
-        <bpmn:outgoing>Flow_07pwb5k</bpmn:outgoing>
-        <bpmn:outgoing>Flow_0qie4dm</bpmn:outgoing>
-      </bpmn:parallelGateway>
-      <bpmn:serviceTask id="Activity_CustomerSendSms" name="Customer Send Sms">
-        <bpmn:extensionElements>
-          <zeebe:taskDefinition type="CustomerSendSms" retries="3" />
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0qie4dm</bpmn:incoming>
-        <bpmn:outgoing>Flow_18srimg</bpmn:outgoing>
-      </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_0qie4dm" sourceRef="Gateway_0w40yxe" targetRef="Activity_CustomerSendSms" />
-      <bpmn:parallelGateway id="Gateway_0llzv7a">
-        <bpmn:incoming>Flow_18srimg</bpmn:incoming>
-        <bpmn:incoming>Flow_0y2dwwj</bpmn:incoming>
-        <bpmn:outgoing>Flow_1v8hatt</bpmn:outgoing>
-      </bpmn:parallelGateway>
-      <bpmn:sequenceFlow id="Flow_18srimg" sourceRef="Activity_CustomerSendSms" targetRef="Gateway_0llzv7a" />
-      <bpmn:sequenceFlow id="Flow_0y2dwwj" sourceRef="Activity_CustomerSendMail" targetRef="Gateway_0llzv7a" />
-      <bpmn:sequenceFlow id="Flow_1v8hatt" sourceRef="Gateway_0llzv7a" targetRef="Activity_CheckAllApproved" />
-      <bpmn:sequenceFlow id="Flow_0ozpbcc" sourceRef="Activity_CheckAllApproved" targetRef="Gateway_12a5y1i" />
+      <bpmn:sequenceFlow id="Flow_0ozpbcc" sourceRef="Activity_CheckAllApproved" targetRef="Gateway_CheckAllApproved" />
       <bpmn:serviceTask id="Activity_CheckAllApproved" name="Check All Approved">
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="CheckAllApproved" retries="3" />
         </bpmn:extensionElements>
-        <bpmn:incoming>Flow_1v8hatt</bpmn:incoming>
+        <bpmn:incoming>Flow_0anzkkj</bpmn:incoming>
         <bpmn:outgoing>Flow_0ozpbcc</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_15eg93e" sourceRef="Activity_11jscgz" targetRef="Gateway_1rhyhl5" />
-      <bpmn:sequenceFlow id="Flow_000ueg2" sourceRef="Activity_17gtf8f" targetRef="Gateway_SaveEntity" />
+      <bpmn:sequenceFlow id="Flow_15eg93e" sourceRef="Activity_11jscgz" targetRef="Gateway_SaveHistory" />
+      <bpmn:sequenceFlow id="Flow_000ueg2" sourceRef="Activity_17gtf8f" targetRef="Gateway_CreateDMSDocument" />
       <bpmn:serviceTask id="Activity_11jscgz" name="Save History">
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="SaveHistory" retries="3" />
@@ -269,15 +244,15 @@
         <bpmn:incoming>Flow_1hrnyqj</bpmn:incoming>
         <bpmn:outgoing>Flow_000ueg2</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:exclusiveGateway id="Gateway_1rhyhl5">
+      <bpmn:exclusiveGateway id="Gateway_SaveHistory">
         <bpmn:incoming>Flow_15eg93e</bpmn:incoming>
         <bpmn:outgoing>Flow_1hrnyqj</bpmn:outgoing>
         <bpmn:outgoing>Flow_18uazzj</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:sequenceFlow id="Flow_1hrnyqj" sourceRef="Gateway_1rhyhl5" targetRef="Activity_17gtf8f">
+      <bpmn:sequenceFlow id="Flow_1hrnyqj" sourceRef="Gateway_SaveHistory" targetRef="Activity_17gtf8f">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = true</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_18uazzj" sourceRef="Gateway_1rhyhl5" targetRef="Event_0wnv53f">
+      <bpmn:sequenceFlow id="Flow_18uazzj" sourceRef="Gateway_SaveHistory" targetRef="Event_0wnv53f">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:endEvent id="Event_0wnv53f">
@@ -292,13 +267,17 @@
       <bpmn:sequenceFlow id="Flow_SaveEntity_IsProcess_True" sourceRef="Gateway_03lmmd2" targetRef="Activity_11jscgz">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = true</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_SaveEntity_IsProcess_False" sourceRef="Gateway_03lmmd2" targetRef="Event_1nnm33k">
+      <bpmn:sequenceFlow id="Flow_SaveEntity_IsProcess_False" sourceRef="Gateway_03lmmd2" targetRef="Event_SaveEntity">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:endEvent id="Event_1nnm33k">
+      <bpmn:endEvent id="Event_SaveEntity">
         <bpmn:incoming>Flow_SaveEntity_IsProcess_False</bpmn:incoming>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_0y2zp2q" errorRef="Error_0orwo1f" />
       </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1y9sd3f" sourceRef="Gateway_ApproveContract" targetRef="Activity_PYSendMail">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = true</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0anzkkj" sourceRef="Activity_PYSendMail" targetRef="Activity_CheckAllApproved" />
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_10ia34g" sourceRef="Event_TimeoutTimer" targetRef="Activity_TimeoutProcess" />
     <bpmn:sequenceFlow id="Flow_14ivxht" sourceRef="Start" targetRef="Activity_ContractApprovalProcess" />
@@ -498,6 +477,28 @@
       <bpmndi:BPMNShape id="Activity_1mqztst_di" bpmnElement="Activity_ContractApprovalProcess" isExpanded="true">
         <dc:Bounds x="230" y="80" width="3250" height="510" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0exgtyg_di" bpmnElement="Flow_SaveEntity_IsProcess_False">
+        <di:waypoint x="570" y="395" />
+        <di:waypoint x="570" y="434" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="542" y="412" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1p67i2j_di" bpmnElement="Flow_SaveEntity_IsProcess_True">
+        <di:waypoint x="595" y="370" />
+        <di:waypoint x="660" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="586" y="352" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18uazzj_di" bpmnElement="Flow_18uazzj">
+        <di:waypoint x="870" y="395" />
+        <di:waypoint x="870" y="434" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hrnyqj_di" bpmnElement="Flow_1hrnyqj">
+        <di:waypoint x="895" y="370" />
+        <di:waypoint x="960" y="370" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_000ueg2_di" bpmnElement="Flow_000ueg2">
         <di:waypoint x="1060" y="370" />
         <di:waypoint x="1125" y="370" />
@@ -510,37 +511,9 @@
         <di:waypoint x="3060" y="370" />
         <di:waypoint x="3115" y="370" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1v8hatt_di" bpmnElement="Flow_1v8hatt">
-        <di:waypoint x="2895" y="370" />
-        <di:waypoint x="2960" y="370" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0y2dwwj_di" bpmnElement="Flow_0y2dwwj">
-        <di:waypoint x="2760" y="452" />
-        <di:waypoint x="2870" y="452" />
-        <di:waypoint x="2870" y="395" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_18srimg_di" bpmnElement="Flow_18srimg">
-        <di:waypoint x="2760" y="290" />
-        <di:waypoint x="2870" y="290" />
-        <di:waypoint x="2870" y="345" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0qie4dm_di" bpmnElement="Flow_0qie4dm">
-        <di:waypoint x="2540" y="345" />
-        <di:waypoint x="2540" y="290" />
-        <di:waypoint x="2660" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_07pwb5k_di" bpmnElement="Flow_07pwb5k">
-        <di:waypoint x="2540" y="395" />
-        <di:waypoint x="2540" y="452" />
-        <di:waypoint x="2660" y="452" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0st7chg_di" bpmnElement="Flow_0st7chg">
         <di:waypoint x="3360" y="370" />
         <di:waypoint x="3412" y="370" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0941ddq_di" bpmnElement="Flow_0941ddq">
-        <di:waypoint x="2435" y="370" />
-        <di:waypoint x="2515" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1wxdbxy_di" bpmnElement="Flow_1wxdbxy">
         <di:waypoint x="2410" y="345" />
@@ -656,27 +629,13 @@
         <di:waypoint x="3165" y="370" />
         <di:waypoint x="3260" y="370" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1hrnyqj_di" bpmnElement="Flow_1hrnyqj">
-        <di:waypoint x="895" y="370" />
-        <di:waypoint x="960" y="370" />
+      <bpmndi:BPMNEdge id="Flow_1y9sd3f_di" bpmnElement="Flow_1y9sd3f">
+        <di:waypoint x="2435" y="370" />
+        <di:waypoint x="2520" y="370" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_18uazzj_di" bpmnElement="Flow_18uazzj">
-        <di:waypoint x="870" y="395" />
-        <di:waypoint x="870" y="434" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1p67i2j_di" bpmnElement="Flow_SaveEntity_IsProcess_True">
-        <di:waypoint x="595" y="370" />
-        <di:waypoint x="660" y="370" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="586" y="352" width="83" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0exgtyg_di" bpmnElement="Flow_SaveEntity_IsProcess_False">
-        <di:waypoint x="570" y="395" />
-        <di:waypoint x="570" y="434" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="542" y="412" width="87" height="27" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_0anzkkj_di" bpmnElement="Flow_0anzkkj">
+        <di:waypoint x="2620" y="370" />
+        <di:waypoint x="2960" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0k9mjyd_di" bpmnElement="Event_0k9mjyd">
         <dc:Bounds x="282" y="352" width="36" height="36" />
@@ -693,7 +652,7 @@
           <dc:Bounds x="3420" y="395" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_07g446g_di" bpmnElement="Gateway_12a5y1i" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Gateway_07g446g_di" bpmnElement="Gateway_CheckAllApproved" isMarkerVisible="true">
         <dc:Bounds x="3115" y="345" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3169" y="343" width="62" height="14" />
@@ -714,10 +673,13 @@
           <dc:Bounds x="1986" y="111" width="88" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0d1x6b7_di" bpmnElement="Activity_SaveEntity">
+        <dc:Bounds x="380" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0niurt5_di" bpmnElement="Event_00aphdy">
         <dc:Bounds x="1132" y="434" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_04s0wsw_di" bpmnElement="Gateway_SaveEntity" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Gateway_04s0wsw_di" bpmnElement="Gateway_CreateDMSDocument" isMarkerVisible="true">
         <dc:Bounds x="1125" y="345" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_18e2qb9_di" bpmnElement="Gateway_LoadContractInfo" isMarkerVisible="true">
@@ -768,41 +730,29 @@
       <bpmndi:BPMNShape id="Activity_0jfywen_di" bpmnElement="Activity_0jfywen">
         <dc:Bounds x="3260" y="330" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1oya8gg_di" bpmnElement="Activity_CustomerSendMail">
-        <dc:Bounds x="2660" y="412" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1y6d64y_di" bpmnElement="Gateway_0w40yxe">
-        <dc:Bounds x="2515" y="345" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1wvfs09_di" bpmnElement="Activity_CustomerSendSms">
-        <dc:Bounds x="2660" y="250" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_050n9a1_di" bpmnElement="Gateway_0llzv7a">
-        <dc:Bounds x="2845" y="345" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0a7xb67_di" bpmnElement="Activity_CheckAllApproved">
         <dc:Bounds x="2960" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_118u9dx_di" bpmnElement="Activity_11jscgz">
+        <dc:Bounds x="660" y="330" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1nlha1i_di" bpmnElement="Activity_17gtf8f">
         <dc:Bounds x="960" y="330" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1rhyhl5_di" bpmnElement="Gateway_1rhyhl5" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Gateway_1rhyhl5_di" bpmnElement="Gateway_SaveHistory" isMarkerVisible="true">
         <dc:Bounds x="845" y="345" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_12a0kgz_di" bpmnElement="Event_0wnv53f">
         <dc:Bounds x="852" y="434" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_118u9dx_di" bpmnElement="Activity_11jscgz">
-        <dc:Bounds x="660" y="330" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0d1x6b7_di" bpmnElement="Activity_SaveEntity">
-        <dc:Bounds x="380" y="330" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_03lmmd2_di" bpmnElement="Gateway_03lmmd2" isMarkerVisible="true">
         <dc:Bounds x="545" y="345" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_05gaw2z_di" bpmnElement="Event_1nnm33k">
+      <bpmndi:BPMNShape id="Event_05gaw2z_di" bpmnElement="Event_SaveEntity">
         <dc:Bounds x="552" y="434" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1oya8gg_di" bpmnElement="Activity_PYSendMail">
+        <dc:Bounds x="2520" y="330" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_02uy4lu_di" bpmnElement="Event_LimitTime">
         <dc:Bounds x="2102" y="312" width="36" height="36" />
