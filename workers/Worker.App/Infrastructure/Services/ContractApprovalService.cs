@@ -665,8 +665,8 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
-                variables.Error = ex.Message;
+                //variables.IsProcess = false;
+                variables.Error = "PYSendMail - " + ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
