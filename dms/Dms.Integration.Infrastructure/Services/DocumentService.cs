@@ -34,7 +34,7 @@ public class DocumentService : IDocumentService
     public string CreateDMSDocument(DocumentInfo document)
     {
         if (string.IsNullOrEmpty(_url))
-            return _url;
+            return "";
         StringBuilder builder = new StringBuilder();
         builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         builder.Append($"<document>");

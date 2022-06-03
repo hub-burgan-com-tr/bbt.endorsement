@@ -210,7 +210,6 @@ public class ContractApprovalService : IContractApprovalService
 
                             variables.IsProcess = true;
                             variables.DmsIds = dms.Data;
-                            variables.DmsIds.Add(StaticValues.DMSService);
                         }
                         catch (Exception ex)
                         {
@@ -642,8 +641,30 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"CustomerSendMail");
+                Log.ForContext("OrderId", variables.InstanceId).Information($"PersonSendMail");
 
+                var emailTemplateParams = new EmailTemplateParams
+                {
+                    MusteriAdSoyad = "Hüeyin Töremen",
+                    MusteriNo = 12345
+                };
+
+                var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
+
+                await _messagingService.SendMailTemplateAsync(new SendMailTemplateRequest
+                {
+                    headerInfo = new SendMailTemplateHeaderInfo
+                    {
+                        sender = "Burgan"
+                    },
+                    templateParams = templateParams,
+                    template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:",
+                    email = "HToremen@burgan.com.tr",
+                    process = new SendMailTemplateProcess
+                    {
+                        name = "Zeebe - Contract Approval - SendOtp"
+                    }
+                });
             }
             catch (Exception ex)
             {
