@@ -1,4 +1,5 @@
 ﻿using Dms.Integration.Api.Models.Messages;
+using Dms.Integration.Infrastructure.Extensions;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -14,10 +15,15 @@ public interface IMessagingService
 
 public class MessagingService : IMessagingService
 {
+    private readonly string _url;
+    public MessagingService(IConfigurationRoot config)
+    {
+        _url = config.GetMessagingGatewayUrl();
+    }
+
     public Task<SendMailResponse> SendMailTemplateAsync(SendEmailTemplateRequest request)
     {
-        var url = "https://test-messaginggateway.burgan.com.tr";
-        var restClient = new RestClient(url);
+        var restClient = new RestClient(_url);
         var restRequest = new RestRequest("/api/v1/Messaging/email/templated", Method.Post);
         restRequest.RequestFormat = DataFormat.Json;
         restRequest.AddJsonBody(request);
@@ -30,8 +36,7 @@ public class MessagingService : IMessagingService
 
     public Task<SendMailResponse> SendMailMessageAsync(SendMailRequest request)
     {
-        var url = "https://test-messaginggateway.burgan.com.tr";
-        var restClient = new RestClient(url);
+        var restClient = new RestClient(_url);
         var restRequest = new RestRequest("/api/v1/Messaging/email/message", Method.Post);
         restRequest.RequestFormat = DataFormat.Json;
         restRequest.AddJsonBody(request);
@@ -44,8 +49,7 @@ public class MessagingService : IMessagingService
 
     public Task<MessagingResponse> SendSmsMessageAsync(MessagingRequest request)
     {
-        var url = "https://test-messaginggateway.burgan.com.tr";
-        var restClient = new RestClient(url);
+        var restClient = new RestClient(_url);
         var restRequest = new RestRequest("/api/v1/Messaging/sms/message", Method.Post);
         restRequest.RequestFormat = DataFormat.Json;
         restRequest.AddJsonBody(request);

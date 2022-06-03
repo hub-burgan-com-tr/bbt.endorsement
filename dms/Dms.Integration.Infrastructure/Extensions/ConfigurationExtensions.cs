@@ -8,4 +8,8 @@ public static class ConfigurationExtensions
     {
         return config.GetSection("ServiceEndpoint")["DMSService"];
     }
+    public static string GetMessagingGatewayUrl(this IConfiguration config)
+    {
+        return config.GetSection("Entegration")["MessagingGateway"];
+    }
 }
