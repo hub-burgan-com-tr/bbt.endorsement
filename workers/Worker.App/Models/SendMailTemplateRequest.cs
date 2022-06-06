@@ -26,12 +26,6 @@ public class SendMailTemplateHeaderInfo
     public string smsTemplateSuffix { get; set; }
 }
 
-public class SendMailTemplateResponse
-{
-    public string txnId { get; set; }
-    public string status { get; set; }
-}
-
 public class EmailTemplateParams
 {
     public int MusteriNo { get; set; }

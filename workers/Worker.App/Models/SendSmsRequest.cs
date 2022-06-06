@@ -8,8 +8,8 @@ public class SendSmsRequest
     public string contentType { get; set; }
     public string smsType { get; set; } //Alabileceği değerler Fast,Bulk 
     public string id { get; set; }
-    public SmsPhone phone { get; set; }
-    public SmsProcess process { get; set; }
+    public Phone phone { get; set; }
+    public Process process { get; set; }
 }
 
 public class HeaderInfo
@@ -24,14 +24,14 @@ public class HeaderInfo
 }
 
 
-public class SmsPhone
+public class Phone
 {
     public int countryCode { get; set; } //ülke kodu 90
     public int prefix { get; set; } //Gsm prefix 553,533 etc
     public int number { get; set; } // Telefon numarası
 }
 
-public class SmsProcess
+public class Process
 {
     public string name { get; set; } //İşlem programatik tetikleniyorsa program bilgisi
     public string itemId { get; set; }
