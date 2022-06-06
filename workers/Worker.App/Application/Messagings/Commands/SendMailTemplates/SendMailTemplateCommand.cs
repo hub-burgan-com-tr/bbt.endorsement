@@ -56,17 +56,19 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
             }
         };
 
-        if (order.State == OrderState.Approve.ToString())
+        foreach (var document in order.Documents)
         {
-            sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
-            await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+            if (document.State == OrderState.Approve.ToString())
+            {
+                sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
+                await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+            }
+            else if (document.State == OrderState.Reject.ToString())
+            {
+                sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
+                await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+            }
         }
-        else if (order.State == OrderState.Reject.ToString())
-        {
-            sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
-            await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-        }
-
-        throw new NotImplementedException();
+        return Response<bool>.Success(200);
     }
 }
