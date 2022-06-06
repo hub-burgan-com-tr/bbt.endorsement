@@ -302,14 +302,14 @@ public class ContractApprovalService : IContractApprovalService
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
                 if (person.Data != null)
                 {
-                    await _mediator.Send(new SendSmsTemplateCommand
+                    var responseSms = await _mediator.Send(new SendSmsTemplateCommand
                     {
                         OrderId = variables.InstanceId,
                         GsmPhone = person.Data.Person.GsmPhone,
                         CustomerNumber = person.Data.Person.CustomerNumber,
                     });
 
-                    await _mediator.Send(new SendMailTemplateCommand
+                    var responseMail = await _mediator.Send(new SendMailTemplateCommand
                     {
                         OrderId = variables.InstanceId,
                         Email = person.Data.Person.Email,
