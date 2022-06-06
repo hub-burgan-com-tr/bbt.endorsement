@@ -5,6 +5,7 @@ namespace Worker.App.Application.Common.Interfaces
 {
     public interface IInternalsService
     {
+        Task<Response<CustomerResponse>> GetCustomerSearchByName(CustomerSearchRequest request);
         Task<Response<CustomerResponse>> GetCustomerSearch(CustomerRequest person);
 
         Task<Response<List<PersonResponse>>> GetPersonSearch(string name);
