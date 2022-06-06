@@ -30,7 +30,9 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
 
     public async Task<Response<MessageResponse>> Handle(SendSmsTemplateCommand request, CancellationToken cancellationToken)
     {
-        var gsmPhone = request.GsmPhone;
+        try
+        {
+            var gsmPhone = request.GsmPhone;
         var messageRequest = new SendSmsTemplateRequest
         {
             headerInfo = new HeaderInfo
@@ -52,9 +54,14 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
                 action = "SendOtp"
             }
         };
-        var response = await _messagingService.SendSmsTemplateAsync(messageRequest);
+            var response = await _messagingService.SendSmsTemplateAsync(messageRequest);
 
-        var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(messageRequest), Response = JsonConvert.SerializeObject(response) };
-        return Response<MessageResponse>.Success(messageResponse, 200);
+            var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(messageRequest), Response = JsonConvert.SerializeObject(response) };
+            return Response<MessageResponse>.Success(messageResponse, 200);
+        }
+        catch (Exception ex)
+        {
+            return Response<MessageResponse>.Fail(ex.Message, 201);
+        }
     }
 }

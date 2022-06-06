@@ -29,26 +29,33 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
 
     public async Task<Response<MessageResponse>> Handle(SendMailTemplateCommand request, CancellationToken cancellationToken)
     {
-        var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
-        if (order == null)
-            return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
-
-        var sendMailTemplate = new SendMailTemplateRequest
+        try
         {
-            headerInfo = new SendMailTemplateHeaderInfo
-            {
-                sender = "Burgan"
-            },
-            template = "Müşteriye Giden Başvuru Onay Talebi",
-            email = "HToremen@burgan.com.tr", // request.Email
-            process = new SendMailTemplateProcess
-            {
-                name = "Zeebe - Contract Approval - SendOtp"
-            }
-        };
+            var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
+            if (order == null)
+                return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 
-        var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-        var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
-        return Response<MessageResponse>.Success(messageResponse, 200);
+            var sendMailTemplate = new SendMailTemplateRequest
+            {
+                headerInfo = new SendMailTemplateHeaderInfo
+                {
+                    sender = "Burgan"
+                },
+                template = "Müşteriye Giden Başvuru Onay Talebi",
+                email = "HToremen@burgan.com.tr", // request.Email
+                process = new SendMailTemplateProcess
+                {
+                    name = "Zeebe - Contract Approval - SendOtp"
+                }
+            };
+
+            var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+            var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
+            return Response<MessageResponse>.Success(messageResponse, 200);
+        }
+        catch (Exception ex)
+        {
+            return Response<MessageResponse>.Fail(ex.Message, 200);
+        }
     }
 }

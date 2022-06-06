@@ -239,7 +239,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
@@ -330,7 +330,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
@@ -368,7 +368,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -466,7 +466,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -506,7 +506,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -582,7 +582,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -645,7 +645,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
