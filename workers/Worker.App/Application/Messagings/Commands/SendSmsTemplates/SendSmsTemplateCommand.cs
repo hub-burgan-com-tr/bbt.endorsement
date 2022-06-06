@@ -33,27 +33,27 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
         try
         {
             var gsmPhone = request.GsmPhone;
-        var messageRequest = new SendSmsTemplateRequest
-        {
-            headerInfo = new HeaderInfo
+            var messageRequest = new SendSmsTemplateRequest
             {
-                sender = "Burgan"
-            },
-            template = "Müşteriden Talep Edilen Onay SMS'i",
-            phone = new Phone
-            {
-                countryCode = 90, // gsmPhone.County,
-                prefix = 542, // gsmPhone.Prefix,
-                number = 4729390, // gsmPhone.Number
-            },
-            customerNo = request.CustomerNumber,
-            process = new Process
-            {
-                name = "Zeebe - bbt.endorsement",
-                itemId = request.OrderId,
-                action = "SendOtp"
-            }
-        };
+                headerInfo = new HeaderInfo
+                {
+                    sender = "Burgan"
+                },
+                template = "Müşteriden Talep Edilen Onay SMS'i",
+                phone = new Phone
+                {
+                    countryCode = 90, // gsmPhone.County,
+                    prefix = 542, // gsmPhone.Prefix,
+                    number = 4729390, // gsmPhone.Number
+                },
+                //customerNo = request.CustomerNumber,
+                process = new Process
+                {
+                    name = "Zeebe - bbt.endorsement",
+                    //itemId = request.OrderId,
+                    //action = "SendOtp"
+                }
+            };
             var response = await _messagingService.SendSmsTemplateAsync(messageRequest);
 
             var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(messageRequest), Response = JsonConvert.SerializeObject(response) };

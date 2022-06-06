@@ -322,6 +322,33 @@ public class ContractApprovalService : IContractApprovalService
                         Description = "",
                         IsStaff = true
                     });
+
+                    try
+                    {
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı(Sms)",
+                            Description = "",
+                            IsStaff = false,
+                            Request = responseSms.Data.Request,
+                            Response = responseSms.Data.Response
+                        });
+
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı(Mail)",
+                            Description = "",
+                            IsStaff = false,
+                            Request = responseMail.Data.Request,
+                            Response = responseMail.Data.Response
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                    }
                 }
             }
             catch (Exception ex)
