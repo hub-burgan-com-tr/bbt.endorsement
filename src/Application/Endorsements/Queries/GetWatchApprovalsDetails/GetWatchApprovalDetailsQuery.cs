@@ -41,6 +41,7 @@ namespace Application.Endorsements.Queries.GetWatchApprovalsDetails
                 RetryFrequence = x.Config.RetryFrequence,
                 ExpireInMinutes = x.Config.ExpireInMinutes,
                 OrderState=x.State,
+             
                 History = x.OrderHistories.Where(x=>x.IsStaff).OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
                 Documents = x.Documents.OrderByDescending(x=>x.Created).Select(x => new GetWatchApprovalDocumentDetailsDto { DocumentId = x.DocumentId, Name = x.Name,MimeType=x.MimeType, TypeName = x.Type ==ContentType.PlainText.ToString() ? "Metin" : "Belge", Title = x.DocumentActions.FirstOrDefault(y => y.IsSelected).Title, Content = x.Type == ContentType.PlainText.ToString() ? DecodeBase64Services.DecodeBase64(x.Content) : x.Content, Type = x.FileType }).ToList() }).FirstOrDefaultAsync();
             return Response<GetWatchApprovalDetailsDto>.Success(response, 200);
