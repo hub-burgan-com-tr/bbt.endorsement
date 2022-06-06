@@ -1,7 +1,5 @@
-﻿using Domain.Enums;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Infrastructure.Services;
@@ -34,41 +32,23 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
         if (order == null)
             return Response<bool>.NotFoundException("Order not found: " + request.OrderId, 404);
 
-        var names = order.Documents.Select(x => x.Name).ToArray();
-        var emailTemplateParams = new EmailTemplateParams
-        {
-            MusteriAdSoyad = "Hüseyin Töremen",
-            MusteriNo = 12345,
-            Names = names
-        };
-        var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
         var sendMailTemplate = new SendMailTemplateRequest
         {
             headerInfo = new SendMailTemplateHeaderInfo
             {
                 sender = "Burgan"
             },
-            templateParams = templateParams,
+            template= "Müşteriye Giden Başvuru Onay Talebi",
             email = "HToremen@burgan.com.tr", // request.Email
             process = new SendMailTemplateProcess
             {
                 name = "Zeebe - Contract Approval - SendOtp"
             }
         };
+        
+        await _messagingService.SendMailTemplateAsync(sendMailTemplate);
 
-        foreach (var document in order.Documents)
-        {
-            if (document.State == OrderState.Approve.ToString())
-            {
-                sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
-                await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-            }
-            else if (document.State == OrderState.Reject.ToString())
-            {
-                sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
-                await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-            }
-        }
         return Response<bool>.Success(200);
     }
 }
+
