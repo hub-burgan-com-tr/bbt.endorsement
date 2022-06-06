@@ -7,6 +7,7 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Common.Models;
 using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 using Worker.App.Application.Messagings.Commands.SendMailTemplates;
 using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
@@ -82,6 +83,11 @@ public class ContractApprovalService : IContractApprovalService
                 // var state = customHeaders["State"].ToString();
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
+                Log.ForContext("OrderId", variables.InstanceId).Information("Internals: " + StaticValues.Internals);
+                Log.ForContext("OrderId", variables.InstanceId).Information("Sso: " + StaticValues.Sso);
+                Log.ForContext("OrderId", variables.InstanceId).Information("DMSService: " + StaticValues.DMSService);
+                Log.ForContext("OrderId", variables.InstanceId).Information("TemplateEngine: " + StaticValues.TemplateEngine);
+                Log.ForContext("OrderId", variables.InstanceId).Information("MessagingGateway: " + StaticValues.MessagingGateway);
 
                 if (variables != null)
                 {
