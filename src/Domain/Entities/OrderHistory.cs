@@ -25,6 +25,10 @@ namespace Domain.Entities
         public string Description { get; set; }
         [Required]
         public bool IsStaff { get; set; }
+        [MaxLength(4000)]
+        public string Request { get; set; }
+        [MaxLength(4000)]
+        public string Response { get; set; }
         public virtual Document Document { get; set; }
         public virtual Order Order { get; set; }
     }
