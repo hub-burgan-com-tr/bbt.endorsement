@@ -11,7 +11,8 @@ public interface IMessagingService
     Task<SendSmsResponse> SendSmsMessageAsync(SendSmsRequest request);
     Task<SendMailResponse> SendMailMessageAsync(SendMailRequest request);
 
-    Task<SendMailTemplateResponse> SendMailTemplateAsync(SendMailTemplateRequest request);
+    Task<SendMailResponse> SendMailTemplateAsync(SendMailTemplateRequest request);
+    Task<SendSmsResponse> SendSmsTemplateAsync(SendSmsTemplateRequest request);
 }
 
 public class MessagingService : IMessagingService
@@ -35,7 +36,7 @@ public class MessagingService : IMessagingService
         return Task.FromResult(data);
     }
 
-    public Task<SendMailTemplateResponse> SendMailTemplateAsync(SendMailTemplateRequest request)
+    public Task<SendMailResponse> SendMailTemplateAsync(SendMailTemplateRequest request)
     {
         var restClient = new RestClient(messagingGateway);
         var restRequest = new RestRequest("/api/v1/Messaging/email/templated", Method.Post);
@@ -43,7 +44,7 @@ public class MessagingService : IMessagingService
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
-        var data = JsonConvert.DeserializeObject<SendMailTemplateResponse>(response.Content);
+        var data = JsonConvert.DeserializeObject<SendMailResponse>(response.Content);
 
         return Task.FromResult(data);
     }
@@ -59,5 +60,18 @@ public class MessagingService : IMessagingService
         var data = JsonConvert.DeserializeObject<SendSmsResponse>(response.Content);
 
         throw new NotImplementedException();
+    }
+
+    public Task<SendSmsResponse> SendSmsTemplateAsync(SendSmsTemplateRequest request)
+    {
+        var restClient = new RestClient(messagingGateway);
+        var restRequest = new RestRequest("/api/v1/Messaging/sms/templated", Method.Post);
+        restRequest.RequestFormat = DataFormat.Json;
+        restRequest.AddJsonBody(request);
+
+        var response = restClient.ExecuteAsync(restRequest).Result;
+        var data = JsonConvert.DeserializeObject<SendSmsResponse>(response.Content);
+
+        return Task.FromResult(data);
     }
 }
