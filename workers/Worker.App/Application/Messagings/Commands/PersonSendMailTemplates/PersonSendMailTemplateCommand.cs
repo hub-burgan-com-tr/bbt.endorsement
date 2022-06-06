@@ -9,13 +9,13 @@ using Worker.App.Models;
 
 namespace Worker.App.Application.Messagings.Commands.PersonSendMailTemplates;
 
-public class PersonSendMailTemplateCommand : IRequest<Response<bool>>
+public class PersonSendMailTemplateCommand : IRequest<Response<List<MessageResponse>>>
 {
     public string OrderId { get; set; }
     public string Email { get; set; }
 }
 
-public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMailTemplateCommand, Response<bool>>
+public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMailTemplateCommand, Response<List<MessageResponse>>>
 {
     private IApplicationDbContext _context;
     private IDateTime _dateTime;
@@ -28,11 +28,11 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
         _messagingService = messagingService;
     }
 
-    public async Task<Response<bool>> Handle(PersonSendMailTemplateCommand request, CancellationToken cancellationToken)
+    public async Task<Response<List<MessageResponse>>> Handle(PersonSendMailTemplateCommand request, CancellationToken cancellationToken)
     {
         var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
         if (order == null)
-            return Response<bool>.NotFoundException("Order not found: " + request.OrderId, 404);
+            return Response<List<MessageResponse>>.NotFoundException("Order not found: " + request.OrderId, 404);
 
         var names = order.Documents.Select(x => x.Name).ToArray();
         var emailTemplateParams = new EmailTemplateParams
@@ -56,19 +56,23 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
             }
         };
 
+        var messages = new List<MessageResponse>();
+
         foreach (var document in order.Documents)
         {
             if (document.State == OrderState.Approve.ToString())
             {
                 sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
-                await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                messages.Add(messageResponse);
             }
             else if (document.State == OrderState.Reject.ToString())
             {
                 sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
-                await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                messages.Add(messageResponse);
             }
         }
-        return Response<bool>.Success(200);
+        return Response<List<MessageResponse>>.Success(messages, 200);
     }
 }

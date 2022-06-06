@@ -25,9 +25,3 @@ public class MailAttachment
     public string name { get; set; }
     public string data { get; set; }
 }
-
-public class SendMailResponse
-{
-    public string txnId { get; set; }
-    public string status { get; set; }
-}

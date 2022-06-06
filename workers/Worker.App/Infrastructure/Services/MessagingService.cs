@@ -8,11 +8,11 @@ namespace Worker.App.Infrastructure.Services;
 
 public interface IMessagingService
 {
-    Task<SendSmsResponse> SendSmsMessageAsync(SendSmsRequest request);
-    Task<SendMailResponse> SendMailMessageAsync(SendMailRequest request);
+    Task<MessageResponse> SendSmsMessageAsync(SendSmsRequest request);
+    Task<MessageResponse> SendMailMessageAsync(SendMailRequest request);
 
-    Task<SendMailResponse> SendMailTemplateAsync(SendMailTemplateRequest request);
-    Task<SendSmsResponse> SendSmsTemplateAsync(SendSmsTemplateRequest request);
+    Task<MessageResponse> SendMailTemplateAsync(SendMailTemplateRequest request);
+    Task<MessageResponse> SendSmsTemplateAsync(SendSmsTemplateRequest request);
 }
 
 public class MessagingService : IMessagingService
@@ -23,7 +23,7 @@ public class MessagingService : IMessagingService
         messagingGateway = StaticValues.MessagingGateway;
     }
 
-    public Task<SendMailResponse> SendMailMessageAsync(SendMailRequest request)
+    public Task<MessageResponse> SendMailMessageAsync(SendMailRequest request)
     {
         var restClient = new RestClient(messagingGateway);
         var restRequest = new RestRequest("/api/v1/Messaging/email/message", Method.Post);
@@ -31,12 +31,12 @@ public class MessagingService : IMessagingService
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
-        var data = JsonConvert.DeserializeObject<SendMailResponse>(response.Content);
+        var data = JsonConvert.DeserializeObject<MessageResponse>(response.Content);
 
         return Task.FromResult(data);
     }
 
-    public Task<SendMailResponse> SendMailTemplateAsync(SendMailTemplateRequest request)
+    public Task<MessageResponse> SendMailTemplateAsync(SendMailTemplateRequest request)
     {
         var restClient = new RestClient(messagingGateway);
         var restRequest = new RestRequest("/api/v1/Messaging/email/templated", Method.Post);
@@ -44,12 +44,12 @@ public class MessagingService : IMessagingService
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
-        var data = JsonConvert.DeserializeObject<SendMailResponse>(response.Content);
+        var data = JsonConvert.DeserializeObject<MessageResponse>(response.Content);
 
         return Task.FromResult(data);
     }
 
-    public Task<SendSmsResponse> SendSmsMessageAsync(SendSmsRequest request)
+    public Task<MessageResponse> SendSmsMessageAsync(SendSmsRequest request)
     {
         var restClient = new RestClient(messagingGateway);
         var restRequest = new RestRequest("/api/v1/Messaging/sms/message", Method.Post);
@@ -57,12 +57,12 @@ public class MessagingService : IMessagingService
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
-        var data = JsonConvert.DeserializeObject<SendSmsResponse>(response.Content);
+        var data = JsonConvert.DeserializeObject<MessageResponse>(response.Content);
 
         throw new NotImplementedException();
     }
 
-    public Task<SendSmsResponse> SendSmsTemplateAsync(SendSmsTemplateRequest request)
+    public Task<MessageResponse> SendSmsTemplateAsync(SendSmsTemplateRequest request)
     {
         var restClient = new RestClient(messagingGateway);
         var restRequest = new RestRequest("/api/v1/Messaging/sms/templated", Method.Post);
@@ -70,7 +70,7 @@ public class MessagingService : IMessagingService
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
-        var data = JsonConvert.DeserializeObject<SendSmsResponse>(response.Content);
+        var data = JsonConvert.DeserializeObject<MessageResponse>(response.Content);
 
         return Task.FromResult(data);
     }

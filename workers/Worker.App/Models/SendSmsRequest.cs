@@ -39,7 +39,7 @@ public class Process
     public string identity { get; set; } //İşlemi bir kullanıcı tetikliyorsa user code bilgisi
 }
 
-public class SendSmsResponse
+public class MessageResponse
 {
     public string txnId { get; set; }
     public string status { get; set; }

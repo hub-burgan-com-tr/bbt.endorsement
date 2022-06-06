@@ -7,13 +7,13 @@ using Worker.App.Models;
 
 namespace Worker.App.Application.Messagings.Commands.SendMailTemplates;
 
-public class SendMailTemplateCommand : IRequest<Response<bool>>
+public class SendMailTemplateCommand : IRequest<Response<MessageResponse>>
 {
     public string OrderId { get; set; }
     public string Email { get; set; }
 }
 
-public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCommand, Response<bool>>
+public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCommand, Response<MessageResponse>>
 {
     private IApplicationDbContext _context;
     private IDateTime _dateTime;
@@ -26,11 +26,11 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
         _messagingService = messagingService;
     }
 
-    public async Task<Response<bool>> Handle(SendMailTemplateCommand request, CancellationToken cancellationToken)
+    public async Task<Response<MessageResponse>> Handle(SendMailTemplateCommand request, CancellationToken cancellationToken)
     {
         var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
         if (order == null)
-            return Response<bool>.NotFoundException("Order not found: " + request.OrderId, 404);
+            return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 
         var sendMailTemplate = new SendMailTemplateRequest
         {
@@ -38,17 +38,16 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
             {
                 sender = "Burgan"
             },
-            template= "Müşteriye Giden Başvuru Onay Talebi",
+            template = "Müşteriye Giden Başvuru Onay Talebi",
             email = "HToremen@burgan.com.tr", // request.Email
             process = new SendMailTemplateProcess
             {
                 name = "Zeebe - Contract Approval - SendOtp"
             }
         };
-        
-        await _messagingService.SendMailTemplateAsync(sendMailTemplate);
 
-        return Response<bool>.Success(200);
+        var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+
+        return Response<MessageResponse>.Success(response, 200);
     }
 }
-

@@ -7,14 +7,14 @@ using Worker.App.Models;
 
 namespace Worker.App.Application.Messagings.Commands.SendSmsTemplates;
 
-public class SendSmsTemplateCommand : IRequest<Response<bool>>
+public class SendSmsTemplateCommand : IRequest<Response<MessageResponse>>
 {
     public string OrderId { get; set; }
     public GsmPhones GsmPhone { get; set; }
     public int CustomerNumber { get; set; }
 }
 
-public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateCommand, Response<bool>>
+public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateCommand, Response<MessageResponse>>
 {
     private IApplicationDbContext _context;
     private IDateTime _dateTime;
@@ -27,7 +27,7 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
         _messagingService = messagingService;
     }
 
-    public async Task<Response<bool>> Handle(SendSmsTemplateCommand request, CancellationToken cancellationToken)
+    public async Task<Response<MessageResponse>> Handle(SendSmsTemplateCommand request, CancellationToken cancellationToken)
     {
         var gsmPhone = request.GsmPhone;
         var messageRequest = new SendSmsTemplateRequest
@@ -51,8 +51,8 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
                 action = "SendOtp"
             }
         };
-        await _messagingService.SendSmsTemplateAsync(messageRequest);
+        var response = await _messagingService.SendSmsTemplateAsync(messageRequest);
 
-        return Response<bool>.Success(200);
+        return Response<MessageResponse>.Success(response, 200);
     }
 }
