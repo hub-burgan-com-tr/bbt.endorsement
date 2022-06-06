@@ -306,14 +306,14 @@ public class ContractApprovalService : IContractApprovalService
                     var responseSms = await _mediator.Send(new SendSmsTemplateCommand
                     {
                         OrderId = variables.InstanceId,
-                        GsmPhone = person.Data.Person.GsmPhone,
-                        CustomerNumber = person.Data.Person.CustomerNumber,
+                        GsmPhone = person.Data.Customer.GsmPhone,
+                        CustomerNumber = person.Data.Customer.CustomerNumber,
                     });
 
                     var responseMail = await _mediator.Send(new SendMailTemplateCommand
                     {
                         OrderId = variables.InstanceId,
-                        Email = person.Data.Person.Email,
+                        Email = person.Data.Customer.Email,
                     });
 
                     var history = _mediator.Send(new CreateOrderHistoryCommand
@@ -637,7 +637,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"PYSendMail");
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand { OrderId = variables.InstanceId, Email = person.Data.Person.Email });
+                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand { OrderId = variables.InstanceId, Email = person.Data.Customer.Email });
 
                 try
                 {
