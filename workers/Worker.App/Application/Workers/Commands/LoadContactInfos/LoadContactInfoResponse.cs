@@ -4,6 +4,6 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
 {
     public class LoadContactInfoResponse
     {
-        public PersonResponse Person { get; set; }
+        public CustomerList Customer { get; set; }
     }
 }
