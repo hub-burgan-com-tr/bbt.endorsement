@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
+using Worker.App.Application.Messagings.Commands.SendMailTemplates;
 using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
 using Worker.App.Application.Orders.Queries.GetOrderDocuments;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
@@ -638,29 +639,8 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"PYSendMail");
-
-                var emailTemplateParams = new EmailTemplateParams
-                {
-                    MusteriAdSoyad = "Hüeyin Töremen",
-                    MusteriNo = 12345
-                };
-
-                var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
-
-                await _messagingService.SendMailTemplateAsync(new SendMailTemplateRequest
-                {
-                    headerInfo = new SendMailTemplateHeaderInfo
-                    {
-                        sender = "Burgan"
-                    },
-                    templateParams = templateParams,
-                    template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:",
-                    email = "HToremen@burgan.com.tr",
-                    process = new SendMailTemplateProcess
-                    {
-                        name = "Zeebe - Contract Approval - SendOtp"
-                    }
-                });
+                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                await _mediator.Send(new SendMailTemplateCommand { OrderId = variables.InstanceId, Email = person.Data.Person.Email });
             }
             catch (Exception ex)
             {
