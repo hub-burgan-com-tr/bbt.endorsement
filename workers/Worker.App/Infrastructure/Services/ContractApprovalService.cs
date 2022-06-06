@@ -162,7 +162,8 @@ public class ContractApprovalService : IContractApprovalService
                             {
                                 OrderId = variables.InstanceId,
                                 State = "Onay Belgesi Geldi",
-                                Description = document.Name
+                                Description = document.Name,
+                                IsStaff = true
                             });
                         }
 
