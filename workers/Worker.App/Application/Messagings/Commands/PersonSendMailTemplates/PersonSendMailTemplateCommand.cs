@@ -64,13 +64,13 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
             {
                 sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
                 var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-                messages.Add(messageResponse);
+                messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
             }
             else if (document.State == OrderState.Reject.ToString())
             {
                 sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
-                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-                messages.Add(messageResponse);
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate); 
+                messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
             }
         }
         return Response<List<MessageResponse>>.Success(messages, 200);

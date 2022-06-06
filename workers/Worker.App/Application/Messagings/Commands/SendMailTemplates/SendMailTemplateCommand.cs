@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Infrastructure.Services;
@@ -47,7 +48,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
         };
 
         var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-
-        return Response<MessageResponse>.Success(response, 200);
+        var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
+        return Response<MessageResponse>.Success(messageResponse, 200);
     }
 }

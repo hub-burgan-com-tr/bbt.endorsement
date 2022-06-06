@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Newtonsoft.Json;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Application.Internals.Models;
@@ -53,6 +54,7 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
         };
         var response = await _messagingService.SendSmsTemplateAsync(messageRequest);
 
-        return Response<MessageResponse>.Success(response, 200);
+        var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(messageRequest), Response = JsonConvert.SerializeObject(response) };
+        return Response<MessageResponse>.Success(messageResponse, 200);
     }
 }

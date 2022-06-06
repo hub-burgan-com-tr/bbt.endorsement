@@ -39,8 +39,14 @@ public class Process
     public string identity { get; set; } //İşlemi bir kullanıcı tetikliyorsa user code bilgisi
 }
 
-public class MessageResponse
+public class Response
 {
     public string txnId { get; set; }
     public string status { get; set; }
+}
+
+public class MessageResponse
+{
+    public string Request { get; set; }
+    public string Response { get; set; }
 }
