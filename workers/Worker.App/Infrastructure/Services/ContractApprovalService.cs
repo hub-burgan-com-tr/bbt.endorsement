@@ -82,12 +82,20 @@ public class ContractApprovalService : IContractApprovalService
             {
                 // var state = customHeaders["State"].ToString();
 
-                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
-                Log.ForContext("OrderId", variables.InstanceId).Information("Internals: " + StaticValues.Internals);
-                Log.ForContext("OrderId", variables.InstanceId).Information("Sso: " + StaticValues.Sso);
-                Log.ForContext("OrderId", variables.InstanceId).Information("DMSService: " + StaticValues.DMSService);
-                Log.ForContext("OrderId", variables.InstanceId).Information("TemplateEngine: " + StaticValues.TemplateEngine);
-                Log.ForContext("OrderId", variables.InstanceId).Information("MessagingGateway: " + StaticValues.MessagingGateway);
+                //Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
+                //Log.ForContext("OrderId", variables.InstanceId).Information("Internals: " + StaticValues.Internals);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("Sso: " + StaticValues.Sso);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("DMSService: " + StaticValues.DMSService);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("TemplateEngine: " + StaticValues.TemplateEngine);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("MessagingGateway: " + StaticValues.MessagingGateway);
+                variables.Urls = new string[] 
+                                { 
+                                    "Internals: " + StaticValues.Internals,
+                                    "Sso: " + StaticValues.Sso,
+                                    "DMSService: " + StaticValues.DMSService,
+                                    "TemplateEngine: " + StaticValues.TemplateEngine,
+                                    "MessagingGateway: " + StaticValues.MessagingGateway
+                                };
 
                 if (variables != null)
                 {
