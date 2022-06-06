@@ -28,7 +28,7 @@ public class TokenHandler
                 new Claim("IsStaff",user.IsStaff.ToString())
             };
 
-        if (user.IsStaff == false)
+        if (user.IsStaff == true)
         {
             claims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),

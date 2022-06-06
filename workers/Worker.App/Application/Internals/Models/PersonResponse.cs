@@ -13,11 +13,14 @@ namespace Worker.App.Application.Internals.Models
         [JsonProperty("name")]
         public Name Name { get; set; }
 
-        [JsonProperty("gsmPhones")]
-        public GsmPhone[] GsmPhones { get; set; }
+        [JsonProperty("gsmPhone")]
+        public GsmPhones GsmPhone { get; set; }
 
         [JsonProperty("emails")]
         public string[] Emails { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
 
         [JsonProperty("devices")]
         public Device[] Devices { get; set; }
@@ -32,7 +35,7 @@ namespace Worker.App.Application.Internals.Models
         public string Label { get; set; }
     }
 
-    public partial class GsmPhone
+    public partial class GsmPhones
     {
         [JsonProperty("county")]
         public long County { get; set; }

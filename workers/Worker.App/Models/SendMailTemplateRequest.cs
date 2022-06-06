@@ -4,12 +4,8 @@ public class SendMailTemplateRequest
 {
     public SendMailTemplateHeaderInfo headerInfo { get; set; }
     public string templateParams { get; set; }
-    public int customerNo { get; set; }
-    public string contactId { get; set; }
     public string template { get; set; }
-    public string id { get; set; }
     public string email { get; set; }
-    public List<SendMailTemplateAttachment> attachments { get; set; }
     public SendMailTemplateProcess process { get; set; }
 }
 public class SendMailTemplateProcess
@@ -29,14 +25,10 @@ public class SendMailTemplateHeaderInfo
     public string smsTemplatePrefix { get; set; }
     public string smsTemplateSuffix { get; set; }
 }
-public class SendMailTemplateAttachment
-{
-    public string name { get; set; }
-    public string data { get; set; }
-}
 
-public class SendMailTemplateResponse
+public class EmailTemplateParams
 {
-    public string txnId { get; set; }
-    public string status { get; set; }
+    public int MusteriNo { get; set; }
+    public string MusteriAdSoyad { get; set; }
+    public string[] Names { get; set; }
 }

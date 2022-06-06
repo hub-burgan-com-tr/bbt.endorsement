@@ -32,8 +32,9 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
             if (order.Customer == null)
                 return Response<LoadContactInfoResponse>.NotFoundException("Customer not found", 404);
 
-            var response = await _internalsService.GetPersonById(order.Customer.CitizenshipNumber);
-            return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Person = response.Data }, 200);
+            var person = await _internalsService.GetPersonById(order.Customer.CitizenshipNumber);
+
+            return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Person = person.Data }, 200);
         }
     }
 }

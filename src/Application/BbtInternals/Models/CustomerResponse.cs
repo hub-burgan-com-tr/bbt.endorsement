@@ -17,6 +17,11 @@ public class CustomerResponse
 
 public class CustomerList
 {
+    public CustomerList()
+    {
+        Authory = new AuthoryModel();
+    }
+
     [JsonProperty("customerNumber")]
     public int CustomerNumber { get; set; }
     [JsonProperty("name")]
@@ -28,7 +33,7 @@ public class CustomerList
     [JsonProperty("isStaff")]
     public bool IsStaff { get; set; }
     [JsonProperty("gsmPhone")]
-    public GsmPhone GsmPhone { get; set; }
+    public GsmPhones GsmPhone { get; set; }
     [JsonProperty("email")]
     public string Email { get; set; }
     [JsonProperty("businessLine")]
@@ -37,4 +42,6 @@ public class CustomerList
     public Device[] Devices { get; set; }
     [JsonProperty("identityNumber")]
     public string IdentityNumber { get; set; }
+
+    public AuthoryModel Authory { get; set; }
 }

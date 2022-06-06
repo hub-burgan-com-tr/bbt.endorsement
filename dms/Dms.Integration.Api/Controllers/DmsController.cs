@@ -86,10 +86,7 @@ public class DmsController : ControllerBase
         {
             DmsPrefix = "InternetBankaciligi"
         };
-
-
         var dmsRefId = _documentService.CreateDMSDocument(documentInfo);
-        var dmsStatus = DocumentDmsStatus.Ok;
 
         return true;
     }

@@ -7,6 +7,7 @@ public class ContractModel
     public ContractModel()
     {
         Documents = new List<ApproveOrderDocument>();
+        DmsIds = new List<string>();
     }
 
     public StartRequest StartRequest { get; set; }
@@ -33,7 +34,10 @@ public class ContractModel
     public string Error { get; set; }
     public string DmsDocumentId { get; set; }
 
+    public string[] Urls { get; set; }
+
     public List<ApproveOrderDocument> Documents { get; set; }
+    public List<string> DmsIds { get; set; }
 }
 
 public class ApproveOrderDocument

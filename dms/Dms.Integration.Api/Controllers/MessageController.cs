@@ -2,6 +2,7 @@
 using Dms.Integration.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Dms.Integration.Api.Controllers;
 
@@ -14,6 +15,36 @@ public class MessageController : ControllerBase
     public MessageController(IMessagingService messagingService)
     {
         this._messagingService = messagingService;
+    }
+
+    [Route("send-email-template")]
+    [HttpPost]
+    public async Task<SendMailResponse> SendEmaiTemplate()
+    {
+        var emailTemplateParams = new EmailTemplateParams
+        {
+            MusteriAdSoyad = "Hüeyin Töremen",
+            MusteriNo = 12345
+        };
+
+        var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
+        var emailRequest = new SendEmailTemplateRequest
+        {
+            headerInfo = new HeaderInfo
+            {
+                sender = "Burgan"
+            },
+            templateParams = templateParams,
+            template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:",
+            email = "HToremen@burgan.com.tr",
+            process = new Process
+            {
+                name = "Zeebe - Contract Approval - SendOtp"
+            }
+        };
+        var response = await _messagingService.SendMailTemplateAsync(emailRequest);
+
+        return response;
     }
 
     [Route("send-sms-message")]

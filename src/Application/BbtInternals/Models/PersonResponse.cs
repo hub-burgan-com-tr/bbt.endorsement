@@ -15,7 +15,7 @@ namespace Application.BbtInternals.Models
         [JsonProperty("isStaff")]
         public bool IsStaff { get; set; }
         [JsonProperty("gsmPhones")]
-        public GsmPhone[] GsmPhones { get; set; }
+        public GsmPhones GsmPhones { get; set; }
         [JsonProperty("email")]
         public string Email { get; set; }
         [JsonProperty("businessLine")]
@@ -38,7 +38,7 @@ namespace Application.BbtInternals.Models
         public string Label { get; set; }
     }
 
-    public partial class GsmPhone
+    public partial class GsmPhones
     {
         [JsonProperty("county")]
         public long County { get; set; }
@@ -58,6 +58,7 @@ namespace Application.BbtInternals.Models
         [JsonProperty("last")]
         public string Last { get; set; }
     }
+
     public class AuthoryModel
     {
         [JsonProperty("isreadyformcreator")]

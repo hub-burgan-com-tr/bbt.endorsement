@@ -37,17 +37,47 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string name)
         {
-
-            var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
-      
-            if (response != null&&response.Data.Persons.Any())
+            var isState = false;
+            if (true)
             {
-                var result = response.Data.Persons.Select(x => new GetSearchPersonSummaryDto {CustomerNumber=x.CustomerNumber,Token="", First = x.First, Last = x.Last, CitizenshipNumber = x.CitizenshipNumber, IsStaff = x.IsStaff, Authory = x.Authory }).FirstOrDefault();
-                TokenHandler tokenHandler = new TokenHandler(_configuration);
-                Token token = tokenHandler.CreateAccessToken(result);
-                result.Token = token.AccessToken;
-                return result;
-                
+                var result = GetUsers()
+                     .Where(x => x.Name.First.Contains(name, StringComparison.OrdinalIgnoreCase) || x.Name.Last.Contains(name, StringComparison.OrdinalIgnoreCase) || (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase) || x.CitizenshipNumber.ToString() == name || x.CustomerNumber.ToString() == name)
+                    .Select(x => new GetSearchPersonSummaryDto
+                    {
+                        CitizenshipNumber = x.CitizenshipNumber.ToString(),
+                        First = x.Name.First,
+                        Last = x.Name.Last,
+                        CustomerNumber = x.CustomerNumber,
+                        IsStaff = x.IsStaff,
+                    // Email = x.Email,
+                    // TaxNo = x.TaxNo,
+                    // GsmPhone = x.GsmPhone,
+                    Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
+                    }).FirstOrDefault();
+
+                if (result != null)
+                {
+                    TokenHandler tokenHandler = new TokenHandler(_configuration);
+                    Token token = tokenHandler.CreateAccessToken(result);
+                    result.Token = token.AccessToken;
+                    isState = true;
+                    return result;
+                }
+            }
+            
+
+            if(isState == false)
+            {
+                var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
+
+                if (response != null && response.Data.Persons.Any())
+                {
+                    var result = response.Data.Persons.Select(x => new GetSearchPersonSummaryDto { CustomerNumber = x.CustomerNumber, Token = "", First = x.First, Last = x.Last, CitizenshipNumber = x.CitizenshipNumber, IsStaff = x.IsStaff, Authory = x.Authory }).FirstOrDefault();
+                    TokenHandler tokenHandler = new TokenHandler(_configuration);
+                    Token token = tokenHandler.CreateAccessToken(result);
+                    result.Token = token.AccessToken;
+                    return result;
+                }
             }
             return null;
         }
@@ -77,27 +107,27 @@ namespace Api.Controllers
         {
             var users = new List<UserModel>
             {
-                new UserModel { CitizenshipNumber = 56906430700, CustomerNumber = 1309912, Name = new UserModel.NameClass { First = "Ahmet", Last = "Güler" }, IsStaff = true },
-                new UserModel { CitizenshipNumber = 77120263424, CustomerNumber = 3063809, Name = new UserModel.NameClass { First = "Hüseyin", Last = "Töremen" }, IsStaff = true },
-                new UserModel { CitizenshipNumber = 69967514210, CustomerNumber = 3580693, Name = new UserModel.NameClass { First = "Gizem", Last = "Ünal" }, IsStaff = true },
-                new UserModel { CitizenshipNumber = 58542320728, CustomerNumber = 1324223, Name = new UserModel.NameClass { First = "Tolgahan", Last = "Özgür" }, IsStaff = true },
-                new UserModel { CitizenshipNumber = 17556080776, CustomerNumber = 5142508, Name = new UserModel.NameClass { First = "Merve", Last = "Aydın" }, IsStaff = true },
-                new UserModel { CitizenshipNumber = 70189942774, CustomerNumber = 4362433, Name = new UserModel.NameClass { First = "Mehmet Ali", Last = "Çokyaşar" }, IsStaff = true },
+                new UserModel { CitizenshipNumber = 15244250036, CustomerNumber = 233615, Name = new UserModel.NameClass { First = "Mehmet", Last = "Tamer" }, IsStaff = false },
+                new UserModel { CitizenshipNumber = 77120263424, CustomerNumber = 3063809, Name = new UserModel.NameClass { First = "Hüseyin", Last = "Töremen" }, IsStaff = false },
+                new UserModel { CitizenshipNumber = 69967514210, CustomerNumber = 3580693, Name = new UserModel.NameClass { First = "Gizem", Last = "Ünal" }, IsStaff = false },
+                new UserModel { CitizenshipNumber = 58542320728, CustomerNumber = 1324223, Name = new UserModel.NameClass { First = "Tolgahan", Last = "Özgür" }, IsStaff = false },
+                new UserModel { CitizenshipNumber = 17556080776, CustomerNumber = 5142508, Name = new UserModel.NameClass { First = "Merve", Last = "Aydın" }, IsStaff = false },
+                new UserModel { CitizenshipNumber = 70189942774, CustomerNumber = 4362433, Name = new UserModel.NameClass { First = "Mehmet Ali", Last = "Çokyaşar" }, IsStaff = false },
                 
                 // Personel Yetki
                 new UserModel { CitizenshipNumber = 21216850128, CustomerNumber = 4830830, Name = new UserModel.NameClass { First = "Yetki", Last = "Yok" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = false, IsNewFormCreator = false, IsReadyFormCreator = false, }},
                 
                 // Personel                
-                new UserModel { CitizenshipNumber = 55871259316, CustomerNumber = 1340653, Name = new UserModel.NameClass { First = "Yetki", Last = "1" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
-                new UserModel { CitizenshipNumber = 59976413048, CustomerNumber = 4788897, Name = new UserModel.NameClass { First = "Yetki", Last = "2" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = true, IsReadyFormCreator = false }},
-                new UserModel { CitizenshipNumber = 31971649998, CustomerNumber = 2977276, Name = new UserModel.NameClass { First = "Yetki", Last = "3" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = true }},
-                new UserModel { CitizenshipNumber = 48324769968, CustomerNumber = 4135519, Name = new UserModel.NameClass { First = "Yetki", Last = "4" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = true, IsReadyFormCreator = true }},
+                new UserModel { CitizenshipNumber = 55871259316, CustomerNumber = 1340653, Name = new UserModel.NameClass { First = "Yetki", Last = "1" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
+                new UserModel { CitizenshipNumber = 59976413048, CustomerNumber = 4788897, Name = new UserModel.NameClass { First = "Yetki", Last = "2" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = true, IsReadyFormCreator = false }},
+                new UserModel { CitizenshipNumber = 31971649998, CustomerNumber = 2977276, Name = new UserModel.NameClass { First = "Yetki", Last = "3" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = true }},
+                new UserModel { CitizenshipNumber = 48324769968, CustomerNumber = 4135519, Name = new UserModel.NameClass { First = "Yetki", Last = "4" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = true, IsReadyFormCreator = true }},
          
                 // Şube
-                new UserModel { CitizenshipNumber = 26556716738, CustomerNumber = 9920213, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "1" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
-                new UserModel { CitizenshipNumber = 65628864892, CustomerNumber = 6855588, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "2" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = true, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
-                new UserModel { CitizenshipNumber = 20778668004, CustomerNumber = 5266452, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "3" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = true, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
-                new UserModel { CitizenshipNumber = 95445410934, CustomerNumber = 4435967, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "4" }, IsStaff = false, Authory = new UserModel.AuthoryModel{ IsBranchApproval = true, IsBranchFormReader = true, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
+                new UserModel { CitizenshipNumber = 26556716738, CustomerNumber = 9920213, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "1" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
+                new UserModel { CitizenshipNumber = 65628864892, CustomerNumber = 6855588, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "2" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = true, IsBranchFormReader = false, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
+                new UserModel { CitizenshipNumber = 20778668004, CustomerNumber = 5266452, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "3" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = false, IsBranchFormReader = true, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
+                new UserModel { CitizenshipNumber = 95445410934, CustomerNumber = 4435967, Name = new UserModel.NameClass { First = "Yetki Şube", Last = "4" }, IsStaff = true, Authory = new UserModel.AuthoryModel{ IsBranchApproval = true, IsBranchFormReader = true, IsFormReader = true, IsNewFormCreator = false, IsReadyFormCreator = false }},
             };
             return users;
         }
