@@ -636,7 +636,27 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"PYSendMail");
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                await _mediator.Send(new PersonSendMailTemplateCommand { OrderId = variables.InstanceId, Email = person.Data.Person.Email });
+                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand { OrderId = variables.InstanceId, Email = person.Data.Person.Email });
+
+                try
+                {
+                    foreach (var item in responseEmail.Data)
+                    {
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı(Email)",
+                            Description = "",
+                            IsStaff = false,
+                            Request = item.Request,
+                            Response = item.Response
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                }
             }
             catch (Exception ex)
             {
