@@ -323,9 +323,6 @@ public class ContractApprovalService : IContractApprovalService
                         IsStaff = true
                     });
                 }
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
             }
             catch (Exception ex)
             {
@@ -333,8 +330,11 @@ public class ContractApprovalService : IContractApprovalService
                // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
+                // await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
             }
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
         });
     }
 
