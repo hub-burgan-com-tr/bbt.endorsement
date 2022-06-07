@@ -1,5 +1,5 @@
 export interface User {
-  "clientNumber": number,
+  "customerNumber": number,
   "citizenshipNumber": number,
   "token": string,
   "name": {
