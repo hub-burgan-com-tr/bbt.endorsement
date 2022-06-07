@@ -30,46 +30,53 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
 
     public async Task<Response<List<MessageResponse>>> Handle(PersonSendMailTemplateCommand request, CancellationToken cancellationToken)
     {
-        var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
-        if (order == null)
-            return Response<List<MessageResponse>>.NotFoundException("Order not found: " + request.OrderId, 404);
+        try
+        {
+            var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
+            if (order == null)
+                return Response<List<MessageResponse>>.NotFoundException("Order not found: " + request.OrderId, 404);
 
-        var names = order.Documents.Select(x => x.Name).ToArray();
-        var emailTemplateParams = new EmailTemplateParams
-        {
-            MusteriAdSoyad = "Hüseyin Töremen",
-            MusteriNo = 12345,
-            Names = names
-        };
-        var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
-        var sendMailTemplate = new SendMailTemplateRequest
-        {
-            headerInfo = new SendMailTemplateHeaderInfo
+            var names = order.Documents.Select(x => x.Name).ToArray();
+            var emailTemplateParams = new EmailTemplateParams
             {
-                sender = "Burgan"
-            },
-            templateParams = templateParams,
-            email = "HToremen@burgan.com.tr", // request.Email
-            process = new SendMailTemplateProcess
+                MusteriAdSoyad = "Hüseyin Töremen",
+                MusteriNo = 12345,
+                Names = names
+            };
+            var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
+            var sendMailTemplate = new SendMailTemplateRequest
             {
-                name = "Zeebe - Contract Approval - SendOtp"
+                headerInfo = new SendMailTemplateHeaderInfo
+                {
+                    sender = "Burgan"
+                },
+                templateParams = templateParams,
+                email = "HToremen@burgan.com.tr", // request.Email
+                process = new SendMailTemplateProcess
+                {
+                    name = "Zeebe - Contract Approval - SendOtp"
+                }
+            };
+
+            var messages = new List<MessageResponse>();
+
+            if (order.State == OrderState.Approve.ToString())
+            {
+                sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
             }
-        };
-
-        var messages = new List<MessageResponse>();
-
-        if (order.State == OrderState.Approve.ToString())
-        {
-            sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
-            var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-            messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
+            else if (order.State == OrderState.Reject.ToString())
+            {
+                sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
+            }
+            return Response<List<MessageResponse>>.Success(messages, 200);
         }
-        else if (order.State == OrderState.Reject.ToString())
+        catch (Exception ex)
         {
-            sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
-            var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-            messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
+            return Response<List<MessageResponse>>.Fail(ex.Message, 201);
         }
-        return Response<List<MessageResponse>>.Success(messages, 200);
     }
 }
