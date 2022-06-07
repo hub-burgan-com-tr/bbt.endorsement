@@ -55,11 +55,10 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
                 var dmsPerson = new DmsPerson
                 {
-                    CitizenshipNumber = person.CitizenshipNumber,
-                    CustomerNumber = person.CustomerNumber,
-                    PersonId = person.PersonId,
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
+                    CitizenshipNumber = customer.CitizenshipNumber,
+                    ClientNumber = customer.CustomerNumber,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
                 };
 
                 var dmsDocument = new DmsDocument

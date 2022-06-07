@@ -48,7 +48,7 @@ public class DmsController : ControllerBase
         var person = new DmsPerson
         {
             CitizenshipNumber = 38606229792,
-            CustomerNumber = 1,
+            ClientNumber = 1,
             FirstName = "Hüseyin",
             LastName = "TÖREMEN"
         };
