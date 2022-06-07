@@ -37,7 +37,7 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
             {
                 headerInfo = new HeaderInfo
                 {
-                    sender = "Burgan"
+                    sender = "AutoDetect"
                 },
                 template = "Müşteriden Talep Edilen Onay SMS'i",
                 phone = new Phone

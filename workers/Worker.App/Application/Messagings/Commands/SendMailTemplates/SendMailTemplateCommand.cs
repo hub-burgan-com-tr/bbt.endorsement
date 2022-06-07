@@ -39,7 +39,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
             {
                 headerInfo = new SendMailTemplateHeaderInfo
                 {
-                    sender = "Burgan"
+                    sender = "AutoDetect"
                 },
                 template = "Müşteriye Giden Başvuru Onay Talebi",
                 email = "HToremen@burgan.com.tr", // request.Email
