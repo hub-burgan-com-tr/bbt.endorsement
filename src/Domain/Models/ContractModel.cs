@@ -91,7 +91,6 @@ public class DocumentActionClass
     public string Title { get; set; }
     public ActionType Type { get; set; }
 }
-
 public class OrderReference
 {
     public string Process { get; set; }
