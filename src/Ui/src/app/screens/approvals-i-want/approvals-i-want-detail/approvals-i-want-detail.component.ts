@@ -26,6 +26,7 @@ export class ApprovalsIWantDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
   openModal(d: any) {
