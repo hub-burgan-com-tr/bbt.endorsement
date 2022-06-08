@@ -40,7 +40,7 @@ namespace Application.Endorsements.Queries.GetApprovals
                     {
                         OrderId = x.OrderId,
                         Title = x.Title,
-                        IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString() && x.FormDefinitionId == null)
+                        IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString())
                     })
                     .PaginatedListAsync(request.PageNumber, request.PageSize);
                 return Response<PaginatedList<GetApprovalDto>>.Success(list, 200);
