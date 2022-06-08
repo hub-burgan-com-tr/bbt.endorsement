@@ -29,11 +29,19 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         if (form == null)
             return new Response<RenderResponse>();
 
-        var content = request.Content.Replace("true", "\"X\"");
+        var content = request.Content;
+        content = content.Replace("\"sigortaEttirenIleSigortaliAyniKisidir\":true", "\"sigortaEttirenIleSigortaliAyniKisidir\":\"EVET\"");
+
+        content = content.Replace("\"sigortaEttirenIleSigortaliAyniKisidir\":false", "\"sigortaEttirenIleSigortaliAyniKisidir\":\"HAYIR\"");
+
+        content = content.Replace("true", "\"X\"");
         content = content.Replace("True", "\"X\"");
         content = content.Replace("false", "\"\"");
         content = content.Replace("False", "\"\"");
-
+        //var content = request.Content.Replace("true", "\"X\"");
+        //content = content.Replace("True", "\"X\"");
+        //content = content.Replace("false", "\"\"");
+        //content = content.Replace("False", "\"\"");
         var html = "";
         if(form.Type == ContentType.HTML.ToString())
         {
