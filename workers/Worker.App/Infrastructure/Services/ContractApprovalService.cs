@@ -289,18 +289,24 @@ public class ContractApprovalService : IContractApprovalService
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
                 if (person.Data != null)
                 {
-                    var responseSms = await _mediator.Send(new SendSmsTemplateCommand
+                    foreach (var gsmPhone in Users.GsmPhones())
                     {
-                        OrderId = variables.InstanceId,
-                        GsmPhone = person.Data.Customer.GsmPhone,
-                        CustomerNumber = person.Data.Customer.CustomerNumber,
-                    });
+                        var responseSms = await _mediator.Send(new SendSmsTemplateCommand
+                        {
+                            OrderId = variables.InstanceId,
+                            GsmPhone = gsmPhone, // person.Data.Customer.GsmPhone,
+                            CustomerNumber = person.Data.Customer.CustomerNumber,
+                        });
+                    }
 
-                    var responseMail = await _mediator.Send(new SendMailTemplateCommand
+                    foreach (var email in Users.Emails())
                     {
-                        OrderId = variables.InstanceId,
-                        Email = person.Data.Customer.Email,
-                    });
+                        var responseMail = await _mediator.Send(new SendMailTemplateCommand
+                        {
+                            OrderId = variables.InstanceId,
+                            Email = email, // person.Data.Customer.Email,
+                        });
+                    }
 
                     var history = _mediator.Send(new CreateOrderHistoryCommand
                     {
@@ -312,25 +318,25 @@ public class ContractApprovalService : IContractApprovalService
 
                     try
                     {
-                        await _mediator.Send(new CreateOrderHistoryCommand
-                        {
-                            OrderId = variables.InstanceId.ToString(),
-                            State = "Hatırlatma Mesajı(Sms)",
-                            Description = "",
-                            IsStaff = false,
-                            Request = responseSms.Data.Request,
-                            Response = responseSms.Data.Response
-                        });
+                        //await _mediator.Send(new CreateOrderHistoryCommand
+                        //{
+                        //    OrderId = variables.InstanceId.ToString(),
+                        //    State = "Hatırlatma Mesajı(Sms)",
+                        //    Description = "",
+                        //    IsStaff = false,
+                        //    Request = responseSms.Data.Request,
+                        //    Response = responseSms.Data.Response
+                        //});
 
-                        await _mediator.Send(new CreateOrderHistoryCommand
-                        {
-                            OrderId = variables.InstanceId.ToString(),
-                            State = "Hatırlatma Mesajı(Mail)",
-                            Description = "",
-                            IsStaff = false,
-                            Request = responseMail.Data.Request,
-                            Response = responseMail.Data.Response
-                        });
+                        //await _mediator.Send(new CreateOrderHistoryCommand
+                        //{
+                        //    OrderId = variables.InstanceId.ToString(),
+                        //    State = "Hatırlatma Mesajı(Mail)",
+                        //    Description = "",
+                        //    IsStaff = false,
+                        //    Request = responseMail.Data.Request,
+                        //    Response = responseMail.Data.Response
+                        //});
                     }
                     catch (Exception ex)
                     {

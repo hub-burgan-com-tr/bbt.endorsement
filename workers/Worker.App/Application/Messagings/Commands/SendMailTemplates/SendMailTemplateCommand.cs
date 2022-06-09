@@ -42,7 +42,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                     sender = "AutoDetect"
                 },
                 template = "Müşteriye Giden Başvuru Onay Talebi",
-                email = "HToremen@burgan.com.tr", // request.Email
+                email = request.Email,
                 process = new SendMailTemplateProcess
                 {
                     name = "Zeebe - Contract Approval - SendOtp"

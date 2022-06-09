@@ -42,9 +42,9 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
                 template = "Müşteriden Talep Edilen Onay SMS'i",
                 phone = new Phone
                 {
-                    countryCode = 90, // gsmPhone.County,
-                    prefix = 542, // gsmPhone.Prefix,
-                    number = 4729390, // gsmPhone.Number
+                    countryCode = request.GsmPhone.County,
+                    prefix = request.GsmPhone.Prefix,
+                    number = request.GsmPhone.Number
                 },
                 //customerNo = request.CustomerNumber,
                 process = new Process
