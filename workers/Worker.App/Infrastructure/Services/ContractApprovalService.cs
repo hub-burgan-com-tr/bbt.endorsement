@@ -64,7 +64,7 @@ public class ContractApprovalService : IContractApprovalService
         DeleteEntity();
         ErrorHandler();
 
-        PYSendMail();
+        PersonalSendMail();
         CheckAllApproved();
         CreateDMSDocument();
     }
@@ -622,12 +622,12 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
-    private void PYSendMail()
+    private void PersonalSendMail()
     {
-        CreateWorker("PYSendMail", async (jobClient, job) =>
+        CreateWorker("PersonalSendMail", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-            variables.Services.Add("PYSendMail");
+            variables.Services.Add("PersonalSendMail");
 
             if (variables != null)
                 variables.Limit += 1;
@@ -637,7 +637,7 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"PYSendMail");
+                Log.ForContext("OrderId", variables.InstanceId).Information($"PersonalSendMail");
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
 
                 foreach (var email in Users.Emails())
@@ -670,7 +670,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                 //variables.IsProcess = false;
-                variables.Error = "PYSendMail - " + ex.Message;
+                variables.Error = "PersonalSendMail - " + ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
