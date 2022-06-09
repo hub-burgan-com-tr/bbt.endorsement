@@ -33,7 +33,6 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
         try
         {
             var order = _context.Orders
-                .Include(x => x.Documents)
                 .Include(x=> x.Customer)
                 .FirstOrDefault(x => x.OrderId == request.OrderId);
 

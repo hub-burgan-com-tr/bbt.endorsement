@@ -300,6 +300,23 @@ public class ContractApprovalService : IContractApprovalService
                             GsmPhone = gsmPhone, // person.Data.Customer.GsmPhone,
                             CustomerNumber = person.Data.Customer.CustomerNumber,
                         });
+
+                        try
+                        {
+                            await _mediator.Send(new CreateOrderHistoryCommand
+                            {
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "Hatırlatma Mesajı(Sms)",
+                                Description = "",
+                                IsStaff = false,
+                                Request = responseSms.Data.Request,
+                                Response = responseSms.Data.Response
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                        }
                     }
 
                     foreach (var email in Users.Emails())
@@ -309,6 +326,23 @@ public class ContractApprovalService : IContractApprovalService
                             OrderId = variables.InstanceId,
                             Email = email, // person.Data.Customer.Email,
                         });
+
+                        try
+                        {
+                            await _mediator.Send(new CreateOrderHistoryCommand
+                            {
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "Hatırlatma Mesajı(Mail)",
+                                Description = "",
+                                IsStaff = false,
+                                Request = responseMail.Data.Request,
+                                Response = responseMail.Data.Response
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                        }
                     }
 
                     var history = _mediator.Send(new CreateOrderHistoryCommand
@@ -319,32 +353,6 @@ public class ContractApprovalService : IContractApprovalService
                         IsStaff = true
                     });
 
-                    try
-                    {
-                        //await _mediator.Send(new CreateOrderHistoryCommand
-                        //{
-                        //    OrderId = variables.InstanceId.ToString(),
-                        //    State = "Hatırlatma Mesajı(Sms)",
-                        //    Description = "",
-                        //    IsStaff = false,
-                        //    Request = responseSms.Data.Request,
-                        //    Response = responseSms.Data.Response
-                        //});
-
-                        //await _mediator.Send(new CreateOrderHistoryCommand
-                        //{
-                        //    OrderId = variables.InstanceId.ToString(),
-                        //    State = "Hatırlatma Mesajı(Mail)",
-                        //    Description = "",
-                        //    IsStaff = false,
-                        //    Request = responseMail.Data.Request,
-                        //    Response = responseMail.Data.Response
-                        //});
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                    }
                 }
             }
             catch (Exception ex)
