@@ -623,22 +623,30 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"PYSendMail");
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand { OrderId = variables.InstanceId, Email = person.Data.Customer.Email });
+
+                foreach (var email in Users.Emails())
+                {
+                    var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+                    {
+                        OrderId = variables.InstanceId,
+                        Email = email, // person.Data.Customer.Email
+                    });
+                }
 
                 try
                 {
-                    foreach (var item in responseEmail.Data)
-                    {
-                        await _mediator.Send(new CreateOrderHistoryCommand
-                        {
-                            OrderId = variables.InstanceId.ToString(),
-                            State = "Hatırlatma Mesajı(Email)",
-                            Description = "",
-                            IsStaff = false,
-                            Request = item.Request,
-                            Response = item.Response
-                        });
-                    }
+                    //foreach (var item in responseEmail.Data)
+                    //{
+                    //    await _mediator.Send(new CreateOrderHistoryCommand
+                    //    {
+                    //        OrderId = variables.InstanceId.ToString(),
+                    //        State = "Hatırlatma Mesajı(Email)",
+                    //        Description = "",
+                    //        IsStaff = false,
+                    //        Request = item.Request,
+                    //        Response = item.Response
+                    //    });
+                    //}
                 }
                 catch (Exception ex)
                 {

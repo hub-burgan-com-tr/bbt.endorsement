@@ -32,15 +32,19 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
     {
         try
         {
-            var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
+            var order = _context.Orders
+                .Include(x => x.Documents)
+                .Include(x=> x.Customer)
+                .FirstOrDefault(x => x.OrderId == request.OrderId);
+
             if (order == null)
                 return Response<List<MessageResponse>>.NotFoundException("Order not found: " + request.OrderId, 404);
 
             var names = order.Documents.Select(x => x.Name).ToArray();
             var emailTemplateParams = new EmailTemplateParams
             {
-                MusteriAdSoyad = "Hüseyin Töremen",
-                MusteriNo = 12345,
+                MusteriAdSoyad = order.Customer.FirstName + " " + order.Customer.LastName,
+                MusteriNo = order.Customer.CustomerNumber,
                 Title = order.Title
             };
             var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
@@ -51,7 +55,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                     sender = "AutoDeteck"
                 },
                 templateParams = templateParams,
-                email = "htoremen@burgan.com.tr", // request.Email
+                email = request.Email,
                 process = new SendMailTemplateProcess
                 {
                     name = "Zeebe - Contract Approval - SendOtp"
