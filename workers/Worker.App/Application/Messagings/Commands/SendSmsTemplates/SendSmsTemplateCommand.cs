@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Application.Internals.Models;
+using Worker.App.Application.Messagings.Commands.SendMailTemplates;
 using Worker.App.Infrastructure.Services;
 using Worker.App.Models;
 
@@ -32,14 +33,24 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
     {
         try
         {
-            var gsmPhone = request.GsmPhone;
+            var order = _context.Orders.FirstOrDefault(o => o.OrderId == request.OrderId);
+            var gsmPhone = request.GsmPhone; 
+            
+            var param = new SendMailTemplate
+            {
+                Title = order.Title
+            };
+            var templateParams = JsonConvert.SerializeObject(param);
+
             var messageRequest = new SendSmsTemplateRequest
             {
                 headerInfo = new HeaderInfo
                 {
                     sender = "AutoDetect"
                 },
+                templateParams = templateParams,
                 template = "Müşteriden Talep Edilen Onay SMS'i",
+                title = order.Title,
                 phone = new Phone
                 {
                     countryCode = request.GsmPhone.County,

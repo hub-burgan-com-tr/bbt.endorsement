@@ -35,12 +35,18 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
             if (order == null)
                 return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 
+            var param = new SendMailTemplate
+            {
+                Title = order.Title
+            };
+            var templateParams = JsonConvert.SerializeObject(param);
             var sendMailTemplate = new SendMailTemplateRequest
             {
                 headerInfo = new SendMailTemplateHeaderInfo
                 {
                     sender = "AutoDetect"
                 },
+                templateParams = templateParams,
                 template = "Müşteriye Giden Başvuru Onay Talebi",
                 email = request.Email,
                 process = new SendMailTemplateProcess
@@ -59,3 +65,4 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
         }
     }
 }
+
