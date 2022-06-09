@@ -15,9 +15,10 @@ namespace Api.Controllers
         private readonly IConfiguration _configuration;
         private readonly ISsoService _ssoService;
 
-        public HomeController(IConfiguration configuration)
+        public HomeController(IConfiguration configuration, ISsoService ssoService)
         {
             _configuration = configuration;
+            _ssoService = ssoService;
         }
 
         [Route("AccessToken")]
