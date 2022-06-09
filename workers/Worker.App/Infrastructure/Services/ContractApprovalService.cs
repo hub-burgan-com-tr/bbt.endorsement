@@ -191,26 +191,23 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (variables != null)
                 {
-                    if (variables.FormType == Form.FormOrder)
+                    try
                     {
-                        try
+                        var dms = _mediator.Send(new CreateDMSDocumentCommand
                         {
-                            var dms = _mediator.Send(new CreateDMSDocumentCommand
+                            InstanceId = variables.InstanceId,
+                            Document = new ApproveOrderDocument
                             {
-                                InstanceId = variables.InstanceId,
-                                Document = new ApproveOrderDocument
-                                {
-                                    DocumentId = variables.DmsDocumentId
-                                }
-                            }).Result;
+                                DocumentId = variables.DmsDocumentId
+                            }
+                        }).Result;
 
-                            variables.IsProcess = true;
-                            variables.DmsIds = dms.Data;
-                        }
-                        catch (Exception ex)
-                        {
-                            variables.Error = ex.Message;
-                        }
+                        variables.IsProcess = true;
+                        variables.DmsIds = dms.Data;
+                    }
+                    catch (Exception ex)
+                    {
+                        variables.Error = ex.Message;
                     }
 
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
