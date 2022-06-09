@@ -166,13 +166,6 @@ public class ContractApprovalService : IContractApprovalService
                                 IsStaff = true
                             });
                         }
-
-                        if (variables.FormType == Form.FormOrder)
-                        {
-                            var document = response.Data.FirstOrDefault();
-                            if (document != null)
-                                variables.DmsDocumentId = document.DocumentId;
-                        }
                     }
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                     await jobClient.NewCompleteJobCommand(job.Key)
@@ -213,11 +206,7 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         var dms = _mediator.Send(new CreateDMSDocumentCommand
                         {
-                            InstanceId = variables.InstanceId,
-                            Document = new ApproveOrderDocument
-                            {
-                                DocumentId = variables.DmsDocumentId
-                            }
+                            InstanceId = variables.InstanceId
                         }).Result;
 
                         variables.IsProcess = true;

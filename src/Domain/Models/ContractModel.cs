@@ -32,7 +32,6 @@ public class ContractModel
     public bool DependecyRules { get; set; }
 
     public string Error { get; set; }
-    public string DmsDocumentId { get; set; }
 
     public string[] Urls { get; set; }
 

@@ -3,7 +3,6 @@ using Dms.Integration.Infrastructure.DocumentServices;
 using Dms.Integration.Infrastructure.Enums;
 using Dms.Integration.Infrastructure.Models;
 using Dms.Integration.Infrastructure.Services;
-using Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
@@ -13,7 +12,6 @@ namespace Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 
 public class CreateDMSDocumentCommand : IRequest<Response<List<string>>>
 {
-    public ApproveOrderDocument Document { get; set; }
     public string InstanceId { get; set; }
 }
 
@@ -31,13 +29,13 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
     public async Task<Response<List<string>>> Handle(CreateDMSDocumentCommand request, CancellationToken cancellationToken)
     {
         var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString());
-        var document = _context.Documents.FirstOrDefault(x => x.OrderId == request.InstanceId.ToString() && x.DocumentId == request.Document.DocumentId);
+        var documents = _context.Documents.Where(x => x.OrderId == request.InstanceId.ToString());
         var person = order.Person;
         var customer = order.Customer;
 
         var dmsIds= new List<string>();
 
-        if (document != null)
+        foreach (var document in documents)
         {
             var documentInsuranceTypes = _context.DocumentInsuranceTypes
                 .Where(x => x.DocumentId == document.DocumentId)
