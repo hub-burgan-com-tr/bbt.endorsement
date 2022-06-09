@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
+using Worker.App.Application.Internals.Models;
 
 namespace Worker.App.Application.Workers.Commands.LoadContactInfos
 {
@@ -32,8 +33,14 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
             if (order.Customer == null)
                 return Response<LoadContactInfoResponse>.NotFoundException("Customer not found", 404);
 
-            var response = await _internalsService.GetPersonById(order.Customer.CitizenshipNumber);
-            return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Person = response.Data }, 200);
+            var person = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
+            {
+                name = order.Customer.CitizenshipNumber.ToString(),
+                page = 1,
+                size = 10
+            });
+
+            return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Customer = person.Data.CustomerList.FirstOrDefault() }, 200);
         }
     }
 }

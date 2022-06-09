@@ -32,7 +32,7 @@ public class MessageController : ControllerBase
         {
             headerInfo = new HeaderInfo
             {
-                sender = "Burgan"
+                sender = "AutoDeteck"
             },
             templateParams = templateParams,
             template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:",
@@ -55,7 +55,7 @@ public class MessageController : ControllerBase
         {
             headerInfo = new HeaderInfo
             {
-                sender = "On"
+                sender = "AutoDeteck"
             },
             content = @"Değerli Müşterimiz, ""belgeonay.burgan.com.tr"" linkine giriş yapıp, başvurunuza ilişkin belgeleri ""Onayımdakiler"" adımından onaylamanızı rica ederiz. Detaylı bilgi için 0 850 222 8 222 numaralı telefonumuzdan bizi arayabilirsiniz.  Mersis : 0140003231000116",
             contentType = "Private",

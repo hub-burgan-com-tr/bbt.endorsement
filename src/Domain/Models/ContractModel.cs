@@ -34,6 +34,8 @@ public class ContractModel
     public string Error { get; set; }
     public string DmsDocumentId { get; set; }
 
+    public string[] Urls { get; set; }
+
     public List<ApproveOrderDocument> Documents { get; set; }
     public List<string> DmsIds { get; set; }
 }
@@ -89,7 +91,6 @@ public class DocumentActionClass
     public string Title { get; set; }
     public ActionType Type { get; set; }
 }
-
 public class OrderReference
 {
     public string Process { get; set; }

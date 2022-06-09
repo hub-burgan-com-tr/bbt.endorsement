@@ -7,7 +7,11 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Common.Models;
 using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
+using Worker.App.Application.Messagings.Commands.PersonSendMailTemplates;
+using Worker.App.Application.Messagings.Commands.SendMailTemplates;
+using Worker.App.Application.Messagings.Commands.SendSmsTemplates;
 using Worker.App.Application.Orders.Commands.UpdateOrderGroups;
 using Worker.App.Application.Orders.Queries.GetOrderDocuments;
 using Worker.App.Application.Workers.Commands.ApproveContracts;
@@ -56,9 +60,9 @@ public class ContractApprovalService : IContractApprovalService
         CreateDMSDocument();
 
         LoadContactInfo();
-
         SendOtp();
         SendPush();
+
         UpdateEntity();
         DeleteEntity();
         ErrorHandler();
@@ -80,7 +84,20 @@ public class ContractApprovalService : IContractApprovalService
             {
                 // var state = customHeaders["State"].ToString();
 
-                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
+                //Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
+                //Log.ForContext("OrderId", variables.InstanceId).Information("Internals: " + StaticValues.Internals);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("Sso: " + StaticValues.Sso);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("DMSService: " + StaticValues.DMSService);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("TemplateEngine: " + StaticValues.TemplateEngine);
+                //Log.ForContext("OrderId", variables.InstanceId).Information("MessagingGateway: " + StaticValues.MessagingGateway);
+                variables.Urls = new string[] 
+                                { 
+                                    "Internals: " + StaticValues.Internals,
+                                    "Sso: " + StaticValues.Sso,
+                                    "DMSService: " + StaticValues.DMSService,
+                                    "TemplateEngine: " + StaticValues.TemplateEngine,
+                                    "MessagingGateway: " + StaticValues.MessagingGateway
+                                };
 
                 if (variables != null)
                 {
@@ -145,7 +162,8 @@ public class ContractApprovalService : IContractApprovalService
                             {
                                 OrderId = variables.InstanceId,
                                 State = "Onay Belgesi Geldi",
-                                Description = document.Name
+                                Description = document.Name,
+                                IsStaff = true
                             });
                         }
 
@@ -219,7 +237,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
@@ -242,33 +260,9 @@ public class ContractApprovalService : IContractApprovalService
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             try
             {
-                if (false)
-                {
-                    var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                    if (person.Data != null)
-                    {
-                        if (person.Data.Person.Devices.Any())
-                        {
-                            variables.Device = true;
-                            var device = person.Data.Person.Devices.FirstOrDefault();
-                        }
-                        else
-                        {
-                            variables.Device = false;
-                            var gsmPhone = person.Data.Person.GsmPhone;
-                            var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
-                        }
-                    }
-                }
-
                 Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
 
-                //var history = _mediator.Send(new CreateOrderHistoryCommand
-                //{
-                //    OrderId = variables.InstanceId.ToString(),
-                //    State = "Müşteri Bilgileri",
-                //    Description = ""
-                //});
+                variables.Device = false;
                 variables.IsProcess = true;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -302,66 +296,70 @@ public class ContractApprovalService : IContractApprovalService
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
-                if (false)
+
+                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                if (person.Data != null)
                 {
-                    var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-                    if (person.Data != null)
+                    var responseSms = await _mediator.Send(new SendSmsTemplateCommand
                     {
-                        if (person.Data.Person.Devices.Any())
-                        {
-                            var device = person.Data.Person.Devices.FirstOrDefault();
-                        }
-                        else
-                        {
-                            var gsmPhone = person.Data.Person.GsmPhone;
-                            var phone = gsmPhone.County.ToString() + gsmPhone.Prefix.ToString() + gsmPhone.Number.ToString();
+                        OrderId = variables.InstanceId,
+                        GsmPhone = person.Data.Customer.GsmPhone,
+                        CustomerNumber = person.Data.Customer.CustomerNumber,
+                    });
 
-                            var messageRequest = new SendSmsRequest
-                            {
-                                headerInfo = new HeaderInfo
-                                {
-                                    sender = "AutoDetect"
-                                },
-                                content = @"Değerli Müşterimiz, ""belgeonay.burgan.com.tr"" linkine giriş yapıp, başvurunuza ilişkin belgeleri ""Onayımdakiler"" adımından onaylamanızı rica ederiz. Detaylı bilgi için 0 850 222 8 222 numaralı telefonumuzdan bizi arayabilirsiniz.  Mersis : 0140003231000116",
-                                contentType = "Private",
-                                phone = new SmsPhone
-                                {
-                                    countryCode = 90, // gsmPhone.County,
-                                    prefix = 542, // gsmPhone.Prefix,
-                                    number = 4729390, // gsmPhone.Number
-                                },
-                                customerNo = person.Data.Person.CustomerNumber,
-                                smsType = "Fast",
-                                process = new SmsProcess
-                                {
-                                    name = "Zeebe - Contract Approval - SendOtp"
-                                }
-                            };
-                            await _messagingService.SendSmsMessageAsync(messageRequest);
+                    var responseMail = await _mediator.Send(new SendMailTemplateCommand
+                    {
+                        OrderId = variables.InstanceId,
+                        Email = person.Data.Customer.Email,
+                    });
 
-                            var history = _mediator.Send(new CreateOrderHistoryCommand
-                            {
-                                OrderId = variables.InstanceId.ToString(),
-                                State = "Hatırlatma Mesajı (Sms)",
-                                Description = "",
-                                IsStaff = true
-                            });
-                        }
+                    var history = _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = variables.InstanceId.ToString(),
+                        State = "Hatırlatma Mesajı",
+                        Description = "",
+                        IsStaff = true
+                    });
+
+                    try
+                    {
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı(Sms)",
+                            Description = "",
+                            IsStaff = false,
+                            Request = responseSms.Data.Request,
+                            Response = responseSms.Data.Response
+                        });
+
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı(Mail)",
+                            Description = "",
+                            IsStaff = false,
+                            Request = responseMail.Data.Request,
+                            Response = responseMail.Data.Response
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
                 }
-
-                await jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
             }
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
+                // await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
             }
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
         });
     }
 
@@ -395,7 +393,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -493,7 +491,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -533,7 +531,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -609,7 +607,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+                //variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
@@ -635,29 +633,28 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"PYSendMail");
+                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand { OrderId = variables.InstanceId, Email = person.Data.Customer.Email });
 
-                var emailTemplateParams = new EmailTemplateParams
+                try
                 {
-                    MusteriAdSoyad = "Hüeyin Töremen",
-                    MusteriNo = 12345
-                };
-
-                var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
-
-                await _messagingService.SendMailTemplateAsync(new SendMailTemplateRequest
-                {
-                    headerInfo = new SendMailTemplateHeaderInfo
+                    foreach (var item in responseEmail.Data)
                     {
-                        sender = "Burgan"
-                    },
-                    templateParams = templateParams,
-                    template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:",
-                    email = "HToremen@burgan.com.tr",
-                    process = new SendMailTemplateProcess
-                    {
-                        name = "Zeebe - Contract Approval - SendOtp"
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı(Email)",
+                            Description = "",
+                            IsStaff = false,
+                            Request = item.Request,
+                            Response = item.Response
+                        });
                     }
-                });
+                }
+                catch (Exception ex)
+                {
+                    Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                }
             }
             catch (Exception ex)
             {
@@ -693,7 +690,7 @@ public class ContractApprovalService : IContractApprovalService
             catch (Exception ex)
             {
                 Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                variables.IsProcess = false;
+               // variables.IsProcess = false;
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }

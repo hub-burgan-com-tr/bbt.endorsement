@@ -19,6 +19,9 @@ namespace Worker.App.Application.Internals.Models
         [JsonProperty("emails")]
         public string[] Emails { get; set; }
 
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
         [JsonProperty("devices")]
         public Device[] Devices { get; set; }
     }

@@ -154,11 +154,8 @@ namespace Api.Controllers
             )
         {
             var status = await Mediator.Send(new GetOrderStatusQuery { Id = id });
-
             return status;
         }
-
-
 
         [SwaggerOperation(
           Summary = "Query endorsement order documents.",
@@ -177,8 +174,6 @@ namespace Api.Controllers
                 OrderId = orderId
             });
         }
-
-
         /// <summary>
         ///  Onayımdakiler Listesi
         /// </summary>
