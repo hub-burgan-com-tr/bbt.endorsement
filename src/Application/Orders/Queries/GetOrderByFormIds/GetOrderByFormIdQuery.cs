@@ -68,7 +68,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                             orders.Add(new GetOrderByFormIdResponse
                             {
                                 OrderId = orderMap.OrderId,
-                                OrderName =orderMap.Order.Reference.ProcessNo!=null? orderMap.Order.Title + " - " + orderMap.Order.Reference.ProcessNo:orderMap.Order.Title
+                                OrderName =!string.IsNullOrEmpty(orderMap.Order.Reference.ProcessNo)? orderMap.Order.Title + " - " + orderMap.Order.Reference.ProcessNo:orderMap.Order.Title
                             });
                         }
                     }
@@ -84,7 +84,7 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                           .Select(x => new GetOrderByFormIdResponse
                           {
                               OrderId = x.OrderId,
-                              OrderName =x.Reference.ProcessNo!=null? x.Title + " - " + x.Reference.ProcessNo:x.Title
+                              OrderName =!string.IsNullOrEmpty(x.Reference.ProcessNo)? x.Title + " - " + x.Reference.ProcessNo:x.Title
                           })
                           .ToList();
 

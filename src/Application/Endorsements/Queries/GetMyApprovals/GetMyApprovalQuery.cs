@@ -37,7 +37,7 @@ namespace Application.Endorsements.Queries.GetMyApprovals
                 {
                     OrderId = x.OrderId,
                     Title = x.Title,
-                    IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString() && x.FormDefinitionId == null),
+                    IsDocument = x.Documents.Any(x => x.Type != ContentType.PlainText.ToString()),
                     State = x.State,
                 })
                 .PaginatedListAsync(request.PageNumber, request.PageSize);
