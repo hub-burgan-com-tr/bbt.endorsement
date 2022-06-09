@@ -9,13 +9,13 @@ using Worker.App.Models;
 
 namespace Worker.App.Application.Messagings.Commands.PersonSendMailTemplates;
 
-public class PersonSendMailTemplateCommand : IRequest<Response<List<MessageResponse>>>
+public class PersonSendMailTemplateCommand : IRequest<Response<MessageResponse>>
 {
     public string OrderId { get; set; }
     public string Email { get; set; }
 }
 
-public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMailTemplateCommand, Response<List<MessageResponse>>>
+public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMailTemplateCommand, Response<MessageResponse>>
 {
     private IApplicationDbContext _context;
     private IDateTime _dateTime;
@@ -28,7 +28,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
         _messagingService = messagingService;
     }
 
-    public async Task<Response<List<MessageResponse>>> Handle(PersonSendMailTemplateCommand request, CancellationToken cancellationToken)
+    public async Task<Response<MessageResponse>> Handle(PersonSendMailTemplateCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -38,7 +38,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 .FirstOrDefault(x => x.OrderId == request.OrderId);
 
             if (order == null)
-                return Response<List<MessageResponse>>.NotFoundException("Order not found: " + request.OrderId, 404);
+                return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 
             var names = order.Documents.Select(x => x.Name).ToArray();
             var emailTemplateParams = new EmailTemplateParams
@@ -62,25 +62,25 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 }
             };
 
-            var messages = new List<MessageResponse>();
+            var messages = new MessageResponse();
 
             if (order.State == OrderState.Approve.ToString())
             {
                 sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
                 var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-                messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
+                messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
             }
             else if (order.State == OrderState.Reject.ToString())
             {
                 sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
                 var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-                messages.Add(new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) });
+                messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
             }
-            return Response<List<MessageResponse>>.Success(messages, 200);
+            return Response<MessageResponse>.Success(messages, 200);
         }
         catch (Exception ex)
         {
-            return Response<List<MessageResponse>>.Fail(ex.Message, 201);
+            return Response<MessageResponse>.Fail(ex.Message, 201);
         }
     }
 }

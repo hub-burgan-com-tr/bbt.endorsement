@@ -40,14 +40,12 @@ public class ContractApprovalService : IContractApprovalService
     private static readonly string WorkerName = Environment.MachineName;
     private IServiceProvider _provider = null!;
     private ISender _mediator = null!;
-    private IMessagingService _messagingService = null!;
 
-    public ContractApprovalService(IZeebeService zeebeService, IServiceProvider provider, IMessagingService messagingService = null)
+    public ContractApprovalService(IZeebeService zeebeService, IServiceProvider provider)
     {
         _zeebeService = zeebeService;
         _provider = provider;
         _mediator = _provider.CreateScope().ServiceProvider.GetRequiredService<ISender>();
-        _messagingService = messagingService;
     }
 
     public void StartWorkers()
@@ -649,26 +647,23 @@ public class ContractApprovalService : IContractApprovalService
                         OrderId = variables.InstanceId,
                         Email = email, // person.Data.Customer.Email
                     });
-                }
 
-                try
-                {
-                    //foreach (var item in responseEmail.Data)
-                    //{
-                    //    await _mediator.Send(new CreateOrderHistoryCommand
-                    //    {
-                    //        OrderId = variables.InstanceId.ToString(),
-                    //        State = "Hatırlatma Mesajı(Email)",
-                    //        Description = "",
-                    //        IsStaff = false,
-                    //        Request = item.Request,
-                    //        Response = item.Response
-                    //    });
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                    try
+                    {
+                        await _mediator.Send(new CreateOrderHistoryCommand
+                        {
+                            OrderId = variables.InstanceId.ToString(),
+                            State = "Hatırlatma Mesajı(Email)",
+                            Description = "",
+                            IsStaff = false,
+                            Request = responseEmail.Data.Request,
+                            Response = responseEmail.Data.Response
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                    }
                 }
             }
             catch (Exception ex)
