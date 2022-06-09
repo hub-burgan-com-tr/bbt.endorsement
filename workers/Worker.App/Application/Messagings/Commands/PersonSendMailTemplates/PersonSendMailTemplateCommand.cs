@@ -40,19 +40,18 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
             if (order == null)
                 return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 
-            var names = order.Documents.Select(x => x.Name).ToArray();
-            var emailTemplateParams = new EmailTemplateParams
+            var parameters = new EmailTemplateParams
             {
                 MusteriAdSoyad = order.Customer.FirstName + " " + order.Customer.LastName,
                 MusteriNo = order.Customer.CustomerNumber,
                 Title = order.Title
             };
-            var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
+            var templateParams = JsonConvert.SerializeObject(parameters);
             var sendMailTemplate = new SendMailTemplateRequest
             {
                 headerInfo = new SendMailTemplateHeaderInfo
                 {
-                    sender = "AutoDeteck"
+                    sender = "AutoDetect"
                 },
                 templateParams = templateParams,
                 email = request.Email,
