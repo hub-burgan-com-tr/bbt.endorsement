@@ -3,6 +3,7 @@ using Dms.Integration.Infrastructure.DocumentServices;
 using Dms.Integration.Infrastructure.Enums;
 using Dms.Integration.Infrastructure.Models;
 using Dms.Integration.Infrastructure.Services;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
@@ -34,6 +35,8 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
         var customer = order.Customer;
 
         var dmsIds= new List<string>();
+        if(order.State != OrderState.Approve.ToString())
+            return Response<List<string>>.Success(dmsIds, 200);
 
         foreach (var document in documents)
         {

@@ -57,7 +57,6 @@ public class ContractApprovalService : IContractApprovalService
 
         SaveEntity();
         SaveHistory();
-        CreateDMSDocument();
 
         LoadContactInfo();
         SendOtp();
@@ -69,6 +68,7 @@ public class ContractApprovalService : IContractApprovalService
 
         PYSendMail();
         CheckAllApproved();
+        CreateDMSDocument();
     }
 
     private void SaveEntity()
