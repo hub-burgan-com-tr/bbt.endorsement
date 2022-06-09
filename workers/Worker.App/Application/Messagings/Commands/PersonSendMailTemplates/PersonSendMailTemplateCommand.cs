@@ -41,7 +41,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
             {
                 MusteriAdSoyad = "Hüseyin Töremen",
                 MusteriNo = 12345,
-                //Names = names
+                Title = order.Title
             };
             var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
             var sendMailTemplate = new SendMailTemplateRequest
