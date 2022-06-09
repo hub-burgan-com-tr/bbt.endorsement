@@ -80,6 +80,7 @@ public class ContractApprovalService : IContractApprovalService
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("SaveEntity");
             try
             {
                 // var state = customHeaders["State"].ToString();
@@ -137,6 +138,7 @@ public class ContractApprovalService : IContractApprovalService
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("SaveHistory");
             try
             {
                 // var state = customHeaders["State"].ToString();
@@ -196,6 +198,7 @@ public class ContractApprovalService : IContractApprovalService
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("CreateDMSDocument");
             try
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"CreateDMSDocument");
@@ -244,6 +247,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("LoadContactInfo", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("LoadContactInfo");
             if (variables != null)
                 variables.RetryEnd = true;
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -274,6 +278,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("SendOtp", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("SendOtp");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             try
             {
@@ -365,6 +370,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("SendPush", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("SendPush");
 
             if (variables != null)
                 variables.Limit += 1;
@@ -406,6 +412,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("UpdateEntity", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("UpdateEntity");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             if (variables != null)
             {
@@ -439,6 +446,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("ApproveContract", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("ApproveContract");
             if (variables != null)
             {
                 var orderConfig = _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
@@ -503,6 +511,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("DeleteEntity", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("DeleteEntity");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"DeleteEntity");
 
@@ -545,6 +554,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("ConsumeCallback", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("ConsumeCallback");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("OrderId", variables.InstanceId).Information($"ConsumeCallback");
 
@@ -567,6 +577,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("CheckAllApproved", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("CheckAllApproved");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
             try
@@ -618,6 +629,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("PYSendMail", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("PYSendMail");
 
             if (variables != null)
                 variables.Limit += 1;
@@ -678,6 +690,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("CustomerSendSms", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("CustomerSendSms");
 
             if (variables != null)
                 variables.Limit += 1;
@@ -711,6 +724,7 @@ public class ContractApprovalService : IContractApprovalService
         CreateWorker("ErrorHandler", async (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("ErrorHandler");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.Information($"ErrorEntity data");
 
