@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
       this.state = params['state'];
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.returnUrl = params['returnUrl'] || '/';
       console.log(this.code);
       console.log(this.state);
       console.log(this.returnUrl);
