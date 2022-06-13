@@ -81,13 +81,23 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     // To Enable authorization using Swagger (JWT)  
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.OAuth2,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        Flows = new OpenApiOAuthFlows
+        {
+            ClientCredentials = new OpenApiOAuthFlow
+            {
+                TokenUrl = new Uri($"{Configuration["Authentication:Authority"]}/connect/token"),
+                Scopes = new Dictionary<string, string>
+                            {
+                                {"roles", "ROLES"}
+                            }
+            }
+        }
     });
 
-    options.OperationFilter<AuthorizeOperationFilter>();
+    // options.OperationFilter<AuthorizeOperationFilter>();
     // options.SchemaFilter<EnumSchemaFilter>();
     options.UseInlineDefinitionsForEnums();
 
@@ -98,10 +108,16 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options))
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
+              .AddJwtBearer(options =>
+              {
+                  options.Authority = Configuration["Authentication:Authority"];
+                  options.Audience = "api";
+              });
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options))
+//    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
