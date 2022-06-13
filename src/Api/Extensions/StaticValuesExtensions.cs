@@ -11,6 +11,10 @@ public static class StaticValuesExtensions
         StaticValues.Internals = settings.Entegration.Internals;
         StaticValues.DMSService = settings.Entegration.DMSService;
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
+
+        StaticValues.Authority = settings.Authentication.Authority;
+        StaticValues.ApiGateway = settings.Authentication.ApiGateway;   
+        StaticValues.SecretKey = settings.Authentication.SecretKey;
     }
 }
 

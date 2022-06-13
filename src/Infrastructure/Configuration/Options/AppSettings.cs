@@ -11,6 +11,7 @@ public class AppSettings
     public ZeebeOptions Zeebe { get; set; }
     public Entegration Entegration { get; set; }
     public TokenOptions Token { get; set; }
+    public Authentication Authentication { get; set; }
 }
 
 public class Entegration
@@ -26,4 +27,11 @@ public class TokenOptions
     public string Issuer { get; set; }
     public string Audience { get; set; }
     public string SecurityKey { get; set; }
+}
+
+public class Authentication
+{
+    public string Authority { get; set; }
+    public string ApiGateway { get; set; }
+    public string SecretKey { get; set; }
 }

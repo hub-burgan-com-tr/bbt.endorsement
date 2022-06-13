@@ -79,8 +79,7 @@ builder.Services.AddSwaggerGen(options =>
         Title = "Contract Approval API",
         Description = "Provides validation infrastructure for contracts that customers need to approve."
     });
-
-    // To Enable authorization using Swagger (JWT)  
+ 
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.OAuth2,

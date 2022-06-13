@@ -1,12 +1,15 @@
 ﻿using Api.Extensions;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Application.Common.Models;
 using Infrastructure.SsoServices;
 using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Text;
 
 namespace Api.Controllers
 {
@@ -32,65 +35,86 @@ namespace Api.Controllers
         }
 
 
-        [Route("_login")]
-        [HttpGet]
-        [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(UserModel))]
-        [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<GetSearchPersonSummaryDto> _Login(string name)
-        {
-            var isState = false;
-            if (true)
-            {
-                var result = GetUsers()
-                     .Where(x => x.Name.First.Contains(name, StringComparison.OrdinalIgnoreCase) || x.Name.Last.Contains(name, StringComparison.OrdinalIgnoreCase) || (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase) || x.CitizenshipNumber.ToString() == name || x.CustomerNumber.ToString() == name)
-                    .Select(x => new GetSearchPersonSummaryDto
-                    {
-                        CitizenshipNumber = x.CitizenshipNumber.ToString(),
-                        First = x.Name.First,
-                        Last = x.Name.Last,
-                        CustomerNumber = x.CustomerNumber,
-                        IsStaff = x.IsStaff,
-                    // Email = x.Email,
-                    // TaxNo = x.TaxNo,
-                    // GsmPhone = x.GsmPhone,
-                    Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
-                    }).FirstOrDefault();
+        //[Route("_login")]
+        //[HttpGet]
+        //[SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(UserModel))]
+        //[SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
+        //public async Task<GetSearchPersonSummaryDto> _Login(string name)
+        //{
+        //    var isState = false;
+        //    if (true)
+        //    {
+        //        var result = GetUsers()
+        //             .Where(x => x.Name.First.Contains(name, StringComparison.OrdinalIgnoreCase) || x.Name.Last.Contains(name, StringComparison.OrdinalIgnoreCase) || (x.Name.First + " " + x.Name.Last).Contains(name, StringComparison.OrdinalIgnoreCase) || x.CitizenshipNumber.ToString() == name || x.CustomerNumber.ToString() == name)
+        //            .Select(x => new GetSearchPersonSummaryDto
+        //            {
+        //                CitizenshipNumber = x.CitizenshipNumber.ToString(),
+        //                First = x.Name.First,
+        //                Last = x.Name.Last,
+        //                CustomerNumber = x.CustomerNumber,
+        //                IsStaff = x.IsStaff,
+        //            // Email = x.Email,
+        //            // TaxNo = x.TaxNo,
+        //            // GsmPhone = x.GsmPhone,
+        //            Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
+        //            }).FirstOrDefault();
 
-                if (result != null)
-                {
-                    TokenHandler tokenHandler = new TokenHandler(_configuration);
-                    Token token = tokenHandler.CreateAccessToken(result);
-                    result.Token = token.AccessToken;
-                    isState = true;
-                    return result;
-                }
-            }
+        //        if (result != null)
+        //        {
+        //            TokenHandler tokenHandler = new TokenHandler(_configuration);
+        //            Token token = tokenHandler.CreateAccessToken(result);
+        //            result.Token = token.AccessToken;
+        //            isState = true;
+        //            return result;
+        //        }
+        //    }
             
 
-            if(isState == false)
-            {
-                var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
+        //    if(isState == false)
+        //    {
+        //        var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
 
-                if (response != null && response.Data.Persons.Any())
-                {
-                    var result = response.Data.Persons.Select(x => new GetSearchPersonSummaryDto { CustomerNumber = x.CustomerNumber, Token = "", First = x.First, Last = x.Last, CitizenshipNumber = x.CitizenshipNumber, IsStaff = x.IsStaff, Authory = x.Authory }).FirstOrDefault();
-                    TokenHandler tokenHandler = new TokenHandler(_configuration);
-                    Token token = tokenHandler.CreateAccessToken(result);
-                    result.Token = token.AccessToken;
-                    return result;
-                }
-            }
-            return null;
-        }
+        //        if (response != null && response.Data.Persons.Any())
+        //        {
+        //            var result = response.Data.Persons.Select(x => new GetSearchPersonSummaryDto { CustomerNumber = x.CustomerNumber, Token = "", First = x.First, Last = x.Last, CitizenshipNumber = x.CitizenshipNumber, IsStaff = x.IsStaff, Authory = x.Authory }).FirstOrDefault();
+        //            TokenHandler tokenHandler = new TokenHandler(_configuration);
+        //            Token token = tokenHandler.CreateAccessToken(result);
+        //            result.Token = token.AccessToken;
+        //            return result;
+        //        }
+        //    }
+        //    return null;
+        //}
 
 
         [HttpGet("decode-token")]
         public JwtSecurityToken DecodeToken(string token)
         {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                }, out SecurityToken validateToken);
+
+                var jwtToken = (JwtSecurityToken)validateToken;
+                return jwtToken;
+
+            }
+            catch 
+            {
+            }
             var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token);
+            var jsonToken = handler.ReadJwtToken(token);
             var tokenS = jsonToken as JwtSecurityToken;
 
             return tokenS;
