@@ -21,22 +21,22 @@ namespace Api.Controllers
             _ssoService = ssoService;
         }
 
-        [Route("AccessToken")]
+        [Route("login")]
         [HttpGet]
-        public async Task<AccessToken> AccessToken(string code, string state)
+        public async Task<AccessToken> Login(string code, string state)
         {
             var response = await _ssoService.AccessToken(code, state);
             return response;
         }
 
 
-        [Route("login")]
+        [Route("_login")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(UserModel))]
         [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<GetSearchPersonSummaryDto> Login(string name)
+        public async Task<GetSearchPersonSummaryDto> _Login(string name)
         {
             var isState = false;
             if (true)
