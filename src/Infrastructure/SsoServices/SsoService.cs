@@ -23,7 +23,7 @@ public class SsoService : ISsoService
                         new KeyValuePair<string, string>("response_type", code),
                         new KeyValuePair<string, string>("client_id", "Endorsement"),
                         new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                        new KeyValuePair<string, string>("client_secret", Guid.NewGuid().ToString().ToUpper()),
+                        new KeyValuePair<string, string>("client_secret", "A615C904-4E98-4153-8C53-B9174D4FD32B"),
                         new KeyValuePair<string, string>("redirect_uri", "https://test-bbt-endorsementui.apps.nonprod.ebt.bank/login"),
                     });
                 var result = await client.PostAsync("/connect/token", content);
