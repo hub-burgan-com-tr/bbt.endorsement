@@ -2,8 +2,10 @@
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Infrastructure.SsoServices;
 using Infrastructure.SsoServices.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace Api.Controllers
@@ -84,17 +86,17 @@ namespace Api.Controllers
         }
 
 
-        //[HttpGet("decode-token")]
-        //public JwtSecurityToken DecodeToken(string token)
-        //{
-        //    var handler = new JwtSecurityTokenHandler();
-        //    var jsonToken = handler.ReadToken(token);
-        //    var tokenS = jsonToken as JwtSecurityToken;
+        [HttpGet("decode-token")]
+        public JwtSecurityToken DecodeToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token);
+            var tokenS = jsonToken as JwtSecurityToken;
 
-        //    return tokenS;
-        //}
+            return tokenS;
+        }
 
-        //[Authorize]
+        //[Authorize("roles")]
         //[HttpGet("get")]
         //public int Get()
         //{
