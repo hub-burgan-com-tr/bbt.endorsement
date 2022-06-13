@@ -28,9 +28,9 @@ export class LoginComponent implements OnInit {
       if (this.code && this.state) {
         this.authService.login(this.code, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
           console.log(res);
-          if (res) {
+          /*if (res) {
             this.router.navigate([this.returnUrl]);
-          }
+          }*/
         });
       }
     });
