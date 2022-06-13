@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
 using Api.OperationFilters;
@@ -9,6 +10,7 @@ using Infrastructure.Configuration.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 /// <summary>
@@ -79,7 +81,7 @@ builder.Services.AddSwaggerGen(options =>
         Title = "Contract Approval API",
         Description = "Provides validation infrastructure for contracts that customers need to approve."
     });
- 
+
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.OAuth2,
@@ -168,6 +170,7 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 //    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 //});
 
+var settings = builder.Configuration.Get<AppSettings>();
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 //{
 //    option.TokenValidationParameters = new TokenValidationParameters
@@ -190,7 +193,6 @@ builder.Services.AddInfrastructure(builder);
 //builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
 
-var settings = builder.Configuration.Get<AppSettings>();
 StaticValuesExtensions.SetStaticValues(settings);
 
 var app = builder.Build();

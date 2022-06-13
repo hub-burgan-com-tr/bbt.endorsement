@@ -1,15 +1,9 @@
 ﻿using Api.Extensions;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
-using Application.Common.Models;
 using Infrastructure.SsoServices;
-using Infrastructure.SsoServices.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Annotations;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Text;
 
 namespace Api.Controllers
 {
@@ -28,10 +22,28 @@ namespace Api.Controllers
 
         [Route("login")]
         [HttpGet]
-        public async Task<AccessToken> Login(string code, string state)
+        [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(UserModel))]
+        [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
             var response = await _ssoService.AccessToken(code, state);
-            return response;
+
+            var result = new GetSearchPersonSummaryDto
+            {
+                CitizenshipNumber = response.Tckn
+            };
+
+            if (result != null)
+            {
+                TokenHandler tokenHandler = new TokenHandler(_configuration);
+                Token token = tokenHandler.CreateAccessToken(result);
+                result.Token = token.AccessToken;
+                return result;
+            }
+
+            return result;
         }
 
 
@@ -89,36 +101,36 @@ namespace Api.Controllers
         //}
 
 
-        [HttpGet("decode-token")]
-        public JwtSecurityToken DecodeToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
+        //[HttpGet("decode-token")]
+        //public JwtSecurityToken DecodeToken(string token)
+        //{
+        //    var tokenHandler = new JwtSecurityTokenHandler();
 
-            try
-            {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecretKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
-                }, out SecurityToken validateToken);
+        //    try
+        //    {
+        //        tokenHandler.ValidateToken(token, new TokenValidationParameters
+        //        {
+        //            ValidateIssuerSigningKey = true,
+        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecretKey)),
+        //            ValidateIssuer = false,
+        //            ValidateAudience = false,
+        //            ValidateLifetime = true,
+        //            ClockSkew = TimeSpan.Zero,
+        //        }, out SecurityToken validateToken);
 
-                var jwtToken = (JwtSecurityToken)validateToken;
-                return jwtToken;
+        //        var jwtToken = (JwtSecurityToken)validateToken;
+        //        return jwtToken;
 
-            }
-            catch 
-            {
-            }
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadJwtToken(token);
-            var tokenS = jsonToken as JwtSecurityToken;
+        //    }
+        //    catch 
+        //    {
+        //    }
+        //    var handler = new JwtSecurityTokenHandler();
+        //    var jsonToken = handler.ReadJwtToken(token);
+        //    var tokenS = jsonToken as JwtSecurityToken;
 
-            return tokenS;
-        }
+        //    return tokenS;
+        //}
 
         //[Authorize("roles")]
         //[HttpGet("get")]
