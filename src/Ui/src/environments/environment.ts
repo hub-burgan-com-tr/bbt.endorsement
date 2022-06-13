@@ -15,3 +15,5 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+
+// https://gondor-identityserver.burgan.com.tr/connect/authorize?response_type=code&client_id=Endorsement&state=EndorsementGondor&scope=roles&redirect_uri=https://test-bbt-endorsementui.apps.nonprod.ebt.bank/login
