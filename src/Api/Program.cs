@@ -1,14 +1,14 @@
 using System.Reflection;
-using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
+using Api.OperationFilters;
 using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 /// <summary>
@@ -53,10 +53,6 @@ else
         .Build();
 
 
-builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
-{
-    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
 
 builder.Services.Configure<FormOptions>(x =>
 {
@@ -85,12 +81,23 @@ builder.Services.AddSwaggerGen(options =>
     });
 
     // To Enable authorization using Swagger (JWT)  
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.OAuth2,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        Flows = new OpenApiOAuthFlows
+        {
+            ClientCredentials = new OpenApiOAuthFlow
+            {
+                TokenUrl = new Uri($"{Configuration["Authentication:Authority"]}/connect/token"),
+                Scopes = new Dictionary<string, string>
+                            {
+                                {"roles", "ROLES"}
+                            }
+            }
+        }
     });
 
+    // options.OperationFilter<AuthorizeOperationFilter>();
     // options.SchemaFilter<EnumSchemaFilter>();
     options.UseInlineDefinitionsForEnums();
 
@@ -101,6 +108,21 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+              .AddJwtBearer(options =>
+              {
+                  options.Authority = Configuration["Authentication:Authority"];
+                  options.Audience = "api";
+              });
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options))
+//    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => builder.Configuration.Bind("CookieSettings", options));
+
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 //builder.Services.AddSwaggerGen(options =>
 //{
@@ -146,22 +168,21 @@ builder.Services.AddSwaggerGen(options =>
 //    options.CustomSchemaIds(x => x.FullName);
 //    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 //});
-var settings = builder.Configuration.Get<AppSettings>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
-{
-    option.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateAudience = false, // Oluþturulacak token deðerini kimlerin/hangi originlerin/sitelerin kullanacaðýný belirlediðimiz alandýr.
-        ValidateIssuer = false, // Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimiz alandýr.
-        ValidateLifetime = true, // Oluþturulan token deðerinin süresini kontrol edecek olan doðrulamadýr.
-        ValidateIssuerSigningKey = true, // Üretilecek token deðerinin uygulamamýza ait bir deðer olduðunu ifade eden security key verisinin doðrulamasýdýr.
-        ValidIssuer = settings.Token.Issuer,
-        ValidAudience = settings.Token.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Token.SecurityKey)),
-        ClockSkew = TimeSpan.Zero // Üretilecek token deðerinin expire süresinin belirtildiði deðer kadar uzatýlmasýný saðlayan özelliktir. 
-    };
-});
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+//{
+//    option.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateAudience = false, // Oluþturulacak token deðerini kimlerin/hangi originlerin/sitelerin kullanacaðýný belirlediðimiz alandýr.
+//        ValidateIssuer = false, // Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimiz alandýr.
+//        ValidateLifetime = true, // Oluþturulan token deðerinin süresini kontrol edecek olan doðrulamadýr.
+//        ValidateIssuerSigningKey = true, // Üretilecek token deðerinin uygulamamýza ait bir deðer olduðunu ifade eden security key verisinin doðrulamasýdýr.
+//        ValidIssuer = settings.Token.Issuer,
+//        ValidAudience = settings.Token.Audience,
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Token.SecurityKey)),
+//        ClockSkew = TimeSpan.Zero // Üretilecek token deðerinin expire süresinin belirtildiði deðer kadar uzatýlmasýný saðlayan özelliktir. 
+//    };
+//});
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
@@ -170,6 +191,7 @@ builder.Services.AddInfrastructure(builder);
 //builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
 
+var settings = builder.Configuration.Get<AppSettings>();
 StaticValuesExtensions.SetStaticValues(settings);
 
 var app = builder.Build();
