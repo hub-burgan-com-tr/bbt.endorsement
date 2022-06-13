@@ -73,6 +73,8 @@ builder.Services.AddControllers()
         opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -85,28 +87,9 @@ builder.Services.AddSwaggerGen(options =>
     // To Enable authorization using Swagger (JWT)  
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.OAuth2,
         Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
     });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                          new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            new string[] {}
-
-                    }
-                });
 
     // options.SchemaFilter<EnumSchemaFilter>();
     options.UseInlineDefinitionsForEnums();
@@ -117,6 +100,52 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(x => x.FullName);
     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
+
+
+//builder.Services.AddSwaggerGen(options =>
+//{
+//    options.SwaggerDoc("v1", new OpenApiInfo
+//    {
+//        Version = "v1.5",
+//        Title = "Contract Approval API",
+//        Description = "Provides validation infrastructure for contracts that customers need to approve."
+//    });
+
+//    // To Enable authorization using Swagger (JWT)  
+//    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+//    {
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.ApiKey,
+//        Scheme = "Bearer",
+//        BearerFormat = "JWT",
+//        In = ParameterLocation.Header,
+//        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+//    });
+//    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+//                {
+//                    {
+//                          new OpenApiSecurityScheme
+//                            {
+//                                Reference = new OpenApiReference
+//                                {
+//                                    Type = ReferenceType.SecurityScheme,
+//                                    Id = "Bearer"
+//                                }
+//                            },
+//                            new string[] {}
+
+//                    }
+//                });
+
+//    // options.SchemaFilter<EnumSchemaFilter>();
+//    options.UseInlineDefinitionsForEnums();
+
+//    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+//    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+//    options.IncludeXmlComments(xmlPath);
+//    options.CustomSchemaIds(x => x.FullName);
+//    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+//});
 var settings = builder.Configuration.Get<AppSettings>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
