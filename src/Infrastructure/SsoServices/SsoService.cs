@@ -17,10 +17,10 @@ public class SsoService : ISsoService
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://gondor-apigateway.burgan.com.tr");
+                client.BaseAddress = new Uri("https://gondor-identityserver.burgan.com.tr");
                 var content = new FormUrlEncodedContent(new[]
                 {
-                        new KeyValuePair<string, string>("response_type", code),
+                        new KeyValuePair<string, string>("code", code),
                         new KeyValuePair<string, string>("client_id", "Endorsement"),
                         new KeyValuePair<string, string>("grant_type", "authorization_code"),
                         new KeyValuePair<string, string>("client_secret", "A615C904-4E98-4153-8C53-B9174D4FD32B"),
