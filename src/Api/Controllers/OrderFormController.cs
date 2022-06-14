@@ -21,7 +21,7 @@ namespace Api.Controllers
     /// <summary>
     /// Form İşlemleri 
     /// </summary>
-    //[Authorize]
+    [Authorize]
     [Route("Forms")]
     [ApiController]
     public class FormController : ApiControllerBase

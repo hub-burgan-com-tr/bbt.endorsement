@@ -4,6 +4,7 @@ using Application.OrderForms.Commands.UpdateFormDependencyReuse;
 using Application.OrderForms.Commands.UpdateFormInformations;
 using Application.OrderForms.Queries.GetFormInformations;
 using Application.Orders.Queries.GetOrderByFormIds;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,7 +13,7 @@ namespace Api.Controllers
     /// <summary>
     /// Form Definition İşlemleri 
     /// </summary>
-    //[Authorize]
+    [Authorize]
     [Route("FormDefiniton")]
     [ApiController]
     public class FormDefinitonController : ApiControllerBase
