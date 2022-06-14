@@ -32,7 +32,11 @@ namespace Api.Controllers
 
             var result = new GetSearchPersonSummaryDto
             {
-                CitizenshipNumber = response.Tckn
+                CitizenshipNumber = response.Tckn,
+                IsStaff = false,
+                CustomerNumber = 20186951,
+                First = "",
+                Last = ""
             };
 
             if (result != null)
