@@ -22,15 +22,11 @@ export class LoginComponent implements OnInit {
       this.code = params['code'];
       this.state = params['state'];
       this.returnUrl = params['returnUrl'] || '/';
-      console.log(this.code);
-      console.log(this.state);
-      console.log(this.returnUrl);
       if (this.code && this.state) {
         this.authService.login(this.code, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
-          console.log(res);
-          /*if (res) {
+          if (res) {
             this.router.navigate([this.returnUrl]);
-          }*/
+          }
         });
       }
     });
