@@ -1,0 +1,17 @@
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: endorsement
+    namespace: bbt-endorsement
+  spec:
+    ingressClassName: nginx
+    rules:
+      - http:
+          paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: endorsement
+                port:
+                  number: 5070

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: endorsement-ui
+  namespace: bbt-endorsement
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: endorsement-ui

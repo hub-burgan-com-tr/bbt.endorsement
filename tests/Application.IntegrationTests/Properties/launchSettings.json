@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Application.IntegrationTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
