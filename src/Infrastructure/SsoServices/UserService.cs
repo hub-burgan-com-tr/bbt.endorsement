@@ -1,6 +1,7 @@
 ﻿using Application.Common.Models;
 using Infrastructure.SsoServices.Models;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            throw ex.InnerException;
+            Log.Error(ex, ex.Message);
         }
         return response;
     }

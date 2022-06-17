@@ -2,6 +2,7 @@
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Infrastructure.SsoServices;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 
@@ -30,6 +31,9 @@ namespace Api.Controllers
         {
             var response = await _userService.AccessToken(code, state);
 
+
+            var i = 0;
+            var p = 25 / i;
 
             var result = new GetSearchPersonSummaryDto
             {

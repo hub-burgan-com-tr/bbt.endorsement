@@ -16,68 +16,58 @@ using Worker.App.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 IWebHostEnvironment environment = builder.Environment;
+IConfiguration Configuration;
 if (environment.EnvironmentName == "Development")
 {
-    var configuration = builder
+    Configuration = builder
         .Configuration
         .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
-
-    Log.Logger = new LoggerConfiguration()
-       .ReadFrom.Configuration(configuration)
-       .CreateLogger();
 }
 else if (environment.EnvironmentName == "Prod")
 {
-    var configuration = builder
+    Configuration = builder
         .Configuration
         .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
-
-    Log.Logger = new LoggerConfiguration()
-       .ReadFrom.Configuration(configuration)
-       .CreateLogger();
 }
 else if (environment.EnvironmentName == "Test")
 {
-    var configuration = builder
+    Configuration = builder
         .Configuration
         .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
-
-    Log.Logger = new LoggerConfiguration()
-       .ReadFrom.Configuration(configuration)
-       .CreateLogger();
 }
 else
 {
-    var configuration = builder
+    Configuration = builder
         .Configuration
         .AddJsonFile("appsettings.json", true, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
-
-    Log.Logger = new LoggerConfiguration()
-       .ReadFrom.Configuration(configuration)
-       .CreateLogger();
 }
+
+
+Log.Logger = new LoggerConfiguration()
+   .ReadFrom.Configuration(Configuration)
+   .CreateLogger();
+builder.Host.UseSerilog();
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
-builder.Host.UseSerilog();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

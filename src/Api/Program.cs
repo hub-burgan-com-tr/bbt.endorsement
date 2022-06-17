@@ -1,17 +1,17 @@
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
-using Api.OperationFilters;
 using Application;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 /// <summary>
 ///  
@@ -55,6 +55,19 @@ else
         .Build();
 
 
+Log.Logger = new LoggerConfiguration()
+   .ReadFrom.Configuration(Configuration)
+   .CreateLogger();
+
+//Serilog.Debugging.SelfLog.Enable(msg =>
+//{
+//    Debug.Print(msg);
+//    Debugger.Break();
+//});
+
+//builder.Logging.ClearProviders();
+//builder.Logging.AddSerilog(Log.Logger);
+builder.Host.UseSerilog(((ctx, lc) => lc.ReadFrom.Configuration(Configuration)));
 
 builder.Services.Configure<FormOptions>(x =>
 {
@@ -138,6 +151,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
 
@@ -147,10 +161,13 @@ builder.Services.Configure<AppSettings>(options => Configuration.GetSection(name
 
 StaticValuesExtensions.SetStaticValues(settings);
 
+
 var app = builder.Build();
 
-
+app.UseSerilogRequestLogging();
 app.AddUseMiddleware();
+
+Log.Information("Endorsement API running... - " + environment.EnvironmentName);
 
 // Configure the HTTP request pipeline.
 //if (!app.Environment.IsDevelopment())
