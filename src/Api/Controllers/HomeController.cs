@@ -31,10 +31,6 @@ namespace Api.Controllers
         {
             var response = await _userService.AccessToken(code, state);
 
-
-            var i = 0;
-            var p = 25 / i;
-
             var result = new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = response.Tckn,
