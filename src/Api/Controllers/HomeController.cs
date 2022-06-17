@@ -40,7 +40,7 @@ namespace Api.Controllers
                 Last = ""
             };
 
-            if (result != null)
+            if (result != null && response.Tckn != null)
             {
                 if (response.Tckn.StartsWith("5048"))
                 {
