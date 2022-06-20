@@ -18,7 +18,7 @@ public static class StaticValuesExtensions
 
         StaticValues.Issuer = settings.Token.Issuer;
         StaticValues.Audience = settings.Token.Audience;
-        StaticValues.SecretKey = settings.Token.SecretKey;
+        StaticValues.SecurityKey = settings.Token.SecurityKey;
     }
 }
 

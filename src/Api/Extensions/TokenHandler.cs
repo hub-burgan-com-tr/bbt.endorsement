@@ -40,7 +40,7 @@ public class TokenHandler
         }
 
         //Security  Key'in simetriğini alıyoruz.
-        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecretKey)); // Configuration["Token:SecurityKey"]
+        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecurityKey)); // Configuration["Token:SecurityKey"]
 
         //Şifrelenmiş kimliği oluşturuyoruz.
         SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
