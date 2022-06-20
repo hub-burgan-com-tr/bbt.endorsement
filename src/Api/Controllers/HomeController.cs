@@ -13,12 +13,10 @@ namespace Api.Controllers
     [ApiController]
     public class HomeController : ApiControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
 
-        public HomeController(IConfiguration configuration, IUserService userService)
+        public HomeController( IUserService userService)
         {
-            _configuration = configuration;
             _userService = userService;
         }
 
@@ -30,25 +28,20 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            //var response = await _userService.AccessToken(code, state);
-
-            var response = new AccessToken
-            {
-                Tckn = "12345678910"
-            };
+            var response = await _userService.AccessToken(code, state);
 
             var result = new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = response.Tckn == null ? "" : response.Tckn,
                 IsStaff = false,
-                CustomerNumber = 20186951,
+                CustomerNumber = 20186950,
                 First = "",
                 Last = ""
             };
 
             if (result != null)
             {
-                if (response.Tckn.StartsWith("5048"))
+                if (result.CitizenshipNumber.StartsWith("5048"))
                 {
                     result.IsStaff = true;
                     result.Authory = new AuthoryModel
@@ -60,7 +53,7 @@ namespace Api.Controllers
                         IsBranchFormReader = false
                     };
                 }
-                else if (response.Tckn.StartsWith("3595"))
+                else if (result.CitizenshipNumber.StartsWith("3595"))
                 {
                     result.IsStaff = true;
                     result.Authory = new AuthoryModel
@@ -73,7 +66,7 @@ namespace Api.Controllers
                     };
                 }
 
-                TokenHandler tokenHandler = new TokenHandler(_configuration);
+                TokenHandler tokenHandler = new TokenHandler();
                 Token token = tokenHandler.CreateAccessToken(result);
                 result.Token = token.AccessToken;
                 return result;

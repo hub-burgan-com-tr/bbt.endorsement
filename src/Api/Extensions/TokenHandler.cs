@@ -10,12 +10,6 @@ namespace Api.Extensions;
 
 public class TokenHandler
 {
-    public IConfiguration Configuration { get; set; }
-    public TokenHandler(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
     public Token CreateAccessToken(GetSearchPersonSummaryDto user)
     {
         var tokenInstance = new Token();
@@ -54,8 +48,8 @@ public class TokenHandler
         //Oluşturulacak token ayarlarını veriyoruz.
         tokenInstance.Expiration = DateTime.Now.AddMinutes(60);
         JwtSecurityToken securityToken = new JwtSecurityToken(
-            issuer: Configuration["Token:Issuer"],
-            audience: Configuration["Token:Audience"],
+            issuer: StaticValues.Issuer, // Configuration["Token:Issuer"],
+            audience: StaticValues.Audience, // Configuration["Token:Audience"],
             expires: tokenInstance.Expiration,//Token süresini 5 dk olarak belirliyorum
             notBefore: DateTime.Now,//Token üretildikten ne kadar süre sonra devreye girsin ayarlıyouz.
             signingCredentials: signingCredentials,
