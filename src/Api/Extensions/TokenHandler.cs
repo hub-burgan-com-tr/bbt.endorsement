@@ -1,4 +1,5 @@
 ﻿using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Application.Common.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -45,7 +46,7 @@ public class TokenHandler
         }
 
         //Security  Key'in simetriğini alıyoruz.
-        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:SecurityKey"]));
+        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecretKey)); // Configuration["Token:SecurityKey"]
 
         //Şifrelenmiş kimliği oluşturuyoruz.
         SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
