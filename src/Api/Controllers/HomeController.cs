@@ -70,7 +70,6 @@ namespace Api.Controllers
                 TokenHandler tokenHandler = new TokenHandler();
                 Token token = tokenHandler.CreateAccessToken(result);
                 result.Token = token.AccessToken;
-                return result;
             }
 
             result.Data = "Authority: " + StaticValues.Authority + 
