@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
 using Application;
+using Application.Common.Models;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
@@ -136,6 +137,9 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var settings = builder.Configuration.Get<AppSettings>();
+builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
+StaticValuesExtensions.SetStaticValues(settings);
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 {
     option.TokenValidationParameters = new TokenValidationParameters
@@ -144,9 +148,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuer = false, // Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimiz alandýr.
         ValidateLifetime = true, // Oluþturulan token deðerinin süresini kontrol edecek olan doðrulamadýr.
         ValidateIssuerSigningKey = true, // Üretilecek token deðerinin uygulamamýza ait bir deðer olduðunu ifade eden security key verisinin doðrulamasýdýr.
-        ValidIssuer = settings.Token.Issuer,
-        ValidAudience = settings.Token.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Token.SecretKey)),
+        ValidIssuer = StaticValues.Issuer,
+        ValidAudience = StaticValues.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecretKey)),
         ClockSkew = TimeSpan.Zero // Üretilecek token deðerinin expire süresinin belirtildiði deðer kadar uzatýlmasýný saðlayan özelliktir. 
     };
 });
@@ -157,9 +161,6 @@ builder.Services.AddInfrastructure(builder);
 
 //builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 //builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
-
-StaticValuesExtensions.SetStaticValues(settings);
 
 
 var app = builder.Build();
