@@ -1,5 +1,6 @@
 ﻿using Api.Extensions;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Application.Common.Models;
 using Infrastructure.SsoServices;
 using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,9 @@ namespace Api.Controllers
                 return result;
             }
 
+            result.Data = "Authority: " + StaticValues.Authority + 
+                          " - ApiGateway: " + StaticValues.ApiGateway +
+                          " - RedirectUri: " + StaticValues.RedirectUri; 
             return result;
         }
 
