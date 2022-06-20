@@ -1,6 +1,7 @@
 ﻿using Api.Extensions;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Infrastructure.SsoServices;
+using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
@@ -29,7 +30,12 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            var response = await _userService.AccessToken(code, state);
+            //var response = await _userService.AccessToken(code, state);
+
+            var response = new AccessToken
+            {
+                Tckn = "12345678910"
+            };
 
             var result = new GetSearchPersonSummaryDto
             {
