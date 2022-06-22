@@ -84,7 +84,6 @@ namespace Api.Controllers
         {
             return await Mediator.Send(new CancelOrderCommand { orderId = data.orderId });
         }
-
         /// <param name="approver">Approver of endorsement order. Type as citizenshipnumber.</param>
         /// <param name="customer">Customer of endorsement order. Type as citizenshipnumber for retail customers and tax number for corporate customers.</param>
         [SwaggerOperation(
