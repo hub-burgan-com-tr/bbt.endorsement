@@ -29,7 +29,11 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            var response = await _userService.AccessToken(code, state);
+            //var response = await _userService.AccessToken(code, state);
+            var response = new AccessToken
+            {
+                Tckn = "12345678901"
+            };
 
             var result = new GetSearchPersonSummaryDto
             {
