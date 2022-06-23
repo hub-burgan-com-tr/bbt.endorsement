@@ -25,7 +25,11 @@ export class LoginComponent implements OnInit {
       if (this.code && this.state) {
         this.authService.login(this.code, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
           if (res) {
-            this.router.navigate([this.returnUrl]);
+            if (res.isStaff) {
+              this.router.navigate(['approvals-i-want']);
+            } else {
+              this.router.navigate(['my-approval']);
+            }
           }
         });
       }

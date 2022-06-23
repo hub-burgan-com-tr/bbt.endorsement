@@ -49,11 +49,22 @@
     {
       "label": "Sigortalı VKN/TCKN",
       "labelPosition": "left-left",
+      "tableView": true,
+      "validate": {
+        "minLength": 10,
+        "maxLength": 11
+      },
+      "errors": {
+        "required": "Zorunlu alandır.Boş geçilemez.",
+        "minLength": "Min. karakter sayısı 10 olmalıdır."
+      },
+      "key": "FormInstance_Approver_CitizenshipNumber",
+      "attributes": {
+        "maxLength": "11"
+      },
+      "type": "textfield",
       "labelWidth": 40,
       "labelMargin": 1,
-      "tableView": true,
-      "key": "FormInstance_Approver_CitizenshipNumber",
-      "type": "textfield",
       "input": true
     },
     {
@@ -74,26 +85,38 @@
     {
       "label": "Sigorta Ettiren VKN/TCKN",
       "labelPosition": "left-left",
-      "labelWidth": 40,
-      "labelMargin": 1,
       "tableView": true,
+      "validate": {
+        "minLength": 10,
+        "maxLength": 11
+      },
+      "errors": {
+        "required": "Zorunlu alandır.Boş geçilemez.",
+        "minLength": "Min. karakter sayısı 10 olmalıdır."
+      },
       "key": "SigortaEttirenVKN",
       "conditional": {
         "show": false,
         "when": "sigortaEttirenIleSigortaliAyniKisidir",
         "eq": "true"
       },
+      "attributes": {
+        "maxLength": "11"
+      },
       "type": "textfield",
+      "labelWidth": 40,
+      "labelMargin": 1,
       "input": true
     },
     {
       "label": "Daini Mürtehin",
       "labelPosition": "left-left",
-      "labelWidth": 40,
-      "labelMargin": 1,
       "tableView": true,
+      "defaultValue": "BURGANBANK A.Ş",
       "key": "dainiMurtehin",
       "type": "textfield",
+      "labelWidth": 40,
+      "labelMargin": 1,
       "input": true
     },
     {
@@ -181,25 +204,24 @@
       "tableView": false,
       "components": [
         {
-          "label": "Adres kodu  (UAVT kodu) ",
+          "label": "Adres kodu  (UAVT kodu)",
           "labelPosition": "left-left",
-          "mask": false,
-          "tableView": false,
-          "delimiter": false,
-          "requireDecimal": false,
-          "inputFormat": "plain",
-          "truncateMultipleSpaces": false,
+          "tableView": true,
           "validate": {
-            "required": true
+            "required": true,
+            "minLength": 10,
+            "maxLength": 10,
+            "maxWords": 0
           },
           "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez."
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "minLength": "Min. karakter sayısı 10 olmalıdır."
           },
-          "key": "adresKoduUavtKodu",
+          "key": "adresKoduDeneme1",
           "attributes": {
-            "maxlength": "10"
+            "maxLength": "10"
           },
-          "type": "number",
+          "type": "textfield",
           "labelWidth": 40,
           "labelMargin": 1,
           "input": true
@@ -207,6 +229,28 @@
         {
           "label": "Bina m2",
           "labelPosition": "left-left",
+          "tableView": true,
+          "validate": {
+            "required": true,
+            "maxLength": 4,
+            "maxWords": 0
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "maxLength": "Min. karakter sayısı 4 olmalıdır."
+          },
+          "key": "adresKoduDeneme2",
+          "attributes": {
+            "maxLength": "4"
+          },
+          "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "input": true
+        },
+        {
+          "label": "Bina Sigorta Değeri",
+          "labelPosition": "left-left",
           "mask": false,
           "tableView": false,
           "delimiter": false,
@@ -219,66 +263,68 @@
           "errors": {
             "required": "Zorunlu alandır.Boş geçilemez"
           },
-          "key": "binaM2",
+          "key": "binaSigortaDegeri2",
+          "type": "number",
+          "input": true,
+          "labelWidth": 40,
+          "labelMargin": 1
+        },
+        {
+          "label": "Eşya Sigorta Değeri",
+          "labelPosition": "left-left",
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
+          "validate": {
+            "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
+          "key": "esyaSigortaDegeri4",
+          "type": "number",
+          "input": true,
+          "labelWidth": 40,
+          "labelMargin": 1
+        },
+        {
+          "label": "Bina Yapım Yılı",
+          "labelPosition": "left-left",
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
+          "validate": {
+            "required": true
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez",
+            "minLength": "Min. 4 hane girilmelidir."
+          },
+          "key": "binaYapimYili1",
+          "attributes": {
+            "maxLength": "4",
+            "minLength": "4"
+          },
           "type": "number",
           "labelWidth": 40,
           "labelMargin": 1,
           "input": true
         },
         {
-          "label": "Bina sigorta  değeri",
+          "label": "Toplam Kat Adedi",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
-          "validate": {
-            "required": true
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
-          "key": "binaSigortaDegeri",
-          "type": "textfield",
-          "input": true
-        },
-        {
-          "label": "Eşya sigorta  değeri",
-          "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
-          "validate": {
-            "required": true
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
-          "key": "esyaSigortaDegeri",
-          "type": "textfield",
-          "input": true
-        },
-        {
-          "label": "Bina yapım  yılı",
-          "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
-          "validate": {
-            "required": true
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
-          "key": "binaYapimYili",
-          "type": "textfield",
-          "input": true
-        },
-        {
-          "label": "Toplam kat adedi",
-          "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
           "validate": {
             "required": true
           },
@@ -286,23 +332,30 @@
             "required": "Zorunlu alandır.Boş geçilemez"
           },
           "key": "toplamKatAdedi",
-          "type": "textfield",
+          "type": "number",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
-          "label": "Bulunduğu kat",
+          "label": "Bulunduğu Kat",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
-          "tableView": true,
+          "mask": false,
+          "tableView": false,
+          "delimiter": false,
+          "requireDecimal": false,
+          "inputFormat": "plain",
+          "truncateMultipleSpaces": false,
           "validate": {
             "required": true
           },
           "errors": {
             "required": "Zorunlu alandır.Boş geçilemez"
           },
-          "key": "bulunduguKat",
-          "type": "textfield",
+          "key": "bulunduguKat1",
+          "type": "number",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
@@ -353,81 +406,103 @@
         {
           "label": "Plaka",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
           "validate": {
-            "required": true
+            "required": true,
+            "maxLength": 8
           },
           "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "maxLength": "Max. karakter sayısı 8 olmalıdır."
           },
           "key": "plaka",
+          "attributes": {
+            "maxLength": "8"
+          },
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
           "label": "Belge Seri No",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
           "validate": {
-            "required": true
+            "required": true,
+            "maxLength": 8
           },
           "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "maxLength": "Max. karakter sayısı 8 olmalıdır."
           },
           "key": "textField1",
+          "attributes": {
+            "maxLength": "8"
+          },
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
           "label": "Araç marka  model",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
           "validate": {
-            "required": true
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
+            "required": true,
+            "maxLength": 5
           },
           "key": "aracMarkaModel",
+          "attributes": {
+            "maxLength": "5"
+          },
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
           "label": "Araç marka  kodu",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
           "validate": {
-            "required": true
+            "required": true,
+            "maxLength": 5
           },
           "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "maxLength": "Max. karakter sayısı 5 olmalıdır."
           },
           "key": "aracMarkaKodu",
+          "attributes": {
+            "maxLength": "5"
+          },
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
           "label": "Motor / Şase no",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
           "validate": {
-            "required": true
+            "required": true,
+            "minLength": 17
           },
           "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "minLength": "Min. karakter sayısı 17 olmalıdır."
           },
           "key": "motorSaseNo",
+          "attributes": {
+            "maxLength": "17",
+            "minLength": "17"
+          },
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true
         },
         {
@@ -476,25 +551,24 @@
       "tableView": false,
       "components": [
         {
-          "label": "Adres kodu  (UAVT kodu) ",
+          "label": "Adres kodu  (UAVT kodu)",
           "labelPosition": "left-left",
-          "mask": false,
-          "tableView": false,
-          "delimiter": false,
-          "requireDecimal": false,
-          "inputFormat": "plain",
-          "truncateMultipleSpaces": false,
+          "tableView": true,
           "validate": {
-            "required": true
+            "required": true,
+            "minLength": 10,
+            "maxLength": 10,
+            "maxWords": 0
           },
           "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez."
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "minLength": "Min. karakter sayısı 10 olmalıdır."
           },
-          "key": "adresKoduUavtKodu1",
+          "key": "adresKoduDeneme3",
           "attributes": {
-            "maxlength": "10"
+            "maxLength": "10"
           },
-          "type": "number",
+          "type": "textfield",
           "labelWidth": 40,
           "labelMargin": 1,
           "input": true
@@ -502,20 +576,21 @@
         {
           "label": "Bina m2",
           "labelPosition": "left-left",
-          "mask": false,
-          "tableView": false,
-          "delimiter": false,
-          "requireDecimal": false,
-          "inputFormat": "plain",
-          "truncateMultipleSpaces": false,
+          "tableView": true,
           "validate": {
-            "required": true
+            "required": true,
+            "maxLength": 4,
+            "maxWords": 0
           },
           "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
+            "required": "Zorunlu alandır.Boş geçilemez.",
+            "maxLength": "Min. karakter sayısı 4 olmalıdır."
           },
-          "key": "binaM3",
-          "type": "number",
+          "key": "adresKoduDeneme4",
+          "attributes": {
+            "maxLength": "4"
+          },
+          "type": "textfield",
           "labelWidth": 40,
           "labelMargin": 1,
           "input": true
