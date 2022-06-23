@@ -1,4 +1,5 @@
 ﻿using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Application.Common.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,12 +10,6 @@ namespace Api.Extensions;
 
 public class TokenHandler
 {
-    public IConfiguration Configuration { get; set; }
-    public TokenHandler(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
     public Token CreateAccessToken(GetSearchPersonSummaryDto user)
     {
         var tokenInstance = new Token();
@@ -45,7 +40,7 @@ public class TokenHandler
         }
 
         //Security  Key'in simetriğini alıyoruz.
-        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:SecurityKey"]));
+        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecurityKey)); // Configuration["Token:SecurityKey"]
 
         //Şifrelenmiş kimliği oluşturuyoruz.
         SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -53,8 +48,8 @@ public class TokenHandler
         //Oluşturulacak token ayarlarını veriyoruz.
         tokenInstance.Expiration = DateTime.Now.AddMinutes(60);
         JwtSecurityToken securityToken = new JwtSecurityToken(
-            issuer: Configuration["Token:Issuer"],
-            audience: Configuration["Token:Audience"],
+            issuer: StaticValues.Issuer, // Configuration["Token:Issuer"],
+            audience: StaticValues.Audience, // Configuration["Token:Audience"],
             expires: tokenInstance.Expiration,//Token süresini 5 dk olarak belirliyorum
             notBefore: DateTime.Now,//Token üretildikten ne kadar süre sonra devreye girsin ayarlıyouz.
             signingCredentials: signingCredentials,

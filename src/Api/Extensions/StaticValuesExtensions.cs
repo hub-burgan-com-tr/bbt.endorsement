@@ -14,7 +14,11 @@ public static class StaticValuesExtensions
 
         StaticValues.Authority = settings.Authentication.Authority;
         StaticValues.ApiGateway = settings.Authentication.ApiGateway;   
-        StaticValues.SecretKey = settings.Authentication.SecretKey;
+        StaticValues.RedirectUri = settings.Authentication.RedirectUri;
+
+        StaticValues.Issuer = settings.Token.Issuer;
+        StaticValues.Audience = settings.Token.Audience;
+        StaticValues.SecurityKey = settings.Token.SecurityKey;
     }
 }
 

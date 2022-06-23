@@ -34,5 +34,22 @@ public enum DocumentDefinitionType
     /// </summary>
     [Name("Nüfus Cüzdanı")]
     IdentificationCard = 40,
-}
 
+    /// <summary>
+    /// Diğer Elementer Kasko Poliçesi => 1572
+    /// </summary>
+    [Name("Diğer Elementer Kasko Poliçesi")]
+    OtherInsurancePolicy = 1200,
+
+    /// <summary>
+    /// Esya-Konut-DASK-Isyeri => 1565
+    /// </summary>
+    [Name("Esya Konut DASK Isyeri Poliçesi")]
+    DaskInsurancePolicy = 1210,
+
+    /// <summary>
+    ///  Kasko-Trafik => 1568
+    /// </summary>
+    [Name("Araç Kasko Trafik Poliçesi")]
+    VehicleInsurancePolicy = 1220,
+}

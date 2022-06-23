@@ -44,7 +44,7 @@ public static class ConfigureServiceContainer
         services.AddSingleton<IZeebeService, ZeebeService>();
         services.AddSingleton<IInternalsService, InternalsService>();
         services.AddSingleton<ITemplateEngineService, TemplateEngineService>();
-        services.AddSingleton<ISsoService, SsoService>();
+        services.AddSingleton<IUserService, UserService>();
     }
 
     public static void AddServices(this IServiceCollection services)

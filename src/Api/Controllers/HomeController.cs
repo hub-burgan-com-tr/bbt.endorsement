@@ -1,7 +1,10 @@
 ﻿using Api.Extensions;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using Application.Common.Models;
 using Infrastructure.SsoServices;
+using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 
@@ -11,13 +14,11 @@ namespace Api.Controllers
     [ApiController]
     public class HomeController : ApiControllerBase
     {
-        private readonly IConfiguration _configuration;
-        private readonly ISsoService _ssoService;
+        private readonly IUserService _userService;
 
-        public HomeController(IConfiguration configuration, ISsoService ssoService)
+        public HomeController( IUserService userService)
         {
-            _configuration = configuration;
-            _ssoService = ssoService;
+            _userService = userService;
         }
 
         [Route("login")]
@@ -28,25 +29,52 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            var response = await _ssoService.AccessToken(code, state);
+            var response = await _userService.AccessToken(code, state);
 
             var result = new GetSearchPersonSummaryDto
             {
-                CitizenshipNumber = response.Tckn,
+                CitizenshipNumber = response.Tckn == null ? "12345678901" : response.Tckn,
                 IsStaff = false,
-                CustomerNumber = 20186951,
+                CustomerNumber = 20186950,
                 First = "",
                 Last = ""
             };
 
             if (result != null)
             {
-                TokenHandler tokenHandler = new TokenHandler(_configuration);
+                if (result.CitizenshipNumber.StartsWith("5048"))
+                {
+                    result.IsStaff = true;
+                    result.Authory = new AuthoryModel
+                    {
+                        IsFormReader = true,
+                        IsNewFormCreator = true,
+                        IsReadyFormCreator = true,
+                        IsBranchApproval = false,
+                        IsBranchFormReader = false
+                    };
+                }
+                else if (result.CitizenshipNumber.StartsWith("3595"))
+                {
+                    result.IsStaff = true;
+                    result.Authory = new AuthoryModel
+                    {
+                        IsFormReader = true,
+                        IsNewFormCreator = false,
+                        IsReadyFormCreator = false,
+                        IsBranchApproval = true,
+                        IsBranchFormReader = true
+                    };
+                }
+
+                TokenHandler tokenHandler = new TokenHandler();
                 Token token = tokenHandler.CreateAccessToken(result);
                 result.Token = token.AccessToken;
-                return result;
             }
 
+            result.Data = "Authority: " + StaticValues.Authority + 
+                          " - ApiGateway: " + StaticValues.ApiGateway +
+                          " - RedirectUri: " + StaticValues.RedirectUri; 
             return result;
         }
 

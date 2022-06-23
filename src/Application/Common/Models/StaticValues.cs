@@ -9,5 +9,10 @@ public static class StaticValues
 
     public static string Authority { get; set; }
     public static string ApiGateway { get; set; }
-    public static string SecretKey { get; set; }
+    public static string RedirectUri { get; set; }
+
+    // Token
+    public static string Issuer { get; set; }
+    public static string Audience { get; set; }
+    public static string SecurityKey { get; set; }
 }

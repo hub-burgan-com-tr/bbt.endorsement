@@ -14,6 +14,7 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public AuthoryModel Authory { get; set; }
         public string Email { get; set; }
         public GsmPhones GsmPhone { get; set; }
+        public string Data { get; set; }
 
     }
     public class AuthoryModel
