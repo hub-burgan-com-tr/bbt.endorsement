@@ -1,9 +1,9 @@
 ﻿<!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset=utf-8>
     <title>Hesap Hareketleri</title>
-    <style type="text/css">
+    <style type=text/css>
         body,
         html {
             padding: 0 20px;
@@ -127,16 +127,17 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="colbar"><img src="https://www.burgan.com.tr/assets/images/maildata/colbar.gif" width="100%" height="4"></div><img src="https://www.burgan.com.tr/assets/images/maildata/BurganLogo.gif" class="Logo" style="" left;>
+    <div class=header>
+        <div class=colbar><img src=https://www.burgan.com.tr/assets/images/maildata/colbar.gif width=100% height=4></div><img src=https://www.burgan.com.tr/assets/images/maildata/BurganLogo.gif class=Logo style=left;>
     </div>
-    <h2 style="text-align:right;margin-top:30px">SİGORTA BAŞVURU FORMU</h2>
-    <div class="TablePan">
+    <h2 style=text-align:right;margin-top:30px>SİGORTA BAŞVURU FORMU</h2>
+    <div class=TablePan>
         <table>
             <tr>
                 <td><b>İşlem No :</b>{{data.FormInstance_Transaction_Id}}</td>
                 <td><b>Sigorta Ettiren ile Sigortalı Aynı Kişidir</b><br>{{data.sigortaEttirenIleSigortaliAyniKisidir}}</td>
-
+            </tr>
+            <tr>
                 <td><b>Sigortalı Adı/Ünvanı :</b>{{data.FormInstance_Approver_Fullname}}</td>
                 <td><b>Sigortalı VKN/TCKN :</b>{{data.FormInstance_Approver_CitizenshipNumber}}</td>
             </tr>
@@ -145,20 +146,20 @@
                 <td><b>Sigorta Ettiren VKN/TCKN :</b>{{data.SigortaEttirenVKN}}</td>
             </tr>
             <tr>
-                <td colspan="2"><b>DAİNİ MÜRTEHİN :</b>{{data.dainiMurtehin}}</td>
+                <td colspan=2><b>DAİNİ MÜRTEHİN :</b>{{data.dainiMurtehin}}</td>
             </tr>
         </table>
     </div><br>
-    <div class="TList">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <div class=TList>
+        <table cellspacing=0 cellpadding=0 border=0 width=100%>
             <thead>
                 <tr>
-                    <th style="" 20px;>TALEP EDİLEN SİGORTA TÜRÜ</th>
+                    <th style=20px;>TALEP EDİLEN SİGORTA TÜRÜ</th>
                 </tr>
             </thead>
         </table>
     </div>
-    <div class="TablePan">
+    <div class=TablePan>
         <table>
             <tr>
                 <td><b>KONUT EŞYA</b><br>{{data.sigortaTuru.esya}}</td>
@@ -171,16 +172,16 @@
             </tr>
         </table>
     </div><br>
-    <div class="TList">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <div class=TList>
+        <table cellspacing=0 cellpadding=0 border=0 width=100%>
             <thead>
                 <tr>
-                    <th style="" 20px;>KONUT-KONUT EŞYA VE DASK İÇİN</th>
+                    <th style=20px;>KONUT-KONUT EŞYA VE DASK İÇİN</th>
                 </tr>
             </thead>
         </table>
     </div>
-    <div class="TablePan">
+    <div class=TablePan>
         <table>
             <tr>
                 <td><b>Adres kodu (UAVT kodu)</b><br>{{data.adresKoduUavtKodu}}</td>
@@ -195,21 +196,21 @@
                 <td><b>Bulunduğu kat</b><br>{{data.bulunduguKat}}</td>
             </tr>
             <tr>
-                <td colspan="4"><b>Riziko Adresi</b><br>{{data.rizikoAdresi}}</td>
+                <td colspan=4><b>Riziko Adresi</b><br>{{data.rizikoAdresi}}</td>
             </tr>
         </table>
-        <p style="" center><i>{{data.textArea1}}</i></p>
+        <p style=center><i>{{data.textArea1}}</i></p>
     </div><br>
-    <div class="TList">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <div class=TList>
+        <table cellspacing=0 cellpadding=0 border=0 width=100%>
             <thead>
                 <tr>
-                    <th style="" 20px;>KASKO-TRAFİK İÇİN</th>
+                    <th style=20px;>KASKO-TRAFİK İÇİN</th>
                 </tr>
             </thead>
         </table>
     </div>
-    <div class="TablePan">
+    <div class=TablePan>
         <table>
             <tr>
                 <td><b>Plaka</b><br>{{data.plaka}}</td>
@@ -219,21 +220,21 @@
                 <td><b>Motor / Şase no</b><br>{{data.motorSaseNo}}</td>
             </tr>
             <tr>
-                <td colspan="5"><b>Sigortalı Adresi</b><br>{{data.sigortaliAdres}}</td>
+                <td colspan=5><b>Sigortalı Adresi</b><br>{{data.sigortaliAdres}}</td>
             </tr>
         </table>
-        <p style="" center><i>{{data.textArea}}</i></p>
+        <p style=center><i>{{data.textArea}}</i></p>
     </div><br>
-    <div class="TList">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <div class=TList>
+        <table cellspacing=0 cellpadding=0 border=0 width=100%>
             <thead>
                 <tr>
-                    <th style="" 20px;>İŞYERİ İÇİN</th>
+                    <th style=20px;>İŞYERİ İÇİN</th>
                 </tr>
             </thead>
         </table>
     </div>
-    <div class="TablePan">
+    <div class=TablePan>
         <table>
             <tr>
                 <td><b>Adres kodu (UAVT kodu)</b><br>{{data.adresKoduUavtKodu1}}</td>
@@ -248,18 +249,40 @@
                 <td><b>Demirbaş değeri</b><br>{{data.esyaSigortaDegeri5}}</td>
             </tr>
             <tr>
-                <td colspan="5"><b>Riziko Adresi</b><br>{{data.rizikoAdresi1}}</td>
+                <td colspan=5><b>Riziko Adresi</b><br>{{data.rizikoAdresi1}}</td>
             </tr>
         </table>
-        <p style="" center><i>{{data.textArea2}}</i></p>
+        <p style=center><i>{{data.textArea2}}</i></p>
     </div><br>
+
+
+    <div class=TList>
+        <table cellspacing=0 cellpadding=0 border=0 width=100%>
+            <thead>
+                <tr>
+                    <th style=20px;>DİĞER</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class=TablePan>
+        <table>
+
+            <tr>
+                <td colspan=5><b>Diğer</b><br>{{data.diger}}</td>
+            </tr>
+        </table>
+        <p style=center><i>{{data.textArea3}}</i></p>
+    </div><br>
+
+
     <p><b>İşyeri İçin Varsa Ek Bedel ve Bilgiler :</b></p>
     <p>Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i mürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.</p>
     <p>Yukarıda beyan etmiş olduğum bilgiler çerçevesinde sigorta talebimin alınmasını ve tarafıma sigorta teklifinin yapılmasını talep ederim.</p>
-    <div class="TablePan">
+    <div class=TablePan>
         <table>
             <tr>
-                <td><b>Sigorta Ettirenin Adı-Soyad</b><br>{{data.sigortaEttirenAdiUnvani}} {{data.sigortaEttirenSoyad}}</td>
+                <td><b>Sigorta Ettirenin Adı-Soyad</b><br>{{data.SigortaEttirenAd}} {{data.sigortaEttirenSoyad}}</td>
             </tr>
         </table>
     </div>
