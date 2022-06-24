@@ -23,8 +23,9 @@ public class MessageController : ControllerBase
     {
         var emailTemplateParams = new EmailTemplateParams
         {
-            MusteriAdSoyad = "Hüeyin Töremen",
-            MusteriNo = 12345
+            MusteriAdSoyad = "RAMAZAN AÇIKOL",
+            MusteriNo = 12345,
+            Title = ""
         };
 
         var templateParams = JsonConvert.SerializeObject(emailTemplateParams);

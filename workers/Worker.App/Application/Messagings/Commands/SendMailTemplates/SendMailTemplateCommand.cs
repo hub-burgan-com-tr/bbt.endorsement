@@ -49,15 +49,15 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                     sender = "AutoDetect"
                 },
                 templateParams = templateParams,
-                template = "Müşteriye Giden Başvuru Onay Talebi",
                 email = request.Email,
+                template = "Müşteriye Giden Başvuru Onay Talebi",
                 process = new SendMailTemplateProcess
                 {
                     name = "Zeebe - Contract Approval - SendOtp"
                 }
             };
 
-            var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+            var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
             messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
             messageResponse.CustomerId = order.CustomerId; 
             return Response<MessageResponse>.Success(messageResponse, 200);

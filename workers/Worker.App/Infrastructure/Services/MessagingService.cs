@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RestSharp;
+using Serilog;
 using Worker.App.Application.Common.Models;
 using Worker.App.Models;
 
@@ -11,7 +12,7 @@ public interface IMessagingService
     Task<Response> SendSmsMessageAsync(SendSmsRequest request);
     Task<Response> SendMailMessageAsync(SendMailRequest request);
 
-    Task<Response> SendMailTemplateAsync(SendMailTemplateRequest request);
+    Task<Response> SendMailTemplateAsync(SendMailTemplateRequest request, string instanceId);
     Task<Response> SendSmsTemplateAsync(SendSmsTemplateRequest request);
 }
 
@@ -36,7 +37,7 @@ public class MessagingService : IMessagingService
         return Task.FromResult(data);
     }
 
-    public Task<Response> SendMailTemplateAsync(SendMailTemplateRequest request)
+    public Task<Response> SendMailTemplateAsync(SendMailTemplateRequest request, string instanceId)
     {
         var restClient = new RestClient(messagingGateway);
         var restRequest = new RestRequest("/api/v1/Messaging/email/templated", Method.Post);
@@ -44,6 +45,8 @@ public class MessagingService : IMessagingService
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
+        if(response.Content != null)
+            Log.ForContext("OrderId", instanceId).Information(response.Content.ToString());
         var data = JsonConvert.DeserializeObject<Response>(response.Content);
 
         return Task.FromResult(data);
