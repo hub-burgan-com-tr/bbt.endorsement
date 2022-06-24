@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Serilog;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Infrastructure.Services;
@@ -30,6 +31,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
 
     public async Task<Response<MessageResponse>> Handle(PersonSendMailTemplateCommand request, CancellationToken cancellationToken)
     {
+        var messages = new MessageResponse();
         try
         {
             var order = _context.Orders
@@ -38,6 +40,8 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
 
             if (order == null)
                 return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
+
+            messages.PersonId = order.PersonId;
 
             var parameters = new EmailTemplateParams
             {
@@ -60,25 +64,24 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 }
             };
 
-            var messages = new MessageResponse();
-
             if (order.State == OrderState.Approve.ToString())
             {
                 sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
-                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
                 messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
             }
             else if (order.State == OrderState.Reject.ToString())
             {
                 sendMailTemplate.template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:";
-                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
                 messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
             }
-            return Response<MessageResponse>.Success(messages, 200);
         }
         catch (Exception ex)
         {
+            Log.ForContext("OrderId", request.OrderId).Error(ex, ex.Message);
             return Response<MessageResponse>.Fail(ex.Message, 201);
         }
+        return Response<MessageResponse>.Success(messages, 200);
     }
 }

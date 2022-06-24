@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Serilog;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Infrastructure.Services;
@@ -29,6 +30,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
 
     public async Task<Response<MessageResponse>> Handle(SendMailTemplateCommand request, CancellationToken cancellationToken)
     {
+        var messageResponse = new MessageResponse();
         try
         {
             var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
@@ -47,21 +49,23 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                     sender = "AutoDetect"
                 },
                 templateParams = templateParams,
-                template = "Müşteriye Giden Başvuru Onay Talebi",
                 email = request.Email,
+                template = "Müşteriye Giden Başvuru Onay Talebi",
                 process = new SendMailTemplateProcess
                 {
                     name = "Zeebe - Contract Approval - SendOtp"
                 }
             };
 
-            var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
-            var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
+            var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
+            messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
+            messageResponse.CustomerId = order.CustomerId; 
             return Response<MessageResponse>.Success(messageResponse, 200);
         }
         catch (Exception ex)
-        {
-            return Response<MessageResponse>.Fail(ex.Message, 200);
+        {        
+            Log.ForContext("OrderId", request.OrderId).Error(ex, ex.Message);
+            return Response<MessageResponse>.Fail(ex.Message, 201);
         }
     }
 }
