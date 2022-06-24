@@ -95,6 +95,227 @@ namespace Infrastructure.Services
 
         }
 
+       
+  
         //{"approver":{"citizenshipNumber":"55294243060","first":"RAMAZAN","last":"KOÇ","customerNumber":20184378},"content":"{\"FormDefinition_Name\":\"                              SIGORTA BASVURU FORMU\",\"FormInstance_Transaction_Id\":\"999\",\"sigortaEttirenIleSigortaliAyniKisidir\":true,\"FormInstance_Approver_Fullname\":\"RAMAZAN KOÇ\",\"FormInstance_Approver_CitizenshipNumber\":\"55294243060\",\"dainiMurtehin\":\"BURGANBANK A.Ş.\",\"sigortaTuru\":{\"esya\":false,\"konut\":false,\"dask\":false,\"kasko\":false,\"trafik\":false,\"isyeri\":false,\"diger\":true},\"textArea\":\"Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i \\nmürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.\",\"textArea1\":\"Yukarıda beyan etmiş olduğum bilgiler çerçevesinde sigorta talebimin alınmasını ve tarafıma sigorta teklifinin yapılmasını \\ntalep ederim.\",\"textArea2\":\"Sigorta poliçesi talebiniz kapsamında paylaştığınız kişisel verilerinize ilişkin 6698 sayılı Kişisel Verilerin Korunması Kanunu hakkındaki detaylı bilgilendirmeye \\nwww.burgan.com.tr adresinden ulaşabilirsiniz.\",\"diger\":\"\",\"SigortaEttirenAd\":\"RAMAZAN KOÇ\",\"SigortaEttirenVKN\":\"55294243060\"}","fileType":"","formId":"fd95116e-e7e0-4cdf-b734-11c414c3a471","reference":{"processNo":"999","tagId":["1595c481-f41b-46e5-a747-d35ba7e1b651"],"formId":"fd95116e-e7e0-4cdf-b734-11c414c3a471"},"title":"Sigorta Başvuru Formu","insuranceType":"diger","source":"formio","dependencyOrderId":""}
     }
 }
+//{
+//    "ConnectionStrings": {
+//        //"DefaultConnection": "Server=20.101.26.65; Database=ContractApproval; Uid=sa; Pwd=Zh27qm4NTz3-k"
+//        "DefaultConnection": "Server=SVTSTSQL2019\\INT2,1435; Database=EndorsementDB; Uid=EndorsementUser; Pwd=AEE53F5A-6590-4256-9B86-E4DCF9FB4363"
+//    },
+//  "Zeebe": {
+//        "ModelFilename": "ContractApproval.bpmn",
+//    //"ZeebeGateway": "20.103.18.203:26500"
+//    "ZeebeGateway": "10.180.141.16:32553"
+//  },
+//  "Logging": {
+//        "LogLevel": {
+//            "Default": "Information",
+//      "Microsoft.AspNetCore": "Warning"
+//        },
+//    "File": {
+//            "MinimumLogEventLevel": "Debug"
+//    },
+//    "Elasticsearch": {
+//            "IsEnabled": false,
+//      "Host": "20.101.233.77:9200",
+//      "IndexFormat": "mslogs-{0:yyyy.MM.dd}",
+//      "MinimumLogEventLevel": "Debug"
+//    }
+//    },
+//  "Entegration": {
+//        //"Internals": "http://20.31.226.131:5000",
+//        "Internals": "https://test-entegrasyon-customerapi.burgan.com.tr",
+//    //"TemplateEngine": "http://20.126.170.150:5000",
+//    "TemplateEngine": "https://test-template-engine.burgan.com.tr",
+//    "Sso": "https://gondor-identityserver.burgan.com.tr"
+//  },
+//  "ServiceEndpoint": {
+//        "DMSService": "https://svpredms01.ebt.bank/Intertech.rota.dms.appserver/dmsservice.asmx"
+//  },
+//  "Authentication": {
+//        "Authority": "https://gondor-identityserver.burgan.com.tr",
+//    "ApiGateway": "https://gondor-apigateway.burgan.com.tr",
+//    "RedirectUri": "https://test-bbt-endorsementui.apps.nonprod.ebt.bank/login"
+//  },
+//  "AllowedHosts": "*",
+//  "Token": {
+//        "Issuer": "Issuer",
+//    "Audience": "Audience",
+//    "SecurityKey": "VS7djKZZ79RvVXJgH7RsefzvqtbqsFqLxbCzjwLvtqj4Jq2fJzZ7UMrERz8XtEAE",
+//  },
+//  "Serilog": {
+//        "Using": [ "Serilog.Sinks.MSSqlServer" ],
+//    "MinimumLevel": "Information",
+//    "WriteTo": [
+//      {
+//            "Name": "MSSqlServer",
+//        "Args": {
+//                "connectionString": "Server=SVTSTSQL2019\\INT2,1435; Database=EndorsementLogDB;  Uid=EndorsementUser; Pwd=AEE53F5A-6590-4256-9B86-E4DCF9FB4363",
+//          "sinkOptionsSection": {
+//                    "tableName": "Logs",
+//            "schemaName": "Endorsement",
+//            "autoCreateSqlTable": true,
+//            "batchPostingLimit": 1000,
+//            "period": "0.00:00:30"
+//          },
+//          "columnOptionsSection": {
+//                    "customColumns": [
+//                      {
+//                        "ColumnName": "OrderId",
+//                "DataType": "nvarchar",
+//                "DataLength": 40,
+//                "AllowNull": true
+//                      },
+//              {
+//                        "ColumnName": "UserName",
+//                "DataType": "nvarchar",
+//                "DataLength": 256,
+//                "AllowNull": true
+
+//              }
+//            ]
+//          }
+//            }
+//        }
+//    ]
+//  }
+//}
+
+
+//{
+//    "ConnectionStrings": {
+//        //"DefaultConnection": "Server=20.101.26.65; Database=ContractApproval; Uid=sa; Pwd=Zh27qm4NTz3-k"
+//        "DefaultConnection": "Server=SVTSTSQL2019\\INT2,1435; Database=EndorsementDB; Uid=EndorsementUser; Pwd=AEE53F5A-6590-4256-9B86-E4DCF9FB4363"
+//    },
+//  "Zeebe": {
+//        "ModelFilename": "ContractApproval.bpmn",
+//    //"ZeebeGateway": "20.103.18.203:26500"
+//    "ZeebeGateway": "10.180.141.16:32553"
+//  },
+//  "Logging": {
+//        "LogLevel": {
+//            "Default": "Information",
+//      "Microsoft.AspNetCore": "Warning"
+//        },
+//    "File": {
+//            "MinimumLogEventLevel": "Debug"
+//    },
+//    "Elasticsearch": {
+//            "IsEnabled": false,
+//      "Host": "20.101.233.77:9200",
+//      "IndexFormat": "mslogs-{0:yyyy.MM.dd}",
+//      "MinimumLogEventLevel": "Debug"
+//    }
+//    },
+//  "Entegration": {
+//        //"Internals": "http://20.31.226.131:5000",
+//        "Internals": "https://test-entegrasyon-customerapi.burgan.com.tr",
+//    //"TemplateEngine": "http://20.126.170.150:5000",
+//    "TemplateEngine": "https://test-template-engine.burgan.com.tr",
+//    "Sso": "https://gondor-identityserver.burgan.com.tr"
+//  },
+//  "ServiceEndpoint": {
+//        "DMSService": "https://svpredms01.ebt.bank/Intertech.rota.dms.appserver/dmsservice.asmx"
+//  },
+//  "Authentication": {
+//        "Authority": "https://gondor-identityserver.burgan.com.tr",
+//    "ApiGateway": "https://gondor-apigateway.burgan.com.tr",
+//    "SecretKey": "Zq4t7w9z$C&F)J@NcRfUjXn2r5u8x/A%D*G-KaPdSgVkYp3s6v9y$B&E(H+MbQeThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u8x/A?D(G+KbPdSgVkYp3s6v9y$B&E)H@Mc"
+//  },
+//  "AllowedHosts": "*",
+//  "Token": {
+//        "Issuer": "Issuer",
+//    "Audience": "Audience",
+//    "SecurityKey": "Zq4t7w9z$C&F)J@NcRfUjXn2r5u8x/A%D*G-KaPdSgVkYp3s6v9y$B&E(H+MbQeThWmZq4t7w!z%C*F-J@NcRfUjXn2r5u8x/A?D(G+KbPdSgVkYp3s6v9y$B&E)H@Mc"
+//  }
+//}
+
+
+
+
+//{
+//    "ConnectionStrings": {
+//        //"DefaultConnection": "Server=20.101.26.65; Database=ContractApproval; Uid=sa; Pwd=Zh27qm4NTz3-k"
+//        "DefaultConnection": "Server=SVTSTSQL2019\\INT2,1435; Database=EndorsementDB; Uid=EndorsementUser; Pwd=AEE53F5A-6590-4256-9B86-E4DCF9FB4363"
+//    },
+//  "Zeebe": {
+//        "ModelFilename": "ContractApproval.bpmn",
+//    //"ZeebeGateway": "20.103.18.203:26500"
+//    "ZeebeGateway": "10.180.141.16:32553"
+//  },
+//  "Logging": {
+//        "LogLevel": {
+//            "Default": "Information",
+//      "Microsoft.AspNetCore": "Warning"
+//        },
+//    "File": {
+//            "MinimumLogEventLevel": "Debug"
+//    },
+//    "Elasticsearch": {
+//            "IsEnabled": false,
+//      "Host": "20.101.233.77:9200",
+//      "IndexFormat": "mslogs-{0:yyyy.MM.dd}",
+//      "MinimumLogEventLevel": "Debug"
+//    }
+//    },
+//  "Entegration": {
+//        //"Internals": "http://20.31.226.131:5000",
+//        "Internals": "https://test-entegrasyon-customerapi.burgan.com.tr",
+//    //"TemplateEngine": "http://20.126.170.150:5000",
+//    "TemplateEngine": "https://test-template-engine.burgan.com.tr",
+//    "Sso": "https://gondor-identityserver.burgan.com.tr"
+//  },
+//  "ServiceEndpoint": {
+//        "DMSService": "https://svpredms01.ebt.bank/Intertech.rota.dms.appserver/dmsservice.asmx"
+//  },
+//  "Authentication": {
+//        "Authority": "https://gondor-identityserver.burgan.com.tr",
+//    "ApiGateway": "https://gondor-apigateway.burgan.com.tr",
+//    "RedirectUri": "https://test-bbt-endorsementui.apps.nonprod.ebt.bank/login"
+//  },
+//  "AllowedHosts": "*",
+//  "Token": {
+//        "Issuer": "Issuer",
+//    "Audience": "Audience",
+//    "SecurityKey": "VS7djKZZ79RvVXJgH7RsefzvqtbqsFqLxbCzjwLvtqj4Jq2fJzZ7UMrERz8XtEAE",
+//  },
+//  "Serilog": {
+//        "Using": [ "Serilog.Sinks.MSSqlServer" ],
+//    "MinimumLevel": "Information",
+//    "WriteTo": [
+//      {
+//            "Name": "MSSqlServer",
+//        "Args": {
+//                "connectionString": "Server=SVTSTSQL2019\\INT2,1435; Database=EndorsementLogDB;  Uid=EndorsementUser; Pwd=AEE53F5A-6590-4256-9B86-E4DCF9FB4363",
+//          "sinkOptionsSection": {
+//                    "tableName": "Logs",
+//            "schemaName": "Endorsement",
+//            "autoCreateSqlTable": true,
+//            "batchPostingLimit": 1000,
+//            "period": "0.00:00:30"
+//          },
+//          "columnOptionsSection": {
+//                    "customColumns": [
+//                      {
+//                        "ColumnName": "OrderId",
+//                "DataType": "nvarchar",
+//                "DataLength": 40,
+//                "AllowNull": true
+//                      },
+//              {
+//                        "ColumnName": "UserName",
+//                "DataType": "nvarchar",
+//                "DataLength": 256,
+//                "AllowNull": true
+
+//              }
+//            ]
+//          }
+//            }
+//        }
+//    ]
+//  }
+//}
