@@ -30,42 +30,91 @@ namespace Api.Controllers
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
             var response = await _userService.AccessToken(code, state);
-
+            //var response = new AccessToken
+            //{
+            //    Tckn = "12345678901"
+            //};
+            
             var result = new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = response.Tckn == null ? "12345678901" : response.Tckn,
-                IsStaff = false,
+                IsStaff = response.credentials.Count > 0 ? true : false,
                 CustomerNumber = 20186950,
                 First = "",
                 Last = ""
             };
 
+            foreach (var credential in response.credentials)
+            {
+                var value = credential.Split("###");
+                if (value.Length == 2)
+                {
+                    if(value[0] == "isFormReader")
+                    {
+                        if(value[1] == "1")
+                            result.Authory.IsFormReader = true;                        
+                        else
+                            result.Authory.IsFormReader = false;
+                    }
+                    else if (value[0] == "isNewFormCreator")
+                    {
+                        if (value[1] == "1")
+                            result.Authory.IsNewFormCreator = true;
+                        else
+                            result.Authory.IsNewFormCreator = false;
+                    }
+                    else if (value[0] == "isReadyFormCreator")
+                    {
+                        if (value[1] == "1")
+                            result.Authory.IsReadyFormCreator = true;
+                        else
+                            result.Authory.IsReadyFormCreator = false;
+                    }
+                    else if (value[0] == "isBranchApproval")
+                    {
+                        if (value[1] == "1")
+                            result.Authory.IsBranchApproval = true;
+                        else
+                            result.Authory.IsBranchApproval = false;
+                    }
+                    else if (value[0] == "isBranchFormReader")
+                    {
+                        if (value[1] == "1")
+                            result.Authory.IsBranchFormReader = true;
+                        else
+                            result.Authory.IsBranchFormReader = false;
+                    }
+                }
+            }
+
+          
+
             if (result != null)
             {
-                if (result.CitizenshipNumber.StartsWith("5048"))
-                {
-                    result.IsStaff = true;
-                    result.Authory = new AuthoryModel
-                    {
-                        IsFormReader = true,
-                        IsNewFormCreator = true,
-                        IsReadyFormCreator = true,
-                        IsBranchApproval = false,
-                        IsBranchFormReader = false
-                    };
-                }
-                else if (result.CitizenshipNumber.StartsWith("3595"))
-                {
-                    result.IsStaff = true;
-                    result.Authory = new AuthoryModel
-                    {
-                        IsFormReader = true,
-                        IsNewFormCreator = false,
-                        IsReadyFormCreator = false,
-                        IsBranchApproval = true,
-                        IsBranchFormReader = true
-                    };
-                }
+                //if (result.CitizenshipNumber.StartsWith("5048"))
+                //{
+                //    result.IsStaff = true;
+                //    result.Authory = new AuthoryModel
+                //    {
+                //        IsFormReader = true,
+                //        IsNewFormCreator = true,
+                //        IsReadyFormCreator = true,
+                //        IsBranchApproval = false,
+                //        IsBranchFormReader = false
+                //    };
+                //}
+                //else if (result.CitizenshipNumber.StartsWith("3595"))
+                //{
+                //    result.IsStaff = true;
+                //    result.Authory = new AuthoryModel
+                //    {
+                //        IsFormReader = true,
+                //        IsNewFormCreator = false,
+                //        IsReadyFormCreator = false,
+                //        IsBranchApproval = true,
+                //        IsBranchFormReader = true
+                //    };
+                //}
 
                 TokenHandler tokenHandler = new TokenHandler();
                 Token token = tokenHandler.CreateAccessToken(result);
