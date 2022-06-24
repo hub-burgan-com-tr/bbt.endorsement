@@ -684,6 +684,13 @@ public class ContractApprovalService : IContractApprovalService
                         }
                         else
                         {
+                            await _mediator.Send(new CreateOrderHistoryCommand
+                            {
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "PY Hatırlatma Mesajı(Email)",
+                                Description = "",
+                                IsStaff = false,
+                            });
                             Log.ForContext("OrderId", variables.InstanceId).Information("InstanceId: " + variables.InstanceId + " - email: " + email + " - ErrorMessage: " + responseEmail.Message);
                         }
                     }

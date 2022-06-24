@@ -11,7 +11,7 @@ public class SendEmailTemplateRequest
 
 public class EmailTemplateParams
 {
-    //public int MusteriNo { get; set; }
-    //public string MusteriAdSoyad { get; set; }
+    public int MusteriNo { get; set; }
+    public string MusteriAdSoyad { get; set; }
     public string Title { get; set; }
 }
