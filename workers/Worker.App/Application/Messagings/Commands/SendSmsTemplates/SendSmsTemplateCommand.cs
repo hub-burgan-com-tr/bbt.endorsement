@@ -67,7 +67,7 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
             };
             var response = await _messagingService.SendSmsTemplateAsync(messageRequest);
 
-            var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(messageRequest), Response = JsonConvert.SerializeObject(response) };
+            var messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(messageRequest), Response = JsonConvert.SerializeObject(response), CustomerId = order.CustomerId };
             return Response<MessageResponse>.Success(messageResponse, 200);
         }
         catch (Exception ex)

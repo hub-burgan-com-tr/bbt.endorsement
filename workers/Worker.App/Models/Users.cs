@@ -24,7 +24,6 @@ public static class Users
     {
         var list = new List<string>
         {
-            "htoremen@burgan.com.tr",
             "KKarakus@burgan.com.tr",
             "VSerapYilankirkan@burgan.com.tr",
             "LYaktubay@burgan.com.tr",

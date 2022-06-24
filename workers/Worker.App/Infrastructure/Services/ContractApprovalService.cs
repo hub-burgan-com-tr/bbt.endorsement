@@ -310,7 +310,8 @@ public class ContractApprovalService : IContractApprovalService
                                 Description = "",
                                 IsStaff = false,
                                 Request = responseSms.Data.Request,
-                                Response = responseSms.Data.Response
+                                Response = responseSms.Data.Response,
+                                CustomerId = responseSms.Data.CustomerId,
                             });
                         }
                         catch (Exception ex)
@@ -336,7 +337,7 @@ public class ContractApprovalService : IContractApprovalService
                                 {
                                     OrderId = variables.InstanceId.ToString(),
                                     State = "Hatırlatma Mesajı(Mail)",
-                                    Description = "InstanceId: " + variables.InstanceId + " - email: " + email,
+                                    Description ="",
                                     IsStaff = false,
                                     Request = responseMail.Data.Request,
                                     Response = responseMail.Data.Response,
