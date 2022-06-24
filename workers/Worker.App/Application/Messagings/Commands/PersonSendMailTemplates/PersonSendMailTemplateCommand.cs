@@ -82,6 +82,6 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
             Log.ForContext("OrderId", request.OrderId).Error(ex, ex.Message);
             return Response<MessageResponse>.Fail(ex.Message, 201);
         }
-        return Response<MessageResponse>.Success(messages, 201);
+        return Response<MessageResponse>.Success(messages, 200);
     }
 }
