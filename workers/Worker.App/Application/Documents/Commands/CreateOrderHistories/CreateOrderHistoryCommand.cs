@@ -30,6 +30,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
 
     public async Task<Response<bool>> Handle(CreateOrderHistoryCommand request, CancellationToken cancellationToken)
     {
+        var order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
         _context.OrderHistories.Add(new OrderHistory
         {
             OrderHistoryId = Guid.NewGuid().ToString(),
@@ -41,6 +42,8 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             IsStaff = request.IsStaff,
             Request = request.Request,
             Response = request.Response,
+            PersonId=order?.PersonId,
+            CustomerId=order?.CustomerId
         });
         var result = _context.SaveChanges();
         return Response<bool>.Success(result > 0 ? true : false, 200);
