@@ -37,7 +37,6 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
             if (order == null)
                 return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 
-            messageResponse.CustomerId = order.CustomerId;
             var param = new SendMailTemplate
             {
                 Title = order.Title
@@ -60,6 +59,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
 
             var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
             messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
+            messageResponse.CustomerId = order.CustomerId; 
             return Response<MessageResponse>.Success(messageResponse, 200);
         }
         catch (Exception ex)
