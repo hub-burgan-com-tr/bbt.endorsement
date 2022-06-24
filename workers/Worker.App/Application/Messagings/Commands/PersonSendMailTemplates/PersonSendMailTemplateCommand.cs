@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Serilog;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Infrastructure.Services;
@@ -30,6 +31,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
 
     public async Task<Response<MessageResponse>> Handle(PersonSendMailTemplateCommand request, CancellationToken cancellationToken)
     {
+        var messages = new MessageResponse();
         try
         {
             var order = _context.Orders
@@ -60,8 +62,6 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 }
             };
 
-            var messages = new MessageResponse();
-
             if (order.State == OrderState.Approve.ToString())
             {
                 sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
@@ -74,11 +74,12 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate);
                 messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
             }
-            return Response<MessageResponse>.Success(messages, 200);
         }
         catch (Exception ex)
         {
+            Log.ForContext("OrderId", request.OrderId).Error(ex, ex.Message);
             return Response<MessageResponse>.Fail(ex.Message, 201);
         }
+        return Response<MessageResponse>.Success(messages, 201);
     }
 }
