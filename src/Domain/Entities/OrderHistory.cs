@@ -20,6 +20,11 @@ namespace Domain.Entities
         [Required]
         [MaxLength(250)]
         public string State { get; set; }
+        [MaxLength(36)]
+        public string CustomerId { get; set; }
+        [MaxLength(36)]
+        public string PersonId { get; set; }
+
         [MaxLength(250)]
         [Required]
         public string Description { get; set; }

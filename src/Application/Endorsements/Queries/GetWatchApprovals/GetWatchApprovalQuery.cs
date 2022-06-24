@@ -39,15 +39,17 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
         }
         public async Task<Response<PaginatedList<GetWatchApprovalDto>>> Handle(GetWatchApprovalQuery request, CancellationToken cancellationToken)
         {
+
+
             IQueryable<Order> orders = _context.Orders.OrderByDescending(x => x.Created).Include(x => x.Documents).Include(x => x.Person).Include(x => x.Customer);
             if (!string.IsNullOrEmpty(request.Customer))
                 orders = orders.Where(x => x.Customer.FirstName.Contains(request.Customer.Trim())
                                                      || x.Customer.LastName.Contains(request.Customer.Trim()) ||
-                                                     (x.Customer.FirstName + " " + x.Customer.LastName).Contains(request.Customer.Trim()));
+                                                     (x.Customer.FirstName + " " + x.Customer.LastName).Contains(request.Customer.Trim())||x.Customer.CustomerNumber.ToString()==request.Customer.ToString()||x.Customer.CitizenshipNumber.ToString()== request.Customer.ToString());
             if (!string.IsNullOrEmpty(request.Approver))
                 orders = orders.Where(x => x.Person.FirstName.Contains(request.Approver.Trim())
                                                                     || x.Person.LastName.Contains(request.Approver.Trim()) ||
-                                                                    (x.Person.FirstName + " " + x.Person.LastName).Contains(request.Approver.Trim()));
+                                                                    (x.Person.FirstName + " " + x.Person.LastName).Contains(request.Approver.Trim())||x.Person.CitizenshipNumber.ToString()==request.Approver.ToString());
             if (!string.IsNullOrEmpty(request.Process))
                 orders = orders.Where(x => x.Reference.Process.Contains(request.Process.Trim()));
             if (!string.IsNullOrEmpty(request.State))

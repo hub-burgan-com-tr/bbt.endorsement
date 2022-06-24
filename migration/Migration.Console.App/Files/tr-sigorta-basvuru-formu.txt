@@ -112,7 +112,7 @@
       "label": "Daini Mürtehin",
       "labelPosition": "left-left",
       "tableView": true,
-      "defaultValue": "BURGANBANK A.Ş",
+      "defaultValue": "BURGANBANK A.Ş.",
       "key": "dainiMurtehin",
       "type": "textfield",
       "labelWidth": 40,
