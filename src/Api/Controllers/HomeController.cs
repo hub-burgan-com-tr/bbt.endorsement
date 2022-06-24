@@ -29,16 +29,16 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            // var response = await _userService.AccessToken(code, state);
+            //var response = await _userService.AccessToken(code, state);
             var response = new AccessToken
             {
-                Tckn = "12345678901"
+                Tckn = "3369"
             };
 
             var result = new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = response.Tckn == null ? "12345678901" : response.Tckn,
-                //IsStaff = response.credentials.Count > 0 ? true : false,
+               // IsStaff = response.credentials.Count > 0 ? true : false,
                 CustomerNumber = 20186950,
                 First = "",
                 Last = ""
@@ -49,10 +49,10 @@ namespace Api.Controllers
             //    var value = credential.Split("###");
             //    if (value.Length == 2)
             //    {
-            //        if(value[0] == "isFormReader")
+            //        if (value[0] == "isFormReader")
             //        {
-            //            if(value[1] == "1")
-            //                result.Authory.IsFormReader = true;                        
+            //            if (value[1] == "1")
+            //                result.Authory.IsFormReader = true;
             //            else
             //                result.Authory.IsFormReader = false;
             //        }
@@ -87,7 +87,7 @@ namespace Api.Controllers
             //    }
             //}
 
-          
+
 
             if (result != null)
             {
