@@ -23,9 +23,9 @@ public class MessageController : ControllerBase
     {
         var emailTemplateParams = new EmailTemplateParams
         {
-            MusteriAdSoyad = "RAMAZAN AÇIKOL",
-            MusteriNo = 12345,
-            Title = ""
+            //MusteriAdSoyad = "RAMAZAN AÇIKOL",
+            //MusteriNo = 12345,
+            Title = "Başvuru Formu"
         };
 
         var templateParams = JsonConvert.SerializeObject(emailTemplateParams);
@@ -36,8 +36,8 @@ public class MessageController : ControllerBase
                 sender = "AutoDetect"
             },
             templateParams = templateParams,
-            template = "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:",
-            email = "HToremen@burgan.com.tr",
+            template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:", // "Onaylanmadığına ilişkin PY ye Giden E-posta İçeriği:",
+            email = "VSerapYilankirkan@burgan.com.tr",
             process = new Process
             {
                 name = "Zeebe - Contract Approval - SendOtp"

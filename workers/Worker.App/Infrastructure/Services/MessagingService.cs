@@ -27,13 +27,12 @@ public class MessagingService : IMessagingService
     public Task<Response> SendMailMessageAsync(SendMailRequest request)
     {
         var restClient = new RestClient(messagingGateway);
-        var restRequest = new RestRequest("/api/v1/Messaging/email/message", Method.Post);
+        var restRequest = new RestRequest("/api/v1/Messaging/email/templated", Method.Post);
         restRequest.RequestFormat = DataFormat.Json;
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
         var data = JsonConvert.DeserializeObject<Response>(response.Content);
-
         return Task.FromResult(data);
     }
 
