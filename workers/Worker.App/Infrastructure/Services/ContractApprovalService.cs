@@ -317,6 +317,7 @@ public class ContractApprovalService : IContractApprovalService
                         {
                             Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                         }
+                        Thread.Sleep(100);
                     }
 
                     foreach (var email in Users.Emails())
@@ -351,6 +352,7 @@ public class ContractApprovalService : IContractApprovalService
                         {
                             Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                         }
+                        Thread.Sleep(100);
                     }
 
                     var history = _mediator.Send(new CreateOrderHistoryCommand
@@ -688,6 +690,7 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
+                    Thread.Sleep(100);
                 }
             }
             catch (Exception ex)
