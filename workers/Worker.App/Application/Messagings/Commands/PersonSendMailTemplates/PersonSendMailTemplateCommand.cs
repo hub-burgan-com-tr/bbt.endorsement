@@ -41,6 +41,8 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
             if (order == null)
                 return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 
+            messages.PersonId = order.PersonId;
+
             var parameters = new EmailTemplateParams
             {
                 MusteriAdSoyad = order.Customer.FirstName + " " + order.Customer.LastName,

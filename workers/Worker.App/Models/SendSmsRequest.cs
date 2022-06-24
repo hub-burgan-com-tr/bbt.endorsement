@@ -49,4 +49,6 @@ public class MessageResponse
 {
     public string Request { get; set; }
     public string Response { get; set; }
+    public string CustomerId { get; set; }
+    public string PersonId { get; set; }
 }

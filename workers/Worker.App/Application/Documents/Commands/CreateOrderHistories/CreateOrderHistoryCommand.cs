@@ -14,6 +14,8 @@ public class CreateOrderHistoryCommand : IRequest<Response<bool>>
     public bool IsStaff { get; set; } = false;
     public string Response { get; set; }
     public string Request { get; set; }
+    public string CustomerId { get; set; }
+    public string PersonId { get; set; }
 
 }
 
@@ -41,6 +43,8 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             IsStaff = request.IsStaff,
             Request = request.Request,
             Response = request.Response,
+            PersonId = request.PersonId,
+            CustomerId = request.CustomerId,
         });
         var result = _context.SaveChanges();
         return Response<bool>.Success(result > 0 ? true : false, 200);

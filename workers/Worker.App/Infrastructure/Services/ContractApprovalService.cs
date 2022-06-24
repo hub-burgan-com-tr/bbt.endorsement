@@ -338,7 +338,8 @@ public class ContractApprovalService : IContractApprovalService
                                     Description = "InstanceId: " + variables.InstanceId + " - email: " + email,
                                     IsStaff = false,
                                     Request = responseMail.Data.Request,
-                                    Response = responseMail.Data.Response
+                                    Response = responseMail.Data.Response,
+                                    CustomerId = responseMail.Data.CustomerId,
                                 });
                             }
                             else
@@ -674,7 +675,8 @@ public class ContractApprovalService : IContractApprovalService
                                 Description = "",
                                 IsStaff = false,
                                 Request = responseEmail.Data.Request,
-                                Response = responseEmail.Data.Response
+                                Response = responseEmail.Data.Response,
+                                PersonId = responseEmail.Data.PersonId.ToString(),
                             });
                         }
                         else
