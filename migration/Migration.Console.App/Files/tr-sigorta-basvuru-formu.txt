@@ -82,7 +82,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "evs8gyo"
+      "id": "emqqly8"
     },
     {
       "label": "İşlem No",
@@ -161,7 +161,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e590db"
+      "id": "e4gga4f"
     },
     {
       "label": "Sigorta Ettiren ile Sigortalı Aynı Kişidir",
@@ -229,7 +229,7 @@
       "inputType": "checkbox",
       "value": "",
       "name": "",
-      "id": "euac1g"
+      "id": "e5pc1r"
     },
     {
       "label": "Sigortalı Adı/Ünvanı",
@@ -308,7 +308,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eew8u9"
+      "id": "e41dox4c"
     },
     {
       "label": "Sigortalı VKN/TCKN",
@@ -393,7 +393,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ew3y5la"
+      "id": "el87en"
     },
     {
       "label": "Sigorta Ettiren Adı/Ünvanı",
@@ -472,7 +472,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eadndd"
+      "id": "ejgafvj"
     },
     {
       "label": "Sigorta Ettiren VKN/TCKN",
@@ -557,7 +557,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eas3ry"
+      "id": "ekp1nxd"
     },
     {
       "label": "Daini Mürtehin",
@@ -636,7 +636,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ejnipm4"
+      "id": "e0icen5"
     },
     {
       "label": "Sigorta Türü",
@@ -751,89 +751,7 @@
       "addons": [],
       "fieldSet": false,
       "inline": false,
-      "id": "ectozwm"
-    },
-    {
-      "label": "Diğer Sigorta Türü Bilgileri",
-      "labelPosition": "left-left",
-      "tableView": true,
-      "errors": {
-        "required": "Zorunlu alandır.Boş geçilemez"
-      },
-      "key": "diger",
-      "customConditional": "show = data.sigortaTuru.diger || data.sigortaTuru.diger;",
-      "type": "textfield",
-      "labelWidth": 40,
-      "input": true,
-      "placeholder": "",
-      "prefix": "",
-      "customClass": "",
-      "suffix": "",
-      "multiple": false,
-      "defaultValue": null,
-      "protected": false,
-      "unique": false,
-      "persistent": true,
-      "hidden": false,
-      "clearOnHide": true,
-      "refreshOn": "",
-      "redrawOn": "",
-      "modalEdit": false,
-      "dataGridLabel": false,
-      "description": "",
-      "errorLabel": "",
-      "tooltip": "",
-      "hideLabel": false,
-      "tabindex": "",
-      "disabled": false,
-      "autofocus": false,
-      "dbIndex": false,
-      "customDefaultValue": "",
-      "calculateValue": "",
-      "calculateServer": false,
-      "widget": {
-        "type": "input"
-      },
-      "attributes": {},
-      "validateOn": "change",
-      "validate": {
-        "required": false,
-        "custom": "",
-        "customPrivate": false,
-        "strictDateValidation": false,
-        "multiple": false,
-        "unique": false,
-        "minLength": "",
-        "maxLength": "",
-        "pattern": ""
-      },
-      "conditional": {
-        "show": null,
-        "when": null,
-        "eq": ""
-      },
-      "overlay": {
-        "style": "",
-        "left": "",
-        "top": "",
-        "width": "",
-        "height": ""
-      },
-      "allowCalculateOverride": false,
-      "encrypted": false,
-      "showCharCount": false,
-      "showWordCount": false,
-      "properties": {},
-      "allowMultipleMasks": false,
-      "addons": [],
-      "mask": false,
-      "inputType": "text",
-      "inputFormat": "plain",
-      "inputMask": "",
-      "displayMask": "",
-      "spellcheck": true,
-      "truncateMultipleSpaces": false,
-      "id": "es1shdb"
+      "id": "eq3srrq"
     },
     {
       "title": "Konut/Konut Eşya/DASK için",
@@ -937,7 +855,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ebtp58f"
+          "id": "ew56yw"
         },
         {
           "label": "Bina m2",
@@ -1023,7 +941,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e1sk21"
+          "id": "e5jclf"
         },
         {
           "label": "Bina Sigorta Değeri",
@@ -1104,7 +1022,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "ewd8aua"
+          "id": "e7qnhl5"
         },
         {
           "label": "Eşya Sigorta Değeri",
@@ -1185,7 +1103,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "enhztp"
+          "id": "elt7q6"
         },
         {
           "label": "Bina Yapım Yılı",
@@ -1270,7 +1188,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "e37dqy"
+          "id": "elahrsq"
         },
         {
           "label": "Toplam Kat Adedi",
@@ -1351,7 +1269,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "etaoqgy"
+          "id": "ek5vxdy"
         },
         {
           "label": "Bulunduğu Kat",
@@ -1432,7 +1350,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "etrut2n"
+          "id": "er4jr7x"
         },
         {
           "label": "Riziko Adresi",
@@ -1514,7 +1432,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "eyqu7a4"
+          "id": "e80z4h4"
         },
         {
           "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
@@ -1584,7 +1502,7 @@
           "inputType": "checkbox",
           "value": "",
           "name": "",
-          "id": "eu0r97o"
+          "id": "e7oi9b"
         }
       ],
       "placeholder": "",
@@ -1642,7 +1560,7 @@
       "lazyLoad": false,
       "theme": "default",
       "breadcrumb": "default",
-      "id": "eun534g"
+      "id": "ej1hz7"
     },
     {
       "title": "Kasko Trafik İçin",
@@ -1742,7 +1660,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "eok7mh"
+          "id": "elko2x"
         },
         {
           "label": "Belge Seri No",
@@ -1827,7 +1745,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ef05navm"
+          "id": "en3au5o"
         },
         {
           "label": "Araç marka  model",
@@ -1908,7 +1826,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e8mo0r"
+          "id": "ep0znrhg"
         },
         {
           "label": "Araç marka  kodu",
@@ -1993,7 +1911,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ehcfsg"
+          "id": "en1wzb"
         },
         {
           "label": "Motor / Şase no",
@@ -2079,7 +1997,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ef6tshd"
+          "id": "ewbc5mkb"
         },
         {
           "label": "Sigortalı Adresi",
@@ -2161,7 +2079,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ewm61zk"
+          "id": "e8khyd"
         },
         {
           "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
@@ -2231,7 +2149,7 @@
           "inputType": "checkbox",
           "value": "",
           "name": "",
-          "id": "e9cdu1g"
+          "id": "eugtg9l"
         }
       ],
       "placeholder": "",
@@ -2290,7 +2208,7 @@
       "lazyLoad": false,
       "theme": "default",
       "breadcrumb": "default",
-      "id": "eo16myc"
+      "id": "e9wxn6r"
     },
     {
       "title": "İşyeri İçin",
@@ -2390,7 +2308,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e5ircae"
+          "id": "enuuwlu"
         },
         {
           "label": "Bina m2",
@@ -2476,7 +2394,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e5a42f7"
+          "id": "ec5qte9"
         },
         {
           "label": "Bina sigorta  değeri",
@@ -2558,7 +2476,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ebhhy1o"
+          "id": "e9thiy"
         },
         {
           "label": "Eşya sigorta  değeri",
@@ -2640,7 +2558,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e0db854"
+          "id": "e6nhgr"
         },
         {
           "label": "Elektronik cihaz  değeri",
@@ -2722,7 +2640,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ejeoyxs"
+          "id": "eyzzv6v"
         },
         {
           "label": "Makine kırılması  değeri",
@@ -2804,7 +2722,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ef8f65e"
+          "id": "ebd1kav"
         },
         {
           "label": "Demirbaş  değeri",
@@ -2886,7 +2804,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e4vzg1o"
+          "id": "euc73xv"
         },
         {
           "label": "Riziko Adresi",
@@ -2968,7 +2886,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e6qd5oa"
+          "id": "ezlhban"
         },
         {
           "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
@@ -3038,7 +2956,7 @@
           "inputType": "checkbox",
           "value": "",
           "name": "",
-          "id": "ezzhs2o"
+          "id": "est0ul5"
         },
         {
           "label": "İşyeri İçin Varsa Ek Bedel ve Bilgiler :",
@@ -3117,7 +3035,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "erkh1yl"
+          "id": "e8fc4sdp"
         }
       ],
       "placeholder": "",
@@ -3176,7 +3094,163 @@
       "lazyLoad": false,
       "theme": "default",
       "breadcrumb": "default",
-      "id": "e5yv1f"
+      "id": "e9vacye"
+    },
+    {
+      "title": "Diğer",
+      "collapsible": false,
+      "key": "paneldiger",
+      "customConditional": "show = data.sigortaTuru.diger || data.sigortaTuru.diger;",
+      "conditional": {
+        "show": true,
+        "eq": "Belge Seri No",
+        "when": null
+      },
+      "type": "panel",
+      "label": "Panel",
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "label": "Diğer Sigorta Türü Bilgileri",
+          "labelPosition": "left-left",
+          "tableView": true,
+          "validate": {
+            "required": true,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "minLength": "",
+            "maxLength": "",
+            "pattern": ""
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez"
+          },
+          "key": "diger",
+          "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "input": true,
+          "placeholder": "",
+          "prefix": "",
+          "customClass": "",
+          "suffix": "",
+          "multiple": false,
+          "defaultValue": null,
+          "protected": false,
+          "unique": false,
+          "persistent": true,
+          "hidden": false,
+          "clearOnHide": true,
+          "refreshOn": "",
+          "redrawOn": "",
+          "modalEdit": false,
+          "dataGridLabel": false,
+          "description": "",
+          "errorLabel": "",
+          "tooltip": "",
+          "hideLabel": false,
+          "tabindex": "",
+          "disabled": false,
+          "autofocus": false,
+          "dbIndex": false,
+          "customDefaultValue": "",
+          "calculateValue": "",
+          "calculateServer": false,
+          "widget": {
+            "type": "input"
+          },
+          "attributes": {},
+          "validateOn": "change",
+          "conditional": {
+            "show": null,
+            "when": null,
+            "eq": ""
+          },
+          "overlay": {
+            "style": "",
+            "left": "",
+            "top": "",
+            "width": "",
+            "height": ""
+          },
+          "allowCalculateOverride": false,
+          "encrypted": false,
+          "showCharCount": false,
+          "showWordCount": false,
+          "properties": {},
+          "allowMultipleMasks": false,
+          "addons": [],
+          "mask": false,
+          "inputType": "text",
+          "inputFormat": "plain",
+          "inputMask": "",
+          "displayMask": "",
+          "spellcheck": true,
+          "truncateMultipleSpaces": false,
+          "id": "ehiht29"
+        }
+      ],
+      "placeholder": "",
+      "prefix": "",
+      "customClass": "",
+      "suffix": "",
+      "multiple": false,
+      "defaultValue": null,
+      "protected": false,
+      "unique": false,
+      "persistent": false,
+      "hidden": false,
+      "clearOnHide": false,
+      "refreshOn": "",
+      "redrawOn": "",
+      "modalEdit": false,
+      "dataGridLabel": false,
+      "labelPosition": "top",
+      "description": "",
+      "errorLabel": "",
+      "tooltip": "",
+      "hideLabel": false,
+      "tabindex": "",
+      "disabled": false,
+      "autofocus": false,
+      "dbIndex": false,
+      "customDefaultValue": "",
+      "calculateValue": "",
+      "calculateServer": false,
+      "widget": null,
+      "attributes": {},
+      "validateOn": "change",
+      "validate": {
+        "required": false,
+        "custom": "",
+        "customPrivate": false,
+        "strictDateValidation": false,
+        "multiple": false,
+        "unique": false
+      },
+      "overlay": {
+        "style": "",
+        "left": "",
+        "top": "",
+        "width": "",
+        "height": ""
+      },
+      "allowCalculateOverride": false,
+      "encrypted": false,
+      "showCharCount": false,
+      "showWordCount": false,
+      "properties": {},
+      "allowMultipleMasks": false,
+      "addons": [],
+      "tree": false,
+      "lazyLoad": false,
+      "theme": "default",
+      "breadcrumb": "default",
+      "id": "e58npw"
     },
     {
       "label": "Text Area",
@@ -3260,7 +3334,91 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "edcilc"
+      "id": "e2o27fx"
+    },
+    {
+      "label": "Text Area",
+      "rows": 2,
+      "autoExpand": false,
+      "tabindex": "0",
+      "hideLabel": true,
+      "disabled": true,
+      "tableView": true,
+      "defaultValue": "Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i \nmürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.",
+      "protected": true,
+      "key": "textArea3",
+      "type": "textarea",
+      "input": true,
+      "placeholder": "",
+      "prefix": "",
+      "customClass": "",
+      "suffix": "",
+      "multiple": false,
+      "unique": false,
+      "persistent": true,
+      "hidden": false,
+      "clearOnHide": true,
+      "refreshOn": "",
+      "redrawOn": "",
+      "modalEdit": false,
+      "dataGridLabel": false,
+      "labelPosition": "top",
+      "description": "",
+      "errorLabel": "",
+      "tooltip": "",
+      "autofocus": false,
+      "dbIndex": false,
+      "customDefaultValue": "",
+      "calculateValue": "",
+      "calculateServer": false,
+      "widget": {
+        "type": "input"
+      },
+      "attributes": {},
+      "validateOn": "change",
+      "validate": {
+        "required": false,
+        "custom": "",
+        "customPrivate": false,
+        "strictDateValidation": false,
+        "multiple": false,
+        "unique": false,
+        "minLength": "",
+        "maxLength": "",
+        "pattern": "",
+        "minWords": "",
+        "maxWords": ""
+      },
+      "conditional": {
+        "show": null,
+        "when": null,
+        "eq": ""
+      },
+      "overlay": {
+        "style": "",
+        "left": "",
+        "top": "",
+        "width": "",
+        "height": ""
+      },
+      "allowCalculateOverride": false,
+      "encrypted": false,
+      "showCharCount": false,
+      "showWordCount": false,
+      "properties": {},
+      "allowMultipleMasks": false,
+      "addons": [],
+      "mask": false,
+      "inputType": "text",
+      "inputFormat": "html",
+      "inputMask": "",
+      "displayMask": "",
+      "spellcheck": true,
+      "truncateMultipleSpaces": false,
+      "wysiwyg": false,
+      "editor": "",
+      "fixedSize": true,
+      "id": "eo865ga"
     },
     {
       "label": "Text Area",
@@ -3344,7 +3502,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "es2b98q"
+      "id": "enrosmu"
     },
     {
       "label": "Text Area",
@@ -3428,7 +3586,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "eytbk9"
+      "id": "eh2k5k"
     }
   ]
 }
