@@ -2,11 +2,11 @@
 
 public class AccessToken
 {
-    public string citizenshipNumber { get; set; }
-    public string customerNumber { get; set; }
-    public string firstName { get; set; }
-    public string lastName { get; set; }
-    public string isStaff { get; set; }
-    public string access_token { get; set; }
-    public List<string> credentials { get; set; }
+    public string CitizenshipNumber { get; set; }
+    public string CustomerNumber { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string IsStaff { get; set; }
+    public string Access_token { get; set; }
+    public List<string> Credentials { get; set; }
 }
