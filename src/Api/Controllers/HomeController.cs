@@ -70,8 +70,6 @@ namespace Api.Controllers
                 Log.Information("Login-Token: " + result.Token);
             }
 
-            result.CitizenshipNumber = "";
-            result.CustomerNumber = 0;
             return result;
         }
 
