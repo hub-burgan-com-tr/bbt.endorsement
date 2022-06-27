@@ -29,60 +29,66 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            var response = await _userService.AccessToken(code, state);
-            //var response = new AccessToken
-            //{
-            //    Tckn = "3369"
-            //};
+            //var response = await _userService.AccessToken(code, state);
+            var response = new AccessToken
+            {
+                Tckn = "3369"
+            };
 
+            var random = new Random();
+            var isStaff = random.Next(0, 10) > (Int32.MaxValue / 2);
             var result = new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = response.Tckn == null ? "12345678901" : response.Tckn,
-               // IsStaff = response.credentials.Count > 0 ? true : false,
-                CustomerNumber = 20186950,
+                // IsStaff = response.credentials.Count > 0 ? true : false,
+                IsStaff = isStaff,
+                CustomerNumber = 20186940,
                 First = "",
                 Last = ""
             };
 
-            foreach (var credential in response.credentials)
+            if (response.credentials != null)
             {
-                var value = credential.Split("###");
-                if (value.Length == 2)
+                foreach (var credential in response.credentials)
                 {
-                    if (value[0] == "isFormReader")
+                    var value = credential.Split("###");
+                    if (value.Length == 2)
                     {
-                        if (value[1] == "1")
-                            result.Authory.IsFormReader = true;
-                        else
-                            result.Authory.IsFormReader = false;
-                    }
-                    else if (value[0] == "isNewFormCreator")
-                    {
-                        if (value[1] == "1")
-                            result.Authory.IsNewFormCreator = true;
-                        else
-                            result.Authory.IsNewFormCreator = false;
-                    }
-                    else if (value[0] == "isReadyFormCreator")
-                    {
-                        if (value[1] == "1")
-                            result.Authory.IsReadyFormCreator = true;
-                        else
-                            result.Authory.IsReadyFormCreator = false;
-                    }
-                    else if (value[0] == "isBranchApproval")
-                    {
-                        if (value[1] == "1")
-                            result.Authory.IsBranchApproval = true;
-                        else
-                            result.Authory.IsBranchApproval = false;
-                    }
-                    else if (value[0] == "isBranchFormReader")
-                    {
-                        if (value[1] == "1")
-                            result.Authory.IsBranchFormReader = true;
-                        else
-                            result.Authory.IsBranchFormReader = false;
+                        if (value[0] == "isFormReader")
+                        {
+                            if (value[1] == "1")
+                                result.Authory.IsFormReader = true;
+                            else
+                                result.Authory.IsFormReader = false;
+                        }
+                        else if (value[0] == "isNewFormCreator")
+                        {
+                            if (value[1] == "1")
+                                result.Authory.IsNewFormCreator = true;
+                            else
+                                result.Authory.IsNewFormCreator = false;
+                        }
+                        else if (value[0] == "isReadyFormCreator")
+                        {
+                            if (value[1] == "1")
+                                result.Authory.IsReadyFormCreator = true;
+                            else
+                                result.Authory.IsReadyFormCreator = false;
+                        }
+                        else if (value[0] == "isBranchApproval")
+                        {
+                            if (value[1] == "1")
+                                result.Authory.IsBranchApproval = true;
+                            else
+                                result.Authory.IsBranchApproval = false;
+                        }
+                        else if (value[0] == "isBranchFormReader")
+                        {
+                            if (value[1] == "1")
+                                result.Authory.IsBranchFormReader = true;
+                            else
+                                result.Authory.IsBranchFormReader = false;
+                        }
                     }
                 }
             }
