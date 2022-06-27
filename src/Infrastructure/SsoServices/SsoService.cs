@@ -32,7 +32,7 @@ public class SsoService : ISsoService
                     var result = await client.PostAsync("/connect/token", content);
                     var responseContent = result.Content.ReadAsStringAsync().Result;
                     var token = JsonConvert.DeserializeObject<AccessToken>(responseContent);
-                    accessToken = token.access_token;
+                    accessToken = token.Access_token;
                 }
 
                 using (var client = new HttpClient())
