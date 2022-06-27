@@ -12,13 +12,16 @@ public class TokenHandler
 {
     public Token CreateAccessToken(GetSearchPersonSummaryDto user)
     {
+        var citizenshipNumber =user.CitizenshipNumber == null? "" : user.CitizenshipNumber;
+        var first = user.First == null ? "" : user.First;
+        var last = user.Last == null ? "" : user.Last;
         var tokenInstance = new Token();
         var claims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),
-                new Claim("CitizenshipNumber",user.CitizenshipNumber.ToString()),
+                new Claim("CitizenshipNumber",citizenshipNumber),
                 new Claim("CustomerNumber",user.CustomerNumber.ToString()),
-                new Claim("First",user.First.ToString()),
-                new Claim("Last",user.Last.ToString()),
+                new Claim("First",first),
+                new Claim("Last",last),
                 new Claim("IsStaff",user.IsStaff.ToString())
             };
 
@@ -26,10 +29,10 @@ public class TokenHandler
         {
             claims = new Claim[]{
                 new Claim(JwtRegisteredClaimNames.NameId,Guid.NewGuid().ToString()),
-                new Claim("CitizenshipNumber",user.CitizenshipNumber.ToString()),
+                new Claim("CitizenshipNumber",citizenshipNumber),
                 new Claim("CustomerNumber",user.CustomerNumber.ToString()),
-                new Claim("First",user.First.ToString()),
-                new Claim("Last",user.Last.ToString()),
+                new Claim("First",first),
+                new Claim("Last",last),
                 new Claim("IsStaff",user.IsStaff.ToString()),
                 new Claim("IsBranchApproval",user.Authory.IsBranchApproval.ToString()),
                 new Claim("IsBranchFormReader",user.Authory.IsBranchFormReader.ToString()),
