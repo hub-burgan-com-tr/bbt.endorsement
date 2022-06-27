@@ -48,6 +48,8 @@ public class UserService : IUserService
                     var responseContent = result.Content.ReadAsStringAsync().Result;
                     response = JsonConvert.DeserializeObject<AccessToken>(responseContent);
                     Log.Information("Login-SSO: " + responseContent);
+                    if (!string.IsNullOrEmpty(response.CitizenshipNumber))
+                        response.IsLogin = true;
                 }
             }
         }

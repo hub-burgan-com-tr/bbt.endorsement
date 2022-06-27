@@ -29,46 +29,50 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
+            var response = new AccessToken();
             try
             {
-                var response = await _userService.AccessToken(code, state);
+                response = await _userService.AccessToken(code, state);
 
+                if (response.IsLogin == false)
+                {
+                    return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
+                }
                 //var response = new AccessToken()
                 //{
                 //    citizenshipNumber = "",
                 //    customerNumber = "0",
                 //    isStaff = "true",
                 //};
-
-                var result = new GetSearchPersonSummaryDto
-                {
-                    CitizenshipNumber = response.CitizenshipNumber,
-                    IsStaff = Convert.ToBoolean(response.IsStaff),
-                    CustomerNumber = Convert.ToInt32(response.CustomerNumber),
-                    First = response.FirstName,
-                    Last = response.LastName,
-                };
-
-                GetCredentials(result, response);
-
-
-                if (result != null)
-                {
-                    TokenHandler tokenHandler = new TokenHandler();
-                    Token token = tokenHandler.CreateAccessToken(result);
-                    result.Token = token.AccessToken;
-                    Log.Information("Login-Token: " + result.Token);
-                }
-
-                result.CitizenshipNumber = "";
-                result.CustomerNumber = 0;
-                return result;
             }
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
             }
-            return new GetSearchPersonSummaryDto();
+
+            var result = new GetSearchPersonSummaryDto
+            {
+                CitizenshipNumber = response.CitizenshipNumber,
+                IsStaff = Convert.ToBoolean(response.IsStaff),
+                CustomerNumber = Convert.ToInt32(response.CustomerNumber),
+                First = response.FirstName,
+                Last = response.LastName,
+            };
+
+            GetCredentials(result, response);
+
+
+            if (result != null)
+            {
+                TokenHandler tokenHandler = new TokenHandler();
+                Token token = tokenHandler.CreateAccessToken(result);
+                result.Token = token.AccessToken;
+                Log.Information("Login-Token: " + result.Token);
+            }
+
+            result.CitizenshipNumber = "";
+            result.CustomerNumber = 0;
+            return result;
         }
 
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
