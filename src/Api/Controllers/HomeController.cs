@@ -23,55 +23,57 @@ namespace Api.Controllers
 
         [Route("login")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
-        [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
+        //[SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
+        //[SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public GetSearchPersonSummaryDto Login(string code, string state)
         {
             var response = new AccessToken();
             try
             {
-                //response = await _userService.AccessToken(code, state);
+                response = _userService.AccessToken(code, state).Result;
 
-                //if (response.IsLogin == false)
-                //{
-                //    return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
-                //}
-                response = new AccessToken()
+                if (response.IsLogin == false)
                 {
-                    CitizenshipNumber = "12345678901",
-                    CustomerNumber = "0",
-                    IsStaff = "true",
+                    return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
+                }
+                //response = new AccessToken()
+                //{
+                //    CitizenshipNumber = "12345678901",
+                //    CustomerNumber = "0",
+                //    IsStaff = "true",
+                //};
+                //return new GetSearchPersonSummaryDto { Data = "Giriş" };
+                var result = new GetSearchPersonSummaryDto
+                {
+                    CitizenshipNumber = response.CitizenshipNumber,
+                    IsStaff = Convert.ToBoolean(response.IsStaff),
+                    CustomerNumber = Convert.ToInt32(response.CustomerNumber),
+                    First = response.FirstName,
+                    Last = response.LastName,
                 };
-                return new GetSearchPersonSummaryDto { Data = "Giriş" };
+
+                GetCredentials(result, response);
+
+
+                if (result != null)
+                {
+                    TokenHandler tokenHandler = new TokenHandler();
+                    Token token = tokenHandler.CreateAccessToken(result);
+                    result.Token = token.AccessToken;
+                    Log.Information("Login-Token: " + result.Token);
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
             }
 
-            var result = new GetSearchPersonSummaryDto
-            {
-                CitizenshipNumber = response.CitizenshipNumber,
-                IsStaff = Convert.ToBoolean(response.IsStaff),
-                CustomerNumber = Convert.ToInt32(response.CustomerNumber),
-                First = response.FirstName,
-                Last = response.LastName,
-            };
-
-            GetCredentials(result, response);
-
-
-            if (result != null)
-            {
-                TokenHandler tokenHandler = new TokenHandler();
-                Token token = tokenHandler.CreateAccessToken(result);
-                result.Token = token.AccessToken;
-                Log.Information("Login-Token: " + result.Token);
-            }
-
-            return result;
+            return null;
         }
 
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
