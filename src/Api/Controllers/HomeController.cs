@@ -29,37 +29,45 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            //var response = await _userService.AccessToken(code, state);
-
-            var response = new AccessToken()
+            try
             {
-                citizenshipNumber = "",
-                customerNumber = "0",
-                isStaff = "true",
-            };
+                var response = await _userService.AccessToken(code, state);
 
-            var result = new GetSearchPersonSummaryDto
-            {
-                CitizenshipNumber = response.citizenshipNumber,
-                IsStaff = Convert.ToBoolean(response.isStaff),
-                CustomerNumber = Convert.ToInt32(response.customerNumber),
-                First = response.firstName,
-                Last = response.lastName,
-            };
+                //var response = new AccessToken()
+                //{
+                //    citizenshipNumber = "",
+                //    customerNumber = "0",
+                //    isStaff = "true",
+                //};
 
-            GetCredentials(result, response);
+                var result = new GetSearchPersonSummaryDto
+                {
+                    CitizenshipNumber = response.citizenshipNumber,
+                    IsStaff = Convert.ToBoolean(response.isStaff),
+                    CustomerNumber = Convert.ToInt32(response.customerNumber),
+                    First = response.firstName,
+                    Last = response.lastName,
+                };
+
+                GetCredentials(result, response);
 
 
-            if (result != null)
-            {
-                TokenHandler tokenHandler = new TokenHandler();
-                Token token = tokenHandler.CreateAccessToken(result);
-                result.Token = token.AccessToken;
+                if (result != null)
+                {
+                    TokenHandler tokenHandler = new TokenHandler();
+                    Token token = tokenHandler.CreateAccessToken(result);
+                    result.Token = token.AccessToken;
+                }
+
+                result.CitizenshipNumber = "";
+                result.CustomerNumber = 0;
+                return result;
             }
-
-            result.CitizenshipNumber = "";
-            result.CustomerNumber = 0;
-            return result;
+            catch (Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+            }
+            return new GetSearchPersonSummaryDto();
         }
 
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
