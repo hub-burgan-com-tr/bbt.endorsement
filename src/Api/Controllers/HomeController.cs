@@ -30,23 +30,33 @@ namespace Api.Controllers
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
             var response = await _userService.AccessToken(code, state);
-            //var response = new AccessToken
-            //{
-            //    Tckn = "3369"
-            //};
 
-            var random = new Random();
-            var isStaff = random.Next(0, 10) > (Int32.MaxValue / 2);
             var result = new GetSearchPersonSummaryDto
             {
-                CitizenshipNumber = response.Tckn == null ? "12345678901" : response.Tckn,
-                // IsStaff = response.credentials.Count > 0 ? true : false,
-                IsStaff = isStaff,
-                CustomerNumber = 20186940,
-                First = "",
-                Last = ""
+                CitizenshipNumber = response.citizenshipNumber,
+                IsStaff = Convert.ToBoolean(response.isStaff),
+                CustomerNumber = Convert.ToInt32(response.customerNumber),
+                First = response.firstName,
+                Last = response.lastName,
             };
 
+            GetCredentials(result, response);
+
+
+            if (result != null)
+            {
+                TokenHandler tokenHandler = new TokenHandler();
+                Token token = tokenHandler.CreateAccessToken(result);
+                result.Token = token.AccessToken;
+            }
+
+            result.CitizenshipNumber = "";
+            result.CustomerNumber = 0;
+            return result;
+        }
+
+        private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
+        {
             if (response.credentials != null)
             {
                 foreach (var credential in response.credentials)
@@ -92,33 +102,6 @@ namespace Api.Controllers
                     }
                 }
             }
-
-
-
-            if (result != null)
-            {
-                //if (result.CitizenshipNumber.StartsWith("3369"))
-                //{
-                //    result.IsStaff = true;
-                //    result.Authory = new AuthoryModel
-                //    {
-                //        IsFormReader = true,
-                //        IsNewFormCreator = true,
-                //        IsReadyFormCreator = true,
-                //        IsBranchApproval = false,
-                //        IsBranchFormReader = false
-                //    };
-                //}
-
-                TokenHandler tokenHandler = new TokenHandler();
-                Token token = tokenHandler.CreateAccessToken(result);
-                result.Token = token.AccessToken;
-            }
-
-            result.Data = "Authority: " + StaticValues.Authority + 
-                          " - ApiGateway: " + StaticValues.ApiGateway +
-                          " - RedirectUri: " + StaticValues.RedirectUri; 
-            return result;
         }
 
 
@@ -157,7 +140,7 @@ namespace Api.Controllers
         //            return result;
         //        }
         //    }
-            
+
 
         //    if(isState == false)
         //    {
