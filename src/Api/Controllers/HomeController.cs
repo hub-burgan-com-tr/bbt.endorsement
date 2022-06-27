@@ -32,18 +32,18 @@ namespace Api.Controllers
             var response = new AccessToken();
             try
             {
-                response = await _userService.AccessToken(code, state);
+                //response = await _userService.AccessToken(code, state);
 
-                if (response.IsLogin == false)
-                {
-                    return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
-                }
-                //var response = new AccessToken()
+                //if (response.IsLogin == false)
                 //{
-                //    citizenshipNumber = "",
-                //    customerNumber = "0",
-                //    isStaff = "true",
-                //};
+                //    return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
+                //}
+                response = new AccessToken()
+                {
+                    CitizenshipNumber = "12345678901",
+                    CustomerNumber = "0",
+                    IsStaff = "true",
+                };
             }
             catch (Exception ex)
             {
