@@ -23,7 +23,7 @@ namespace Api.Controllers
 
         [Route("login")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(UserModel))]
+        [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
         [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -44,6 +44,7 @@ namespace Api.Controllers
                     CustomerNumber = "0",
                     IsStaff = "true",
                 };
+                return new GetSearchPersonSummaryDto { Data = "Giriş" };
             }
             catch (Exception ex)
             {
