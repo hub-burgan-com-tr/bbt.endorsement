@@ -57,6 +57,7 @@ namespace Api.Controllers
                     TokenHandler tokenHandler = new TokenHandler();
                     Token token = tokenHandler.CreateAccessToken(result);
                     result.Token = token.AccessToken;
+                    Log.Information("Token: " + result.Token);
                 }
 
                 result.CitizenshipNumber = "";
