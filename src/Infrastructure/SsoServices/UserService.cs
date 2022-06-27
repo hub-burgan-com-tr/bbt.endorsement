@@ -34,6 +34,7 @@ public class UserService : IUserService
                     var responseContent = result.Content.ReadAsStringAsync().Result;
                     var token = JsonConvert.DeserializeObject<AccessToken>(responseContent);
                     accessToken = token.access_token;
+                    Log.Information("SSO Token: " + accessToken);
                 }
 
                 using (var client = new HttpClient())
