@@ -84,7 +84,7 @@ namespace Infrastructure.Services
 
             var templateName = "sigorta_onay_formu.txt";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
-            var data = File.ReadAllText(path, Encoding.Default);
+            var data = File.ReadAllText(path, Encoding.GetEncoding("Windows-1254"));
 
             var jsonString = data.Replace("\r\n", string.Empty);
 
@@ -94,5 +94,7 @@ namespace Infrastructure.Services
             return jsonString;
 
         }
+
+      
     }
 }
