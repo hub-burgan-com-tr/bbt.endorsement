@@ -34,6 +34,7 @@ public class UserService : IUserService
                     var responseContent = result.Content.ReadAsStringAsync().Result;
                     var token = JsonConvert.DeserializeObject<AccessToken>(responseContent);
                     accessToken = token.access_token;
+                    Log.Information("responseContent: " + responseContent);
                 }
 
                 using (var client = new HttpClient())
@@ -46,6 +47,7 @@ public class UserService : IUserService
                     var result = await client.PostAsync("/ib/Resource", content);
                     var responseContent = result.Content.ReadAsStringAsync().Result;
                     response = JsonConvert.DeserializeObject<AccessToken>(responseContent);
+                    Log.Information("AccessToken: " + response);
                 }
             }
         }
