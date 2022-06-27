@@ -33,8 +33,8 @@ public class UserService : IUserService
                     var result = await client.PostAsync("/connect/token", content);
                     var responseContent = result.Content.ReadAsStringAsync().Result;
                     var token = JsonConvert.DeserializeObject<AccessToken>(responseContent);
-                    accessToken = token.access_token;
-                    Log.Information("SSO Token: " + accessToken);
+                    accessToken = token.Access_token;
+                    Log.Information("Login-SSOToken: " + accessToken);
                 }
 
                 using (var client = new HttpClient())
@@ -47,7 +47,7 @@ public class UserService : IUserService
                     var result = await client.PostAsync("/ib/Resource", content);
                     var responseContent = result.Content.ReadAsStringAsync().Result;
                     response = JsonConvert.DeserializeObject<AccessToken>(responseContent);
-                    Log.Information("SSO: " + responseContent);
+                    Log.Information("Login-SSO: " + responseContent);
                 }
             }
         }

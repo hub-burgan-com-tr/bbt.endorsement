@@ -42,11 +42,11 @@ namespace Api.Controllers
 
                 var result = new GetSearchPersonSummaryDto
                 {
-                    CitizenshipNumber = response.citizenshipNumber,
-                    IsStaff = Convert.ToBoolean(response.isStaff),
-                    CustomerNumber = Convert.ToInt32(response.customerNumber),
-                    First = response.firstName,
-                    Last = response.lastName,
+                    CitizenshipNumber = response.CitizenshipNumber,
+                    IsStaff = Convert.ToBoolean(response.IsStaff),
+                    CustomerNumber = Convert.ToInt32(response.CustomerNumber),
+                    First = response.FirstName,
+                    Last = response.LastName,
                 };
 
                 GetCredentials(result, response);
@@ -57,7 +57,7 @@ namespace Api.Controllers
                     TokenHandler tokenHandler = new TokenHandler();
                     Token token = tokenHandler.CreateAccessToken(result);
                     result.Token = token.AccessToken;
-                    Log.Information("Token: " + result.Token);
+                    Log.Information("Login-Token: " + result.Token);
                 }
 
                 result.CitizenshipNumber = "";
@@ -73,9 +73,9 @@ namespace Api.Controllers
 
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
         {
-            if (response.credentials != null)
+            if (response.Credentials != null)
             {
-                foreach (var credential in response.credentials)
+                foreach (var credential in response.Credentials)
                 {
                     var value = credential.Split("###");
                     if (value.Length == 2)
