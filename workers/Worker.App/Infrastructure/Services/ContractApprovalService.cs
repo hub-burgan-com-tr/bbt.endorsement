@@ -589,6 +589,128 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
+    private void PersonalSendMail()
+    {
+        CreateWorker("PersonalSendMail", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("PersonalSendMail");
+
+            if (variables != null)
+                variables.Limit += 1;
+            variables.IsProcess = true;
+
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+            try
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Information($"PersonalSendMail");
+                //var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+
+                //foreach (var email in Users.Emails())
+                //{
+                //    var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+                //    {
+                //        OrderId = variables.InstanceId,
+                //        Email = email, // person.Data.Customer.Email
+                //    });
+
+                //    try
+                //    {
+                //        if (responseEmail.StatusCode == 200)
+                //        {
+                //            await _mediator.Send(new CreateOrderHistoryCommand
+                //            {
+                //                OrderId = variables.InstanceId.ToString(),
+                //                State = "PY Hatırlatma Mesajı(Email)",
+                //                Description = "",
+                //                IsStaff = false,
+                //                Request = responseEmail.Data.Request,
+                //                Response = responseEmail.Data.Response,
+                //                PersonId = responseEmail.Data.PersonId.ToString(),
+                //            });
+                //        }
+                //        else
+                //        {
+                //            await _mediator.Send(new CreateOrderHistoryCommand
+                //            {
+                //                OrderId = variables.InstanceId.ToString(),
+                //                State = "PY Hatırlatma Mesajı(Email)",
+                //                Description = "",
+                //                IsStaff = false,
+                //            });
+                //            Log.ForContext("OrderId", variables.InstanceId).Information("InstanceId: " + variables.InstanceId + " - email: " + email + " - ErrorMessage: " + responseEmail.Message);
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                //    }
+                //    Thread.Sleep(100);
+                //}
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                //variables.IsProcess = false;
+                variables.Error = "PersonalSendMail - " + ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
+
+            await jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
+        });
+    }
+
+    private async Task SendPersonalMail(string instanceId)
+    {
+        var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = instanceId });
+
+        foreach (var email in Users.Emails())
+        {
+            var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+            {
+                OrderId = instanceId,
+                Email = email, // person.Data.Customer.Email
+            });
+
+            try
+            {
+                if (responseEmail.StatusCode == 200)
+                {
+                    await _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = instanceId,
+                        State = "PY Hatırlatma Mesajı(Email)",
+                        Description = "",
+                        IsStaff = false,
+                        Request = responseEmail.Data.Request,
+                        Response = responseEmail.Data.Response,
+                        PersonId = responseEmail.Data.PersonId.ToString(),
+                    });
+                }
+                else
+                {
+                    await _mediator.Send(new CreateOrderHistoryCommand
+                    {
+                        OrderId = instanceId,
+                        State = "PY Hatırlatma Mesajı(Email)",
+                        Description = "",
+                        IsStaff = false,
+                    });
+                    Log.ForContext("OrderId", instanceId).Information("InstanceId: " + instanceId + " - email: " + email + " - ErrorMessage: " + responseEmail.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
+            }
+            Thread.Sleep(100);
+        }
+    }
+
+
     private void CheckAllApproved()
     {
         CreateWorker("CheckAllApproved", async (jobClient, job) =>
@@ -596,6 +718,8 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("CheckAllApproved");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+            await SendPersonalMail(variables.InstanceId);
 
             try
             {
@@ -622,7 +746,7 @@ public class ContractApprovalService : IContractApprovalService
                         await _mediator.Send(new UpdateOrderGroupCommand
                         {
                             OrderId = variables.InstanceId
-                        });               
+                        });
                     }
                 }
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -641,79 +765,6 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
-    private void PersonalSendMail()
-    {
-        CreateWorker("PersonalSendMail", async (jobClient, job) =>
-        {
-            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-            variables.Services.Add("PersonalSendMail");
-
-            if (variables != null)
-                variables.Limit += 1;
-            variables.IsProcess = true;
-
-            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-
-            try
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"PersonalSendMail");
-                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
-
-                foreach (var email in Users.Emails())
-                {
-                    var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
-                    {
-                        OrderId = variables.InstanceId,
-                        Email = email, // person.Data.Customer.Email
-                    });
-
-                    try
-                    {
-                        if (responseEmail.StatusCode == 200)
-                        {
-                            await _mediator.Send(new CreateOrderHistoryCommand
-                            {
-                                OrderId = variables.InstanceId.ToString(),
-                                State = "PY Hatırlatma Mesajı(Email)",
-                                Description = "",
-                                IsStaff = false,
-                                Request = responseEmail.Data.Request,
-                                Response = responseEmail.Data.Response,
-                                PersonId = responseEmail.Data.PersonId.ToString(),
-                            });
-                        }
-                        else
-                        {
-                            await _mediator.Send(new CreateOrderHistoryCommand
-                            {
-                                OrderId = variables.InstanceId.ToString(),
-                                State = "PY Hatırlatma Mesajı(Email)",
-                                Description = "",
-                                IsStaff = false,
-                            });
-                            Log.ForContext("OrderId", variables.InstanceId).Information("InstanceId: " + variables.InstanceId + " - email: " + email + " - ErrorMessage: " + responseEmail.Message);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                    }
-                    Thread.Sleep(100);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                //variables.IsProcess = false;
-                variables.Error = "PersonalSendMail - " + ex.Message;
-                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            }
-
-            await jobClient.NewCompleteJobCommand(job.Key)
-                .Variables(data)
-                .Send();
-        });
-    }
 
     private void CustomerSendSms()
     {
