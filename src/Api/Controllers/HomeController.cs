@@ -29,11 +29,11 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
         {
-            //var response = await _userService.AccessToken(code, state);
-            var response = new AccessToken
-            {
-                Tckn = "3369"
-            };
+            var response = await _userService.AccessToken(code, state);
+            //var response = new AccessToken
+            //{
+            //    Tckn = "3369"
+            //};
 
             var random = new Random();
             var isStaff = random.Next(0, 10) > (Int32.MaxValue / 2);
