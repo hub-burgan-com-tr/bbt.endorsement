@@ -630,16 +630,21 @@ public class ContractApprovalService : IContractApprovalService
                     Email = email, // person.Data.Customer.Email
                 }).Result;
 
-                await _mediator.Send(new CreateOrderHistoryCommand
+                var createOrderHistoryCommand = new CreateOrderHistoryCommand
                 {
                     OrderId = instanceId,
                     State = "PY Hatırlatma Mesajı(Email)",
                     Description = "",
-                    IsStaff = false,
-                    Request = responseEmail.Data.Request,
-                    Response = responseEmail.Data.Response,
-                    PersonId = responseEmail.Data.PersonId.ToString(),
-                });
+                    IsStaff = false
+                };
+                if(responseEmail.Data != null)
+                {
+                    createOrderHistoryCommand.Request = responseEmail.Data.Request;
+                    createOrderHistoryCommand.Response = responseEmail.Data.Response;
+                    createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId.ToString();
+                }
+
+                await _mediator.Send(createOrderHistoryCommand);
             }
             catch (Exception ex)
             {
