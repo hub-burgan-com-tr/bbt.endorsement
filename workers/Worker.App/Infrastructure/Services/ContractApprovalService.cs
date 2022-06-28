@@ -244,12 +244,12 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     foreach (var gsmPhone in Users.GsmPhones())
                     {
-                        var responseSms = await _mediator.Send(new SendSmsTemplateCommand
+                        var responseSms = _mediator.Send(new SendSmsTemplateCommand
                         {
                             OrderId = variables.InstanceId,
                             GsmPhone = gsmPhone, // person.Data.Customer.GsmPhone,
                             CustomerNumber = person.Data.Customer.CustomerNumber,
-                        });
+                        }).Result;
 
                         try
                         {
@@ -273,11 +273,11 @@ public class ContractApprovalService : IContractApprovalService
 
                     foreach (var email in Users.Emails())
                     {
-                        var responseMail = await _mediator.Send(new SendMailTemplateCommand
+                        var responseMail = _mediator.Send(new SendMailTemplateCommand
                         {
                             OrderId = variables.InstanceId,
                             Email = email, // person.Data.Customer.Email,
-                        });
+                        }).Result;
 
                         try
                         {
