@@ -280,23 +280,16 @@ public class ContractApprovalService : IContractApprovalService
 
                         try
                         {
-                            if (responseMail.StatusCode == 200)
+                            await _mediator.Send(new CreateOrderHistoryCommand
                             {
-                                await _mediator.Send(new CreateOrderHistoryCommand
-                                {
-                                    OrderId = variables.InstanceId.ToString(),
-                                    State = "Hatırlatma Mesajı(Mail)",
-                                    Description ="",
-                                    IsStaff = false,
-                                    Request = responseMail.Data.Request,
-                                    Response = responseMail.Data.Response,
-                                    CustomerId = responseMail.Data.CustomerId,
-                                });
-                            }
-                            else
-                            {
-                                Log.ForContext("OrderId", variables.InstanceId).Information("InstanceId: " + variables.InstanceId + " - email: " + email + " - ErrorMessage: " + responseMail.Message);
-                            }
+                                OrderId = variables.InstanceId.ToString(),
+                                State = "Hatırlatma Mesajı(Mail)",
+                                Description = "",
+                                IsStaff = false,
+                                Request = responseMail.Data.Request,
+                                Response = responseMail.Data.Response,
+                                CustomerId = responseMail.Data.CustomerId,
+                            });
                         }
                         catch (Exception ex)
                         {
@@ -705,39 +698,6 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
-
-
-    private void CustomerSendSms()
-    {
-        CreateWorker("CustomerSendSms", async (jobClient, job) =>
-        {
-            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
-            variables.Services.Add("CustomerSendSms");
-
-            if (variables != null)
-                variables.Limit += 1;
-            variables.IsProcess = true;
-
-            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-
-            try
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"CustomerSendSms");
-
-            }
-            catch (Exception ex)
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-               // variables.IsProcess = false;
-                variables.Error = ex.Message;
-                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            }
-
-            await jobClient.NewCompleteJobCommand(job.Key)
-                .Variables(data)
-                .Send();
-        });
-    }
 
     private void ErrorHandler()
     {
