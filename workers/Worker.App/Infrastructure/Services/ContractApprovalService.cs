@@ -626,6 +626,39 @@ public class ContractApprovalService : IContractApprovalService
     }
 
 
+    private async Task SendPersonalMail(string instanceId)
+    {
+        var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = instanceId });
+
+        foreach (var email in Users.Emails())
+        {
+            try
+            {
+                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+                {
+                    OrderId = instanceId,
+                    Email = email, // person.Data.Customer.Email
+                });
+
+                await _mediator.Send(new CreateOrderHistoryCommand
+                {
+                    OrderId = instanceId,
+                    State = "PY Hatırlatma Mesajı(Email)",
+                    Description = "",
+                    IsStaff = false,
+                    Request = responseEmail.Data.Request,
+                    Response = responseEmail.Data.Response,
+                    PersonId = responseEmail.Data.PersonId.ToString(),
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
+            }
+            Thread.Sleep(100);
+        }
+    }
+
     private void CreateDMSDocument()
     {
         // Log.Information("SaveEntity Worker registered ");
@@ -678,38 +711,6 @@ public class ContractApprovalService : IContractApprovalService
     }
 
 
-    private async Task SendPersonalMail(string instanceId)
-    {
-        var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = instanceId });
-
-        foreach (var email in Users.Emails())
-        {
-            try
-            {
-                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
-                {
-                    OrderId = instanceId,
-                    Email = email, // person.Data.Customer.Email
-                });
-
-                await _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = instanceId,
-                    State = "PY Hatırlatma Mesajı(Email)",
-                    Description = "",
-                    IsStaff = false,
-                    Request = responseEmail.Data.Request,
-                    Response = responseEmail.Data.Response,
-                    PersonId = responseEmail.Data.PersonId.ToString(),
-                });
-            }
-            catch (Exception ex)
-            {
-                Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
-            }
-            Thread.Sleep(100);
-        }
-    }
 
     private void CustomerSendSms()
     {
