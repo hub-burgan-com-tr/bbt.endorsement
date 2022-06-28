@@ -641,7 +641,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     createOrderHistoryCommand.Request = responseEmail.Data.Request;
                     createOrderHistoryCommand.Response = responseEmail.Data.Response;
-                    createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId.ToString();
+                    createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
                 }
 
                 await _mediator.Send(createOrderHistoryCommand);
