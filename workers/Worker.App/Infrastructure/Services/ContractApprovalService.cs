@@ -89,14 +89,14 @@ public class ContractApprovalService : IContractApprovalService
                 //Log.ForContext("OrderId", variables.InstanceId).Information("DMSService: " + StaticValues.DMSService);
                 //Log.ForContext("OrderId", variables.InstanceId).Information("TemplateEngine: " + StaticValues.TemplateEngine);
                 //Log.ForContext("OrderId", variables.InstanceId).Information("MessagingGateway: " + StaticValues.MessagingGateway);
-                variables.Urls = new string[] 
-                                { 
-                                    "Internals: " + StaticValues.Internals,
-                                    "Sso: " + StaticValues.Sso,
-                                    "DMSService: " + StaticValues.DMSService,
-                                    "TemplateEngine: " + StaticValues.TemplateEngine,
-                                    "MessagingGateway: " + StaticValues.MessagingGateway
-                                };
+                //variables.Urls = new string[] 
+                //                { 
+                //                    "Internals: " + StaticValues.Internals,
+                //                    "Sso: " + StaticValues.Sso,
+                //                    "DMSService: " + StaticValues.DMSService,
+                //                    "TemplateEngine: " + StaticValues.TemplateEngine,
+                //                    "MessagingGateway: " + StaticValues.MessagingGateway
+                //                };
 
                 if (variables != null)
                 {
@@ -599,6 +599,7 @@ public class ContractApprovalService : IContractApprovalService
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("PersonalSendMail");
+            Log.ForContext("OrderId", variables.InstanceId).Information($"PersonalSendMail");
 
             if (variables != null)
                 variables.Limit += 1;
@@ -606,18 +607,7 @@ public class ContractApprovalService : IContractApprovalService
 
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            try
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"PersonalSendMail");
-                await SendPersonalMail(variables.InstanceId);                
-            }
-            catch (Exception ex)
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                //variables.IsProcess = false;
-                variables.Error = "PersonalSendMail - " + ex.Message;
-                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            }
+            var response = SendPersonalMail(variables.InstanceId).Result;
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -626,7 +616,7 @@ public class ContractApprovalService : IContractApprovalService
     }
 
 
-    private async Task SendPersonalMail(string instanceId)
+    private async Task<bool> SendPersonalMail(string instanceId)
     {
         var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = instanceId });
 
@@ -634,11 +624,11 @@ public class ContractApprovalService : IContractApprovalService
         {
             try
             {
-                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+                var responseEmail = _mediator.Send(new PersonSendMailTemplateCommand
                 {
                     OrderId = instanceId,
                     Email = email, // person.Data.Customer.Email
-                });
+                }).Result;
 
                 await _mediator.Send(new CreateOrderHistoryCommand
                 {
@@ -655,8 +645,8 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
             }
-            Thread.Sleep(100);
         }
+        return true;
     }
 
     private void CreateDMSDocument()

@@ -82,7 +82,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var documentInsuranceTypes = new List<DocumentInsuranceType>();
             foreach (var type in startFormRequest.InsuranceType.Split(","))
             {
-                var parameter = _context.Parameters.FirstOrDefault(x => x.ParameterTypeId == 3 && x.Text.ToLower() == type.ToLower().Trim());
+                var parameter = _context.Parameters.FirstOrDefault(x => x.DmsReferenceId != null && x.Text.ToLower() == type.ToLower().Trim());
                if(parameter != null)
                     documentInsuranceTypes.Add(new DocumentInsuranceType { DocumentInsuranceTypeId = Guid.NewGuid().ToString(), ParameterId = parameter.Id});
             }
