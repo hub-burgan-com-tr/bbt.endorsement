@@ -1,5 +1,8 @@
-﻿using Domain.Entities;
+﻿using Application.Common.Interfaces;
+using Domain.Common;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Application.Common.Interfaces
 {
@@ -20,7 +23,7 @@ namespace Application.Common.Interfaces
         DbSet<Customer> Customers { get; }
         DbSet<OrderHistory> OrderHistories { get; }
         DbSet<ParameterType> ParameterTypes { get; }
-        DbSet<Parameter> Parameters { get; }
+        DbSet<Domain.Entities.Parameter> Parameters { get; }
         DbSet<FormDefinitionTagMap> FormDefinitionTagMaps { get; }
         DbSet<OrderDefinition> OrderDefinitions { get; }
         DbSet<OrderDefinitionAction> OrderDefinitionActions { get; }
