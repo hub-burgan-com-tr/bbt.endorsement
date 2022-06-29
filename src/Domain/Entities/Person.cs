@@ -20,7 +20,8 @@ namespace Domain.Entities
         [MaxLength(11)]
         public long CitizenshipNumber { get; set; }
         public int CustomerNumber { get; set; }
-
+        [MaxLength(250)]
+        public string IsKolu { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
