@@ -46,24 +46,41 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
 
             IQueryable<Order> orders = _context.Orders.OrderByDescending(x => x.Created).Include(x => x.Documents).Include(x => x.Person).Include(x => x.Customer);
             if (!string.IsNullOrEmpty(request.Customer))
+            {
+                //if (request.IsBranchApproval && !string.IsNullOrEmpty(request.BranchCode))
+                //{
+                //    orders = orders.Where(x => x.Customer.BranchCode == request.BranchCode.Trim());
+
+                //}
                 orders = orders.Where(x => x.Customer.FirstName.Contains(request.Customer.Trim())
-                                                     || x.Customer.LastName.Contains(request.Customer.Trim()) ||
-                                                     (x.Customer.FirstName + " " + x.Customer.LastName).Contains(request.Customer.Trim())||x.Customer.CustomerNumber.ToString()==request.Customer.ToString()||x.Customer.CitizenshipNumber.ToString()== request.Customer.ToString());
+                                                   || x.Customer.LastName.Contains(request.Customer.Trim()) ||
+                                                   (x.Customer.FirstName + " " + x.Customer.LastName).Contains(request.Customer.Trim()) || x.Customer.CustomerNumber.ToString() == request.Customer.ToString() || x.Customer.CitizenshipNumber.ToString() == request.Customer.ToString());
+
+            }
+              
             if (!string.IsNullOrEmpty(request.Approver))
+            {
+                //if (request.IsBranchApproval&&!string.IsNullOrEmpty(request.BranchCode))
+                //{
+                //    orders = orders.Where(x => x.Person.BranchCode == request.BranchCode.Trim());
+
+                //}
                 orders = orders.Where(x => x.Person.FirstName.Contains(request.Approver.Trim())
-                                                                    || x.Person.LastName.Contains(request.Approver.Trim()) ||
-                                                                    (x.Person.FirstName + " " + x.Person.LastName).Contains(request.Approver.Trim())||x.Person.CitizenshipNumber.ToString()==request.Approver.ToString());
+                                                                  || x.Person.LastName.Contains(request.Approver.Trim()) ||
+                                                                  (x.Person.FirstName + " " + x.Person.LastName).Contains(request.Approver.Trim()) || x.Person.CitizenshipNumber.ToString() == request.Approver.ToString());
+            }
+              
             if (!string.IsNullOrEmpty(request.Process))
                 orders = orders.Where(x => x.Reference.Process.Contains(request.Process.Trim()));
             if (!string.IsNullOrEmpty(request.State))
                 orders = orders.Where(x => x.Reference.State.Contains(request.State.Trim()));
             if (!string.IsNullOrEmpty(request.ProcessNo))
                 orders = orders.Where(x => x.Reference.ProcessNo == request.ProcessNo.Trim());
-            if (request.IsBranchApproval)
-            {
-                orders = orders.Where(x => x.Person.BranchCode == request.BranchCode.Trim());
+            //if (request.IsBranchApproval && !string.IsNullOrEmpty(request.BranchCode))
+            //{
+            //    orders = orders.Where(x => x.Person.BranchCode == request.BranchCode.Trim());
 
-            }
+            //}
             var list = await orders.OrderByDescending(x=>x.Created)
               .Select(x => new GetWatchApprovalDto
               {
