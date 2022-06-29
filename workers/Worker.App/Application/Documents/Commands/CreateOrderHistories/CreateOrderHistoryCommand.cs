@@ -44,7 +44,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             IsStaff = request.IsStaff,
             Request = request.Request,
             Response = request.Response,
-            PersonId = request.PersonId,
+            PersonId = order?.PersonId,
             CustomerId = request.CustomerId,
         });
         var result = _context.SaveChanges();
