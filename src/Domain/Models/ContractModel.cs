@@ -79,6 +79,12 @@ public class OrderPerson
     public int CustomerNumber { get; set; }
     public string BranchCode { get; set; }
     public string BusinessLine { get; set; }
+
+    public bool IsBranchApproval { get; set; }
+    public bool IsBranchFormReader { get; set; }
+    public bool IsFormReader { get; set; }
+    public bool IsNewFormCreator { get; set; }
+    public bool IsReadyFormCreator { get; set; }
 }
 public class OrderDocument
 {

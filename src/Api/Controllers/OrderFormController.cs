@@ -1,4 +1,5 @@
-﻿using Application.Common.Models;
+﻿using Api.Extensions;
+using Application.Common.Models;
 using Application.Endorsements.Commands.NewOrderForms;
 using Application.OrderForms.Commands.NewTagForms;
 using Application.OrderForms.Commands.UpdateFormInformations;
@@ -48,15 +49,7 @@ namespace Api.Controllers
             if(User.Claims.Count() == 0)
                 return Response<NewOrderFormResponse>.Fail("Kullanıcı bulunamadı", 404);
 
-            var person = new OrderPerson
-            {
-                CitizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value),
-                CustomerNumber = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "CustomerNumber").Value),
-                First = User.Claims.FirstOrDefault(c => c.Type == "First").Value,
-                Last = User.Claims.FirstOrDefault(c => c.Type == "Last").Value,
-                BranchCode = User.Claims.FirstOrDefault(c => c.Type == "BranchCode") != null ? User.Claims.FirstOrDefault(c => c.Type == "BranchCode").Value : "",
-                BusinessLine = User.Claims.FirstOrDefault(c => c.Type == "BusinessLine") != null ? User.Claims.FirstOrDefault(c => c.Type == "BusinessLine").Value : ""
-            };
+            var person = UserExtensions.GetOrderPerson(User.Claims);
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
         }

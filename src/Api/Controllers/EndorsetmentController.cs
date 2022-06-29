@@ -20,6 +20,7 @@ using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Models;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Api.Extensions;
 
 namespace Api.Controllers
 {
@@ -43,17 +44,7 @@ namespace Api.Controllers
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
             request.Id = Guid.NewGuid().ToString();
-
-            var person = new OrderPerson
-            {
-                CitizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value),
-                CustomerNumber = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "CustomerNumber").Value),
-                First = User.Claims.FirstOrDefault(c => c.Type == "First").Value,
-                Last = User.Claims.FirstOrDefault(c => c.Type == "Last").Value,
-                BranchCode = User.Claims.FirstOrDefault(c => c.Type == "BranchCode") != null ? User.Claims.FirstOrDefault(c => c.Type == "BranchCode").Value : "",
-                BusinessLine = User.Claims.FirstOrDefault(c => c.Type == "BusinessLine") != null ? User.Claims.FirstOrDefault(c => c.Type == "BusinessLine").Value : ""
-            };
-            
+            var person = UserExtensions.GetOrderPerson(User.Claims);
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
         }
 
@@ -296,9 +287,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
-            var result = await Mediator.Send(new GetWantApprovalQuery {CitizenshipNumber=citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
+             var result = await Mediator.Send(new GetWantApprovalQuery { Person = orderPerson, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(result);
         }
 
