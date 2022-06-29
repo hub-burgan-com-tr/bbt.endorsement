@@ -53,7 +53,7 @@ namespace Api.Controllers
                     CustomerNumber = Convert.ToInt32(response.CustomerNumber),
                     First = response.FirstName,
                     Last = response.LastName,
-                    BusinessLine = response.BusinessLine,
+                    BusinessLine = response.BusinessLine != null ? response.BusinessLine : "",
                     BranchCode = response.BranchCode
                 };
 
