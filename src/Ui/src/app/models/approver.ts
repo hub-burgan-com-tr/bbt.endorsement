@@ -10,4 +10,6 @@ export default class Approver implements IApprover {
   first: string;
   last: string;
   customerNumber : string;
+  businessLine : string;
+  branchCode : number;
 }

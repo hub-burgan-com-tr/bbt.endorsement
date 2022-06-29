@@ -17,7 +17,9 @@ export class PersonSearchComponent implements OnInit {
     first: '',
     last: '',
     citizenshipNumber: '',
-    customerNumber: ''
+    customerNumber: '',
+    businessLine: '',
+    branchCode: ''
   };
 
   constructor(private personService: PersonService) {

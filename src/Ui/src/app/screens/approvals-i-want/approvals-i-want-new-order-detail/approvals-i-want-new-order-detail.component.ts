@@ -262,7 +262,9 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
       citizenshipNumber: this.person.citizenshipNumber,
       first: this.person.first,
       last: this.person.last,
-      customerNumber: this.person.customerNumber
+      customerNumber: this.person.customerNumber,
+      businessLine: this.person.businessLine,
+      branchCode: this.person.branchCode,
     }
     this.approvalButtonText = 'Güncelle';
     this.newOrderService.setModel(this.model);

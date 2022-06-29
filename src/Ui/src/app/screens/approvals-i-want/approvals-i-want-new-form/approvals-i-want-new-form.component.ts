@@ -162,7 +162,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
           citizenshipNumber: this.person.citizenshipNumber,
           first: this.person.first,
           last: this.person.last,
-          customerNumber: this.person.customerNumber
+          customerNumber: this.person.customerNumber,
+          businessLine: this.person.businessLine,
+          branchCode: this.person.branchCode
         }
       };
       this.newOrderFormService.getOrderByFormId(model).pipe(takeUntil(this.destroy$)).subscribe(res => {
@@ -196,7 +198,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         citizenshipNumber: this.person.citizenshipNumber,
         first: this.person.first,
         last: this.person.last,
-        customerNumber: this.person.customerNumber
+        customerNumber: this.person.customerNumber,
+        businessLine: this.person.businessLine,
+        branchCode: this.person.branchCode,
       }, this.source === 'file' ? this.fileBase64 : JSON.stringify(e.data), this.f.fileType.value, this.formDefinitionId, <IReference>{
         processNo: this.f.processNo.value,
         tagId: this.f.tag.value,
