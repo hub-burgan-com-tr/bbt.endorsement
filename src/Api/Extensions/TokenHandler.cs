@@ -24,7 +24,7 @@ public class TokenHandler
                 new Claim("Last",last),
                 new Claim("IsStaff",user.IsStaff.ToString()),
                 new Claim("BusinessLine",user.BusinessLine != null ? user.BusinessLine : ""),
-                new Claim("BranchCode",user.BranchCode)
+                new Claim("BranchCode",user.BranchCode != null ? user.BranchCode : "")
             };
 
         if (user.IsStaff == true)
@@ -42,7 +42,7 @@ public class TokenHandler
                 new Claim("IsNewFormCreator",user.Authory.IsNewFormCreator.ToString()),
                 new Claim("IsReadyFormCreator",user.Authory.IsReadyFormCreator.ToString()),
                 new Claim("BusinessLine",user.BusinessLine != null ? user.BusinessLine : ""),
-                new Claim("BranchCode",user.BranchCode)
+                new Claim("BranchCode",user.BranchCode != null ? user.BranchCode : "")
             };
         }
 
