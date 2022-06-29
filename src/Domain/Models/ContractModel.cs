@@ -67,6 +67,8 @@ public class OrderCustomer
     public string First { get; set; }
     public string Last { get; set; }
     public int CustomerNumber { get; set; }
+    public string BranchCode { get; set; }
+    public string BusinessLine { get; set; }
 }
 
 public class OrderPerson
@@ -75,6 +77,8 @@ public class OrderPerson
     public string First { get; set; }
     public string Last { get; set; }
     public int CustomerNumber { get; set; }
+    public string BranchCode { get; set; }
+    public string BusinessLine { get; set; }
 }
 public class OrderDocument
 {

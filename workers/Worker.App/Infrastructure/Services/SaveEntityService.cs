@@ -35,8 +35,8 @@ namespace Worker.App.Infrastructure.Services
                 FirstName = customer.First,
                 LastName = customer.Last,
                 Created = _dateTime.Now,
-                BranchCode="",
-                BusinessLine=""
+                BranchCode = customer.BranchCode,
+                BusinessLine = customer.BusinessLine
             }).Entity;
 
             _context.SaveChanges();

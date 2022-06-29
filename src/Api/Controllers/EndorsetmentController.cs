@@ -49,7 +49,9 @@ namespace Api.Controllers
                 CitizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value),
                 CustomerNumber = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "CustomerNumber").Value),
                 First = User.Claims.FirstOrDefault(c => c.Type == "First").Value,
-                Last = User.Claims.FirstOrDefault(c => c.Type == "Last").Value
+                Last = User.Claims.FirstOrDefault(c => c.Type == "Last").Value,
+                BranchCode = User.Claims.FirstOrDefault(c => c.Type == "BranchCode") != null ? User.Claims.FirstOrDefault(c => c.Type == "BranchCode").Value : "",
+                BusinessLine = User.Claims.FirstOrDefault(c => c.Type == "BusinessLine") != null ? User.Claims.FirstOrDefault(c => c.Type == "BusinessLine").Value : ""
             };
             
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
