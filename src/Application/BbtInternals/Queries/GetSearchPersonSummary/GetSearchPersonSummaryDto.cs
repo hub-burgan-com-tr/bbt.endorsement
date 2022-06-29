@@ -20,6 +20,8 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public string Email { get; set; }
         public GsmPhones GsmPhone { get; set; }
         public string Data { get; set; }
+        public string BranchCode { get; set; }
+        public string BusinessLine { get; set; }
 
     }
     public class AuthoryModel
