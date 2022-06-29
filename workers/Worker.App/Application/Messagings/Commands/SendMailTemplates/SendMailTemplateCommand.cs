@@ -33,7 +33,10 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
         var messageResponse = new MessageResponse();
         try
         {
-            var order = _context.Orders.Include(x => x.Documents).FirstOrDefault(x => x.OrderId == request.OrderId);
+            var order = _context.Orders
+                    .Include(x => x.Documents)
+                    .FirstOrDefault(x => x.OrderId == request.OrderId);
+
             if (order == null)
                 return Response<MessageResponse>.NotFoundException("Order not found: " + request.OrderId, 404);
 

@@ -23,23 +23,29 @@ namespace Api.Controllers
 
         [Route("login")]
         [HttpGet]
-        [SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(UserModel))]
-        [SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
+        //[SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
+        //[SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<GetSearchPersonSummaryDto> Login(string code, string state)
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public GetSearchPersonSummaryDto Login(string code, string state)
         {
+            var response = new AccessToken();
             try
             {
-                var response = await _userService.AccessToken(code, state);
+                response = _userService.AccessToken(code, state).Result;
 
-                //var response = new AccessToken()
+                if (response.IsLogin == false)
+                {
+                    return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
+                }
+                //response = new AccessToken()
                 //{
-                //    citizenshipNumber = "",
-                //    customerNumber = "0",
-                //    isStaff = "true",
+                //    CitizenshipNumber = "12345678901",
+                //    CustomerNumber = "0",
+                //    IsStaff = "true",
                 //};
-
+                //return new GetSearchPersonSummaryDto { Data = "Giriş" };
                 var result = new GetSearchPersonSummaryDto
                 {
                     CitizenshipNumber = response.CitizenshipNumber,
@@ -60,15 +66,14 @@ namespace Api.Controllers
                     Log.Information("Login-Token: " + result.Token);
                 }
 
-                result.CitizenshipNumber = "";
-                result.CustomerNumber = 0;
                 return result;
             }
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
             }
-            return new GetSearchPersonSummaryDto();
+
+            return null;
         }
 
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
