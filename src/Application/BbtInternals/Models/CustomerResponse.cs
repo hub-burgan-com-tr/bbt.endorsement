@@ -42,6 +42,7 @@ public class CustomerList
     public Device[] Devices { get; set; }
     [JsonProperty("identityNumber")]
     public string IdentityNumber { get; set; }
-
+    [JsonProperty("branchCode")]
+    public string BranchCode { get; set; }
     public AuthoryModel Authory { get; set; }
 }

@@ -54,7 +54,7 @@ namespace Api.Controllers
                     First = response.FirstName,
                     Last = response.LastName,
                     BusinessLine = response.BusinessLine != null ? response.BusinessLine : "",
-                    BranchCode = response.BranchCode
+                    BranchCode = response.BranchCode != null ? response.BranchCode : ""
                 };
 
                 GetCredentials(result, response);
