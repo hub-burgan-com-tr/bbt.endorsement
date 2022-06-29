@@ -23,7 +23,7 @@ public class TokenHandler
                 new Claim("First",first),
                 new Claim("Last",last),
                 new Claim("IsStaff",user.IsStaff.ToString()),
-                new Claim("BusinessLine",user.BusinessLine),
+                new Claim("BusinessLine",user.BusinessLine != null ? user.BusinessLine : ""),
                 new Claim("BranchCode",user.BranchCode)
             };
 
@@ -41,7 +41,7 @@ public class TokenHandler
                 new Claim("IsFormReader",user.Authory.IsFormReader.ToString()),
                 new Claim("IsNewFormCreator",user.Authory.IsNewFormCreator.ToString()),
                 new Claim("IsReadyFormCreator",user.Authory.IsReadyFormCreator.ToString()),
-                new Claim("BusinessLine",user.BusinessLine),
+                new Claim("BusinessLine",user.BusinessLine != null ? user.BusinessLine : ""),
                 new Claim("BranchCode",user.BranchCode)
             };
         }
