@@ -32,8 +32,8 @@ namespace Application.Endorsements.Queries.GetWantApprovals
         public async Task<Response<PaginatedList<GetWantApprovalDto>>> Handle(GetWantApprovalQuery request, CancellationToken cancellationToken)
         {
             Expression<Func<Order, bool>> where = x => true == true;
-            if (request.Person.IsBranchApproval) 
-                where = x => x.Person.BranchCode == request.Person.BranchCode;
+            //if (request.Person.IsBranchApproval) 
+            //    where = x => x.Person.BranchCode == request.Person.BranchCode;
 
             var list = await _context.Orders
                                     .Include(x => x.Documents)
