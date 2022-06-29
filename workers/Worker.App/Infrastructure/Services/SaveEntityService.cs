@@ -2,7 +2,6 @@
 using Domain.Models;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Dtos;
-using Api.Extensions;
 
 namespace Worker.App.Infrastructure.Services
 {
