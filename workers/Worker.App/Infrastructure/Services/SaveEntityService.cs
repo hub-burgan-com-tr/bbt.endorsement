@@ -2,6 +2,7 @@
 using Domain.Models;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Dtos;
+using Api.Extensions;
 
 namespace Worker.App.Infrastructure.Services
 {
@@ -53,6 +54,7 @@ namespace Worker.App.Infrastructure.Services
 
         public async Task<string> PersonSaveAsync(OrderPerson customer)
         {
+
             var entity = _context.Persons.Add(new Person
             {
                 PersonId = Guid.NewGuid().ToString(),
@@ -61,8 +63,8 @@ namespace Worker.App.Infrastructure.Services
                 FirstName = customer.First,
                 LastName = customer.Last,
                 Created = _dateTime.Now,
-                BusinessLine="",
-                BranchCode="",
+                BusinessLine=customer.BusinessLine,
+                BranchCode=customer.BranchCode,
             }).Entity;
 
             _context.SaveChanges();
