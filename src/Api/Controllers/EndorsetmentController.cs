@@ -346,7 +346,9 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWatchApprovalAsync(string customer, string approver, string process, string state,
          string processNo, int pageNumber = 1, int pageSize = 10)
         {
-            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize });
+            var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
+
+            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,BranchCode=orderPerson.BranchCode,IsBranchApproval=orderPerson.IsBranchApproval });
             return Ok(result);
         }
 

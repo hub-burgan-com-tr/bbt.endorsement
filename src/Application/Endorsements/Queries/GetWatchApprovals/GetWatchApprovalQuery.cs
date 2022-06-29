@@ -22,6 +22,9 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
         public string Process { get; set; }
         public string State { get; set; }
         public string ProcessNo { get; set; }
+        public string BranchCode { get; set; }
+        public bool IsBranchApproval { get; set; }
+
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
 
@@ -56,6 +59,11 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
                 orders = orders.Where(x => x.Reference.State.Contains(request.State.Trim()));
             if (!string.IsNullOrEmpty(request.ProcessNo))
                 orders = orders.Where(x => x.Reference.ProcessNo == request.ProcessNo.Trim());
+            if (request.IsBranchApproval)
+            {
+                orders = orders.Where(x => x.Person.BranchCode == request.BranchCode.Trim());
+
+            }
             var list = await orders.OrderByDescending(x=>x.Created)
               .Select(x => new GetWatchApprovalDto
               {
