@@ -16,6 +16,7 @@ namespace Migration.Console.App.Seed
                 var parameterType2 = context.ParameterTypes.Add(new ParameterType { Name = "Aşama", Created = DateTime.Now });
                 parameterType2.Entity.Parameters.Add(new Parameter { Text = "Başvuru Formu", Created = DateTime.Now });
                 parameterType2.Entity.Parameters.Add(new Parameter { Text = "Teklif Formu", Created = DateTime.Now });
+                var dys = context.ParameterTypes.Add(new ParameterType { Name = "Dys", Created = DateTime.Now });
 
                 var dysParameter = context.ParameterTypes.Add(new ParameterType { Name = "Dys Form Kategorileri" }).Entity;
                 dysParameter.Parameters.Add(new Parameter { Text = "Esya", Created = DateTime.Now, DmsReferenceId = 1565,DmsReferenceKey=1210 });

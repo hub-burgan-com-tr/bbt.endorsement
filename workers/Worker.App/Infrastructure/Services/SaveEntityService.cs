@@ -35,7 +35,8 @@ namespace Worker.App.Infrastructure.Services
                 FirstName = customer.First,
                 LastName = customer.Last,
                 Created = _dateTime.Now,
-                IsKolu="",
+                BranchCode="",
+                BusinessLine=""
             }).Entity;
 
             _context.SaveChanges();
@@ -60,7 +61,8 @@ namespace Worker.App.Infrastructure.Services
                 FirstName = customer.First,
                 LastName = customer.Last,
                 Created = _dateTime.Now,
-                IsKolu="",
+                BusinessLine="",
+                BranchCode="",
             }).Entity;
 
             _context.SaveChanges();

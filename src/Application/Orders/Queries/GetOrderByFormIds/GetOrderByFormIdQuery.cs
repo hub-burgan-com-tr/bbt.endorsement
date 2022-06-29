@@ -41,7 +41,8 @@ public class GetOrderByFormIdQueryHandler : IRequestHandler<GetOrderByFormIdQuer
                     FirstName = request.Approver.First,
                     LastName = request.Approver.Last,
                     Created = _dateTime.Now,
-                    IsKolu="",
+                    BranchCode="",
+                    BusinessLine=""
                 }).Entity;
 
                 _context.SaveChanges();

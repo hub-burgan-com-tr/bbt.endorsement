@@ -21,7 +21,9 @@ namespace Domain.Entities
         public long CitizenshipNumber { get; set; }
         public int CustomerNumber { get; set; }
         [MaxLength(250)]
-        public string IsKolu { get; set; }
+        public string BranchCode { get; set; }
+        [MaxLength(250)]
+        public string BusinessLine { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
