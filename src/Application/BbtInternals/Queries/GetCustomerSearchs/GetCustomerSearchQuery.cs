@@ -50,6 +50,8 @@ public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQu
                 Email = x.Email,
                 TaxNo=x.TaxNo,
                 GsmPhone = x.GsmPhone,
+                BranchCode = x.BranchCode,
+                BusinessLine=x.BusinessLine,
                 // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
             });
 
