@@ -66,7 +66,7 @@ public class DmsController : ControllerBase
         document.Definition = new DocumentDefinition
         {
             DmsReferenceId = "1565",
-            Key = DocumentDefinitionType.None
+            Key = "Diðer Elementer Poliçesi"
         };
 
         document.Contents = new List<DocumentContent>();

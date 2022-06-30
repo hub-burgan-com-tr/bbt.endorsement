@@ -23,7 +23,7 @@ namespace Migration.Console.App.Seed
                 dysParameter.Parameters.Add(new Parameter { Text = "Kasko", Created = DateTime.Now, DmsReferenceId = 1568, DmsReferenceKey = 1220, DmsReferenceName= "Araç Kasko Trafik Poliçesi" });
                 dysParameter.Parameters.Add(new Parameter { Text = "Trafik", Created = DateTime.Now, DmsReferenceId = 1568, DmsReferenceKey = 1220, DmsReferenceName = "Araç Kasko Trafik Poliçesi" });
                 dysParameter.Parameters.Add(new Parameter { Text = "Isyeri", Created = DateTime.Now, DmsReferenceId = 1565, DmsReferenceKey = 1210, DmsReferenceName = "Esya Konut DASK Isyeri Poliçesi" });
-                dysParameter.Parameters.Add(new Parameter { Text = "Diger", Created = DateTime.Now, DmsReferenceId = 1572, DmsReferenceKey = 1200, DmsReferenceName = "Diğer Elementer Kasko Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { Text = "Diger", Created = DateTime.Now, DmsReferenceId = 1572, DmsReferenceKey = 1200, DmsReferenceName = "Diğer Elementer Poliçesi" });
 
                 await context.SaveChangesAsync();
             }

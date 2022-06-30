@@ -45,7 +45,8 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
                 .Select(x => new
                 {
                     DmsReferenceId = x.Parameter.DmsReferenceId,
-                    DmsReferenceKey = x.Parameter.DmsReferenceKey
+                    DmsReferenceKey = x.Parameter.DmsReferenceKey,
+                    DmsReferenceName = x.Parameter.DmsReferenceName,
                 }).ToList().Distinct();
 
             if (documentInsuranceTypes.Any())
@@ -54,21 +55,23 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
                 {
                     var dmsReferenceId = documentInsuranceType.DmsReferenceId.ToString();
                     var dmsReferenceKey = documentInsuranceType.DmsReferenceId.ToString();
-                    dmsIds = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, request.InstanceId, dmsIds);
+                    var dmsReferenceName = documentInsuranceType.DmsReferenceName;
+                    dmsIds = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName, request.InstanceId, dmsIds);
                 }
             }
             else
             {
                 var dmsReferenceId = "1572";
                 var dmsReferenceKey = ((int)DocumentDefinitionType.OtherInsurancePolicy).ToString();
-                dmsIds = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, request.InstanceId, dmsIds);
+                var dmsReferenceName = "Diğer Elementer Poliçesi";
+                dmsIds = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName,  request.InstanceId, dmsIds);
             }
         }
 
         return Response<List<string>>.Success(dmsIds, 200);
     }
 
-    private List<string> CreateDMSDocumentSend(Domain.Entities.Document document, Domain.Entities.Customer customer, string dmsReferenceId, string dmsReferenceKey, string instanceId, List<string> dmsIds)
+    private List<string> CreateDMSDocumentSend(Domain.Entities.Document document, Domain.Entities.Customer customer, string dmsReferenceId, string dmsReferenceKey, string dmsReferenceName, string instanceId, List<string> dmsIds)
     {
         var channelReferenceId = "";
         var version = "";
@@ -88,7 +91,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
             Definition = new DocumentDefinition
             {
                 DmsReferenceId = dmsReferenceId,
-                Key = (DocumentDefinitionType)Enum.Parse(typeof(DocumentDefinitionType), dmsReferenceKey)
+                Key = dmsReferenceName, //(DocumentDefinitionType)Enum.Parse(typeof(DocumentDefinitionType), dmsReferenceKey)
             },
             Contents = new List<DocumentContent>()
         };
