@@ -30,6 +30,7 @@ namespace Infrastructure.Services
 
         public async Task<Response<string>> PdfRender(string templateName, string content)
         {
+            var responseContent = "";
             var jsonData = GetJsonData(templateName, content);
             var restClient = new RestClient(_templateEngineUrl);
             var restRequest = new RestRequest("/Template/Render/Pdf", Method.Post);
@@ -37,9 +38,11 @@ namespace Infrastructure.Services
             restRequest.AddHeader("Accept", "application/json");
             restRequest.AddStringBody(jsonData, DataFormat.Json);
             var response = await restClient.ExecutePostAsync(restRequest);
-
-            var data = PDFReplace(response.Content);
-            var responseContent = "data:application/pdf;base64," + data;
+            if (response.IsSuccessful)
+            {
+                var data = PDFReplace(response.Content);
+                responseContent = "data:application/pdf;base64," + data;
+            }
             return Response<string>.Success(responseContent, 200);
         }
       

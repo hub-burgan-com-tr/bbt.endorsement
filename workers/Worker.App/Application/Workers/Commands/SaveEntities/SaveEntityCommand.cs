@@ -79,14 +79,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 });
             }
 
-            var documentInsuranceTypes = new List<DocumentInsuranceType>();
-            foreach (var type in startFormRequest.InsuranceType.Split(","))
-            {
-                var parameter = _context.Parameters.FirstOrDefault(x => x.DmsReferenceId != null && x.Text.ToLower() == type.ToLower().Trim());
-               if(parameter != null)
-                    documentInsuranceTypes.Add(new DocumentInsuranceType { DocumentInsuranceTypeId = Guid.NewGuid().ToString(), ParameterId = parameter.Id});
-            }
-
             var mimeType = formDefinition.Type.ToString() == ContentType.HTML.ToString() ? "text/html" : "application/pdf";
             if (startFormRequest.Source == "file")
                 mimeType = startFormRequest.FileType;
@@ -102,14 +94,10 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 InsuranceType = startFormRequest.InsuranceType,
                 Created = _dateTime.Now,
                 DocumentActions = actions,
-                FormDefinitionId = startFormRequest.FormId,
-                DocumentInsuranceTypes = documentInsuranceTypes
+                FormDefinitionId = startFormRequest.FormId
             };
 
-            var documents = new List<Domain.Entities.Document>
-            {
-                document
-            };
+            var documents = new List<Domain.Entities.Document>();
 
             var customer = GetCustomerId(startFormRequest.Approver);
             if(customer.StatusCode != 200)
@@ -128,7 +116,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     var dependencyOrderDocument = _context.Documents.FirstOrDefault(x => x.OrderId == startFormRequest.DependencyOrderId);
                     if (dependencyOrderDocument != null)
                     {
+                        var documentInsuranceTypes = GetDocumentInsuranceType(dependencyOrderDocument.InsuranceType);
                         document.InsuranceType = dependencyOrderDocument.InsuranceType;
+                        document.DocumentInsuranceTypes = documentInsuranceTypes;
                         documents = new List<Domain.Entities.Document> { document };
                     }
                     //var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
@@ -176,6 +166,11 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 //    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, OrderId = order.OrderId, DocumentId = document.DocumentId });
                 //    var entity = _context.OrderGroups.Add(orderGroup).Entity;
                 //}
+
+
+                var documentInsuranceTypes = GetDocumentInsuranceType(startFormRequest.InsuranceType);
+                document.DocumentInsuranceTypes = documentInsuranceTypes;
+                documents = new List<Domain.Entities.Document> { document };
 
                 var orderGroupId = Guid.NewGuid().ToString();
                 var orderGroup = new OrderGroup
@@ -233,6 +228,18 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 }).FirstOrDefault();
 
             return order;
+        }
+
+        private List<DocumentInsuranceType> GetDocumentInsuranceType(string insuranceType)
+        {
+            var documentInsuranceTypes= new List<DocumentInsuranceType>();
+            foreach (var type in insuranceType.Split(","))
+            {
+                var parameter = _context.Parameters.FirstOrDefault(x => x.DmsReferenceId != null && x.Text.ToLower() == type.ToLower().Trim());
+                if (parameter != null)
+                    documentInsuranceTypes.Add(new DocumentInsuranceType { DocumentInsuranceTypeId = Guid.NewGuid().ToString(), ParameterId = parameter.Id });
+            }
+            return documentInsuranceTypes;
         }
 
         private Response<string> GetCustomerId(OrderCustomer customer)
