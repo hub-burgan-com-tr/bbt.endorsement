@@ -125,6 +125,12 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.Order.CustomerId == customerId && y.OrderId == startFormRequest.DependencyOrderId));
                 if (orderGroup != null)
                 {
+                    var dependencyOrderDocument = _context.Documents.FirstOrDefault(x => x.OrderId == startFormRequest.DependencyOrderId);
+                    if (dependencyOrderDocument != null)
+                    {
+                        document.InsuranceType = dependencyOrderDocument.InsuranceType;
+                        documents = new List<Domain.Entities.Document> { document };
+                    }
                     //var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
                     //                                                       x.OrderGroupId == orderGroup.OrderGroupId &&
                     //                                                       x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
