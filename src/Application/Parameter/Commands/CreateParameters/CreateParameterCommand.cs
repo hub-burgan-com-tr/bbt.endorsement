@@ -19,6 +19,8 @@ namespace Application.Parameter.Commands.CreateParameters
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }
         public int? DmsReferenceKey { get; set; }
+        public string DmsReferenceName { get; set; }
+
 
     }
 
@@ -39,6 +41,9 @@ namespace Application.Parameter.Commands.CreateParameters
             CreateParameterCommandValidator validator = new CreateParameterCommandValidator();
             var respnse = validator.Validate(request);
             validator.ValidateAndThrow(request);
+            var IsText = _context.Parameters.Any(x=>x.Text==request.Text.Trim());
+            if (IsText)
+                throw new Exception("Aynı Parametre Daha Önce Eklenmiştir");
             int result = 0;             
                 var parameter = _context.Parameters.Add(new Domain.Entities.Parameter
                 {
@@ -46,7 +51,9 @@ namespace Application.Parameter.Commands.CreateParameters
                     DmsReferenceKey=request.DmsReferenceKey,
                     DmsReferenceId=request.DmsReferenceId,
                     ParameterTypeId=request.ParameterTypeId,
-                    Text=request.Text
+                    Text=request.Text,
+                    DmsReferenceName=request.DmsReferenceName,
+                    Created=DateTime.Now,
                 });
                 
                 result = _context.SaveChanges();
