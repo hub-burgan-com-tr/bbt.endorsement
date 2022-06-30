@@ -14,7 +14,9 @@ namespace Domain.Entities
         public string DocumentId { get; set; }
         [MaxLength(36)]
         public string DmsReferenceId { get; set; }
-
+        public int? DmsReferenceKey { get; set; }
+        [MaxLength(250)]
+        public string DmsReferenceName { get; set; }
         public virtual Document Document { get; set; }
     }
 }

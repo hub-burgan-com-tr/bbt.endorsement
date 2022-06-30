@@ -11,6 +11,8 @@ namespace Application.Parameter.Commands.UpdateParameters
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }
         public int? DmsReferenceKey { get; set; }
+        public string DmsReferenceName { get; set; }
+
     }
 
 
@@ -30,13 +32,22 @@ namespace Application.Parameter.Commands.UpdateParameters
             UpdateParameterCommandValidator validator = new UpdateParameterCommandValidator();
             var respnse = validator.Validate(request);
             validator.ValidateAndThrow(request);
-            int result = 0;
             var parameter = _context.Parameters.FirstOrDefault(x => x.Text == request.Text.Trim());
+            if (parameter != null)
+            {
+                var IsText = _context.Parameters.Any(x => x.Text == request.Text.Trim()&&x.Id!=parameter.Id);
+
+                if (IsText)
+                    throw new Exception("Aynı Parametre Daha Önce Eklenmiştir");
+            }
+      
+            int result = 0;
             if (parameter != null)
             {
                 parameter.DmsReferenceId = request.DmsReferenceId;
                 parameter.DmsReferenceKey = request.DmsReferenceKey;
                 parameter.Created = DateTime.Now;
+                parameter.DmsReferenceName = request.DmsReferenceName;
                 _context.Parameters.Update(parameter);
                 result = _context.SaveChanges();
             }
