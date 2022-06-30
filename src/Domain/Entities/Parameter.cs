@@ -15,7 +15,8 @@ namespace Domain.Entities
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }
         public int? DmsReferenceKey { get; set; }
-
+        [MaxLength(250)]
+        public string DmsReferenceName { get; set; }
         public virtual ParameterType ParameterType { get; set; }
 
         public virtual ICollection<DocumentInsuranceType> DocumentInsuranceTypes { get; set; }
