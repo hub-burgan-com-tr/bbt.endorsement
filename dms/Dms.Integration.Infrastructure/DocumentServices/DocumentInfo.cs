@@ -46,7 +46,7 @@ public abstract class DocumentInfo
     {
         get
         {
-            return $"{OwnerName}{OwnerSurname}-{Document.Definition.Key.ToString()}-{Guid.NewGuid()}." + Content.MimeType.Split("/")[1];
+            return $"{OwnerName}{OwnerSurname}-{Document.Definition.Key}-{Guid.NewGuid()}." + Content.MimeType.Split("/")[1];
         }
     }
 
@@ -65,9 +65,9 @@ public abstract class DocumentInfo
             if (Document.OwnerActionType.HasValue
                 && Document.OwnerActionType.Value != DocumentActionType.None)
             {
-                return $"{DmsPrefix} - {Document.Definition.Key.GetAttributeDescription()} -  {Document.OwnerActionType.GetAttributeDescription()}";
+                return $"{DmsPrefix} - {Document.Definition.Key} -  {Document.OwnerActionType.GetAttributeDescription()}";
             }
-            return $"{DmsPrefix} - { Document.Definition.Key.GetAttributeDescription()} ";
+            return $"{DmsPrefix} - { Document.Definition.Key} ";
         }
     }
 

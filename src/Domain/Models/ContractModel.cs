@@ -7,7 +7,7 @@ public class ContractModel
     public ContractModel()
     {
         Documents = new List<ApproveOrderDocument>();
-        DmsIds = new List<string>();
+        DmsIds = new List<DMSDocumentResponse>();
         Services = new List<string>();
     }
 
@@ -38,7 +38,14 @@ public class ContractModel
     public List<string> Services { get; set; }
 
     public List<ApproveOrderDocument> Documents { get; set; }
-    public List<string> DmsIds { get; set; }
+    public List<DMSDocumentResponse> DmsIds { get; set; }
+}
+
+public class DMSDocumentResponse
+{
+    public string DmsRefId { get; set; } // CreateDMSDocument Gelen
+    public int? DmsReferenceKey { get; set; }
+    public string DmsReferenceName { get; set; }
 }
 
 public class ApproveOrderDocument

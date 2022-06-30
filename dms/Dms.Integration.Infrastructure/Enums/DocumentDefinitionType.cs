@@ -38,7 +38,7 @@ public enum DocumentDefinitionType
     /// <summary>
     /// Diğer Elementer Kasko Poliçesi => 1572
     /// </summary>
-    [Name("Diğer Elementer Kasko Poliçesi")]
+    [Name("Diğer Elementer Poliçesi")]
     OtherInsurancePolicy = 1200,
 
     /// <summary>

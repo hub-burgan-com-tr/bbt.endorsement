@@ -672,7 +672,7 @@ public class ContractApprovalService : IContractApprovalService
                         }).Result;
 
                         variables.IsProcess = true;
-                        variables.DmsIds = dms.Data;
+                        variables.DmsIds = dms.Data.Select(x => new DMSDocumentResponse { DmsReferenceKey = x.DmsReferenceKey, DmsReferenceName = x.DmsReferenceName, DmsRefId = x.DmsRefId}).ToList();
                     }
                     catch (Exception ex)
                     {
