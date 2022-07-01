@@ -20,7 +20,16 @@ namespace Application.OrderForms.Queries.GetTagsFormName
         }
         public async Task<Response<List<GetTagsFormDto>>> Handle(GetTagsFormNameQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.FormDefinitionTagMaps.Include(x=>x.FormDefinition).Where(x=>request.FormDefinitionTagsId.Contains(x.FormDefinitionTagId)).Select(x => new GetTagsFormDto { FormDefinitionId = x.FormDefinitionId, Name = x.FormDefinition.Name }).OrderBy(x => x.Name).ToList();
+            var response = _context.FormDefinitionTagMaps
+                .Include(x => x.FormDefinition)
+                .Where(x => request.FormDefinitionTagsId.Contains(x.FormDefinitionTagId))
+                .Select(x => new GetTagsFormDto
+                {
+                    FormDefinitionId = x.FormDefinitionId,
+                    Name = x.FormDefinition.Name,
+                })
+                .OrderBy(x => x.Name)
+                .ToList();
             return Response<List<GetTagsFormDto>>.Success(response, 200);
         }
     }

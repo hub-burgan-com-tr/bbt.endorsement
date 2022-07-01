@@ -12,12 +12,6 @@ namespace Migration.Console.App.Seed
 
             if (!context.ParameterTypes.Any())
             {
-                var parameterType = context.ParameterTypes.Add(new ParameterType { Name = "İşlem", Created = DateTime.Now });
-                parameterType.Entity.Parameters.Add(new Parameter { Text = "Sigorta Formları", Created = DateTime.Now,IsProcessNo=true });
-                var parameterType2 = context.ParameterTypes.Add(new ParameterType { Name = "Aşama", Created = DateTime.Now });
-                parameterType2.Entity.Parameters.Add(new Parameter { Text = "Başvuru Formu", Created = DateTime.Now });
-                parameterType2.Entity.Parameters.Add(new Parameter { Text = "Teklif Formu", Created = DateTime.Now });
-
                 var dysParameter = context.ParameterTypes.Add(new ParameterType { Name = "Dys Form Kategorileri" }).Entity;
                 dysParameter.Parameters.Add(new Parameter { Text = "Esya", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey=1210,DmsReferenceName= "Konut Sigorta Poliçesi" });
                 dysParameter.Parameters.Add(new Parameter { Text = "Konut", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey = 1210,DmsReferenceName= "Konut Sigorta Poliçesi" });               

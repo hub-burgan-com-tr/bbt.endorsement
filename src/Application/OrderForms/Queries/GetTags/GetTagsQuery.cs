@@ -17,7 +17,8 @@ namespace Application.OrderForms.Queries.GetTags
         }
         public async Task<Response<List<GetTagsDto>>> Handle(GetTagsQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.FormDefinitionTags.Select(x => new GetTagsDto { FormDefinitionTagId = x.FormDefinitionTagId, Tag = x.Tag }).OrderBy(x => x.Tag).ToList();
+            var response = _context.FormDefinitionTags
+                .Select(x => new GetTagsDto { FormDefinitionTagId = x.FormDefinitionTagId, Tag = x.Tag,IsProcessNo=x.IsProcessNo }).OrderBy(x => x.Tag).ToList();
             return Response<List<GetTagsDto>>.Success(response, 200);
         }
     }
