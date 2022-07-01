@@ -34,7 +34,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
         try
         {
             var order = _context.Orders
-                    .Include(x => x.Documents)
+                    .Include(x => x.Documents).Include(x=>x.Customer)
                     .FirstOrDefault(x => x.OrderId == request.OrderId);
 
             if (order == null)
@@ -52,6 +52,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                     sender = "AutoDetect"
                 },
                 templateParams = templateParams,
+                customerNo = order.Customer.CustomerNumber,
                 email = request.Email,
                 template = "Müşteriye Giden Başvuru Onay Talebi",
                 process = new SendMailTemplateProcess

@@ -9,27 +9,24 @@ namespace Migration.Console.App.Seed
         {
             if (context == null)
                 return;
+
             if (!context.ParameterTypes.Any())
             {
                 var parameterType = context.ParameterTypes.Add(new ParameterType { Name = "İşlem", Created = DateTime.Now });
-                parameterType.Entity.Parameters.Add(new Parameter { Text = "Sigorta Formları", Created = DateTime.Now });
+                parameterType.Entity.Parameters.Add(new Parameter { Text = "Sigorta Formları", Created = DateTime.Now,IsProcessNo=true });
                 var parameterType2 = context.ParameterTypes.Add(new ParameterType { Name = "Aşama", Created = DateTime.Now });
                 parameterType2.Entity.Parameters.Add(new Parameter { Text = "Başvuru Formu", Created = DateTime.Now });
                 parameterType2.Entity.Parameters.Add(new Parameter { Text = "Teklif Formu", Created = DateTime.Now });
-                var dysParameter = context.ParameterTypes.Add(new ParameterType { Name = "Dys Form Kategorileri" }).Entity;
-                dysParameter.Parameters.Add(new Parameter { Text = "Esya", Created = DateTime.Now, DmsReferenceId = 1565,DmsReferenceKey=1210,DmsReferenceName= "Esya Konut DASK Isyeri Poliçesi" });
-                dysParameter.Parameters.Add(new Parameter { Text = "Konut", Created = DateTime.Now, DmsReferenceId = 1565, DmsReferenceKey = 1210,DmsReferenceName= "Esya Konut DASK Isyeri Poliçesi" });
-                dysParameter.Parameters.Add(new Parameter { Text = "DASK", Created = DateTime.Now, DmsReferenceId = 1565, DmsReferenceKey = 1210 , DmsReferenceName = "Esya Konut DASK Isyeri Poliçesi" });
-                dysParameter.Parameters.Add(new Parameter { Text = "Kasko", Created = DateTime.Now, DmsReferenceId = 1568, DmsReferenceKey = 1220, DmsReferenceName= "Araç Kasko Trafik Poliçesi" });
-                dysParameter.Parameters.Add(new Parameter { Text = "Trafik", Created = DateTime.Now, DmsReferenceId = 1568, DmsReferenceKey = 1220, DmsReferenceName = "Araç Kasko Trafik Poliçesi" });
-<<<<<<< HEAD
-                dysParameter.Parameters.Add(new Parameter { Text = "İsyeri", Created = DateTime.Now, DmsReferenceId = 1565, DmsReferenceKey = 1210, DmsReferenceName = "Esya Konut DASK Isyeri Poliçesi" });
-                dysParameter.Parameters.Add(new Parameter { Text = "Diger", Created = DateTime.Now, DmsReferenceId = 1572, DmsReferenceKey = 1200, DmsReferenceName = "Diğer Elementer Kasko Poliçesi" });
-=======
-                dysParameter.Parameters.Add(new Parameter { Text = "Isyeri", Created = DateTime.Now, DmsReferenceId = 1565, DmsReferenceKey = 1210, DmsReferenceName = "Esya Konut DASK Isyeri Poliçesi" });
-                dysParameter.Parameters.Add(new Parameter { Text = "Diger", Created = DateTime.Now, DmsReferenceId = 1572, DmsReferenceKey = 1200, DmsReferenceName = "Diğer Elementer Poliçesi" });
->>>>>>> 2b9ff6b2f2912f4efc51c0446efbfe6b22bff33b
 
+                var dysParameter = context.ParameterTypes.Add(new ParameterType { Name = "Dys Form Kategorileri" }).Entity;
+                dysParameter.Parameters.Add(new Parameter { Text = "Esya", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey=1210,DmsReferenceName= "Konut Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { Text = "Konut", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey = 1210,DmsReferenceName= "Konut Sigorta Poliçesi" });               
+                dysParameter.Parameters.Add(new Parameter { Text = "DASK", Created = DateTime.Now, DmsReferenceId = 1832, DmsReferenceKey = 1210 , DmsReferenceName = "Dask Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { Text = "Kasko", Created = DateTime.Now, DmsReferenceId = 1829, DmsReferenceKey = 1220, DmsReferenceName= "Kasko Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { Text = "Trafik", Created = DateTime.Now, DmsReferenceId = 1830, DmsReferenceKey = 1220, DmsReferenceName = "Trafik Sigorta Poliçesi" });               
+                dysParameter.Parameters.Add(new Parameter { Text = "İsyeri", Created = DateTime.Now, DmsReferenceId = 1833, DmsReferenceKey = 1210, DmsReferenceName = "Diğer Elementer Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { Text = "Diger", Created = DateTime.Now, DmsReferenceId = 1833, DmsReferenceKey = 1200, DmsReferenceName = "Diğer Elementer Kasko Poliçesi" });
+              
                 await context.SaveChangesAsync();
             }
         }

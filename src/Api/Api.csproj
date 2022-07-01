@@ -16,9 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="appsettings.Prod.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="appsettings.Test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

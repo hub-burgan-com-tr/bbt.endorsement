@@ -5,6 +5,7 @@ public class SendMailTemplateRequest
     public SendMailTemplateHeaderInfo headerInfo { get; set; }
     public string templateParams { get; set; }
     public string template { get; set; }
+    public int customerNo { get; set; }
     public string email { get; set; }
     public SendMailTemplateProcess process { get; set; }
 }

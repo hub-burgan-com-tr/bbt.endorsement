@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
@@ -33,7 +34,7 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
     {
         try
         {
-            var order = _context.Orders.FirstOrDefault(o => o.OrderId == request.OrderId);
+            var order = _context.Orders.Include(x=>x.Customer).FirstOrDefault(o => o.OrderId == request.OrderId);
             var gsmPhone = request.GsmPhone; 
             
             var param = new SendMailTemplate
@@ -51,6 +52,7 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
                 templateParams = templateParams,
                 template = "Müşteriden Talep Edilen Onay SMS'i",
                 title = order.Title,
+                customerNo = order.Customer.CustomerNumber,
                 phone = new Phone
                 {
                     countryCode = request.GsmPhone.County,

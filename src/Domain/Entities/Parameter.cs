@@ -17,6 +17,7 @@ namespace Domain.Entities
         public int? DmsReferenceKey { get; set; }
         [MaxLength(250)]
         public string DmsReferenceName { get; set; }
+        public bool IsProcessNo { get; set; }
         public virtual ParameterType ParameterType { get; set; }
 
         public virtual ICollection<DocumentInsuranceType> DocumentInsuranceTypes { get; set; }

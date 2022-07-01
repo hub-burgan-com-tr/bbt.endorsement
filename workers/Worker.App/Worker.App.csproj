@@ -23,7 +23,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
     <PackageReference Include="RestSharp" Version="107.3.0" />
@@ -60,6 +60,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\dms\Dms.Integration.Infrastructure\Dms.Integration.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\src\Api\Api.csproj" />
 	  <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
 	</ItemGroup>
 
