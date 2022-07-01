@@ -354,3 +354,5 @@ MigrationBackup/
 
 /tests/Application.IntegrationTests/appsettings.Development.json
 /dms/Dms.Integration.Api/appsettings.Development.json
+/migration/Migration.Console.App/appsettings.Development.json
+/tests/Application.IntegrationTests
