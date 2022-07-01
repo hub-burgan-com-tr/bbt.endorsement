@@ -10,7 +10,6 @@ namespace Application.OrderForms.Queries.GetTags
     public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, Response<List<GetTagsDto>>>
     {
         private IApplicationDbContext _context;
-
         public GetTagsQueryHandler(IApplicationDbContext context)
         {
             _context = context;
