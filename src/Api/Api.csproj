@@ -13,18 +13,22 @@
   <ItemGroup>
     <Content Remove="appsettings.Prod.json" />
     <Content Remove="appsettings.Test.json" />
+    <Content Remove="appsettings.Uat.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="appsettings.Uat.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="appsettings.Test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -32,14 +36,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.1" />
 
 	  <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.5" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.6" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
 	  <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 	  <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-	  <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.7.0" />
+	  <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.7.1" />
 	  
   </ItemGroup>
 
