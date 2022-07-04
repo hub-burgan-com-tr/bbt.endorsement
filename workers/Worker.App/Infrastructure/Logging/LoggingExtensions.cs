@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.EventLog;
 using Serilog;
 using Serilog.Events;
+using Serilog.Exceptions;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.Elasticsearch;
 using Serilog.Sinks.File;
@@ -117,10 +119,10 @@ public static class LoggingExtensions
             options.LogLevel["Default"] = "Warning";
         }
 
-        options.File ??= new FileOptions
-        {
-            MinimumLogEventLevel = LogEventLevel.Warning,
-        };
+        //options.File ??= new System.IO.FileOptions
+        //{
+        //    MinimumLogEventLevel = LogEventLevel.Warning,
+        //};
 
         options.Elasticsearch ??= new ElasticsearchOptions
         {
