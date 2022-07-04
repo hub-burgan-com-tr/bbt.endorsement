@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+	
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+	<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +13,6 @@
     <None Remove="Domain\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Infrastructure\Logging\LoggingExtensions.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.1.0" />
@@ -29,23 +27,16 @@
     <PackageReference Include="RestSharp" Version="108.0.1" />
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="8.3.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.7.1" />
     <PackageReference Include="zb-client" Version="1.2.1" />
   </ItemGroup>
 
+	
 
 	<ItemGroup>
-		<None Update="appsettings.Uat.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="appsettings.Test.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="appsettings.Prod.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -55,15 +46,8 @@
 		</None>
 	</ItemGroup>
 
-
-	<ItemGroup>
-	  <Folder Include="Application\Documents\Queries\" />
-	</ItemGroup>
-
-
 	<ItemGroup>
 	  <ProjectReference Include="..\..\dms\Dms.Integration.Infrastructure\Dms.Integration.Infrastructure.csproj" />
-	  <ProjectReference Include="..\..\src\Api\Api.csproj" />
 	  <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
 	</ItemGroup>
 
