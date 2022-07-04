@@ -76,7 +76,10 @@
           <div class="form-group">
             <label for="processNo">İşlem No</label>
             <input type="text" class="form-control" id="processNo" name="processNo" (change)="processNoChange()"
-                   formControlName="processNo">
+                   formControlName="processNo" [ngClass]="{ 'is-invalid': submitted && f.processNo.invalid }">
+            <div *ngIf="submitted && f.processNo.errors" class="invalid-feedback">
+              <div *ngIf="f.processNo.errors.required">İşlem No girilmelidir.</div>
+            </div>
           </div>
         </div>
 
