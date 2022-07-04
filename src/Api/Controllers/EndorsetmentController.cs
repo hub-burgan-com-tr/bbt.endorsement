@@ -43,6 +43,7 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
+            //
             request.Id = Guid.NewGuid().ToString();
             var person = UserExtensions.GetOrderPerson(User.Claims);
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
