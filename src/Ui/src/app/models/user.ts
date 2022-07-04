@@ -14,5 +14,10 @@ export interface User {
     "isFormReader": boolean,
     "isBranchFormReader": boolean,
     "isBranchApproval": boolean
-  }
+  },
+  "email": string,
+  "gsmPhone": string,
+  "data": any,
+  "branchCode": string,
+  "businessLine": string
 }

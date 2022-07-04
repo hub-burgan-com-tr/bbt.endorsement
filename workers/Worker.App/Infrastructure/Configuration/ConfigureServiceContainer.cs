@@ -14,7 +14,7 @@ namespace Infrastructure.Configuration
 {
     public static class ConfigureServiceContainer
     {
-        public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static void AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var settings = configuration.Get<AppSettings>();
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -29,16 +29,16 @@ namespace Infrastructure.Configuration
             services.AddTransient<IDomainEventService, DomainEventService>();
         }
 
-        public static void AddScopedServices(this IServiceCollection services)
+        public static void AddCustomScoped(this IServiceCollection services)
         {
         }
 
-        public static void AddTransientServices(this IServiceCollection services)
+        public static void AddCustomTransien(this IServiceCollection services)
         {
             services.AddTransient<IDateTime, DateTimeService>();
         }
 
-        public static void AddSingletonServices(this IServiceCollection services)
+        public static void AddCustomSingleton(this IServiceCollection services)
         {
             services.AddSingleton<IZeebeService, ZeebeService>();
             services.AddSingleton<IContractApprovalService, ContractApprovalService>();

@@ -8,10 +8,10 @@ namespace Worker.App.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext(configuration);
-            services.AddScopedServices();
-            services.AddTransientServices();
-            services.AddSingletonServices();
+            services.AddCustomDbContext(configuration);
+            services.AddCustomScoped();
+            services.AddCustomTransien();
+            services.AddCustomSingleton();
 
             return services;
         }

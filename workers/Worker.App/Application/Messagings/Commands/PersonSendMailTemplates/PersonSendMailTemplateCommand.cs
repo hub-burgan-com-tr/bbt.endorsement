@@ -57,6 +57,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                     sender = "AutoDetect"
                 },
                 templateParams = templateParams,
+                customerNo = order.Person.CustomerNumber,
                 email = request.Email,
                 process = new SendMailTemplateProcess
                 {

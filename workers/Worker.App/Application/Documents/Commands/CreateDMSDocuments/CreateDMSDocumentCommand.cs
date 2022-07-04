@@ -62,9 +62,9 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
             }
             else
             {
-                var dmsReferenceId = "1572";
+                var dmsReferenceId = "1833";
                 var dmsReferenceKey = 1200;
-                var dmsReferenceName = "Diğer Elementer Poliçesi";
+                var dmsReferenceName = "Diğer Elementer Sigorta Poliçesi";
                 var dms = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName,  request.InstanceId);
                 dmses.Add(dms);
             }

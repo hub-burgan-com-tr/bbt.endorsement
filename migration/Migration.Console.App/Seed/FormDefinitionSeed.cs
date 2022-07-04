@@ -68,7 +68,7 @@ public static class FormDefinitionSeed
             List<FormDefinitionTag> formDefinitionTags = new List<FormDefinitionTag>();
             formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Hazine  Formları" });
             formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Mevduat Formları" });
-            formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Sigorta Formları" });
+            formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Sigorta Formları",IsProcessNo=true });
             var formdefinitiontag = context.FormDefinitionTags.AddRangeAsync(formDefinitionTags);
             if (formdefinitiontag != null)
             {

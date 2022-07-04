@@ -1,4 +1,5 @@
-﻿using Application.BbtInternals.Queries.GetCustomerSearchs;
+﻿using Api.Extensions;
+using Application.BbtInternals.Queries.GetCustomerSearchs;
 using Application.BbtInternals.Queries.GetPersonSummary;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> CustomerSearch([FromQuery] string name)
         {
-            var response = await Mediator.Send(new GetCustomerSearchQuery { Name = name });
+            var person = UserExtensions.GetOrderPerson(User.Claims);
+            var response = await Mediator.Send(new GetCustomerSearchQuery { Name = name, Person = person });
             return Ok(response);
         }
 

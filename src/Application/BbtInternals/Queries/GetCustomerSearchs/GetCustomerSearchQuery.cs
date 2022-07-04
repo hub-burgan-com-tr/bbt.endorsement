@@ -2,6 +2,7 @@
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Domain.Models;
 using MediatR;
 
 namespace Application.BbtInternals.Queries.GetCustomerSearchs;
@@ -9,6 +10,7 @@ namespace Application.BbtInternals.Queries.GetCustomerSearchs;
 public class GetCustomerSearchQuery : IRequest<Response<GetSearchPersonSummaryResponse>>
 {
     public string Name { get; set; }
+    public OrderPerson Person { get; set; }
 }
 
 public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQuery, Response<GetSearchPersonSummaryResponse>>
@@ -54,6 +56,11 @@ public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQu
                 BusinessLine=x.BusinessLine,
                 // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
             });
+
+            //if (request.Person.IsBranchApproval)
+            //{
+            //    persons = persons.Where(x => x.BranchCode == request.Person.BranchCode);
+            //}
 
             return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
         }

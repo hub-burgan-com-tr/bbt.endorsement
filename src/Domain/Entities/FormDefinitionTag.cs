@@ -14,6 +14,7 @@ namespace Domain.Entities
         [Key]
         [MaxLength(36)]
         public string FormDefinitionTagId { get; set; }
+        public bool IsProcessNo { get; set; }
 
        
         public string Tag { get; set; }
