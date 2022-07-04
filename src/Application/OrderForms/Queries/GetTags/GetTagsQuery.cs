@@ -13,7 +13,6 @@ namespace Application.OrderForms.Queries.GetTags
         public GetTagsQueryHandler(IApplicationDbContext context)
         {
             _context = context;
-
         }
         public async Task<Response<List<GetTagsDto>>> Handle(GetTagsQuery request, CancellationToken cancellationToken)
         {
