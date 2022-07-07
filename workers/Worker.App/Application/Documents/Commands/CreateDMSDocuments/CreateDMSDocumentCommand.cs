@@ -1,6 +1,5 @@
 ﻿using Dms.Integration.Infrastructure.Document;
 using Dms.Integration.Infrastructure.DocumentServices;
-using Dms.Integration.Infrastructure.Enums;
 using Dms.Integration.Infrastructure.Models;
 using Dms.Integration.Infrastructure.Services;
 using Domain.Enums;
