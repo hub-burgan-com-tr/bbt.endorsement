@@ -69,10 +69,10 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
                 orders = orders.Where(x => x.Reference.State.Contains(request.State.Trim()));
             if (!string.IsNullOrEmpty(request.ProcessNo))
                 orders = orders.Where(x => x.Reference.ProcessNo == request.ProcessNo.Trim());
-            //if (!request.Person.IsBranchFormReader)
-            //{
-            //    orders = orders.Where(x => x.Customer.BranchCode == request.Person.BranchCode);
-            //}
+            if (!request.Person.IsBranchFormReader)
+            {
+                orders = orders.Where(x => x.Customer.BranchCode == request.Person.BranchCode);
+            }
             var list = await orders.OrderByDescending(x=>x.Created)
               .Select(x => new GetWatchApprovalDto
               {
