@@ -253,16 +253,20 @@ public class ContractApprovalService : IContractApprovalService
 
                         try
                         {
-                            await _mediator.Send(new CreateOrderHistoryCommand
+                            var orderHistoryCommand = new CreateOrderHistoryCommand
                             {
                                 OrderId = variables.InstanceId.ToString(),
                                 State = "Hatırlatma Mesajı(Sms)",
                                 Description = "",
                                 IsStaff = false,
-                                Request = responseSms.Data.Request,
-                                Response = responseSms.Data.Response,
-                                CustomerId = responseSms.Data.CustomerId,
-                            });
+                            };
+                            if(responseSms.Data != null)
+                            {
+                                orderHistoryCommand.Request = responseSms.Data.Request;
+                                orderHistoryCommand.Response = responseSms.Data.Response;
+                                orderHistoryCommand.CustomerId = responseSms.Data.CustomerId;
+                            }
+                            await _mediator.Send(orderHistoryCommand);
                         }
                         catch (Exception ex)
                         {
