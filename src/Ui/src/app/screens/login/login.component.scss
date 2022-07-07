@@ -1,0 +1,73 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import "~bootstrap/scss/mixins";
+@mixin orientation($direction) {
+  $orientation-landscape: "(orientation:landscape)";
+  $orientation-portrait: "(orientation:portrait)";
+
+  @if $direction == landscape {
+    @media #{$orientation-landscape} { @content; }
+  }
+  @if $direction == portrait {
+    @media #{$orientation-portrait} { @content; }
+  }
+}
+
+$primary-text-color: #464646;
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex: 1;
+  background: url('../../../assets/img/login-bg.png'), #fff;
+  background-size: cover;
+  flex-direction: column;
+
+  .logo {
+    margin: 100px 0;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+  }
+
+  .warning {
+    color: $primary-text-color;
+  }
+
+  .approve-detail {
+    .title {
+      font-weight: 600;
+      color: $primary-text-color;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, .5);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      color: $primary-text-color;
+
+      ul, li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+    }
+  }
+
+}
+
+
+@include media-breakpoint-down(lg) {
+  .login-container {
+    .warning {
+      font-size: 14px;
+    }
+
+    @include orientation(landscape) {
+      .logo {
+        margin: 20px 0;
+      }
+    }
+  }
+}

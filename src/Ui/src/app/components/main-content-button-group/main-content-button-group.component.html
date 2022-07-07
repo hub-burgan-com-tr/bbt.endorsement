@@ -1,0 +1,26 @@
+<div class="d-flex align-items-center justify-content-end flex-column flex-sm-row">
+  <!--<div class="dropdown me-3">
+    <button class="btn btn-outline-white dropdown-toggle px-5" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+      Form ile Emir Ekle
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <li>
+        <a class="dropdown-item" [routerLink]="['/approvals-i-want/new-form']"
+           [queryParams]="{formDefinitionId: i.formDefinitionId}" *ngFor="let i of data">
+          {{i.name}}
+        </a>
+      </li>
+    </ul>
+  </div>-->
+  <app-high-order [show]="user.authory.isReadyFormCreator">
+    <button class="btn btn-outline-white px-5 me-3" [routerLink]="['/approvals-i-want/new-form']">Form ile Emir Ekle
+    </button>
+  </app-high-order>
+  <app-high-order [show]="user.authory.isNewFormCreator">
+    <button class="btn btn-white px-5 mb-2 mt-2 mb-sm-0 mt-sm-0" [routerLink]="['/approvals-i-want/new-order']">Yeni
+      Onay
+      Emri
+    </button>
+  </app-high-order>
+</div>

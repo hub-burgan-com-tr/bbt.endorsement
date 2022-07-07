@@ -1,0 +1,77 @@
+<ngx-smart-modal #confirmModal identifier="confirmModal" (onAnyCloseEventFinished)="redirectToList()">
+  <h1>İşlem Başarılı</h1>
+  <p>Onay gönderiminiz başarılı olmuştur. <br>Detayları incelemek için tıklayın.</p>
+
+  <div class="button-container">
+    <button class="btn btn-primary" (click)="confirmModal.close()">Tamam</button>
+  </div>
+</ngx-smart-modal>
+<ngx-smart-modal #sendModal identifier="sendModal">
+  <h1>Bilgilendirme</h1>
+  <p>Onay kaydedilecektir. Emin misiniz?</p>
+
+  <div class="button-container">
+    <button class="btn btn-primary" (click)="send()">Kaydet</button>
+    <button class="btn btn-outline-primary" (click)="sendModal.close()">İptal</button>
+  </div>
+</ngx-smart-modal>
+<app-main-content blockTitle="Onayımdakiler" subTitle="{{title}}">
+  <div class="row">
+    <!--<div class="col-md-3 col-sm-12 mb-3">
+      <div class="left-box">
+        <div class="left-box-title">{{title}}</div>
+        <div class="attachment">
+          <img src="/assets/img/attachment.png">
+        </div>
+        <div class="arrow">
+          <img src="/assets/img/right-arrow.png">
+        </div>
+      </div>
+    </div>-->
+    <form #f="ngForm" name="f" (ngSubmit)="continue(f)">
+      <div class="col-md-12 col-sm-12">
+        <div *ngFor="let detail of details; let d = index">
+          <div class="box p-3 mb-4" *ngIf="d===step">
+            <b class="mb-2 d-block">{{detail.name}}</b>
+            <app-render-file [detail]="detail"></app-render-file>
+            <div *ngIf="detail.actions.length != 0">
+              <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
+              <ng-template #check>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedDetail' + d }}"
+                         name="{{ 'actionCheckedDetail' + d }}"
+                         [value]="detail.actions[0].value" [(ngModel)]="detail.choice" required
+                         (ngModelChange)="detail.choice?showError=false:showError=true;">
+                  <label class="form-check-label" for="{{ 'actionCheckedDetail' + d }}">
+                    {{detail.actions[0].title}}
+                  </label>
+                </div>
+              </ng-template>
+              <ng-template #radio>
+                <div class="form-check" *ngFor="let action of detail.actions; let a = index">
+                  <input class="form-check-input" type="radio"
+                         name="{{ 'flexRadio-detail' + d }}"
+                         id="{{ 'flexRadio-' + d + '-' + a }}"
+                         [value]="action.value" [(ngModel)]="detail.choice"
+                         required
+                         (ngModelChange)="detail.choice?showError=false:showError=true;"
+                  >
+                  <label class="form-check-label" for="{{ 'flexRadio-' + d + '-' + a }}">
+                    {{action.title}}
+                  </label>
+                </div>
+              </ng-template>
+            </div>
+            <small *ngIf="showError" class="text-danger">
+              Lütfen seçim yapınız
+            </small>
+          </div>
+        </div>
+        <div class="justify-content-center d-flex">
+          <button class="btn btn-orange px-5 mt-5" type="submit">{{buttonText}}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-main-content>

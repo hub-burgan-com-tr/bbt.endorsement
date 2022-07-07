@@ -1,0 +1,13 @@
+{
+  "environmentVariables": {
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  },
+  "profiles": {
+    "Application.UnitTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
