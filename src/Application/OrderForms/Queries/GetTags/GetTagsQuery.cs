@@ -10,7 +10,6 @@ namespace Application.OrderForms.Queries.GetTags
     public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, Response<List<GetTagsDto>>>
     {
         private IApplicationDbContext _context;
-
         public GetTagsQueryHandler(IApplicationDbContext context)
         {
             _context = context;
@@ -21,6 +20,7 @@ namespace Application.OrderForms.Queries.GetTags
                 .Select(x => new GetTagsDto { FormDefinitionTagId = x.FormDefinitionTagId, Tag = x.Tag,IsProcessNo=x.IsProcessNo }).OrderBy(x => x.Tag).ToList();
             return Response<List<GetTagsDto>>.Success(response, 200);
         }
+
     }
 
 

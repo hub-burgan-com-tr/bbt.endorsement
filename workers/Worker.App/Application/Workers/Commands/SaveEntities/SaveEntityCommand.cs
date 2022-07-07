@@ -5,6 +5,7 @@ using Domain.Models;
 using Domain.Entities;
 using Domain.Enums;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -113,24 +114,24 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 var orderGroup = _context.OrderGroups.FirstOrDefault(x => x.OrderMaps.Any(y => y.Order.CustomerId == customerId && y.OrderId == startFormRequest.DependencyOrderId));
                 if (orderGroup != null)
                 {
-                    var dependencyOrderDocument = _context.Documents.FirstOrDefault(x => x.OrderId == startFormRequest.DependencyOrderId);
-                    if (dependencyOrderDocument != null)
-                    {
-                        var documentInsuranceTypes = GetDocumentInsuranceType(dependencyOrderDocument.InsuranceType);
-                        document.InsuranceType = dependencyOrderDocument.InsuranceType;
-                        document.DocumentInsuranceTypes = documentInsuranceTypes;
-                        documents = new List<Domain.Entities.Document> { document };
-                    }
-                    //var orderMaps = _context.OrderMaps.FirstOrDefault(x => x.Order.CustomerId == customerId &&
-                    //                                                       x.OrderGroupId == orderGroup.OrderGroupId &&
-                    //                                                       x.Order.Documents.Any(y => y.FormDefinitionId == startFormRequest.FormId));
+                    //var dependencyOrderDocument = _context.Documents
+                    //                                        .Include(x => x.FormDefinition.Parameter)
+                    //                                        .FirstOrDefault(x => x.OrderId == startFormRequest.DependencyOrderId);
+                    //if (dependencyOrderDocument != null)
+                    //{
+                    //    document.InsuranceType = dependencyOrderDocument.InsuranceType;
+                    //    document.DocumentInsuranceTypes = new List<DocumentInsuranceType> { new DocumentInsuranceType { DocumentInsuranceTypeId = Guid.NewGuid().ToString(), ParameterId = dependencyOrderDocument.FormDefinition.Parameter.ParameterId } };
+                    //    documents = new List<Domain.Entities.Document> { document };
+                    //}
 
+                    documents = new List<Domain.Entities.Document> { document };
                     var orderMap = _context.OrderMaps.Add(new OrderMap
                     {
                         OrderMapId = Guid.NewGuid().ToString(),
                         OrderGroupId = orderGroup.OrderGroupId,
                         OrderId = startFormRequest.Id.ToString(),
                         OrderNumber = 2, // Teklif
+                        DocumentId = document.DocumentId,
                         Order = new Order
                         {
                             OrderId = startFormRequest.Id.ToString(),
@@ -152,24 +153,15 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                                 State = startFormRequest.Title,
                             },
                             Documents = documents
-                        },            
-                        DocumentId = document.DocumentId
+                        }      
                     }).Entity;
                     var entity = _context.OrderMaps.Add(orderMap).Entity;
                 }
             }
             else
             {
-                //var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
-                //if (orderGroup != null)
-                //{
-                //    orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, OrderId = order.OrderId, DocumentId = document.DocumentId });
-                //    var entity = _context.OrderGroups.Add(orderGroup).Entity;
-                //}
-
-
-                var documentInsuranceTypes = GetDocumentInsuranceType(startFormRequest.InsuranceType);
-                document.DocumentInsuranceTypes = documentInsuranceTypes;
+                //var documentInsuranceTypes = GetDocumentInsuranceType(startFormRequest.InsuranceType);
+                //document.DocumentInsuranceTypes = documentInsuranceTypes;
                 documents = new List<Domain.Entities.Document> { document };
 
                 var orderGroupId = Guid.NewGuid().ToString();
@@ -237,7 +229,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             {
                 var parameter = _context.Parameters.FirstOrDefault(x => x.DmsReferenceId != null && x.Text.ToLower() == type.ToLower().Trim());
                 if (parameter != null)
-                    documentInsuranceTypes.Add(new DocumentInsuranceType { DocumentInsuranceTypeId = Guid.NewGuid().ToString(), ParameterId = parameter.Id });
+                    documentInsuranceTypes.Add(new DocumentInsuranceType { DocumentInsuranceTypeId = Guid.NewGuid().ToString(), ParameterId = parameter.ParameterId });
             }
             return documentInsuranceTypes;
         }
@@ -249,6 +241,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 var customerId = _saveEntityService.GetCustomerAsync(customer.CitizenshipNumber).Result;
                 if (customerId == null)
                     customerId = _saveEntityService.CustomerSaveAsync(customer).Result;
+                else
+                    customerId = _saveEntityService.CustomerUpdateAsync(customer).Result;
                 return Response<string>.Success(customerId, 200);
             }
             catch (Exception ex)
@@ -262,6 +256,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var customerId = _saveEntityService.GetPersonAsync(person.CitizenshipNumber).Result;
             if (customerId == null)
                 customerId = _saveEntityService.PersonSaveAsync(person).Result;
+            else
+                customerId = _saveEntityService.PersonUpdateAsync(person).Result;
             return customerId;
         }
 

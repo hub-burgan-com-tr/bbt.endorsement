@@ -46,6 +46,11 @@ public class MessagingService : IMessagingService
         var response = restClient.ExecuteAsync(restRequest).Result;
         if(response.Content != null)
             Log.ForContext("OrderId", instanceId).Information(response.Content.ToString());
+        if (response.Content == "Template Not Found")
+        {
+            Log.ForContext("OrderId", instanceId).Information(response.Content.ToString());
+            return Task.FromResult(new Response());
+        }
         var data = JsonConvert.DeserializeObject<Response>(response.Content);
 
         return Task.FromResult(data);

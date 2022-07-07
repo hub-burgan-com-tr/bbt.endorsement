@@ -43,6 +43,7 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
+            //
             request.Id = Guid.NewGuid().ToString();
             var person = UserExtensions.GetOrderPerson(User.Claims);
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
@@ -348,7 +349,7 @@ namespace Api.Controllers
         {
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
-            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,BranchCode=orderPerson.BranchCode,IsBranchApproval=orderPerson.IsBranchApproval });
+            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,Person=orderPerson });
             return Ok(result);
         }
 

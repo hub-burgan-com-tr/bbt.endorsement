@@ -12,8 +12,9 @@ namespace Domain.Entities
 
         [MaxLength(36)]
         public string DocumentId { get; set; }
+        [MaxLength(36)]
 
-        public int ParameterId { get; set; }
+        public string ParameterId { get; set; }
 
 
         public virtual Document Document { get; set; }

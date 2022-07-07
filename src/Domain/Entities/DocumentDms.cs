@@ -13,6 +13,8 @@ namespace Domain.Entities
         [MaxLength(36)]
         public string DocumentId { get; set; }
         [MaxLength(36)]
+        public string DmsRefId { get; set; }
+        [MaxLength(36)]
         public string DmsReferenceId { get; set; }
         public int? DmsReferenceKey { get; set; }
         [MaxLength(250)]

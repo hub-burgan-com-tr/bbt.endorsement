@@ -8,18 +8,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Migration.Console.App;
 
+IConfiguration Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 IWebHostEnvironment environment = builder.Environment;
-builder.Configuration
+Configuration = builder.Configuration
         .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
-        .Build();
+        .Build(); 
 
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+var settings = builder.Configuration.Get<AppSettings>();
+builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
+StaticValuesExtensions.SetStaticValues(settings);
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
 builder.Services.AddScoped<IMigrationService, MigrationService>();

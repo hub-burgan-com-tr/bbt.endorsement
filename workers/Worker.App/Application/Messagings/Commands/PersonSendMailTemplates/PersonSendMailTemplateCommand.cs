@@ -43,31 +43,31 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
 
             messages.PersonId = order.PersonId;
 
-            var parameters = new EmailTemplateParams
+            var param = new EmailTemplateParams
             {
                 MusteriAdSoyad = order.Customer.FirstName + " " + order.Customer.LastName,
                 MusteriNo = order.Customer.CustomerNumber,
                 Title = order.Title
             };
-            var templateParams = JsonConvert.SerializeObject(parameters);
+            var templateParams = JsonConvert.SerializeObject(param);
             var sendMailTemplate = new SendMailTemplateRequest
             {
-                headerInfo = new SendMailTemplateHeaderInfo
+                headerInfo = new HeaderInfo
                 {
                     sender = "AutoDetect"
                 },
                 templateParams = templateParams,
                 customerNo = order.Person.CustomerNumber,
                 email = request.Email,
-                process = new SendMailTemplateProcess
+                process = new Process
                 {
-                    name = "Zeebe - Contract Approval - SendOtp"
+                    name = "bbt.endorsement -  PersonalSendMail"
                 }
             };
 
             if (order.State == OrderState.Approve.ToString())
             {
-                sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği:";
+                sendMailTemplate.template = "Onaylandığına ilişkin PY ye Giden E-posta İçeriği";
                 var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
                 messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
             }

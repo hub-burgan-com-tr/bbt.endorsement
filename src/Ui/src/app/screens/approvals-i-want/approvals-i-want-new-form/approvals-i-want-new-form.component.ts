@@ -36,6 +36,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   applicationForms: any;
   tags: any;
   sending: boolean = false;
+  isProcessRequired: boolean = false;
 
   constructor(private fb: FormBuilder,
               private modal: NgxSmartModalService,
@@ -63,16 +64,31 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
 
 
   tagChanged(tags) {
+    this.isProcessRequired = false;
     this.formGroup.patchValue({
       form: ''
     })
     if (tags.length) {
+      tags.forEach(el => {
+        if (this.tags.find(tag => tag.formDefinitionTagId == el).isProcessNo) {
+          this.isProcessRequired = true;
+          return;
+        }
+      });
       this.commonService.getTagsFormName(tags).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.formDropdown = res && res.data;
       });
     } else {
       this.form = undefined;
       this.formDropdown = undefined;
+    }
+
+    if (this.isProcessRequired){
+      this.formGroup.controls.processNo.setValidators([Validators.required]);
+      this.formGroup.controls.processNo.updateValueAndValidity();
+    }else{
+      this.formGroup.controls.processNo.setValidators(null);
+      this.formGroup.controls.processNo.updateValueAndValidity();
     }
   }
 

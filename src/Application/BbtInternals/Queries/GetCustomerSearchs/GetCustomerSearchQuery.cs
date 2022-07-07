@@ -57,7 +57,7 @@ public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQu
                 // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
             });
 
-            //if (request.Person.IsBranchApproval)
+            //if (!request.Person.IsBranchApproval)
             //{
             //    persons = persons.Where(x => x.BranchCode == request.Person.BranchCode);
             //}

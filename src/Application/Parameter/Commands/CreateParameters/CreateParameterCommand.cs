@@ -1,27 +1,17 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
-using Domain.Entities;
-using Domain.Enums;
 using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Parameter.Commands.CreateParameters
 {
     public class CreateParameterCommand : IRequest<Response<bool>>
-    {
-     
-        public int ParameterTypeId { get; set; }
+    {     
+        public string ParameterTypeId { get; set; }
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }
         public int? DmsReferenceKey { get; set; }
         public string DmsReferenceName { get; set; }
-
-
     }
 
 

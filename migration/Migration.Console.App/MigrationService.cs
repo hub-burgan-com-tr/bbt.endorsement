@@ -20,9 +20,10 @@ namespace Migration.Console.App
         {
             //_context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
-            FormDefinitionSeed.SeedFormDefinitionsAsync(_context).Wait();
-            ParamaterSeed.SeedFormDefinitionsAsync(_context).Wait();
-            OrderDefinionSeed.SeedFormDefinitionsAsync(_context).Wait();
+            ParamaterSeed.SeedFormParametersAsync(_context).Wait();
+            FormDefinitionSeed.SeedFormDefinitionAsync(_context).Wait();
+            OrderDefinionSeed.SeedOrderDefinitionsAsync(_context).Wait();
+            TemplateEngineSeed.TemplateDefinitionAsync(_context).Wait();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Application.Parameter.Commands.UpdateParameters
             var parameter = _context.Parameters.FirstOrDefault(x => x.Text == request.Text.Trim());
             if (parameter != null)
             {
-                var IsText = _context.Parameters.Any(x => x.Text == request.Text.Trim()&&x.Id!=parameter.Id);
+                var IsText = _context.Parameters.Any(x => x.Text == request.Text.Trim()&&x.ParameterId!=parameter.ParameterId);
 
                 if (IsText)
                     throw new Exception("Aynı Parametre Daha Önce Eklenmiştir");
