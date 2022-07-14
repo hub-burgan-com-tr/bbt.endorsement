@@ -1,9 +1,4 @@
 ﻿using Application.Common.Models;
-using Application.OrderForms.Commands.CreateFormInformations;
-using Application.OrderForms.Commands.UpdateFormDependencyReuse;
-using Application.OrderForms.Commands.UpdateFormInformations;
-using Application.OrderForms.Queries.GetFormInformations;
-using Application.Orders.Queries.GetOrderByFormIds;
 using Application.Parameter.Commands.CreateParameters;
 using Application.Parameter.Commands.UpdateParameters;
 using Application.Parameter.Queries.GetParameters;
@@ -15,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
 {
-  
+    [Authorize]
     [Route("Parameter")]
     [ApiController]
     public class ParameterController : ApiControllerBase

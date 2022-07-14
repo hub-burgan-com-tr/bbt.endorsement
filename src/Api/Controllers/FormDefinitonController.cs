@@ -14,7 +14,7 @@ namespace Api.Controllers
     /// <summary>
     /// Form Definition İşlemleri 
     /// </summary>
-   // [Authorize]
+    [Authorize]
     [Route("FormDefiniton")]
     [ApiController]
     public class FormDefinitonController : ApiControllerBase
