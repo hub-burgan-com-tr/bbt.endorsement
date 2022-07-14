@@ -37,6 +37,7 @@ namespace Application.Parameter.Commands.CreateParameters
             int result = 0;
             var parameter = _context.Parameters.Add(new Domain.Entities.Parameter
             {
+                ParameterId=Guid.NewGuid().ToString(),
                 DmsReferenceKey = request.DmsReferenceKey,
                 DmsReferenceId = request.DmsReferenceId,
                 ParameterTypeId = request.ParameterTypeId,
