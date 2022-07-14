@@ -18,7 +18,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
 {
-  
+    [Authorize]
     [Route("Parameter")]
     [ApiController]
     public class ParameterController : ApiControllerBase
