@@ -26,6 +26,10 @@ public class CreateDependencyFormInformationCommandHandler : IRequestHandler<Cre
 
     public async Task<Response<bool>> Handle(CreateDependencyFormInformationCommand request, CancellationToken cancellationToken)
     {
+        var dependencyForm = _context.FormDefinitions.FirstOrDefault(x => x.DependencyFormId == request.DependencyFormId);
+        if (dependencyForm != null)
+            return Response<bool>.NotFoundException("form (" + dependencyForm.Name + ") formuna bağlı", 200);
+
         var formDefinition = _context.FormDefinitions
             .Include(x => x.Parameter)
             .FirstOrDefault(x => x.FormDefinitionId == request.DependencyFormId);
