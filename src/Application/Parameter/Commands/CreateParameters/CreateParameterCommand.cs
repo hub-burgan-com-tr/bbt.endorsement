@@ -15,12 +15,12 @@ namespace Application.Parameter.Commands.CreateParameters
     }
 
 
-    public class CreateParameterCommandCommandHandler : IRequestHandler<CreateParameterCommand, Response<bool>>
+    public class CreateParameterCommandHandler : IRequestHandler<CreateParameterCommand, Response<bool>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IDateTime _dateTime;
 
-        public CreateParameterCommandCommandHandler(IApplicationDbContext context, IDateTime dateTime)
+        public CreateParameterCommandHandler(IApplicationDbContext context, IDateTime dateTime)
         {
             _context = context;
             _dateTime = dateTime;

@@ -8,6 +8,7 @@ namespace Application.Parameter.Commands.UpdateParameters
 {
     public class UpdateParameterCommand : IRequest<Response<bool>>
     {
+        public string ParameterId { get; set; }
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }
         public int? DmsReferenceKey { get; set; }
@@ -32,7 +33,7 @@ namespace Application.Parameter.Commands.UpdateParameters
             UpdateParameterCommandValidator validator = new UpdateParameterCommandValidator();
             var respnse = validator.Validate(request);
             validator.ValidateAndThrow(request);
-            var parameter = _context.Parameters.FirstOrDefault(x => x.Text == request.Text.Trim());
+            var parameter = _context.Parameters.FirstOrDefault(x => x.ParameterId == request.ParameterId);
             if (parameter != null)
             {
                 var IsText = _context.Parameters.Any(x => x.Text == request.Text.Trim()&&x.ParameterId!=parameter.ParameterId);

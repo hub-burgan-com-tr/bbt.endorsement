@@ -8,6 +8,7 @@ namespace Application.Parameter.Queries.GetParameters
 {
     public class GetParameterDto
     {
+        public string ParameterId { get; set; }
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }
         public int? DmsReferenceKey { get; set; }
