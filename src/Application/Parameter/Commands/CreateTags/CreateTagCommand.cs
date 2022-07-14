@@ -13,6 +13,7 @@ namespace Application.Parameter.Commands.CreateTags
     public class CreateTagCommand : IRequest<Response<bool>>
     {
         public string Tag { get; set; }
+        public bool IsProcessNo { get; set; }
     }
     public class CreateTagCommandHandler : IRequestHandler<CreateTagCommand, Response<bool>>
     {
@@ -37,7 +38,7 @@ namespace Application.Parameter.Commands.CreateTags
             var parameter = _context.FormDefinitionTags.Add(new Domain.Entities.FormDefinitionTag
             {
                 FormDefinitionTagId=Guid.NewGuid().ToString(),
-                IsProcessNo=false,
+                IsProcessNo=request.IsProcessNo,
                 Tag=request.Tag.Trim(),
                 Created = DateTime.Now,
             });

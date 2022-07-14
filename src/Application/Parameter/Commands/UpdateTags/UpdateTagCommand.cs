@@ -13,6 +13,8 @@ namespace Application.Parameter.Commands.UpdateTags
     public class UpdateTagCommand : IRequest<Response<bool>>
     {
         public string Tag { get; set; }
+        public bool IsProcessNo { get; set; }
+
         public string FormDefinitionTagId { get; set; }
     }
 
@@ -45,6 +47,7 @@ namespace Application.Parameter.Commands.UpdateTags
             {
                 parameter.Tag = request.Tag;
                 parameter.Created = DateTime.Now;
+                parameter.IsProcessNo = request.IsProcessNo;
                 _context.FormDefinitionTags.Update(parameter);
                 result = _context.SaveChanges();
             }

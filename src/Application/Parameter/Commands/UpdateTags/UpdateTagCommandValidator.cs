@@ -13,6 +13,8 @@ namespace Application.Parameter.Commands.UpdateTags
         {
             RuleFor(v => v.Tag).NotEmpty().WithMessage("Form Türü girilmelidir.");
             RuleFor(v => v.FormDefinitionTagId).NotEmpty().WithMessage("Form Türü Id girilmelidir.");
+            RuleFor(v => v.IsProcessNo).NotEmpty().WithMessage("İşlem No  girilmelidir.");
+
 
         }
     }

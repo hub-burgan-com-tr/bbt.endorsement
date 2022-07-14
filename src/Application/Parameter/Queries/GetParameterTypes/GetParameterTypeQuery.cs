@@ -13,11 +13,11 @@ namespace Application.Parameter.Queries.GetParameterTypes
     {
     }
 
-    public class GetParameterTypeQueryQueryHandler : IRequestHandler<GetParameterTypeQuery, Response<List<GetParameterTypeDto>>>
+    public class GetParameterTypeQueryHandler : IRequestHandler<GetParameterTypeQuery, Response<List<GetParameterTypeDto>>>
     {
         private IApplicationDbContext _context;
 
-        public GetParameterTypeQueryQueryHandler(IApplicationDbContext context)
+        public GetParameterTypeQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
