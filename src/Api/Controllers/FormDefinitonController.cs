@@ -26,10 +26,9 @@ namespace Api.Controllers
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
-        public async Task<Response<bool>> CreateFormInformation([FromBody] CreateFormInformationCommand request)
+        public async Task<Response<bool>> CreateFormInformation([FromForm] CreateFormInformationCommand request)
         {
             return await Mediator.Send(request);
-
         }
 
         [SwaggerOperation(
