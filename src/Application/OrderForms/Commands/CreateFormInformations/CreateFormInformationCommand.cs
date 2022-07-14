@@ -140,6 +140,42 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     restRequest.AddBody(body);
                     var response = restClient.ExecutePostAsync(restRequest).Result;
                 }
+
+                if (result > 0)
+                {
+                    var formdefinitionTeklif = _context.FormDefinitions.Add(new FormDefinition
+                    {
+                        FormDefinitionId = Guid.NewGuid().ToString(),
+                        DependencyFormId = formdefinition.Entity.FormDefinitionId,
+                        ParameterId = request.ParameterId,
+                        DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999a62b",
+                        Name = name,
+                        Source = "file",
+                        Label = "",
+                        HtmlTemplate = "",
+                        Created = DateTime.Now,
+                        Tags = "",
+                        TemplateName = "",
+                        Mode = "Completed",
+                        Url = "",
+                        Type = ContentType.PDF.ToString(),
+                        RetryFrequence = request.RetryFrequence,
+                        ExpireInMinutes = request.ExpireInMinutes,
+                        MaxRetryCount = request.MaxRetryCount
+
+                    });
+                    formdefinitionTeklif.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
+                    formdefinitionTeklif.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
+
+                    formdefinitionTeklif.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap
+                    {
+                        FormDefinitionTagMapId = Guid.NewGuid().ToString(),
+                        FormDefinitionId = formdefinitionTeklif.Entity.FormDefinitionId,
+                        FormDefinitionTagId = request.FormDefinitionTagId
+                    });
+
+                    result = _context.SaveChanges();
+                }
             }
 
             return Response<bool>.Success(result > 0 ? true : false, 200);
