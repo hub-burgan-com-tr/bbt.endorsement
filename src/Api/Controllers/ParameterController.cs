@@ -7,6 +7,7 @@ using Application.Orders.Queries.GetOrderByFormIds;
 using Application.Parameter.Commands.CreateParameters;
 using Application.Parameter.Commands.UpdateParameters;
 using Application.Parameter.Queries.GetParameters;
+using Application.Parameter.Queries.GetParametersDys;
 using Application.Parameter.Queries.GetParameterTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,20 @@ Description = "Returns process and parameter")]
         public async Task<IActionResult> GetParameter(string text)
         {
             var list = await Mediator.Send(new GetParameterQuery { Text=text});
+            return Ok(list);
+        }
+
+
+        [SwaggerOperation(
+Summary = "Get process and parameter Dys",
+Description = "Returns process and parameter Dys")]
+        [Route("GetParameterDys")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success,Parameter Dys.", typeof(List<GetParameterDysDto>))]
+        [SwaggerResponse(404, "Parameter Dys not found.", typeof(List<GetParameterDysDto>))]
+        public async Task<IActionResult> GetParameterDys()
+        {
+            var list = await Mediator.Send(new GetParameterDysQuery { });
             return Ok(list);
         }
 
