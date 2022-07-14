@@ -39,7 +39,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
             var respnse = validator.Validate(request);
             validator.ValidateAndThrow(request);
             int result = 0;
-            var templateName = request.TemplateName+".txt";
+            var templateName = request.TemplateName + ".txt";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
             var label = File.ReadAllText(path, Encoding.Default);
             var Form = _context.FormDefinitions.Any(x => x.Name == request.Name);
@@ -61,7 +61,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     ExpireInMinutes = request.ExpireInMinutes,
                     MaxRetryCount = request.MaxRetryCount,
                     DependencyReuse = false,
-                    DependencyFormId= Guid.NewGuid().ToString(),    
+                    DependencyFormId = Guid.NewGuid().ToString(),
 
                 });
                 formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
@@ -70,31 +70,27 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                 foreach (var item in request.FormDefinitionTags)
                 {
                     var IsTag = _context.FormDefinitionTags.FirstOrDefault(x => x.Tag == item);
-                    if (IsTag==null)
+                    if (IsTag == null)
                     {
-                        var tag =_context.FormDefinitionTags.Add (new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = item });
-                      
-                            formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = tag.Entity.FormDefinitionTagId });                           
-                        
+                        var tag = _context.FormDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = item });
+                        formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = tag.Entity.FormDefinitionTagId });
                     }
                     else
-                    {                                        
-                                var tagmap = _context.FormDefinitionTagMaps.Any(x => x.FormDefinitionId == formdefinition.Entity.FormDefinitionId && x.FormDefinitionTagId == IsTag.FormDefinitionTagId);
-                                if (!tagmap)
-                                {
-                                    formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = IsTag.FormDefinitionTagId });
-                                }                              
+                    {
+                        var tagmap = _context.FormDefinitionTagMaps.Any(x => x.FormDefinitionId == formdefinition.Entity.FormDefinitionId && x.FormDefinitionTagId == IsTag.FormDefinitionTagId);
+                        if (!tagmap)
+                        {
+                            formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = IsTag.FormDefinitionTagId });
+                        }
                     }
-             
-
                 }
 
                 result = _context.SaveChanges();
             }
-           
+
             return Response<bool>.Success(result > 0 ? true : false, 200);
         }
     }
 
- 
+
 }
