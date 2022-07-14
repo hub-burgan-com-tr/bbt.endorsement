@@ -96,7 +96,7 @@ namespace Api.Controllers
         [SwaggerOperation(
           Summary = "Get form by content",
           Description = "Returns form by content"
-      )]
+        )]
         [Route("GetFormContent")]
         [HttpGet]
         [SwaggerResponse(200, "Success, form is returned successfully.", typeof(GetFormContentDto))]

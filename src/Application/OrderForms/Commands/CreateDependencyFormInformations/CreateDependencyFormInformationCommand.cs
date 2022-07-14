@@ -40,7 +40,7 @@ public class CreateDependencyFormInformationCommandHandler : IRequestHandler<Cre
             return Response<bool>.NotFoundException("form bulunamadı", 200);
 
 
-        var name = "Sigorta Teklif Formu - " + formDefinition.Parameter.Text;
+        var name = request.Name + " - " + formDefinition.Parameter.Text;
 
         var formdefinitionTeklif = _context.FormDefinitions.Add(new FormDefinition
         {
