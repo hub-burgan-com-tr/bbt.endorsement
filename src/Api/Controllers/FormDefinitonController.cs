@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models;
+using Application.OrderForms.Commands.CreateDependencyFormInformations;
 using Application.OrderForms.Commands.CreateFormInformations;
 using Application.OrderForms.Commands.UpdateFormDependencyReuse;
 using Application.OrderForms.Commands.UpdateFormInformations;
@@ -13,7 +14,7 @@ namespace Api.Controllers
     /// <summary>
     /// Form Definition İşlemleri 
     /// </summary>
-    [Authorize]
+   // [Authorize]
     [Route("FormDefiniton")]
     [ApiController]
     public class FormDefinitonController : ApiControllerBase
@@ -21,12 +22,25 @@ namespace Api.Controllers
         [SwaggerOperation(
           Summary = "create form definition",
           Description = "Form definitons create form information"
-      )]
+        )]
         [Route("CreateFormInformation")]
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
         public async Task<Response<bool>> CreateFormInformation([FromForm] CreateFormInformationCommand request)
+        {
+            return await Mediator.Send(request);
+        }
+
+        [SwaggerOperation(
+          Summary = "create form definition",
+          Description = "Form definitons create form information"
+        )]
+        [Route("CreateDependencyFormInformation")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
+        public async Task<Response<bool>> CreateDependencyFormInformation([FromForm] CreateDependencyFormInformationCommand request)
         {
             return await Mediator.Send(request);
         }
@@ -42,14 +56,12 @@ namespace Api.Controllers
         public async Task<Response<bool>> UpdateFormInformation([FromBody] UpdateFormInformationCommand request)
         {
             return await Mediator.Send(request);
-
         }
-
 
         [SwaggerOperation(
          Summary = "updates form definition dependency reuse",
          Description = "Form definitons update dependency reuse information"
-     )]
+        )]
         [Route("UpdateFormDependencyReuse")]
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
@@ -57,13 +69,12 @@ namespace Api.Controllers
         public async Task<Response<bool>> UpdateFormDependencyReuse([FromBody] UpdateFormDependencyReuseCommand request)
         {
             return await Mediator.Send(request);
-
         }
 
 
         [SwaggerOperation(
-  Summary = "Get process and form information",
-  Description = "Returns process and form information")]
+              Summary = "Get process and form information",
+              Description = "Returns process and form information")]
         [Route("GetFormInformation")]
         [HttpGet]
         [SwaggerResponse(200, "Success, Process And Form is returned successfully.", typeof(List<GetFormInformationDto>))]
@@ -74,11 +85,9 @@ namespace Api.Controllers
             return Ok(list);
         }
 
-
-
         [SwaggerOperation(
-  Summary = "Get orders",
-  Description = "Returns orders")]
+              Summary = "Get orders",
+              Description = "Returns orders")]
         [Route("GetOrderByFormId")]
         [HttpPost]
         [SwaggerResponse(200, "Orders is returned successfully.", typeof(List<GetOrderByFormIdResponse>))]
