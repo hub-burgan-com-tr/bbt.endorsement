@@ -7,6 +7,7 @@ using Application.Orders.Queries.GetOrderByFormIds;
 using Application.Parameter.Commands.CreateParameters;
 using Application.Parameter.Commands.UpdateParameters;
 using Application.Parameter.Queries.GetParameters;
+using Application.Parameter.Queries.GetParameterTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -60,6 +61,17 @@ Description = "Returns process and parameter")]
             return await Mediator.Send(request);
 
         }
-
+        [SwaggerOperation(
+Summary = "Get process and parameter type",
+Description = "Returns process and parameter type")]
+        [Route("GetParameterType")]
+        [HttpGet]
+        [SwaggerResponse(200, "Success,Parameter type.", typeof(List<GetParameterTypeDto>))]
+        [SwaggerResponse(404, "Parameter not found.", typeof(List<GetParameterTypeDto>))]
+        public async Task<IActionResult> GetParameterType()
+        {
+            var list = await Mediator.Send(new GetParameterTypeQuery { });
+            return Ok(list);
+        }
     }
 }
