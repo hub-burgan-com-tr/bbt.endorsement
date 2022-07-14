@@ -8,7 +8,11 @@ namespace Application.OrderForms.Queries.GetFormInformations
 {
     public class GetFormInformationDto
     {
+        public string FormDefinitionId { get; set; }
+        public string Name { get; set; }
         public string TemplateName { get; set; }
+        public string Source { get; set; }
+        public string Tag { get; set; }
         public string Type { get; set; }
         public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }

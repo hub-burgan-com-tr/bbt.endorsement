@@ -7,7 +7,7 @@ namespace Application.Parameter.Commands.CreateTags
         public CreateTagCommandValidator()
         {
             RuleFor(v => v.Tag).NotEmpty().WithMessage("Form Türü girilmelidir.");
-            RuleFor(v => v.IsProcessNo).NotEmpty().WithMessage("İşlem No  girilmelidir.");
+            RuleFor(v => v.IsProcessNo).Must(x => x == false || x == true);
 
         }
 

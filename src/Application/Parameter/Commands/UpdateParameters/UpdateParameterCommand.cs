@@ -47,6 +47,7 @@ namespace Application.Parameter.Commands.UpdateParameters
             {
                 parameter.DmsReferenceId = request.DmsReferenceId;
                 parameter.DmsReferenceKey = request.DmsReferenceKey;
+                parameter.Text = request.Text;
                 parameter.Created = DateTime.Now;
                 parameter.DmsReferenceName = request.DmsReferenceName;
                 _context.Parameters.Update(parameter);

@@ -24,7 +24,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
         public int RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
 
-        public IFormFile Label { get; set; }
+        public IFormFile Json { get; set; }
         public IFormFile HtmlTemplate { get; set; }
     }
 
@@ -61,7 +61,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
 
 
             var labelJson = new StringBuilder();
-            using (var reader = new StreamReader(request.Label.OpenReadStream()))
+            using (var reader = new StreamReader(request.Json.OpenReadStream()))
             {
                 while (reader.Peek() > 0)
                     labelJson.AppendLine(reader.ReadLine());
@@ -102,7 +102,6 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     ExpireInMinutes = request.ExpireInMinutes,
                     MaxRetryCount = request.MaxRetryCount,
                     DependencyReuse = false,
-                    DependencyFormId = Guid.NewGuid().ToString(),
 
                 });
                 formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
