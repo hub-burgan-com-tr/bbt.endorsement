@@ -240,12 +240,12 @@ public class ContractApprovalService : IContractApprovalService
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
                 if (person.Data != null)
                 {
-                    foreach (var gsmPhone in Users.GsmPhones())
-                    {
+                    //foreach (var gsmPhone in Users.GsmPhones())
+                   // {
                         var responseSms = _mediator.Send(new SendSmsTemplateCommand
                         {
                             OrderId = variables.InstanceId,
-                            GsmPhone = gsmPhone, // person.Data.Customer.GsmPhone,
+                            GsmPhone = person.Data.Customer.GsmPhone, // gsmPhone
                             CustomerNumber = person.Data.Customer.CustomerNumber,
                         }).Result;
 
@@ -271,14 +271,14 @@ public class ContractApprovalService : IContractApprovalService
                             Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                         }
                         Thread.Sleep(100);
-                    }
+                    //}
 
-                    foreach (var email in Users.Emails())
-                    {
+                    //foreach (var email in Users.Emails())
+                   // {
                         var responseMail = _mediator.Send(new SendMailTemplateCommand
                         {
                             OrderId = variables.InstanceId,
-                            Email = email, // person.Data.Customer.Email,
+                            Email = person.Data.Customer.Email,  // email,
                         }).Result;
 
                         try
@@ -304,7 +304,7 @@ public class ContractApprovalService : IContractApprovalService
                             Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                         }
                         Thread.Sleep(100);
-                    }
+                   // }
 
                     var history = _mediator.Send(new CreateOrderHistoryCommand
                     {
@@ -621,14 +621,14 @@ public class ContractApprovalService : IContractApprovalService
     {
         var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = instanceId });
 
-        foreach (var email in Users.Emails())
-        {
+       // foreach (var email in Users.Emails())
+       // {
             try
             {
                 var responseEmail = _mediator.Send(new PersonSendMailTemplateCommand
                 {
                     OrderId = instanceId,
-                    Email = email, // person.Data.Customer.Email
+                    Email =  person.Data.Customer.Email,//email, //
                 }).Result;
 
                 var createOrderHistoryCommand = new CreateOrderHistoryCommand
@@ -651,7 +651,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
             }
-        }
+       // }
         return true;
     }
 
