@@ -10,6 +10,7 @@ public static class StaticValues
     public static string Authority { get; set; }
     public static string ApiGateway { get; set; }
     public static string RedirectUri { get; set; }
+    public static string ClientSecret { get; set; }
 
     // Token
     public static string Issuer { get; set; }
