@@ -30,10 +30,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public GetSearchPersonSummaryDto Login(string code, string state)
         {
-            var response = new AccessToken();
             try
             {
-                response = _userService.AccessToken(code, state).Result;
+                var response = _userService.AccessTokenResource(code, state).Result;
 
                 if (response.IsLogin == false)
                 {

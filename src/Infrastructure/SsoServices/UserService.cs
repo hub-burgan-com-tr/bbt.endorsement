@@ -7,6 +7,7 @@ namespace Infrastructure.SsoServices;
 public interface IUserService
 {
     Task<AccessToken> AccessToken(string code, string state);
+    Task<AccessToken> AccessTokenResource(string token, string state);
 }
 
 public class UserService : IUserService
@@ -56,6 +57,30 @@ public class UserService : IUserService
         catch (Exception ex)
         {
             Log.Error(ex, ex.Message);
+        }
+        return response;
+    }
+
+    public async Task<AccessToken> AccessTokenResource(string accessToken, string state)
+    {
+        var response = new AccessToken();
+
+        if (state == "EndorsementGondor")
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(StaticValues.ApiGateway);
+                var content = new FormUrlEncodedContent(new[]
+                {
+                        new KeyValuePair<string, string>("access_token", accessToken),
+                });
+                var result = await client.PostAsync("/ib/Resource", content);
+                var responseContent = result.Content.ReadAsStringAsync().Result;
+                response = JsonConvert.DeserializeObject<AccessToken>(responseContent);
+                Log.Information("Login-SSO: " + responseContent);
+                if (!string.IsNullOrEmpty(response.CitizenshipNumber))
+                    response.IsLogin = true;
+            }
         }
         return response;
     }
