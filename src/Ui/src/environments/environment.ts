@@ -1,5 +1,7 @@
 export const environment = {
   production: false,
   baseUrl:'ENDORSEMENTAPI',
-  loginUrl: 'LOGINURL'
+  loginUrl: 'LOGINURL',
+  ClientSecret: 'CLIENTSECRET',
+  RedirectUri: 'REDIRECTURI'
 };
