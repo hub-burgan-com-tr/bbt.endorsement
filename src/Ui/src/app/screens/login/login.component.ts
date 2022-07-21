@@ -23,15 +23,18 @@ export class LoginComponent implements OnInit {
       this.state = params['state'];
       this.returnUrl = params['returnUrl'] || '/';
       if (this.code && this.state) {
-        this.authService.login(this.code, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
-          if (res) {
-            if (res.isStaff) {
-              this.router.navigate(['approvals-i-want']);
-            } else {
-              this.router.navigate(['my-approval']);
+        this.authService.ssoLogin(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
+          this.authService.login(res.access_token, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
+            if (res) {
+              if (res.isStaff) {
+                this.router.navigate(['approvals-i-want']);
+              } else {
+                this.router.navigate(['my-approval']);
+              }
             }
-          }
+          });
         });
+
       }
     });
   }
