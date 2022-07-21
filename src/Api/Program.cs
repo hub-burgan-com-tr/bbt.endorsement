@@ -155,6 +155,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+//builder.Services.AddAuthentication().AddOAuthIntrospection(options =>
+//{
+//    options.Authority = new Uri(Configuration.GetIdentityServerUrl());
+//    options.Audiences.Add(SecurityClients.RetailLoanApi.ClientId);
+//    options.ClientId = SecurityClients.RetailLoanApi.ClientId;
+//    options.ClientSecret = SecurityClients.RetailLoanApi.ClientSecret;
+//    options.RequireHttpsMetadata = Environment.IsProduction();
+//});
+
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
