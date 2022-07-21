@@ -12,6 +12,8 @@ namespace Application.Parameter.Commands.UpdateParameters
         public UpdateParameterCommandValidator()
         {
             RuleFor(v => v.Text).NotEmpty().WithMessage("Text girilmelidir.");
+            RuleFor(v => v.ParameterId).NotEmpty().WithMessage("Parametre Id girilmelidir.");
+
         }
     }
 }

@@ -47,7 +47,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
             var templateParams = JsonConvert.SerializeObject(param);
             var sendMailTemplate = new SendMailTemplateRequest
             {
-                headerInfo = new SendMailTemplateHeaderInfo
+                headerInfo = new HeaderInfo
                 {
                     sender = "AutoDetect"
                 },
@@ -55,9 +55,9 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                 customerNo = order.Customer.CustomerNumber,
                 email = request.Email,
                 template = "Müşteriye Giden Başvuru Onay Talebi",
-                process = new SendMailTemplateProcess
+                process = new Process
                 {
-                    name = "Zeebe - Contract Approval - SendOtp"
+                    name = "bbt.endorsement - SendOtp"
                 }
             };
 

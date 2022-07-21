@@ -23,7 +23,7 @@ namespace Application.OrderForms.Queries.GetOrderFormTags
         }
         public async Task<Response<List<GetOrderFormTagDto>>> Handle(GetOrderFormTagQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.FormDefinitionActions.Where(x=>x.FormDefinitionId== "fd95116e-e7e0-4cdf-b734-11c414c3a471").Select(x => new GetOrderFormTagDto { OrderDefinitionActionId = x.FormDefinitionActionId, Title = x.Title }).ToList();
+            var response = _context.OrderDefinitionActions.Select(x => new GetOrderFormTagDto { OrderDefinitionActionId = x.OrderDefinitionActionId, Title = x.Title }).ToList();
             return Response<List<GetOrderFormTagDto>>.Success(response, 200);
         }
     }

@@ -87,7 +87,14 @@ public class OrderPerson
     public string BranchCode { get; set; }
     public string BusinessLine { get; set; }
 
+    /// <summary>
+    /// IsBranchApproval=true ise şubeler tüm müşterileri listeleyecek. IsBranchApproval=false şubeler sadece kendi şube müşterilerini listeleyecek.
+    /// </summary>
     public bool IsBranchApproval { get; set; }
+
+    /// <summary>
+    /// IsBranchFormReader=true ise şubeler tüm emirleri listeleyecek. IsBranchFormReader=false şubeler sadece kendi şube emirlerini listeleyecek.
+    /// </summary>
     public bool IsBranchFormReader { get; set; }
     public bool IsFormReader { get; set; }
     public bool IsNewFormCreator { get; set; }

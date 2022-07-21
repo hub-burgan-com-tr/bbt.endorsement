@@ -8,9 +8,10 @@ namespace Domain.Entities
 
     public class Parameter : AuditableEntity
     {
-        [Key]
-        public int Id { get; set; }
-        public int ParameterTypeId { get; set; }
+        [MaxLength(36)]
+        public string ParameterId { get; set; }
+        [MaxLength(36)]
+        public string ParameterTypeId { get; set; }
         [MaxLength(250)]
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }

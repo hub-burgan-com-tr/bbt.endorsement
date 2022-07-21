@@ -24,8 +24,8 @@ namespace Application.OrderForms.Queries.GetOrderFormParameters
         }
         public async Task<Response<GetOrderFormParameterDto>> Handle(GetOrderFormParameterQuery request, CancellationToken cancellationToken)
         {
-            var Process =  _context.Parameters.Include(x=>x.ParameterType).OrderBy(x=>x.Text).Where(x => x.ParameterType.Name == "Aşama").Select(x => new ParameterDto { Id = x.Id, Text = x.Text }).ToList();
-            var States = _context.Parameters.Include(x => x.ParameterType).OrderBy(x => x.Text).Where(x => x.ParameterType.Name == "İşlem").Select(x => new ParameterDto { Id = x.Id, Text = x.Text }).ToList();
+            var Process =  _context.Parameters.Include(x=>x.ParameterType).OrderBy(x=>x.Text).Where(x => x.ParameterType.Name == "Aşama").Select(x => new ParameterDto { Id = x.ParameterId, Text = x.Text }).ToList();
+            var States = _context.Parameters.Include(x => x.ParameterType).OrderBy(x => x.Text).Where(x => x.ParameterType.Name == "İşlem").Select(x => new ParameterDto { Id = x.ParameterId, Text = x.Text }).ToList();
             var titles =  _context.OrderDefinitions.OrderBy(x => x.Title).Select(x => new OrderDefinionParameterDto { OrderDefinionId = x.OrderDefinitionId, Title = x.Title }).ToList();
             GetOrderFormParameterDto response = new GetOrderFormParameterDto
             {

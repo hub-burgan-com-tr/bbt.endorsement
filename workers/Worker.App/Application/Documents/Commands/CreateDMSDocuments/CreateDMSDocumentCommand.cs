@@ -1,11 +1,11 @@
 ﻿using Dms.Integration.Infrastructure.Document;
 using Dms.Integration.Infrastructure.DocumentServices;
-using Dms.Integration.Infrastructure.Enums;
 using Dms.Integration.Infrastructure.Models;
 using Dms.Integration.Infrastructure.Services;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 
@@ -30,7 +30,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
     public async Task<Response<List<CreateDMSDocumentResponse>>> Handle(CreateDMSDocumentCommand request, CancellationToken cancellationToken)
     {
         var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString());
-        var documents = _context.Documents.Where(x => x.OrderId == request.InstanceId.ToString());
+        var documents = _context.Documents.Include(x => x.FormDefinition.Parameter).Where(x => x.OrderId == request.InstanceId.ToString());
         var person = order.Person;
         var customer = order.Customer;
 
@@ -40,25 +40,13 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
         foreach (var document in documents)
         {
-            var documentInsuranceTypes = _context.DocumentInsuranceTypes
-                .Where(x => x.DocumentId == document.DocumentId)
-                .Select(x => new
-                {
-                    DmsReferenceId = x.Parameter.DmsReferenceId,
-                    DmsReferenceKey = x.Parameter.DmsReferenceKey,
-                    DmsReferenceName = x.Parameter.DmsReferenceName,
-                }).ToList().Distinct();
-
-            if (documentInsuranceTypes.Any())
+            if (document.FormDefinition != null)
             {
-                foreach (var documentInsuranceType in documentInsuranceTypes)
-                {
-                    var dmsReferenceId = documentInsuranceType.DmsReferenceId.ToString();
-                    var dmsReferenceKey = documentInsuranceType.DmsReferenceId;
-                    var dmsReferenceName = documentInsuranceType.DmsReferenceName;
-                    var dms = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName, request.InstanceId);
-                    dmses.Add(dms);
-                }
+                var dmsReferenceId = document.FormDefinition.Parameter.DmsReferenceId.ToString();
+                var dmsReferenceKey = document.FormDefinition.Parameter.DmsReferenceKey;
+                var dmsReferenceName = document.FormDefinition.Parameter.DmsReferenceName;
+                var dms = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName, request.InstanceId);
+                dmses.Add(dms);
             }
             else
             {
@@ -115,33 +103,41 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
             DmsPrefix = "InternetBankaciligi"
         };
 
-        var dmsRefId = _documentService.CreateDMSDocument(documentInfo);
-
-        if (!string.IsNullOrEmpty(dmsRefId))
+        try
         {
-            response = new CreateDMSDocumentResponse
-            {
-                DmsRefId = dmsRefId,
-                DmsReferenceKey = dmsReferenceKey,
-                DmsReferenceName = dmsReferenceName
-            };
+            var dmsRefId = _documentService.CreateDMSDocument(documentInfo);
 
-            var documentDms = _context.DocumentDmses
-                                        .FirstOrDefault(x => x.Document.OrderId == instanceId &&
-                                                             x.DocumentId == document.DocumentId &&
-                                                             x.DmsReferenceId == dmsRefId);
-            if (documentDms == null)
+            if (!string.IsNullOrEmpty(dmsRefId))
             {
-                _context.DocumentDmses.Add(new Domain.Entities.DocumentDms
+                response = new CreateDMSDocumentResponse
                 {
-                    DocumentDmsId = Guid.NewGuid().ToString(),
-                    DocumentId = document.DocumentId,
-                    DmsReferenceId = dmsRefId,
+                    DmsRefId = dmsRefId,
                     DmsReferenceKey = dmsReferenceKey,
-                    DmsReferenceName= dmsReferenceName
-                });
-                _context.SaveChanges();
+                    DmsReferenceName = dmsReferenceName
+                };
+
+                var documentDms = _context.DocumentDmses
+                                            .FirstOrDefault(x => x.Document.OrderId == instanceId &&
+                                                                 x.DocumentId == document.DocumentId &&
+                                                                 x.DmsRefId == dmsRefId);
+                if (documentDms == null)
+                {
+                    _context.DocumentDmses.Add(new Domain.Entities.DocumentDms
+                    {
+                        DocumentDmsId = Guid.NewGuid().ToString(),
+                        DocumentId = document.DocumentId,
+                        DmsRefId = dmsRefId,
+                        DmsReferenceKey = dmsReferenceKey,
+                        DmsReferenceName = dmsReferenceName,
+                        DmsReferenceId = dmsReferenceId
+                    });
+                    _context.SaveChanges();
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
         }
 
         return response;

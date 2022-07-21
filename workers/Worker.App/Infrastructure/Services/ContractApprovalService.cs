@@ -7,7 +7,6 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
-using Worker.App.Application.Common.Models;
 using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 using Worker.App.Application.Messagings.Commands.PersonSendMailTemplates;
 using Worker.App.Application.Messagings.Commands.SendMailTemplates;
@@ -21,7 +20,6 @@ using Worker.App.Application.Workers.Commands.SaveEntities;
 using Worker.App.Application.Workers.Commands.UpdateEntities;
 using Worker.App.Application.Workers.Queries.GetOrderConfigs;
 using Worker.App.Application.Workers.Queries.GetOrderStates;
-using Worker.App.Infrastructure.Services;
 using Worker.App.Models;
 using Worker.AppApplication.Documents.Commands.CreateOrderHistories;
 using Zeebe.Client.Api.Worker;
@@ -242,62 +240,71 @@ public class ContractApprovalService : IContractApprovalService
                 var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
                 if (person.Data != null)
                 {
-                    foreach (var gsmPhone in Users.GsmPhones())
-                    {
+                    //foreach (var gsmPhone in Users.GsmPhones())
+                   // {
                         var responseSms = _mediator.Send(new SendSmsTemplateCommand
                         {
                             OrderId = variables.InstanceId,
-                            GsmPhone = gsmPhone, // person.Data.Customer.GsmPhone,
+                            GsmPhone = person.Data.Customer.GsmPhone, // gsmPhone
                             CustomerNumber = person.Data.Customer.CustomerNumber,
                         }).Result;
 
                         try
                         {
-                            await _mediator.Send(new CreateOrderHistoryCommand
+                            var orderHistoryCommand = new CreateOrderHistoryCommand
                             {
                                 OrderId = variables.InstanceId.ToString(),
                                 State = "Hatırlatma Mesajı(Sms)",
                                 Description = "",
                                 IsStaff = false,
-                                Request = responseSms.Data.Request,
-                                Response = responseSms.Data.Response,
-                                CustomerId = responseSms.Data.CustomerId,
-                            });
+                            };
+                            if(responseSms.Data != null)
+                            {
+                                orderHistoryCommand.Request = responseSms.Data.Request;
+                                orderHistoryCommand.Response = responseSms.Data.Response;
+                                orderHistoryCommand.CustomerId = responseSms.Data.CustomerId;
+                            }
+                            await _mediator.Send(orderHistoryCommand);
                         }
                         catch (Exception ex)
                         {
                             Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                         }
                         Thread.Sleep(100);
-                    }
+                    //}
 
-                    foreach (var email in Users.Emails())
-                    {
+                    //foreach (var email in Users.Emails())
+                   // {
                         var responseMail = _mediator.Send(new SendMailTemplateCommand
                         {
                             OrderId = variables.InstanceId,
-                            Email = email, // person.Data.Customer.Email,
+                            Email = person.Data.Customer.Email,  // email,
                         }).Result;
 
                         try
                         {
-                            await _mediator.Send(new CreateOrderHistoryCommand
+                            var emailHistory = new CreateOrderHistoryCommand
                             {
                                 OrderId = variables.InstanceId.ToString(),
                                 State = "Hatırlatma Mesajı(Mail)",
                                 Description = "",
                                 IsStaff = false,
-                                Request = responseMail.Data.Request,
-                                Response = responseMail.Data.Response,
-                                CustomerId = responseMail.Data.CustomerId,
-                            });
+                            };
+
+                            if(responseMail.Data != null)
+                            {
+                                emailHistory.Request = responseMail.Data.Request;
+                                emailHistory.Response = responseMail.Data.Response;
+                                emailHistory.CustomerId = responseMail.Data.CustomerId;
+                            }
+                            await _mediator.Send(emailHistory);
                         }
                         catch (Exception ex)
                         {
                             Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                         }
                         Thread.Sleep(100);
-                    }
+                   // }
 
                     var history = _mediator.Send(new CreateOrderHistoryCommand
                     {
@@ -614,14 +621,14 @@ public class ContractApprovalService : IContractApprovalService
     {
         var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = instanceId });
 
-        foreach (var email in Users.Emails())
-        {
+       // foreach (var email in Users.Emails())
+       // {
             try
             {
                 var responseEmail = _mediator.Send(new PersonSendMailTemplateCommand
                 {
                     OrderId = instanceId,
-                    Email = email, // person.Data.Customer.Email
+                    Email =  person.Data.Customer.Email,//email, //
                 }).Result;
 
                 var createOrderHistoryCommand = new CreateOrderHistoryCommand
@@ -644,7 +651,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
             }
-        }
+       // }
         return true;
     }
 

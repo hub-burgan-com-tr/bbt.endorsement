@@ -349,7 +349,7 @@ namespace Api.Controllers
         {
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
-            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,BranchCode=orderPerson.BranchCode,IsBranchApproval=orderPerson.IsBranchApproval });
+            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,Person=orderPerson });
             return Ok(result);
         }
 

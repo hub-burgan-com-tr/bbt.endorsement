@@ -12,7 +12,9 @@ namespace Domain.Entities
         {
             Parameters = new HashSet<Parameter>();
         }
-        public int Id { get; set; }
+
+        [MaxLength(36)]
+        public string ParameterTypeId { get; set; }
         [MaxLength(250)]
         public string Name { get; set; }
         public virtual ICollection<Parameter> Parameters { get; set; }

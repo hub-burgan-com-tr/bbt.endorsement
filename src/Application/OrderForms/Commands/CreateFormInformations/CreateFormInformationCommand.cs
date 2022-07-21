@@ -1,25 +1,31 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Extensions;
+using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
 using Domain.Enums;
 using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Http;
+using RestSharp;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.OrderForms.Commands.CreateFormInformations
 {
+    /// <summary>
+    /// Name: Sigorta Teklif Formu - Konut Eşya
+    /// </summary>
     public class CreateFormInformationCommand : IRequest<Response<bool>>
     {
+        public string FormDefinitionTagId { get; set; }
+        public string ParameterId { get; set; }
         public string Name { get; set; }
         public string TemplateName { get; set; }
         public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
-        public List<string> FormDefinitionTags { get; set; }
+
+        public IFormFile Json { get; set; }
+        public IFormFile HtmlTemplate { get; set; }
     }
 
     public class CreateFormInformationCommandHandler : IRequestHandler<CreateFormInformationCommand, Response<bool>>
@@ -35,25 +41,60 @@ namespace Application.OrderForms.Commands.CreateFormInformations
 
         public async Task<Response<bool>> Handle(CreateFormInformationCommand request, CancellationToken cancellationToken)
         {
+
             CreateFormInformationCommandValidator validator = new CreateFormInformationCommandValidator();
             var respnse = validator.Validate(request);
             validator.ValidateAndThrow(request);
             int result = 0;
-            var templateName = request.TemplateName+".txt";
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
-            var label = File.ReadAllText(path, Encoding.Default);
-            var Form = _context.FormDefinitions.Any(x => x.Name == request.Name);
+            //var templateName = request.TemplateName + ".txt";
+            //var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
+            //var label = File.ReadAllText(path, Encoding.Default);
+
+            var formDefinitionTag = _context.FormDefinitionTags.FirstOrDefault(x => x.FormDefinitionTagId == request.FormDefinitionTagId);
+            if (formDefinitionTag == null)
+                return Response<bool>.NotFoundException("Form Türü bulunamadı", 200);
+
+
+            var parametre = _context.Parameters.FirstOrDefault(x => x.ParameterId == request.ParameterId);
+            if(parametre == null)
+                return Response<bool>.NotFoundException("parametre bulunamadı", 200);
+
+
+            var labelJson = new StringBuilder();
+            using (var reader = new StreamReader(request.Json.OpenReadStream()))
+            {
+                while (reader.Peek() > 0)
+                    labelJson.AppendLine(reader.ReadLine());
+            }
+
+            var label = labelJson.ToString(); //.Replace("\"", String.Empty);
+
+            var htmlTemplate = new StringBuilder();
+            using (var reader = new StreamReader(request.HtmlTemplate.OpenReadStream()))
+            {
+                while (reader.Peek() > 0)
+                    htmlTemplate.AppendLine(reader.ReadLine());
+            }
+            var template = GeneralExtensions.HtmlToString(htmlTemplate.ToString());
+
+
+            var templateName = request.TemplateName + "-" + parametre.Text;
+            var name = request.Name + " - " + parametre.Text;
+            var Form = _context.FormDefinitions.Any(x => x.Name == name);
             if (!Form)
             {
                 var formdefinition = _context.FormDefinitions.Add(new FormDefinition
                 {
                     FormDefinitionId = Guid.NewGuid().ToString(),
+                    ParameterId = request.ParameterId,
                     DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999a62b",
-                    Name = request.Name,
-                    Label = label.ToString(),
+                    Name = name,
+                    Source = "formio",
+                    Label = label,
+                    HtmlTemplate = template,
                     Created = DateTime.Now,
                     Tags = "",
-                    TemplateName = request.TemplateName,
+                    TemplateName = templateName,
                     RetryFrequence = request.RetryFrequence,
                     Mode = "Completed",
                     Url = "",
@@ -61,40 +102,50 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     ExpireInMinutes = request.ExpireInMinutes,
                     MaxRetryCount = request.MaxRetryCount,
                     DependencyReuse = false,
-                    DependencyFormId= Guid.NewGuid().ToString(),    
 
                 });
                 formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
                 formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
 
-                foreach (var item in request.FormDefinitionTags)
+                var tagmap = _context.FormDefinitionTagMaps.Any(x => x.FormDefinitionId == formdefinition.Entity.FormDefinitionId && x.FormDefinitionTagId == request.FormDefinitionTagId);
+                if (!tagmap)
                 {
-                    var IsTag = _context.FormDefinitionTags.FirstOrDefault(x => x.Tag == item);
-                    if (IsTag==null)
+                    formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap
                     {
-                        var tag =_context.FormDefinitionTags.Add (new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = item });
-                      
-                            formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = tag.Entity.FormDefinitionTagId });                           
-                        
-                    }
-                    else
-                    {                                        
-                                var tagmap = _context.FormDefinitionTagMaps.Any(x => x.FormDefinitionId == formdefinition.Entity.FormDefinitionId && x.FormDefinitionTagId == IsTag.FormDefinitionTagId);
-                                if (!tagmap)
-                                {
-                                    formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = IsTag.FormDefinitionTagId });
-                                }                              
-                    }
-             
-
+                        FormDefinitionTagMapId = Guid.NewGuid().ToString(),
+                        FormDefinitionId = formdefinition.Entity.FormDefinitionId,
+                        FormDefinitionTagId = request.FormDefinitionTagId
+                    });
                 }
 
                 result = _context.SaveChanges();
+
+                if(result > 0)
+                {
+                    htmlTemplate = htmlTemplate.Replace("\r\n", string.Empty);
+                    htmlTemplate = htmlTemplate.Replace(@"\""", String.Empty);
+                    htmlTemplate = htmlTemplate.Replace("\"", String.Empty);
+                    htmlTemplate = htmlTemplate.Replace("\t", string.Empty);
+
+                    var restClient = new RestClient(StaticValues.TemplateEngine);
+                    var restRequest = new RestRequest("/Template/Definition", Method.Post);
+                    restRequest.AddHeader("Content-Type", "application/json");
+                    restRequest.AddHeader("Accept", "text/plain");
+
+                    var body = new TemplateDefinitionRoot
+                    {
+                        MasterTemplate = "",
+                        template = template,
+                        name = templateName,
+                    };
+                    restRequest.AddBody(body);
+                    var response = restClient.ExecutePostAsync(restRequest).Result;
+                }
             }
-           
+
             return Response<bool>.Success(result > 0 ? true : false, 200);
         }
     }
 
- 
+
 }

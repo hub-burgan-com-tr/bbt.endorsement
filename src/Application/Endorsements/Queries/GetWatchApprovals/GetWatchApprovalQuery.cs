@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Common.Mappings;
 using Application.Endorsements.Commands.NewOrders;
 using Domain.Enums;
+using Domain.Models;
 
 namespace Application.Endorsements.Queries.GetWatchApprovals
 {
@@ -22,8 +23,8 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
         public string Process { get; set; }
         public string State { get; set; }
         public string ProcessNo { get; set; }
-        public string BranchCode { get; set; }
-        public bool IsBranchApproval { get; set; }
+        public OrderPerson Person { get; set; }
+
 
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -68,10 +69,9 @@ namespace Application.Endorsements.Queries.GetWatchApprovals
                 orders = orders.Where(x => x.Reference.State.Contains(request.State.Trim()));
             if (!string.IsNullOrEmpty(request.ProcessNo))
                 orders = orders.Where(x => x.Reference.ProcessNo == request.ProcessNo.Trim());
-            //if (request.IsBranchApproval && !string.IsNullOrEmpty(request.BranchCode))
-            //{
-            //    orders = orders.Where(x => x.Customer.BranchCode == request.BranchCode.Trim());
-            //}
+            if (request.Person.IsBranchFormReader == false)
+                orders = orders.Where(x => x.Customer.BranchCode == request.Person.BranchCode);
+
             var list = await orders.OrderByDescending(x=>x.Created)
               .Select(x => new GetWatchApprovalDto
               {

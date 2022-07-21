@@ -23,7 +23,7 @@ namespace Application.Parameter.Queries.GetParameters
         }
         public async Task<Response<List<GetParameterDto>>> Handle(GetParameterQuery request, CancellationToken cancellationToken)
         {
-            var response = _context.Parameters.Where(x=>x.Text==request.Text).Select(x => new GetParameterDto { Text = x.Text, DmsReferenceId = x.DmsReferenceId,DmsReferenceKey=x.DmsReferenceKey,DmsReferenceName=x.DmsReferenceName }).OrderBy(x => x.Text).ToList();
+            var response = _context.Parameters.Where(x=>x.Text==request.Text).Select(x => new GetParameterDto {ParameterId=x.ParameterId ,Text = x.Text, DmsReferenceId = x.DmsReferenceId,DmsReferenceKey=x.DmsReferenceKey,DmsReferenceName=x.DmsReferenceName }).OrderBy(x => x.Text).ToList();
             return Response<List<GetParameterDto>>.Success(response, 200);
         }
     }

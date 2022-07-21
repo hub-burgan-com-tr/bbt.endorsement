@@ -91,5 +91,35 @@ namespace Worker.App.Infrastructure.Services
 
             return response;
         }
+
+        public async Task<string> PersonUpdateAsync(OrderPerson person)
+        {
+            var entity = _context.Persons.FirstOrDefault(x => x.CitizenshipNumber == person.CitizenshipNumber);
+            if(entity != null)
+            {
+                if(entity.BranchCode != person.BranchCode)
+                {
+                    entity.BranchCode = person.BranchCode;
+                    _context.Persons.Update(entity);
+                    _context.SaveChanges();
+                }
+            }
+            return entity.PersonId;
+        }
+
+        public async Task<string> CustomerUpdateAsync(OrderCustomer customer)
+        {
+            var entity = _context.Customers.FirstOrDefault(x => x.CitizenshipNumber == customer.CitizenshipNumber);
+            if (entity != null)
+            {
+                if (entity.BranchCode != customer.BranchCode)
+                {
+                    entity.BranchCode = customer.BranchCode;
+                    _context.Customers.Update(entity);
+                    _context.SaveChanges();
+                }
+            }
+            return entity.CustomerId;
+        }
     }
 }

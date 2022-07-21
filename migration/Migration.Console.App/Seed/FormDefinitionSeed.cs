@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Persistence;
 using System.Text;
-using Application.Endorsements.Commands.NewOrders;
 using Domain.Entities;
 using Domain.Enums;
 
@@ -8,81 +7,106 @@ namespace Migration.Console.App.Seed;
 
 public static class FormDefinitionSeed
 {
-    public static async Task SeedFormDefinitionsAsync(ApplicationDbContext context)
+    public static async Task SeedFormDefinitionAsync(ApplicationDbContext context)
     {
         if (context == null)
             return;
         if (!context.FormDefinitions.Any())
         {
-            var templateName = "tr-sigorta-basvuru-formu.txt";
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName);
-            var label = File.ReadAllText(path, Encoding.Default);
-
-            var formDefinitionId = "fd95116e-e7e0-4cdf-b734-11c414c3a471";
-            var formdefinition = context.FormDefinitions.Add(new FormDefinition
-            {
-                FormDefinitionId = formDefinitionId,
-                DocumentSystemId= "b25635e8-1abd-4768-ab97-e1285999a62b",
-                Name = "Sigorta Başvuru Formu",
-                Label = label.ToString(),
-                Created = DateTime.Now,
-                Tags = "",
-                TemplateName = "tr-sigorta-basvuru-formu",
-                RetryFrequence = 15,
-                Mode = "Completed",
-                Url = "",
-                Type = ContentType.PDF.ToString(),
-                ExpireInMinutes = 60,
-                MaxRetryCount = 3,
-                DependencyReuse = false,
-                Source = "formio"
-
-            });                    
-            formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
-            formdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
-            
-            var templateName2 = "tr-sigorta-teklif-formu.txt";
-            var path2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", templateName2);
-            var label2 = File.ReadAllText(path2, Encoding.Default);
-            var formdefinition2 = context.FormDefinitions.Add(new FormDefinition
-            {
-                FormDefinitionId = "04619ad5-5bf0-4651-a7cd-ca6ffa39512c",
-                DependencyFormId = formDefinitionId,
-                DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999a62b",
-                Name = "Sigorta Teklif Formu",
-                Label = label2.ToString(),
-                Created = DateTime.Now,
-                Tags = "",
-                TemplateName = "tr-sigorta-teklif-formu",
-                RetryFrequence = 15,
-                Mode = "Completed",
-                Url = "",
-                Type = ContentType.PDF.ToString(),
-                ExpireInMinutes = 60,
-                MaxRetryCount = 3,
-                Source = "file"
-            });
-            formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
-            formdefinition2.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
 
             List<FormDefinitionTag> formDefinitionTags = new List<FormDefinitionTag>();
             formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Hazine  Formları" });
             formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Mevduat Formları" });
-            formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Sigorta Formları",IsProcessNo=true });
-            var formdefinitiontag = context.FormDefinitionTags.AddRangeAsync(formDefinitionTags);
-            if (formdefinitiontag != null)
+            formDefinitionTags.Add(new FormDefinitionTag { Created = DateTime.Now, FormDefinitionTagId = Guid.NewGuid().ToString(), Tag = "Sigorta Formları", IsProcessNo = true });
+            var formdefinitiontags = context.FormDefinitionTags.AddRangeAsync(formDefinitionTags);
+            await context.SaveChangesAsync();
+
+            var parameters = context.Parameters.Where(x => x.ParameterType.Name == "Dys Form Kategorileri");
+            int basvuru = 1000;
+            int teklif = 2000;
+            foreach (var parameter in parameters)
             {
-                foreach (var item in formDefinitionTags)
+                var basvuruFormuName = "Sigorta Başvuru Formu - " + parameter.Text;
+                var basvuruTemplateName = "tr-sigorta-basvuru-formu-" + parameter.Text;
+
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", basvuruTemplateName + ".txt");
+                var label = File.ReadAllText(path, Encoding.Default);
+
+                var basvuruTemplateHtml = "tr-sigorta-basvuru-formu-" + parameter.Text + ".html";
+                var htmlTemplate = StaticValuesExtensions.HtmlToString(basvuruTemplateHtml);
+
+                var formDefinitionId = "fd95116e-e7e0-4cdf-b734-11c414c3" + basvuru;
+                var başvuruFormdefinition = context.FormDefinitions.Add(new FormDefinition
                 {
-                    if (item.Tag == "Sigorta Formları")
+                    FormDefinitionId = formDefinitionId,
+                    DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999" + basvuru,
+                    Name = basvuruFormuName,
+                    Label = label.ToString(),
+                    Created = DateTime.Now,
+                    Tags = "",
+                    TemplateName = basvuruTemplateName,
+                    RetryFrequence = 15,
+                    Mode = "Completed",
+                    Url = "",
+                    Type = ContentType.PDF.ToString(),
+                    ExpireInMinutes = 60,
+                    MaxRetryCount = 3,
+                    DependencyReuse = false,
+                    Source = "formio",
+                    ParameterId = parameter.ParameterId.ToString(),
+                    HtmlTemplate = htmlTemplate
+                });
+                başvuruFormdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
+                başvuruFormdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
+
+
+
+                var teklifFormuName = "Sigorta Teklif Formu - " + parameter.Text;
+
+                var teklifTemplateName = "tr-sigorta-teklif-formu-" + parameter.Text + ".txt";
+                var teklifPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Files", teklifTemplateName);
+                var tekliflabel = File.ReadAllText(teklifPath, Encoding.Default);
+                var teklifFormdefinition = context.FormDefinitions.Add(new FormDefinition
+                {
+                    FormDefinitionId = "04619ad5-5bf0-4651-a7cd-ca6ffa39" + teklif,
+                    DependencyFormId = formDefinitionId,
+                    DocumentSystemId = "b25635e8-1abd-4768-ab97-e1285999" + teklif,
+                    Name = teklifFormuName,
+                    Label = tekliflabel.ToString(),
+                    Created = DateTime.Now,
+                    Tags = "",
+                    TemplateName = "tr-sigorta-teklif-formu-" + parameter.Text,
+                    RetryFrequence = 15,
+                    Mode = "Completed",
+                    Url = "",
+                    Type = ContentType.PDF.ToString(),
+                    ExpireInMinutes = 60,
+                    MaxRetryCount = 3,
+                    Source = "file",
+                    ParameterId = parameter.ParameterId.ToString()
+                });
+                teklifFormdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onayladım", Choice = 1, Type = ActionType.Approve.ToString(), State = "Onay", FormDefinitionActionId = Guid.NewGuid().ToString() });
+                teklifFormdefinition.Entity.FormDefinitionActions.Add(new FormDefinitionAction { Created = DateTime.Now, Title = "Okudum, onaylamadım", Choice = 2, Type = ActionType.Reject.ToString(), State = "Red", FormDefinitionActionId = Guid.NewGuid().ToString() });
+
+                if (formdefinitiontags != null)
+                {
+                    foreach (var item in formDefinitionTags)
                     {
-                        formdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition.Entity.FormDefinitionId, FormDefinitionTagId = item.FormDefinitionTagId });
-                        formdefinition2.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = formdefinition2.Entity.FormDefinitionId, FormDefinitionTagId = item.FormDefinitionTagId });
+                        if (item.Tag == "Sigorta Formları")
+                        {
+                            başvuruFormdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = başvuruFormdefinition.Entity.FormDefinitionId, FormDefinitionTagId = item.FormDefinitionTagId });
+                            teklifFormdefinition.Entity.FormDefinitionTagMaps.Add(new FormDefinitionTagMap { FormDefinitionTagMapId = Guid.NewGuid().ToString(), FormDefinitionId = teklifFormdefinition.Entity.FormDefinitionId, FormDefinitionTagId = item.FormDefinitionTagId });
+                        }
                     }
                 }
+
+                await context.SaveChangesAsync();
+
+                basvuru++;
+                teklif++;
             }
 
-            await context.SaveChangesAsync();
+
         }
     }
 }
