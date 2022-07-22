@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
+using Api.Providers;
 using Application;
 using Application.Common.Models;
 using Infrastructure;
@@ -20,28 +21,28 @@ using Serilog;
 IConfiguration Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
-IWebHostEnvironment environment = builder.Environment;
+IWebHostEnvironment Environment = builder.Environment;
 
-if (environment.EnvironmentName == "Development")
+if (Environment.EnvironmentName == "Development")
     Configuration = builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
-else if (environment.EnvironmentName == "Prod")
+else if (Environment.EnvironmentName == "Prod")
     Configuration = builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
-else if (environment.EnvironmentName == "Test")
+else if (Environment.EnvironmentName == "Test")
     Configuration = builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
@@ -91,78 +92,89 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
-builder.Services.AddSwaggerGen(options =>
+if (!Environment.IsProduction())
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    builder.Services.AddSwaggerGen(options =>
     {
-        Version = "v1.5",
-        Title = "Contract Approval API",
-        Description = "Provides validation infrastructure for contracts that customers need to approve."
-    });
+        options.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Version = "v1.5",
+            Title = "Endorsement API",
+            Description = "Provides validation infrastructure for contracts that customers need to approve."
+        });
 
-    // To Enable authorization using Swagger (JWT)  
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
+
+        // To Enable authorization using Swagger (JWT)  
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+        {
+            In = ParameterLocation.Header,
+            Description = "Specify token with Bearer tag. example: Bearer {access_token}",
+            BearerFormat = "JWT",
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+           // Scheme = "Bearer",
+        });
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
-                          new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
+                        {
+                              new OpenApiSecurityScheme
                                 {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            new string[] {}
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    }
+                                },
+                                new string[] {}
 
-                    }
-                });
+                        }
+                    });
 
-    // options.SchemaFilter<EnumSchemaFilter>();
-    options.UseInlineDefinitionsForEnums();
 
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
-    options.IncludeXmlComments(xmlPath);
-    options.CustomSchemaIds(x => x.FullName);
-    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
-});
+        // options.SchemaFilter<EnumSchemaFilter>();
+        options.UseInlineDefinitionsForEnums();
+
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+        options.IncludeXmlComments(xmlPath);
+        options.CustomSchemaIds(x => x.FullName);
+        options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+    });
+}
+
 
 var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
 StaticValuesExtensions.SetStaticValues(settings);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
-{
-    option.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateAudience = false, // Oluþturulacak token deðerini kimlerin/hangi originlerin/sitelerin kullanacaðýný belirlediðimiz alandýr.
-        ValidateIssuer = false, // Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimiz alandýr.
-        ValidateLifetime = true, // Oluþturulan token deðerinin süresini kontrol edecek olan doðrulamadýr.
-        ValidateIssuerSigningKey = true, // Üretilecek token deðerinin uygulamamýza ait bir deðer olduðunu ifade eden security key verisinin doðrulamasýdýr.
-        ValidIssuer = StaticValues.Issuer,
-        ValidAudience = StaticValues.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecurityKey)),
-        ClockSkew = TimeSpan.Zero // Üretilecek token deðerinin expire süresinin belirtildiði deðer kadar uzatýlmasýný saðlayan özelliktir. 
-    };
-});
-
-//builder.Services.AddAuthentication().AddOAuthIntrospection(options =>
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 //{
-//    options.Authority = new Uri(Configuration.GetIdentityServerUrl());
-//    options.Audiences.Add(SecurityClients.RetailLoanApi.ClientId);
-//    options.ClientId = SecurityClients.RetailLoanApi.ClientId;
-//    options.ClientSecret = SecurityClients.RetailLoanApi.ClientSecret;
-//    options.RequireHttpsMetadata = Environment.IsProduction();
+//    option.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateAudience = false, // Oluþturulacak token deðerini kimlerin/hangi originlerin/sitelerin kullanacaðýný belirlediðimiz alandýr.
+//        ValidateIssuer = false, // Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimiz alandýr.
+//        ValidateLifetime = true, // Oluþturulan token deðerinin süresini kontrol edecek olan doðrulamadýr.
+//        ValidateIssuerSigningKey = true, // Üretilecek token deðerinin uygulamamýza ait bir deðer olduðunu ifade eden security key verisinin doðrulamasýdýr.
+//        ValidIssuer = StaticValues.Issuer,
+//        ValidAudience = StaticValues.Audience,
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecurityKey)),
+//        ClockSkew = TimeSpan.Zero // Üretilecek token deðerinin expire süresinin belirtildiði deðer kadar uzatýlmasýný saðlayan özelliktir. 
+//    };
 //});
+
+builder.Services.AddAuthentication().AddOAuthIntrospection(options =>
+{
+    options.Authority = new Uri(StaticValues.Authority);
+    options.Audiences.Add("Endorsement");
+    options.ClientId = "Endorsement";
+    options.ClientSecret = StaticValues.ClientSecret;
+    options.RequireHttpsMetadata = Environment.IsProduction();
+});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy();
+//});
+builder.Services.AddDistributedMemoryCache();
 
 
 builder.Services.AddApplication();
@@ -177,7 +189,7 @@ var app = builder.Build();
 app.UseSerilogRequestLogging();
 app.AddUseMiddleware();
 
-Log.Information("Endorsement API running... - " + environment.EnvironmentName);
+Log.Information("Endorsement API running... - " + Environment.EnvironmentName);
 
 // Configure the HTTP request pipeline.
 //if (!app.Environment.IsDevelopment())
