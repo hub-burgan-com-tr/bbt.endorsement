@@ -15,6 +15,14 @@ namespace Api.Controllers
     [ApiController]
     public class PersonController : ApiControllerBase
     {
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public PersonController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+
         [Route("CustomerSearch")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
@@ -23,7 +31,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> CustomerSearch([FromQuery] string name)
         {
-            var person = UserExtensions.GetOrderPerson(User.Claims);
+            var person = UserExtensions.GetOrderPerson(_httpContextAccessor);
             var response = await Mediator.Send(new GetCustomerSearchQuery { Name = name, Person = person });
             return Ok(response);
         }

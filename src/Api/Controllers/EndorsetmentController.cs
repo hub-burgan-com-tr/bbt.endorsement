@@ -30,6 +30,12 @@ namespace Api.Controllers
     [ApiController]
     public class EndorsementController : ApiControllerBase
     {
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public EndorsementController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
         [SwaggerOperation(
             Summary = "Create new endorsement order. After endorsement is created, process is started immediately.",
             Tags = new[] { "Endorsement" }
@@ -45,7 +51,7 @@ namespace Api.Controllers
         {
             //
             request.Id = Guid.NewGuid().ToString();
-            var person = UserExtensions.GetOrderPerson(User.Claims);
+            var person = UserExtensions.GetOrderPerson(_httpContextAccessor);
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
         }
 
@@ -187,7 +193,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            //var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            var citizenshipNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CitizenshipNumber"));
             var list = await Mediator.Send(new GetApprovalQuery { CitizenshipNumber = citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(list);
         }
@@ -209,7 +216,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalDetailAsync([FromQuery] string orderId)
         {
-            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            //var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            var citizenshipNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CitizenshipNumber"));
 
             var result = await Mediator.Send(new GetApprovalDetailsQuery() { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
@@ -236,7 +244,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+           // var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            var citizenshipNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CitizenshipNumber"));
             var data = await Mediator.Send(new GetMyApprovalQuery { CitizenshipNumber = citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(data);
         }
@@ -259,7 +268,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalDetailAsync([FromQuery] string orderId)
         {
-            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+           // var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            var citizenshipNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CitizenshipNumber"));
 
             var result = await Mediator.Send(new GetMyApprovalDetailsQuery { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
@@ -288,7 +298,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
+            var orderPerson = UserExtensions.GetOrderPerson(_httpContextAccessor);
 
              var result = await Mediator.Send(new GetWantApprovalQuery { Person = orderPerson, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(result);
@@ -312,7 +322,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
-            var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+           // var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            var citizenshipNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CitizenshipNumber"));
 
             var result = await Mediator.Send(new GetWantApprovalDetailsQuery() {CitizenshipNumber=citizenshipNumber, OrderId = orderId });
             return Ok(result);
@@ -347,7 +358,7 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWatchApprovalAsync(string customer, string approver, string process, string state,
          string processNo, int pageNumber = 1, int pageSize = 10)
         {
-            var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
+            var orderPerson = UserExtensions.GetOrderPerson(_httpContextAccessor);
 
             var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,Person=orderPerson });
             return Ok(result);
