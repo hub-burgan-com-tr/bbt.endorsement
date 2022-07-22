@@ -1,7 +1,10 @@
 export const environment = {
-  production: true,
+  production: false,
   baseUrl: 'ENDORSEMENTAPI',
   loginUrl: 'LOGINURL',
-  ClientSecret: 'CLIENTSECRET',
-  RedirectUri: 'REDIRECTURI'
+  clientSecret: 'CLIENTSECRET',
+  redirectUri: 'REDIRECTURI',
+  identityServerUrl: 'IDENTITYSERVERURL',
+  clientId: 'CLIENTID',
+  grantType: 'GRANTTYPE'
 };
