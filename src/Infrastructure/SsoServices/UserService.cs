@@ -72,6 +72,7 @@ public class UserService : IUserService
     public async Task<AccessToken> AccessTokenResource(string accessToken, string state)
     {
         var response = new AccessToken();
+        return response;
 
         if (state == "EndorsementGondor")
         {
