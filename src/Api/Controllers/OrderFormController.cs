@@ -13,16 +13,11 @@ using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
 using Domain.Enums;
 using Domain.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
 {
-    /// <summary>
-    /// Form İşlemleri 
-    /// </summary>
-    [Authorize]
     [Route("Forms")]
     [ApiController]
     public class FormController : ApiControllerBase

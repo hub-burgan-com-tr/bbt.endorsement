@@ -5,11 +5,13 @@ namespace Api.Providers;
 
 public static class PolicyProvider
 {
+    public const string DefaultAuthorizedPolicyManager = "DefaultAuthorizedPolicyManager";
+
     public static void AddPolicies(this AuthorizationOptions options)
     {
-        //options.AddPolicy(CanAccessMigrosCashRegisterManager,
-        //      policyBuilder => policyBuilder
-        //            .AddAuthenticationSchemes(OAuthValidationDefaults.AuthenticationScheme)
-        //            .AddRequirements(new CredentialsRequirement(SecurityCredentials.MigrosCashRegisterActionRequirements.ToDictionary())));
+        options.AddPolicy(DefaultAuthorizedPolicyManager,
+              policyBuilder => policyBuilder
+                    .AddAuthenticationSchemes(OAuthValidationDefaults.AuthenticationScheme)
+                    .AddRequirements(new CredentialsRequirement(SecurityCredentials.DefaultRegisterActionRequirements.ToDictionary())));
     }
 }

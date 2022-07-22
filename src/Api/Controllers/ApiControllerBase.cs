@@ -1,10 +1,14 @@
 ﻿using Application.Common.Interfaces;
+using AspNet.Security.OAuth.Validation;
 using Infrastructure.ZeebeServices;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class ApiControllerBase : ControllerBase

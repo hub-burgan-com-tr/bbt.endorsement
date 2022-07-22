@@ -6,6 +6,7 @@ using Api.Extensions;
 using Api.Providers;
 using Application;
 using Application.Common.Models;
+using AspNet.Security.OAuth.Introspection;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
@@ -162,7 +163,10 @@ StaticValuesExtensions.SetStaticValues(settings);
 //    };
 //});
 
-builder.Services.AddAuthentication().AddOAuthIntrospection(options =>
+builder.Services.AddAuthentication(options =>
+{
+   // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+}).AddOAuthIntrospection(options =>
 {
     options.Authority = new Uri(StaticValues.Authority);
     options.Audiences.Add("Endorsement");
@@ -170,10 +174,12 @@ builder.Services.AddAuthentication().AddOAuthIntrospection(options =>
     options.ClientSecret = StaticValues.ClientSecret;
     options.RequireHttpsMetadata = Environment.IsProduction();
 });
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy();
-//});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicies();
+});
+
 builder.Services.AddDistributedMemoryCache();
 
 

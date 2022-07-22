@@ -24,8 +24,6 @@ using Api.Extensions;
 
 namespace Api.Controllers
 {
-
-    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class EndorsementController : ApiControllerBase

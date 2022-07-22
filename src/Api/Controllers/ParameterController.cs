@@ -1,10 +1,5 @@
 ﻿using Application.Common.Models;
-using Application.OrderForms.Commands.CreateFormInformations;
-using Application.OrderForms.Commands.UpdateFormDependencyReuse;
-using Application.OrderForms.Commands.UpdateFormInformations;
-using Application.OrderForms.Queries.GetFormInformations;
 using Application.OrderForms.Queries.GetTags;
-using Application.Orders.Queries.GetOrderByFormIds;
 using Application.Parameter.Commands.CreateParameters;
 using Application.Parameter.Commands.CreateTags;
 using Application.Parameter.Commands.UpdateParameters;
@@ -12,13 +7,13 @@ using Application.Parameter.Commands.UpdateTags;
 using Application.Parameter.Queries.GetParameters;
 using Application.Parameter.Queries.GetParametersDys;
 using Application.Parameter.Queries.GetParameterTypes;
+using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
 {
-    [Authorize]
     [Route("Parameter")]
     [ApiController]
     public class ParameterController : ApiControllerBase

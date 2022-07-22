@@ -11,10 +11,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
 {
-    /// <summary>
-    /// Form Definition İşlemleri 
-    /// </summary>
-    [Authorize]
     [Route("FormDefiniton")]
     [ApiController]
     public class FormDefinitonController : ApiControllerBase

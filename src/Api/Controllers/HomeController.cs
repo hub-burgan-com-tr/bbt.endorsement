@@ -1,11 +1,9 @@
 ﻿using Api.Extensions;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
-using Application.Common.Models;
 using Infrastructure.SsoServices;
 using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 
 namespace Api.Controllers
