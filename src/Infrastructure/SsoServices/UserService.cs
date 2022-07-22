@@ -96,7 +96,7 @@ public class UserService : IUserService
                     _httpContextAccessor.HttpContext.Session.SetString("FirstName", response.FirstName);
                     _httpContextAccessor.HttpContext.Session.SetString("LastName", response.LastName);
                     _httpContextAccessor.HttpContext.Session.SetString("BusinessLine", response.BusinessLine);
-                    _httpContextAccessor.HttpContext.Session.SetString("BranchCode", response.BranchCode);
+                    _httpContextAccessor.HttpContext.Session.SetString("BranchCode", response.BranchCode != null ? response.BranchCode : "");
                     _httpContextAccessor.HttpContext.Session.SetString("IsStaff", response.IsStaff);
 
                     if (response.Credentials != null)
