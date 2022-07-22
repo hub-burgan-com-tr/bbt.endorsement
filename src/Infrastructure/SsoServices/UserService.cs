@@ -104,7 +104,7 @@ public class UserService : IUserService
                         foreach (var credential in response.Credentials)
                         {
                              var value = credential.Split("###");
-                            _httpContextAccessor.HttpContext.Session.SetString(value[0], value[1]);
+                            _httpContextAccessor.HttpContext.Session.SetString(value[0].ToLower(), value[1]);
                         }
                     }
                 }
