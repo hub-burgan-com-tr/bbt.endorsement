@@ -59,9 +59,9 @@ namespace Api.Controllers
 
                 if (result != null)
                 {
-                    TokenHandler tokenHandler = new TokenHandler();
-                    Token token = tokenHandler.CreateAccessToken(result);
-                    result.Token = token.AccessToken;
+                    //TokenHandler tokenHandler = new TokenHandler();
+                   // Token token = tokenHandler.CreateAccessToken(result);
+                    //result.Token = token.AccessToken;
                     Log.Information("Login-Token: " + result.Token);
                 }
 

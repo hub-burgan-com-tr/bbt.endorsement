@@ -72,7 +72,6 @@ public class UserService : IUserService
     public async Task<AccessToken> AccessTokenResource(string accessToken, string state)
     {
         var response = new AccessToken();
-        return response;
 
         if (state == "EndorsementGondor")
         {
@@ -99,13 +98,13 @@ public class UserService : IUserService
                     _httpContextAccessor.HttpContext.Session.SetString("BusinessLine", response.BusinessLine);
                     _httpContextAccessor.HttpContext.Session.SetString("BranchCode", response.BranchCode);
                     _httpContextAccessor.HttpContext.Session.SetString("IsStaff", response.IsStaff);
-                    _httpContextAccessor.HttpContext.Session.SetString("Access_token", response.Access_token);
 
                     if (response.Credentials != null)
                     {
                         foreach (var credential in response.Credentials)
                         {
-                            _httpContextAccessor.HttpContext.Session.SetString(credential, credential);
+                             var value = credential.Split("###");
+                            _httpContextAccessor.HttpContext.Session.SetString(value[0], value[1]);
                         }
                     }
                 }
