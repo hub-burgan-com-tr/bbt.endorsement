@@ -2,12 +2,15 @@
 using Application.BbtInternals.Queries.GetCustomerSearchs;
 using Application.BbtInternals.Queries.GetPersonSummary;
 using Application.BbtInternals.Queries.GetSearchPersonSummary;
+using AspNet.Security.OAuth.Validation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 
 namespace Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("")]
     [ApiController]
     public class PersonController : ApiControllerBase

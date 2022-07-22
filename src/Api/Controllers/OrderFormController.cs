@@ -11,13 +11,16 @@ using Application.OrderForms.Queries.GetOrderFormTags;
 using Application.OrderForms.Queries.GetTags;
 using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
+using AspNet.Security.OAuth.Validation;
 using Domain.Enums;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("Forms")]
     [ApiController]
     public class FormController : ApiControllerBase

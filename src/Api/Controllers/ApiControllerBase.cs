@@ -8,7 +8,6 @@ using System.Net;
 
 namespace Api.Controllers
 {
-    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class ApiControllerBase : ControllerBase

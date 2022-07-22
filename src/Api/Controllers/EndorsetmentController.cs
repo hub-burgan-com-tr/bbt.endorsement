@@ -21,9 +21,11 @@ using Domain.Models;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Api.Extensions;
+using AspNet.Security.OAuth.Validation;
 
 namespace Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     [ApiController]
     public class EndorsementController : ApiControllerBase
