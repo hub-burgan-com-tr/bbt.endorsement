@@ -25,7 +25,7 @@ using AspNet.Security.OAuth.Validation;
 
 namespace Api.Controllers
 {
-    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+   // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     [ApiController]
     public class EndorsementController : ApiControllerBase

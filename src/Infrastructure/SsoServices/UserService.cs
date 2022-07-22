@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
 using Infrastructure.SsoServices.Models;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -12,6 +13,13 @@ public interface IUserService
 
 public class UserService : IUserService
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UserService(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
     public async Task<AccessToken> AccessToken(string code, string state)
     {
         string accessToken = "";
@@ -80,6 +88,26 @@ public class UserService : IUserService
                 Log.Information("Login-SSO: " + responseContent);
                 if (!string.IsNullOrEmpty(response.CitizenshipNumber))
                     response.IsLogin = true;
+
+                if (response.IsLogin)
+                {
+                    _httpContextAccessor.HttpContext.Session.SetString("CustomerNumber", response.CustomerNumber);
+                    _httpContextAccessor.HttpContext.Session.SetString("CitizenshipNumber", response.CitizenshipNumber);
+                    _httpContextAccessor.HttpContext.Session.SetString("FirstName", response.FirstName);
+                    _httpContextAccessor.HttpContext.Session.SetString("LastName", response.LastName);
+                    _httpContextAccessor.HttpContext.Session.SetString("BusinessLine", response.BusinessLine);
+                    _httpContextAccessor.HttpContext.Session.SetString("BranchCode", response.BranchCode);
+                    _httpContextAccessor.HttpContext.Session.SetString("IsStaff", response.IsStaff);
+                    _httpContextAccessor.HttpContext.Session.SetString("Access_token", response.Access_token);
+
+                    if (response.Credentials != null)
+                    {
+                        foreach (var credential in response.Credentials)
+                        {
+                            _httpContextAccessor.HttpContext.Session.SetString(credential, credential);
+                        }
+                    }
+                }
             }
         }
         return response;

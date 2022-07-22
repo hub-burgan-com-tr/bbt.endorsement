@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Api.Controllers
 {
-    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+   // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("")]
     [ApiController]
     public class PersonController : ApiControllerBase

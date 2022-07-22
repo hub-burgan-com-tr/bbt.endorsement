@@ -20,11 +20,18 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Controllers
 {
-    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+   // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("Forms")]
     [ApiController]
     public class FormController : ApiControllerBase
     {
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public FormController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
         [SwaggerOperation(
             Summary = "Creates or updates form definition",
             Description = "Form definitons are stored as a form.io schema. All forms stored with tag data. Tags are primary query elements of form"
@@ -44,10 +51,12 @@ namespace Api.Controllers
                     request.Content = form.Data.Content;
             }
 
-            if(User.Claims.Count() == 0)
-                return Response<NewOrderFormResponse>.Fail("Kullanıcı bulunamadı", 404);
+            //if(User.Claims.Count() == 0)
+            //    return Response<NewOrderFormResponse>.Fail("Kullanıcı bulunamadı", 404);
 
-            var person = UserExtensions.GetOrderPerson(User.Claims);
+            //var person = UserExtensions.GetOrderPerson(User.Claims);
+
+            var person = UserExtensions.GetOrderPerson(_httpContextAccessor);
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
         }

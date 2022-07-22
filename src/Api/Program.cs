@@ -181,6 +181,13 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.AddApplication();
@@ -194,6 +201,7 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 app.AddUseMiddleware();
+app.UseSession();
 
 Log.Information("Endorsement API running... - " + Environment.EnvironmentName);
 

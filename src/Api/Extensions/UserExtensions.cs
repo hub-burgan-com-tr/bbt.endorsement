@@ -25,5 +25,27 @@ public static class UserExtensions
 
         return person;
     }
+
+    public static OrderPerson GetOrderPerson(IHttpContextAccessor _httpContextAccessor)
+    {
+        var person = new OrderPerson
+        {
+            CitizenshipNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CitizenshipNumber")),
+            CustomerNumber = int.Parse(_httpContextAccessor.HttpContext.Session.GetString("CustomerNumber")),
+
+            First = _httpContextAccessor.HttpContext.Session.GetString("First"),
+            Last = _httpContextAccessor.HttpContext.Session.GetString("Last"),
+            BranchCode = _httpContextAccessor.HttpContext.Session.GetString("BranchCode"),
+            BusinessLine = _httpContextAccessor.HttpContext.Session.GetString("BusinessLine"),
+
+            //IsBranchApproval = Claims.FirstOrDefault(c => c.Type == "IsBranchApproval") != null ? Convert.ToBoolean(Claims.FirstOrDefault(c => c.Type == "IsBranchApproval").Value) : false,
+            //IsBranchFormReader = Claims.FirstOrDefault(c => c.Type == "IsBranchFormReader") != null ? Convert.ToBoolean(Claims.FirstOrDefault(c => c.Type == "IsBranchFormReader").Value) : false,
+            //IsFormReader = Claims.FirstOrDefault(c => c.Type == "IsFormReader") != null ? Convert.ToBoolean(Claims.FirstOrDefault(c => c.Type == "IsFormReader").Value) : false,
+            //IsNewFormCreator = Claims.FirstOrDefault(c => c.Type == "IsNewFormCreator") != null ? Convert.ToBoolean(Claims.FirstOrDefault(c => c.Type == "IsNewFormCreator").Value) : false,
+            //IsReadyFormCreator = Claims.FirstOrDefault(c => c.Type == "IsReadyFormCreator") != null ? Convert.ToBoolean(Claims.FirstOrDefault(c => c.Type == "IsReadyFormCreator").Value) : false,
+        };
+
+        return person;
+    }
 }
 
