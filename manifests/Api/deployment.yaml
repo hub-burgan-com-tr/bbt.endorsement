@@ -6,7 +6,7 @@ metadata:
   labels:
     app: endorsement
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: endorsement
