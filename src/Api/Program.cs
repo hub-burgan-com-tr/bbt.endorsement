@@ -165,7 +165,7 @@ StaticValuesExtensions.SetStaticValues(settings);
 
 builder.Services.AddAuthentication(options =>
 {
-   // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+    // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
 }).AddOAuthIntrospection(options =>
 {
     options.Authority = new Uri(StaticValues.Authority);
@@ -175,10 +175,10 @@ builder.Services.AddAuthentication(options =>
     options.RequireHttpsMetadata = Environment.IsProduction();
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicies();
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicies();
+//});
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>

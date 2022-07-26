@@ -23,14 +23,14 @@ namespace Migration.Console.App.Seed
 
                 var dysParameterTypeId = "66265975-f6f4-42f4-97ef-d48dea143000";
                 var dysParameter = context.ParameterTypes.Add(new ParameterType { ParameterTypeId = dysParameterTypeId, Name = "Dys Form Kategorileri" }).Entity;
-                //dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143001", ParameterTypeId = dysParameterTypeId, Text = "Konut Eşya", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey=1210,DmsReferenceName= "Konut Sigorta Poliçesi" });
-                //dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143002", ParameterTypeId = dysParameterTypeId, Text = "Konut", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey = 1210,DmsReferenceName= "Konut Sigorta Poliçesi" });               
-                //dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143003", ParameterTypeId = dysParameterTypeId, Text = "DASK", Created = DateTime.Now, DmsReferenceId = 1832, DmsReferenceKey = 1210 , DmsReferenceName = "Dask Sigorta Poliçesi" });
-                //dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143004", ParameterTypeId = dysParameterTypeId, Text = "Kasko", Created = DateTime.Now, DmsReferenceId = 1829, DmsReferenceKey = 1220, DmsReferenceName= "Kasko Sigorta Poliçesi" });
-                //dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143005", ParameterTypeId = dysParameterTypeId, Text = "Trafik", Created = DateTime.Now, DmsReferenceId = 1830, DmsReferenceKey = 1220, DmsReferenceName = "Trafik Sigorta Poliçesi" });               
-                //dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143006", ParameterTypeId = dysParameterTypeId, Text = "İşyeri", Created = DateTime.Now, DmsReferenceId = 1833, DmsReferenceKey = 1210, DmsReferenceName = "Diğer Elementer Sigorta Poliçesi" });
-                //dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143007", ParameterTypeId = dysParameterTypeId, Text = "Diğer", Created = DateTime.Now, DmsReferenceId = 1833, DmsReferenceKey = 1200, DmsReferenceName = "Diğer Elementer Kasko Poliçesi" });
-              
+                dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143001", ParameterTypeId = dysParameterTypeId, Text = "Konut Eşya", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey = 1210, DmsReferenceName = "Konut Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143002", ParameterTypeId = dysParameterTypeId, Text = "Konut", Created = DateTime.Now, DmsReferenceId = 1831, DmsReferenceKey = 1210, DmsReferenceName = "Konut Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143003", ParameterTypeId = dysParameterTypeId, Text = "DASK", Created = DateTime.Now, DmsReferenceId = 1832, DmsReferenceKey = 1210, DmsReferenceName = "Dask Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143004", ParameterTypeId = dysParameterTypeId, Text = "Kasko", Created = DateTime.Now, DmsReferenceId = 1829, DmsReferenceKey = 1220, DmsReferenceName = "Kasko Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143005", ParameterTypeId = dysParameterTypeId, Text = "Trafik", Created = DateTime.Now, DmsReferenceId = 1830, DmsReferenceKey = 1220, DmsReferenceName = "Trafik Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143006", ParameterTypeId = dysParameterTypeId, Text = "İşyeri", Created = DateTime.Now, DmsReferenceId = 1833, DmsReferenceKey = 1210, DmsReferenceName = "Diğer Elementer Sigorta Poliçesi" });
+                dysParameter.Parameters.Add(new Parameter { ParameterId = "66265975-f6f4-42f4-97ef-d48dea143007", ParameterTypeId = dysParameterTypeId, Text = "Diğer", Created = DateTime.Now, DmsReferenceId = 1833, DmsReferenceKey = 1200, DmsReferenceName = "Diğer Elementer Kasko Poliçesi" });
+
                 await context.SaveChangesAsync();
             }
         }

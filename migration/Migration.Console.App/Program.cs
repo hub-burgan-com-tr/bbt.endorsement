@@ -25,6 +25,7 @@ var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
 StaticValuesExtensions.SetStaticValues(settings);
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder);
 builder.Services.AddScoped<IMigrationService, MigrationService>();

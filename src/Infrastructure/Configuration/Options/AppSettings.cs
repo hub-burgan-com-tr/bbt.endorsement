@@ -21,6 +21,7 @@ public class Entegration
     public string Sso { get; set; }
     public string DMSService { get; set; }
     public string ClientSecret { get; set; }
+    public string ClientId { get; set; }
 }
 
 public class TokenOptions
