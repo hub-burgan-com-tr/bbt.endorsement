@@ -13,7 +13,7 @@ public static class StaticValuesExtensions
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
         StaticValues.ClientSecret = settings.Entegration.ClientSecret;
 
-        StaticValues.ApiClientSecret = settings.Entegration.ApiClientSecret;
+        StaticValues.ApiSecret = settings.Entegration.ApiSecret;
         StaticValues.ClientId = settings.Entegration.ClientId;
 
         StaticValues.Authority = settings.Authentication.Authority;
