@@ -171,7 +171,7 @@ builder.Services.AddAuthentication(options =>
     options.Authority = new Uri(StaticValues.Authority);
     options.Audiences.Add(StaticValues.ClientId);
     options.ClientId = StaticValues.ClientId;
-    options.ClientSecret = StaticValues.ApiClientSecret;
+    options.ClientSecret = StaticValues.ApiSecret;
     options.RequireHttpsMetadata = Environment.IsProduction();
 });
 
