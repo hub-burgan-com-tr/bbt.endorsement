@@ -12,6 +12,8 @@ public static class StaticValuesExtensions
         StaticValues.DMSService = settings.Entegration.DMSService;
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
         StaticValues.ClientSecret = settings.Entegration.ClientSecret;
+
+        StaticValues.ApiClientSecret = settings.Entegration.ApiClientSecret;
         StaticValues.ClientId = settings.Entegration.ClientId;
 
         StaticValues.Authority = settings.Authentication.Authority;

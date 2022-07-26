@@ -169,9 +169,9 @@ builder.Services.AddAuthentication(options =>
 }).AddOAuthIntrospection(options =>
 {
     options.Authority = new Uri(StaticValues.Authority);
-    options.Audiences.Add("Endorsement");
-    options.ClientId = "Endorsement";
-    options.ClientSecret = StaticValues.ClientSecret;
+    options.Audiences.Add(StaticValues.ClientId);
+    options.ClientId = StaticValues.ClientId;
+    options.ClientSecret = StaticValues.ApiClientSecret;
     options.RequireHttpsMetadata = Environment.IsProduction();
 });
 
