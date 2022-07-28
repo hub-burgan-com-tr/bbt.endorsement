@@ -23,6 +23,7 @@ IConfiguration Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 IWebHostEnvironment Environment = builder.Environment;
+Log.Information("Endorsement API running... - " + Environment.EnvironmentName);
 
 if (Environment.EnvironmentName == "Development")
     Configuration = builder
@@ -213,7 +214,6 @@ app.UseSerilogRequestLogging();
 app.AddUseMiddleware();
 app.UseSession();
 
-Log.Information("Endorsement API running... - " + Environment.EnvironmentName);
 
 // Configure the HTTP request pipeline.
 //if (!app.Environment.IsDevelopment())
