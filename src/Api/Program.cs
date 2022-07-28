@@ -183,6 +183,8 @@ builder.Services.AddAuthentication(options =>
     options.RequireHttpsMetadata = Environment.IsProduction();
 });
 
+Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ApiSecret);
+
 //builder.Services.AddAuthorization(options =>
 //{
 //    options.AddPolicies();
