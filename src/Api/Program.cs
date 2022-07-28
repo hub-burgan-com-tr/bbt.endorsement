@@ -40,6 +40,14 @@ else if (Environment.EnvironmentName == "Prod")
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
+else if (Environment.EnvironmentName == "Uat")
+    Configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
 else if (Environment.EnvironmentName == "Test")
     Configuration = builder
         .Configuration
