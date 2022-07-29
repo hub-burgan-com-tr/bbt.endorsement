@@ -1,18 +1,12 @@
-using System.Diagnostics;
 using System.Reflection;
-using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
-using Api.Providers;
 using Application;
 using Application.Common.Models;
-using AspNet.Security.OAuth.Introspection;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
