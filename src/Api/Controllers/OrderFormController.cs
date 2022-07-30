@@ -25,13 +25,6 @@ namespace Api.Controllers
     [ApiController]
     public class FormController : ApiControllerBase
     {
-        private IHttpContextAccessor _httpContextAccessor;
-
-        public FormController(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
         [SwaggerOperation(
             Summary = "Creates or updates form definition",
             Description = "Form definitons are stored as a form.io schema. All forms stored with tag data. Tags are primary query elements of form"
@@ -42,6 +35,9 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
+            if (!User.IsCredentials())
+                return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 200);
+
             request.Id = Guid.NewGuid().ToString();
 
             if (request.Source == "formio")

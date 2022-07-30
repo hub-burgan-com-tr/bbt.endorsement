@@ -19,23 +19,14 @@ using Application.Endorsements.Queries.GetWatchApprovalsDetails;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Models;
 using Domain.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Api.Extensions;
-using AspNet.Security.OAuth.Validation;
 
 namespace Api.Controllers
 {
-   // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("[controller]")]
     [ApiController]
     public class EndorsementController : ApiControllerBase
     {
-        private IHttpContextAccessor _httpContextAccessor;
-
-        public EndorsementController(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
         [SwaggerOperation(
             Summary = "Create new endorsement order. After endorsement is created, process is started immediately.",
             Tags = new[] { "Endorsement" }
@@ -49,7 +40,9 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
-            //
+            if (!User.IsCredentials())
+                return Response<StartResponse>.Fail("Yetkiniz bulunmuyor.", 200);
+
             request.Id = Guid.NewGuid().ToString();
             var person = UserExtensions.GetOrderPerson(User.Claims);
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
@@ -193,7 +186,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var citizenshipNumber = _httpContextAccessor.HttpContext.User.GetCitizenshipNumber();
+            var citizenshipNumber = User.GetCitizenshipNumber();
             var list = await Mediator.Send(new GetApprovalQuery { CitizenshipNumber = citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(list);
         }
@@ -215,7 +208,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetApprovalDetailAsync([FromQuery] string orderId)
         {
-            var citizenshipNumber = _httpContextAccessor.HttpContext.User.GetCitizenshipNumber();
+            var citizenshipNumber = User.GetCitizenshipNumber();
 
             var result = await Mediator.Send(new GetApprovalDetailsQuery() { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
@@ -242,7 +235,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            var citizenshipNumber = _httpContextAccessor.HttpContext.User.GetCitizenshipNumber();
+            var citizenshipNumber = User.GetCitizenshipNumber();
             var data = await Mediator.Send(new GetMyApprovalQuery { CitizenshipNumber = citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(data);
         }
@@ -266,7 +259,7 @@ namespace Api.Controllers
         public async Task<IActionResult> GetMyApprovalDetailAsync([FromQuery] string orderId)
         {
            // var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
-            var citizenshipNumber = _httpContextAccessor.HttpContext.User.GetCitizenshipNumber();
+            var citizenshipNumber = User.GetCitizenshipNumber();
 
             var result = await Mediator.Send(new GetMyApprovalDetailsQuery { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
@@ -319,7 +312,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
-            var citizenshipNumber = _httpContextAccessor.HttpContext.User.GetCitizenshipNumber();
+            var citizenshipNumber = User.GetCitizenshipNumber();
             var result = await Mediator.Send(new GetWantApprovalDetailsQuery() {CitizenshipNumber=citizenshipNumber, OrderId = orderId });
             return Ok(result);
         }
