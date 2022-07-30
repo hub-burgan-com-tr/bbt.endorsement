@@ -56,7 +56,7 @@ namespace Api.Controllers
 
             //var person = UserExtensions.GetOrderPerson(User.Claims);
 
-            var person = UserExtensions.GetOrderPerson(_httpContextAccessor);
+            var person = UserExtensions.GetOrderPerson(User.Claims);
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
         }

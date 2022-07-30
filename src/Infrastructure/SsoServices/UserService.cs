@@ -89,25 +89,25 @@ public class UserService : IUserService
                 if (!string.IsNullOrEmpty(response.CitizenshipNumber))
                     response.IsLogin = true;
 
-                if (response.IsLogin)
-                {
-                    _httpContextAccessor.HttpContext.Session.SetString("CustomerNumber", response.CustomerNumber != null ? response.CustomerNumber : "");
-                    _httpContextAccessor.HttpContext.Session.SetString("CitizenshipNumber", response.CitizenshipNumber != null ? response.CitizenshipNumber : "");
-                    _httpContextAccessor.HttpContext.Session.SetString("FirstName", response.FirstName != null ? response.FirstName : "");
-                    _httpContextAccessor.HttpContext.Session.SetString("LastName", response.LastName != null ? response.LastName : "");
-                    _httpContextAccessor.HttpContext.Session.SetString("BusinessLine", response.BusinessLine != null ? response.BusinessLine : "");
-                    _httpContextAccessor.HttpContext.Session.SetString("BranchCode", response.BranchCode != null ? response.BranchCode : "");
-                    _httpContextAccessor.HttpContext.Session.SetString("IsStaff", response.IsStaff != null ? response.IsStaff : "");
+                //if (response.IsLogin)
+                //{
+                //    _httpContextAccessor.HttpContext.Session.SetString("CustomerNumber", response.CustomerNumber != null ? response.CustomerNumber : "");
+                //    _httpContextAccessor.HttpContext.Session.SetString("CitizenshipNumber", response.CitizenshipNumber != null ? response.CitizenshipNumber : "");
+                //    _httpContextAccessor.HttpContext.Session.SetString("FirstName", response.FirstName != null ? response.FirstName : "");
+                //    _httpContextAccessor.HttpContext.Session.SetString("LastName", response.LastName != null ? response.LastName : "");
+                //    _httpContextAccessor.HttpContext.Session.SetString("BusinessLine", response.BusinessLine != null ? response.BusinessLine : "");
+                //    _httpContextAccessor.HttpContext.Session.SetString("BranchCode", response.BranchCode != null ? response.BranchCode : "");
+                //    _httpContextAccessor.HttpContext.Session.SetString("IsStaff", response.IsStaff != null ? response.IsStaff : "");
 
-                    if (response.Credentials != null)
-                    {
-                        foreach (var credential in response.Credentials)
-                        {
-                             var value = credential.Split("###");
-                            _httpContextAccessor.HttpContext.Session.SetString(value[0].ToLower(), value[1]);
-                        }
-                    }
-                }
+                //    if (response.Credentials != null)
+                //    {
+                //        foreach (var credential in response.Credentials)
+                //        {
+                //             var value = credential.Split("###");
+                //            _httpContextAccessor.HttpContext.Session.SetString(value[0].ToLower(), value[1]);
+                //        }
+                //    }
+                //}
             }
         }
         return response;
