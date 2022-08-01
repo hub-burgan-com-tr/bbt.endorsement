@@ -12,9 +12,9 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace Api.Controllers
 {
     //[Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
-    [Route("FormDefiniton")]
+    [Route("FormDefinition")]
     [ApiController]
-    public class FormDefinitonController : ApiControllerBase
+    public class FormDefinitionController : ApiControllerBase
     {
         [SwaggerOperation(
           Summary = "create form definition",
