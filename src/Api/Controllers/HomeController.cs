@@ -26,11 +26,18 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public GetSearchPersonSummaryDto Login(string access_token, string state)
+        public GetSearchPersonSummaryDto Login()
         {
             try
             {
-                var response = _userService.AccessTokenResource(access_token, state).Result;
+                string access_token = "";
+                string value = Request.Headers["Authorization"];
+                if (value.StartsWith("Bearer "))
+                {
+                    access_token = value.Substring("Bearer ".Length);
+                }
+
+                var response = _userService.AccessTokenResource(access_token).Result;
 
                 if (response.IsLogin == false)
                 {

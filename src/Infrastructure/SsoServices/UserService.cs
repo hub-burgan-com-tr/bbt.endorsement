@@ -8,7 +8,7 @@ namespace Infrastructure.SsoServices;
 public interface IUserService
 {
     Task<AccessToken> AccessToken(string code, string state);
-    Task<AccessToken> AccessTokenResource(string token, string state);
+    Task<AccessToken> AccessTokenResource(string accessToken);
 }
 
 public class UserService : IUserService
@@ -69,12 +69,10 @@ public class UserService : IUserService
         return response;
     }
 
-    public async Task<AccessToken> AccessTokenResource(string accessToken, string state)
+    public async Task<AccessToken> AccessTokenResource(string accessToken)
     {
         var response = new AccessToken();
 
-        if (state == "EndorsementGondor")
-        {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(StaticValues.ApiGateway);
@@ -109,7 +107,7 @@ public class UserService : IUserService
                 //    }
                 //}
             }
-        }
+        
         return response;
     }
 }
