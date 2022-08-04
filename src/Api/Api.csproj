@@ -27,6 +27,7 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Introspection" Version="2.0.0" />
     <PackageReference Include="AspNet.Security.OAuth.Validation" Version="2.0.0" />
+    <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.16.1" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.1" />

@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Api.Extensions;
 using Application;
 using Application.Common.Models;
+using Elastic.Apm.NetCoreAll;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
@@ -59,7 +60,6 @@ else
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
-
 
 Log.Logger = new LoggerConfiguration()
    .ReadFrom.Configuration(Configuration)
@@ -203,6 +203,9 @@ builder.Services.AddInfrastructure(builder);
 
 
 var app = builder.Build();
+
+if (Environment.EnvironmentName == "Prod")
+    app.UseAllElasticApm(Configuration);
 
 app.UseSerilogRequestLogging();
 app.AddUseMiddleware();
