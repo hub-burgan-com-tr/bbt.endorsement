@@ -1,4 +1,5 @@
 ﻿using Document.Infrastructure;
+using Elastic.Apm.NetCoreAll;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -92,6 +93,10 @@ var settings = builder.Configuration.Get<AppSettings>();
 StaticValuesExtensions.SetStaticValues(settings);
 
 var app = builder.Build();
+
+if (environment.EnvironmentName == "Prod")
+    app.UseAllElasticApm(Configuration);
+
 
 app.AddUseMiddleware();
 
