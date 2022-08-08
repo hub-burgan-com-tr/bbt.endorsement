@@ -16,43 +16,43 @@ using Worker.App.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-IWebHostEnvironment environment = builder.Environment;
+IWebHostEnvironment Environment = builder.Environment;
 IConfiguration Configuration;
-if (environment.EnvironmentName == "Development")
+if (Environment.EnvironmentName == "Development")
 {
     Configuration = builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
 }
-else if (environment.EnvironmentName == "Prod")
+else if (Environment.EnvironmentName == "Prod")
 {
     Configuration = builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
 }
-else if (environment.EnvironmentName == "Uat")
+else if (Environment.EnvironmentName == "Uat")
 {
     Configuration = builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
 }
-else if (environment.EnvironmentName == "Test")
+else if (Environment.EnvironmentName == "Test")
 {
     Configuration = builder
         .Configuration
-        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
         .AddEnvironmentVariables()
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
@@ -94,7 +94,7 @@ StaticValuesExtensions.SetStaticValues(settings);
 
 var app = builder.Build();
 
-if (environment.EnvironmentName == "Prod")
+if (Environment.EnvironmentName == "Prod" || Environment.EnvironmentName == "Uat")
     app.UseAllElasticApm(Configuration);
 
 
@@ -102,7 +102,7 @@ app.AddUseMiddleware();
 
 using (var scope = app.Services.CreateScope())
 {
-    Log.Information("Worker.App running... - " + environment.EnvironmentName);
+    Log.Information("Worker.App running... - " + Environment.EnvironmentName);
     var serviceProvider = scope.ServiceProvider;
 
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();

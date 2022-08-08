@@ -204,7 +204,7 @@ builder.Services.AddInfrastructure(builder);
 
 var app = builder.Build();
 
-if (Environment.EnvironmentName == "Prod")
+if (Environment.EnvironmentName == "Prod" || Environment.EnvironmentName == "Uat")
     app.UseAllElasticApm(Configuration);
 
 app.UseSerilogRequestLogging();
