@@ -351,7 +351,7 @@ namespace Api.Controllers
          string processNo, int pageNumber = 1, int pageSize = 10)
         {
             if (!User.IsCredentials())
-                return (IActionResult)Response<GetWatchApprovalDto>.Fail("Yetkiniz bulunmuyor.", 200);
+                return (IActionResult)Response<PaginatedList<GetWatchApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 200);
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
             var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,Person=orderPerson });
