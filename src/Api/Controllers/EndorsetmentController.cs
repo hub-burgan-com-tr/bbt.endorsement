@@ -288,6 +288,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
+            if (!User.IsCredentials())
+                return (IActionResult)Response<PaginatedList<GetWantApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 200);
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
              var result = await Mediator.Send(new GetWantApprovalQuery { Person = orderPerson, PageNumber = pageNumber, PageSize = pageSize });
@@ -312,6 +314,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
+            if (!User.IsCredentials())
+                return (IActionResult)Response<GetWantApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 200);
             var citizenshipNumber = User.GetCitizenshipNumber();
             var result = await Mediator.Send(new GetWantApprovalDetailsQuery() {CitizenshipNumber=citizenshipNumber, OrderId = orderId });
             return Ok(result);
@@ -346,6 +350,8 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWatchApprovalAsync(string customer, string approver, string process, string state,
          string processNo, int pageNumber = 1, int pageSize = 10)
         {
+            if (!User.IsCredentials())
+                return (IActionResult)Response<GetWatchApprovalDto>.Fail("Yetkiniz bulunmuyor.", 200);
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
             var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,Person=orderPerson });
@@ -371,6 +377,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWatchApprovalDetailAsync([FromQuery] string orderId)
         {
+            if (!User.IsCredentials())
+                return (IActionResult)Response<GetWatchApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 200);
             var response = await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
             return Ok(response);
         }
