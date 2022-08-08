@@ -82,7 +82,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "en74a1"
+      "id": "e13r3u"
     },
     {
       "label": "İşlem No",
@@ -161,7 +161,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eyy3lu"
+      "id": "e9za4vr"
     },
     {
       "label": "Sigorta Ettiren ile Sigortalı Aynı Kişidir",
@@ -229,7 +229,7 @@
       "inputType": "checkbox",
       "value": "",
       "name": "",
-      "id": "et4x9vut"
+      "id": "e7mtrn1d"
     },
     {
       "label": "Sigortalı Adı/Ünvanı",
@@ -308,7 +308,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eaxdvw"
+      "id": "eblm716"
     },
     {
       "label": "Sigortalı VKN/TCKN",
@@ -393,7 +393,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "elxxk5m"
+      "id": "etpm6r"
     },
     {
       "label": "Sigorta Ettiren Adı/Ünvanı",
@@ -472,7 +472,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ekoj6pi"
+      "id": "edystbe"
     },
     {
       "label": "Sigorta Ettiren VKN/TCKN",
@@ -557,7 +557,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e8l1pcc"
+      "id": "ejwj0wi"
     },
     {
       "label": "Daini Mürtehin",
@@ -636,7 +636,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e678rq4"
+      "id": "e4ic0ip"
     },
     {
       "title": "TALEP EDİLEN SİGORTA TÜRÜ: KASKO İÇİN",
@@ -730,7 +730,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "enr56a"
+          "id": "eryyxp8"
         },
         {
           "label": "Belge Seri No",
@@ -815,7 +815,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e236nkz"
+          "id": "e46482u"
         },
         {
           "label": "Araç marka  model",
@@ -894,7 +894,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ey0gg7"
+          "id": "eydud9n"
         },
         {
           "label": "Araç marka  kodu",
@@ -979,10 +979,10 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "em7j7qa"
+          "id": "erdk1j"
         },
         {
-          "label": "Motor / Şase no",
+          "label": "Şase no",
           "labelPosition": "left-left",
           "tableView": true,
           "validate": {
@@ -1000,7 +1000,7 @@
             "required": "Zorunlu alandır.Boş geçilemez.",
             "minLength": "Min. karakter sayısı 17 olmalıdır."
           },
-          "key": "motorSaseNo",
+          "key": "SaseNo",
           "attributes": {
             "maxLength": "17",
             "minLength": "17"
@@ -1065,7 +1065,89 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ea9cuat"
+          "id": "en7v0gd"
+        },
+        {
+          "label": "Motor no",
+          "labelPosition": "left-left",
+          "tableView": true,
+          "validate": {
+            "required": true,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "minLength": "",
+            "maxLength": "",
+            "pattern": ""
+          },
+          "errors": {
+            "required": "Zorunlu alandır.Boş geçilemez."
+          },
+          "key": "motorNo1",
+          "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
+          "input": true,
+          "placeholder": "",
+          "prefix": "",
+          "customClass": "",
+          "suffix": "",
+          "multiple": false,
+          "defaultValue": null,
+          "protected": false,
+          "unique": false,
+          "persistent": true,
+          "hidden": false,
+          "clearOnHide": true,
+          "refreshOn": "",
+          "redrawOn": "",
+          "modalEdit": false,
+          "dataGridLabel": false,
+          "description": "",
+          "errorLabel": "",
+          "tooltip": "",
+          "hideLabel": false,
+          "tabindex": "",
+          "disabled": false,
+          "autofocus": false,
+          "dbIndex": false,
+          "customDefaultValue": "",
+          "calculateValue": "",
+          "calculateServer": false,
+          "widget": {
+            "type": "input"
+          },
+          "attributes": {},
+          "validateOn": "change",
+          "conditional": {
+            "show": null,
+            "when": null,
+            "eq": ""
+          },
+          "overlay": {
+            "style": "",
+            "left": "",
+            "top": "",
+            "width": "",
+            "height": ""
+          },
+          "allowCalculateOverride": false,
+          "encrypted": false,
+          "showCharCount": false,
+          "showWordCount": false,
+          "properties": {},
+          "allowMultipleMasks": false,
+          "addons": [],
+          "mask": false,
+          "inputType": "text",
+          "inputFormat": "plain",
+          "inputMask": "",
+          "displayMask": "",
+          "spellcheck": true,
+          "truncateMultipleSpaces": false,
+          "id": "e87awm8"
         },
         {
           "label": "Sigortalı Adresi",
@@ -1147,7 +1229,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ejxfv3"
+          "id": "ez9bqfu"
         },
         {
           "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
@@ -1217,7 +1299,7 @@
           "inputType": "checkbox",
           "value": "",
           "name": "",
-          "id": "e5jpzte"
+          "id": "enkyy4"
         }
       ],
       "placeholder": "",
@@ -1281,7 +1363,7 @@
       "lazyLoad": false,
       "theme": "default",
       "breadcrumb": "default",
-      "id": "e1jkrgi"
+      "id": "etjds7"
     },
     {
       "label": "Text Area",
@@ -1365,7 +1447,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "enkokz"
+      "id": "e9tlxk"
     },
     {
       "label": "Text Area",
@@ -1449,7 +1531,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "ezeh0ow"
+      "id": "e53i52p"
     },
     {
       "label": "Text Area",
@@ -1533,7 +1615,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "ejyc0o"
+      "id": "egr9ixp"
     }
   ]
 }
