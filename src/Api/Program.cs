@@ -96,8 +96,8 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
-if (!Environment.IsProduction())
-{
+//if (!Environment.IsProduction())
+
     builder.Services.AddSwaggerGen(options =>
     {
         options.SwaggerDoc("v1", new OpenApiInfo
@@ -144,7 +144,7 @@ if (!Environment.IsProduction())
         options.CustomSchemaIds(x => x.FullName);
         options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
     });
-}
+
 
 
 var settings = builder.Configuration.Get<AppSettings>();
