@@ -618,12 +618,13 @@ public class ContractApprovalService : IContractApprovalService
 
     private async Task<bool> SendPersonalMail(string instanceId, string email)
     {
+        var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
         try
         {
             var responseEmail = _mediator.Send(new PersonSendMailTemplateCommand
             {
                 OrderId = instanceId,
-                Email = email
+                Email = person.Data.Customer.BusinessEmail
             }).Result;
 
             var createOrderHistoryCommand = new CreateOrderHistoryCommand

@@ -30,7 +30,7 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
                 .FirstOrDefaultAsync().Result;
             if (order == null)
                 return Response<LoadContactInfoPersonResponse>.NotFoundException("Order not found", 404);
-            if (order.Customer == null)
+            if (order.Person == null)
                 return Response<LoadContactInfoPersonResponse>.NotFoundException("Person not found", 404);
 
             var person = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest

@@ -44,8 +44,13 @@ public class CustomerList
     public bool IsStaff { get; set; }
     [JsonProperty("gsmPhone")]
     public GsmPhones GsmPhone { get; set; }
+
     [JsonProperty("email")]
     public string Email { get; set; }
+
+    [JsonProperty("businessEmail")]
+    public string BusinessEmail { get; set; }
+
     [JsonProperty("businessLine")]
     public string BusinessLine { get; set; }
     [JsonProperty("device")]
