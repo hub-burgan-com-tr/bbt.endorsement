@@ -619,7 +619,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private async Task<bool> SendPersonalMail(string instanceId)
     {
-        var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = instanceId });
+        var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
 
        // foreach (var email in Users.Emails())
        // {
