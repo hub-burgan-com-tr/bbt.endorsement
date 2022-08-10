@@ -15,6 +15,7 @@ public static class UserExtensions
         person.Last = Claims.FirstOrDefault(c => c.Type == "family_name").Value;
         person.BranchCode = Claims.FirstOrDefault(c => c.Type == "branch_id") != null ? Claims.FirstOrDefault(c => c.Type == "branch_id").Value : "";
         person.BusinessLine = Claims.FirstOrDefault(c => c.Type == "business_line") != null ? Claims.FirstOrDefault(c => c.Type == "business_line").Value : "";
+        person.Email = Claims.FirstOrDefault(c => c.Type == "email") != null ? Claims.FirstOrDefault(c => c.Type == "email").Value : "";
 
         var credentials = Claims.Where(c => c.Type == "credentials").ToList();
         foreach (var credential in credentials)

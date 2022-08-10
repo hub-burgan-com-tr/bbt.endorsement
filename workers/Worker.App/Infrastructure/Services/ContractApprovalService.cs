@@ -608,7 +608,7 @@ public class ContractApprovalService : IContractApprovalService
 
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            var response = SendPersonalMail(variables.InstanceId).Result;
+            var response = SendPersonalMail(variables.InstanceId, variables.Person.Email).Result;
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -616,42 +616,36 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
-
-    private async Task<bool> SendPersonalMail(string instanceId)
+    private async Task<bool> SendPersonalMail(string instanceId, string email)
     {
-        var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
-
-       // foreach (var email in Users.Emails())
-       // {
-            try
+        try
+        {
+            var responseEmail = _mediator.Send(new PersonSendMailTemplateCommand
             {
-                var responseEmail = _mediator.Send(new PersonSendMailTemplateCommand
-                {
-                    OrderId = instanceId,
-                    Email =  person.Data.Customer.Email,//email, //
-                }).Result;
+                OrderId = instanceId,
+                Email = email
+            }).Result;
 
-                var createOrderHistoryCommand = new CreateOrderHistoryCommand
-                {
-                    OrderId = instanceId,
-                    State = "PY Hatırlatma Mesajı(Email)",
-                    Description = "",
-                    IsStaff = false
-                };
-                if(responseEmail.Data != null)
-                {
-                    createOrderHistoryCommand.Request = responseEmail.Data.Request;
-                    createOrderHistoryCommand.Response = responseEmail.Data.Response;
-                    createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
-                }
-
-                await _mediator.Send(createOrderHistoryCommand);
-            }
-            catch (Exception ex)
+            var createOrderHistoryCommand = new CreateOrderHistoryCommand
             {
-                Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
+                OrderId = instanceId,
+                State = "PY Hatırlatma Mesajı(Email)",
+                Description = "",
+                IsStaff = false
+            };
+            if (responseEmail.Data != null)
+            {
+                createOrderHistoryCommand.Request = responseEmail.Data.Request;
+                createOrderHistoryCommand.Response = responseEmail.Data.Response;
+                createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
             }
-       // }
+
+            await _mediator.Send(createOrderHistoryCommand);
+        }
+        catch (Exception ex)
+        {
+            Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
+        }
         return true;
     }
 

@@ -86,6 +86,7 @@ public class OrderPerson
     public int CustomerNumber { get; set; }
     public string BranchCode { get; set; }
     public string BusinessLine { get; set; }
+    public string Email { get; set; }
 
     /// <summary>
     /// IsBranchApproval=true ise şubeler tüm müşterileri listeleyecek. IsBranchApproval=false şubeler sadece kendi şube müşterilerini listeleyecek.

@@ -31,7 +31,7 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
             if (order == null)
                 return Response<LoadContactInfoPersonResponse>.NotFoundException("Order not found", 404);
             if (order.Customer == null)
-                return Response<LoadContactInfoPersonResponse>.NotFoundException("Customer not found", 404);
+                return Response<LoadContactInfoPersonResponse>.NotFoundException("Person not found", 404);
 
             var person = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
             {
