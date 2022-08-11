@@ -608,7 +608,7 @@ public class ContractApprovalService : IContractApprovalService
 
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            var response = SendPersonalMail(variables.InstanceId, variables.Person.Email).Result;
+            var response = SendPersonalMail(variables.InstanceId).Result;
 
             await jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -616,11 +616,12 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
-    private async Task<bool> SendPersonalMail(string instanceId, string email)
+    private async Task<bool> SendPersonalMail(string instanceId)
     {
-        var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
         try
         {
+            var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
+
             var responseEmail = _mediator.Send(new PersonSendMailTemplateCommand
             {
                 OrderId = instanceId,
