@@ -9,6 +9,7 @@ public class ContractModel
         Documents = new List<ApproveOrderDocument>();
         DmsIds = new List<DMSDocumentResponse>();
         Services = new List<string>();
+        Emails = new List<string>();
     }
 
     public StartRequest StartRequest { get; set; }

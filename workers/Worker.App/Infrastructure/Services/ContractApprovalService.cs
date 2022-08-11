@@ -638,6 +638,7 @@ public class ContractApprovalService : IContractApprovalService
 
                     await _mediator.Send(createOrderHistoryCommand);
 
+                    variables.Emails = new List<string>();
                     variables.Emails.Add(person.Data.Customer.BusinessEmail);
                     data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 }
