@@ -638,13 +638,11 @@ public class ContractApprovalService : IContractApprovalService
 
                     await _mediator.Send(createOrderHistoryCommand);
 
-                    variables.Emails = new List<string>();
-                    variables.Emails.Add(person.Data.Customer.BusinessEmail);
                     data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 }
                 else
                 {
-                    Log.ForContext("OrderId", instanceId).Information(person.Message + " - email : " + person.Data.Customer.BusinessEmail);
+                    Log.ForContext("OrderId", instanceId).Information(person.Message);
                 }
             }
             catch (Exception ex)
