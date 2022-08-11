@@ -27,7 +27,8 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
             var order = _context.Orders
                 .Include(x => x.Person)
                 .Where(x => x.OrderId == request.InstanceId)
-                .FirstOrDefaultAsync().Result;
+                .FirstOrDefault();
+
             if (order == null)
                 return Response<LoadContactInfoPersonResponse>.NotFoundException("Order not found", 404);
             if (order.Person == null)

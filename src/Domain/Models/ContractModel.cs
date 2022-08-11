@@ -35,6 +35,7 @@ public class ContractModel
     public string Error { get; set; }
 
     public string[] Urls { get; set; }
+    public List<string> Emails { get; set; }
     public List<string> Services { get; set; }
 
     public List<ApproveOrderDocument> Documents { get; set; }
