@@ -82,7 +82,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eldleb4"
+      "id": "ewz320m"
     },
     {
       "label": "İşlem No",
@@ -161,7 +161,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "em4nfsk"
+      "id": "eula23a"
     },
     {
       "label": "Sigorta Ettiren ile Sigortalı Aynı Kişidir",
@@ -229,7 +229,7 @@
       "inputType": "checkbox",
       "value": "",
       "name": "",
-      "id": "euw0pxw"
+      "id": "ee2fmpb"
     },
     {
       "label": "Sigortalı Adı/Ünvanı",
@@ -308,7 +308,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "enh416s"
+      "id": "e6iwoy"
     },
     {
       "label": "Sigortalı VKN/TCKN",
@@ -393,7 +393,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e11bsr"
+      "id": "eyxlxva"
     },
     {
       "label": "Sigorta Ettiren Adı/Ünvanı",
@@ -472,7 +472,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "euua15a"
+      "id": "etvz9mb"
     },
     {
       "label": "Sigorta Ettiren VKN/TCKN",
@@ -557,7 +557,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e60qsre"
+      "id": "eg7hj58"
     },
     {
       "label": "Daini Mürtehin",
@@ -636,7 +636,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ec2xi5"
+      "id": "e93d9fw"
     },
     {
       "title": "TALEP EDİLEN SİGORTA TÜRÜ: KONUT İÇİN",
@@ -740,7 +740,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "etawzpw"
+          "id": "e3s7xnc"
         },
         {
           "label": "Bina m2",
@@ -826,7 +826,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "eely6wl"
+          "id": "eb0ccnp"
         },
         {
           "label": "Bina Sigorta Değeri",
@@ -907,7 +907,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "e3s34u7"
+          "id": "eciqcc9"
         },
         {
           "label": "Eşya Sigorta Değeri",
@@ -918,21 +918,6 @@
           "requireDecimal": false,
           "inputFormat": "plain",
           "truncateMultipleSpaces": false,
-          "validate": {
-            "required": true,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false,
-            "min": "",
-            "max": "",
-            "step": "any",
-            "integer": ""
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
           "key": "esyaSigortaDegeri",
           "type": "number",
           "labelWidth": 40,
@@ -969,6 +954,18 @@
           },
           "attributes": {},
           "validateOn": "change",
+          "validate": {
+            "required": false,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "min": "",
+            "max": "",
+            "step": "any",
+            "integer": ""
+          },
           "conditional": {
             "show": null,
             "when": null,
@@ -988,7 +985,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "e68hb1"
+          "id": "e8uo8gp"
         },
         {
           "label": "Bina Yapım Yılı",
@@ -1073,7 +1070,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "e5ck5hq"
+          "id": "e8rzccg"
         },
         {
           "label": "Toplam Kat Adedi",
@@ -1154,7 +1151,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "ex3vn3"
+          "id": "ea975r9"
         },
         {
           "label": "Bulunduğu Kat",
@@ -1235,7 +1232,7 @@
           "properties": {},
           "allowMultipleMasks": false,
           "addons": [],
-          "id": "epuczro"
+          "id": "e6dgs5y"
         },
         {
           "label": "Riziko Adresi",
@@ -1317,7 +1314,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "eyiwbv6"
+          "id": "eqlzbx"
         },
         {
           "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
@@ -1387,7 +1384,7 @@
           "inputType": "checkbox",
           "value": "",
           "name": "",
-          "id": "e10dsih"
+          "id": "e16xr3r"
         }
       ],
       "placeholder": "",
@@ -1445,7 +1442,7 @@
       "lazyLoad": false,
       "theme": "default",
       "breadcrumb": "default",
-      "id": "eirpmo"
+      "id": "eyuxvxm"
     },
     {
       "label": "Text Area",
@@ -1529,7 +1526,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "ewywnsy"
+      "id": "eggdini"
     },
     {
       "label": "Text Area",
@@ -1613,7 +1610,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "eml6oms"
+      "id": "efb8tq8"
     },
     {
       "label": "Text Area",
@@ -1697,7 +1694,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "eqyx27l"
+      "id": "eze1xi6"
     }
   ]
 }

@@ -82,7 +82,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ex8x3jl"
+      "id": "em6mtfb"
     },
     {
       "label": "İşlem No",
@@ -161,7 +161,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "et1t9p"
+      "id": "e1bgosi"
     },
     {
       "label": "Sigorta Ettiren ile Sigortalı Aynı Kişidir",
@@ -229,7 +229,7 @@
       "inputType": "checkbox",
       "value": "",
       "name": "",
-      "id": "ee313g"
+      "id": "e2nkpht"
     },
     {
       "label": "Sigortalı Adı/Ünvanı",
@@ -308,7 +308,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e3a6wg"
+      "id": "e3luvx7j"
     },
     {
       "label": "Sigortalı VKN/TCKN",
@@ -393,7 +393,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "esyffb"
+      "id": "epteu2"
     },
     {
       "label": "Sigorta Ettiren Adı/Ünvanı",
@@ -472,7 +472,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "evvjvs"
+      "id": "ewwgva5"
     },
     {
       "label": "Sigorta Ettiren VKN/TCKN",
@@ -557,7 +557,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eibej94"
+      "id": "egp9gxj"
     },
     {
       "label": "Daini Mürtehin",
@@ -636,7 +636,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ep04q08"
+      "id": "e434noe"
     },
     {
       "title": "TALEP EDİLEN SİGORTA TÜRÜ: İŞYERİ İÇİN",
@@ -731,7 +731,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "eq0yrul"
+          "id": "e9fw683"
         },
         {
           "label": "Bina m2",
@@ -817,30 +817,16 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e6udngp"
+          "id": "eqxantc"
         },
         {
           "label": "Bina sigorta  değeri",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
-          "validate": {
-            "required": true,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false,
-            "minLength": "",
-            "maxLength": "",
-            "pattern": ""
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
           "key": "binaSigortaDegeri1",
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true,
           "placeholder": "",
           "prefix": "",
@@ -873,6 +859,17 @@
           },
           "attributes": {},
           "validateOn": "change",
+          "validate": {
+            "required": false,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "minLength": "",
+            "maxLength": "",
+            "pattern": ""
+          },
           "conditional": {
             "show": null,
             "when": null,
@@ -899,30 +896,16 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "eh5k8uf"
+          "id": "egacwm"
         },
         {
           "label": "Eşya sigorta  değeri",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
-          "validate": {
-            "required": true,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false,
-            "minLength": "",
-            "maxLength": "",
-            "pattern": ""
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
           "key": "esyaSigortaDegeri1",
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true,
           "placeholder": "",
           "prefix": "",
@@ -955,6 +938,17 @@
           },
           "attributes": {},
           "validateOn": "change",
+          "validate": {
+            "required": false,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "minLength": "",
+            "maxLength": "",
+            "pattern": ""
+          },
           "conditional": {
             "show": null,
             "when": null,
@@ -981,30 +975,16 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e1pdeso"
+          "id": "eq7z9q"
         },
         {
           "label": "Elektronik cihaz  değeri",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
-          "validate": {
-            "required": true,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false,
-            "minLength": "",
-            "maxLength": "",
-            "pattern": ""
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
           "key": "esyaSigortaDegeri2",
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true,
           "placeholder": "",
           "prefix": "",
@@ -1037,6 +1017,17 @@
           },
           "attributes": {},
           "validateOn": "change",
+          "validate": {
+            "required": false,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "minLength": "",
+            "maxLength": "",
+            "pattern": ""
+          },
           "conditional": {
             "show": null,
             "when": null,
@@ -1063,30 +1054,16 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "e441wzc"
+          "id": "e15z3no"
         },
         {
           "label": "Makine kırılması  değeri",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
-          "validate": {
-            "required": true,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false,
-            "minLength": "",
-            "maxLength": "",
-            "pattern": ""
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
           "key": "esyaSigortaDegeri3",
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true,
           "placeholder": "",
           "prefix": "",
@@ -1119,6 +1096,17 @@
           },
           "attributes": {},
           "validateOn": "change",
+          "validate": {
+            "required": false,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "minLength": "",
+            "maxLength": "",
+            "pattern": ""
+          },
           "conditional": {
             "show": null,
             "when": null,
@@ -1145,30 +1133,16 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "eoe7yfc"
+          "id": "e4k60e4"
         },
         {
           "label": "Demirbaş  değeri",
           "labelPosition": "left-left",
-          "labelWidth": 40,
-          "labelMargin": 1,
           "tableView": true,
-          "validate": {
-            "required": true,
-            "custom": "",
-            "customPrivate": false,
-            "strictDateValidation": false,
-            "multiple": false,
-            "unique": false,
-            "minLength": "",
-            "maxLength": "",
-            "pattern": ""
-          },
-          "errors": {
-            "required": "Zorunlu alandır.Boş geçilemez"
-          },
           "key": "esyaSigortaDegeri5",
           "type": "textfield",
+          "labelWidth": 40,
+          "labelMargin": 1,
           "input": true,
           "placeholder": "",
           "prefix": "",
@@ -1201,6 +1175,17 @@
           },
           "attributes": {},
           "validateOn": "change",
+          "validate": {
+            "required": false,
+            "custom": "",
+            "customPrivate": false,
+            "strictDateValidation": false,
+            "multiple": false,
+            "unique": false,
+            "minLength": "",
+            "maxLength": "",
+            "pattern": ""
+          },
           "conditional": {
             "show": null,
             "when": null,
@@ -1227,7 +1212,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ejpycwj"
+          "id": "eeru75"
         },
         {
           "label": "Riziko Adresi",
@@ -1309,7 +1294,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ea90oad"
+          "id": "e6kbfih"
         },
         {
           "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
@@ -1379,7 +1364,7 @@
           "inputType": "checkbox",
           "value": "",
           "name": "",
-          "id": "e9u6yh"
+          "id": "e2xbjbk"
         },
         {
           "label": "İşyeri İçin Varsa Ek Bedel ve Bilgiler :",
@@ -1458,7 +1443,7 @@
           "displayMask": "",
           "spellcheck": true,
           "truncateMultipleSpaces": false,
-          "id": "ewo9dn"
+          "id": "e478f38"
         }
       ],
       "placeholder": "",
@@ -1522,7 +1507,7 @@
       "lazyLoad": false,
       "theme": "default",
       "breadcrumb": "default",
-      "id": "e7mbo9"
+      "id": "ehov84"
     },
     {
       "label": "Text Area",
@@ -1606,7 +1591,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "e3kohbs"
+      "id": "e71rif"
     },
     {
       "label": "Text Area",
@@ -1690,7 +1675,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "earl2r"
+      "id": "e6fdhd"
     },
     {
       "label": "Text Area",
@@ -1774,7 +1759,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "eyo9i6m"
+      "id": "efo0jhe"
     }
   ]
 }
