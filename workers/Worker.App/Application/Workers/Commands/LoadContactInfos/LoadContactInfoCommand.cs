@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Enums;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
@@ -9,6 +10,7 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
     public class LoadContactInfoCommand : IRequest<Response<LoadContactInfoResponse>>
     {
         public string InstanceId { get; set; }
+        public EmailSendType EmailSendType { get; set; }
     }
 
     public class LoadContactInfoCommandHandler : IRequestHandler<LoadContactInfoCommand, Response<LoadContactInfoResponse>>
@@ -24,23 +26,56 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
 
         public async Task<Response<LoadContactInfoResponse>> Handle(LoadContactInfoCommand request, CancellationToken cancellationToken)
         {
-            var order = _context.Orders
-                .Include(x => x.Customer)
-                .Where(x => x.OrderId == request.InstanceId)
-                .FirstOrDefaultAsync().Result;
-            if (order == null)
-                return Response<LoadContactInfoResponse>.NotFoundException("Order not found", 404);
-            if (order.Customer == null)
-                return Response<LoadContactInfoResponse>.NotFoundException("Customer not found", 404);
-
-            var person = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
+            var citizenshipNumber = "";
+            if (request.EmailSendType == EmailSendType.Customer)
             {
-                name = order.Customer.CitizenshipNumber.ToString(),
-                page = 1,
-                size = 10
-            });
+                var order = _context.Orders
+                    .Include(x => x.Customer)
+                    .Where(x => x.OrderId == request.InstanceId)
+                    .FirstOrDefaultAsync().Result;
 
-            return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Customer = person.Data.CustomerList.FirstOrDefault() }, 200);
+                if(order != null)
+                {
+                    if(order.Customer != null)
+                    {
+                        citizenshipNumber = order.Customer.CitizenshipNumber.ToString();
+                    }
+                }
+            }
+            else if (request.EmailSendType == EmailSendType.Person)
+            {
+                var order = _context.Orders
+                    .Include(x => x.Person)
+                    .Where(x => x.OrderId == request.InstanceId)
+                    .FirstOrDefaultAsync().Result;
+
+                if (order != null)
+                {
+                    if (order.Person != null)
+                    {
+                        citizenshipNumber = order.Person.CitizenshipNumber.ToString();
+                    }
+                }
+            }
+
+            //if (order == null)
+            //    return Response<LoadContactInfoResponse>.NotFoundException("Order not found", 404);
+            //if (order.Customer == null)
+            //    return Response<LoadContactInfoResponse>.NotFoundException("Customer not found", 404);
+
+            if (!string.IsNullOrEmpty(citizenshipNumber))
+            {
+                var person = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
+                {
+                    name = citizenshipNumber,
+                    page = 1,
+                    size = 10
+                });
+                return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Customer = person.Data.CustomerList.FirstOrDefault() }, 200);
+            }
+
+            return Response<LoadContactInfoResponse>.Fail(request.EmailSendType.ToString() + " not found", 404);
+
         }
     }
 }

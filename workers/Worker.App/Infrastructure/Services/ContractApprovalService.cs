@@ -237,7 +237,7 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
 
 
-                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId });
+                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Customer });
                 if (person.Data != null)
                 {
                     //foreach (var gsmPhone in Users.GsmPhones())
@@ -611,8 +611,9 @@ public class ContractApprovalService : IContractApprovalService
             var instanceId = variables.InstanceId;
             try
             {
-                var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
+               // var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
 
+                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Person });
                 if (person.Data != null)
                 {
                     var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
