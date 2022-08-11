@@ -82,7 +82,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e7lw1em"
+      "id": "evzazn"
     },
     {
       "label": "İşlem No",
@@ -161,7 +161,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eonjtkk"
+      "id": "e8lj9j2"
     },
     {
       "label": "Sigorta Ettiren ile Sigortalı Aynı Kişidir",
@@ -229,7 +229,7 @@
       "inputType": "checkbox",
       "value": "",
       "name": "",
-      "id": "e5sy1bj"
+      "id": "ekgk2b7"
     },
     {
       "label": "Sigortalı Adı/Ünvanı",
@@ -308,7 +308,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "eaowsho"
+      "id": "eisji1o"
     },
     {
       "label": "Sigortalı VKN/TCKN",
@@ -393,7 +393,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ep5ap1c"
+      "id": "ex7ejxk"
     },
     {
       "label": "Sigorta Ettiren Adı/Ünvanı",
@@ -472,7 +472,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e74l76n"
+      "id": "eqgfbqa"
     },
     {
       "label": "Sigorta Ettiren VKN/TCKN",
@@ -557,7 +557,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ehzr9io"
+      "id": "eukm7t"
     },
     {
       "label": "Daini Mürtehin",
@@ -636,7 +636,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "ej9j4vl"
+      "id": "ek3s1hf"
     },
     {
       "label": "TALEP EDİLEN SİGORTA TÜRÜ: DİĞER İÇİN",
@@ -719,7 +719,7 @@
       "displayMask": "",
       "spellcheck": true,
       "truncateMultipleSpaces": false,
-      "id": "e0w706n"
+      "id": "e12f9r9"
     },
     {
       "label": "E-Posta İle İletilen Mevcut Poliçe Şartlarıma Göre  Düzenlensin",
@@ -789,7 +789,7 @@
       "inputType": "checkbox",
       "value": "",
       "name": "",
-      "id": "ec81xij"
+      "id": "e9pw7y"
     },
     {
       "label": "Text Area",
@@ -873,7 +873,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "e7dafw8"
+      "id": "e4u0f09"
     },
     {
       "label": "Text Area",
@@ -957,7 +957,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "ezvpb8l"
+      "id": "ewoud6c"
     },
     {
       "label": "Text Area",
@@ -1041,7 +1041,7 @@
       "wysiwyg": false,
       "editor": "",
       "fixedSize": true,
-      "id": "ewfxyj4"
+      "id": "ef6pxmw"
     }
   ]
 }
