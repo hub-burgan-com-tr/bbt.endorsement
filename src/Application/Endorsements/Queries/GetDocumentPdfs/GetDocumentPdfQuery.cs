@@ -25,7 +25,7 @@ public class GetDocumentPdfQueryHandler : IRequestHandler<GetDocumentPdfQuery, R
         if (document == null)
             return null;
 
-        string fileName = document.DocumentId + ".pdf";
+        string fileName = document.Name + ".pdf";
         var path = Path.Combine("files/", fileName);
 
         var response = new GetDocumentPdfDto { Path = path, FileName = fileName };
