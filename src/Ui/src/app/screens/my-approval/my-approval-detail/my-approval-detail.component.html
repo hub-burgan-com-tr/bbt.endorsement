@@ -1,6 +1,6 @@
 <ngx-smart-modal #confirmModal identifier="confirmModal" (onAnyCloseEventFinished)="redirectToList()">
   <h1>İşlem Başarılı</h1>
-  <p>Onay gönderiminiz başarılı olmuştur. <br>Detayları incelemek için tıklayın.</p>
+  <p>Tercihiniz başarılı şekilde iletilmiştir. <br>Detayları incelemek için tıklayın.</p>
 
   <div class="button-container">
     <button class="btn btn-primary" (click)="confirmModal.close()">Tamam</button>
@@ -39,9 +39,8 @@
               <ng-template #check>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="" id="{{ 'actionCheckedDetail' + d }}"
-                         name="{{ 'actionCheckedDetail' + d }}"
-                         [value]="detail.actions[0].value" [(ngModel)]="detail.choice" required
-                         (ngModelChange)="detail.choice?showError=false:showError=true;">
+                    name="{{ 'actionCheckedDetail' + d }}" [value]="detail.actions[0].value" [(ngModel)]="detail.choice"
+                    required (ngModelChange)="detail.choice?showError=false:showError=true;">
                   <label class="form-check-label" for="{{ 'actionCheckedDetail' + d }}">
                     {{detail.actions[0].title}}
                   </label>
@@ -49,13 +48,9 @@
               </ng-template>
               <ng-template #radio>
                 <div class="form-check" *ngFor="let action of detail.actions; let a = index">
-                  <input class="form-check-input" type="radio"
-                         name="{{ 'flexRadio-detail' + d }}"
-                         id="{{ 'flexRadio-' + d + '-' + a }}"
-                         [value]="action.value" [(ngModel)]="detail.choice"
-                         required
-                         (ngModelChange)="detail.choice?showError=false:showError=true;"
-                  >
+                  <input class="form-check-input" type="radio" name="{{ 'flexRadio-detail' + d }}"
+                    id="{{ 'flexRadio-' + d + '-' + a }}" [value]="action.value" [(ngModel)]="detail.choice" required
+                    (ngModelChange)="detail.choice?showError=false:showError=true;">
                   <label class="form-check-label" for="{{ 'flexRadio-' + d + '-' + a }}">
                     {{action.title}}
                   </label>

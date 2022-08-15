@@ -1,17 +1,33 @@
-import {Component, Input, OnInit} from '@angular/core';
-
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { CommonService } from 'src/app/services/common.service';
+import { Subject, takeUntil } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-render-file',
   templateUrl: './render-file.component.html',
   styleUrls: ['./render-file.component.scss']
 })
-export class RenderFileComponent implements OnInit {
+export class RenderFileComponent implements OnInit, OnDestroy {
   @Input() detail;
-
-  constructor() {
+  private destroy$ = new Subject();
+  orderId: any;
+  constructor(private commonService: CommonService, private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.orderId = params['orderId'];
+    });
   }
 
   ngOnInit(): void {
   }
-
+  getDocumentPdf() {
+    this.commonService.getDocumentPdf(this.orderId, this.detail.actions.documentId).pipe(takeUntil(this.destroy$)).subscribe(
+      data => {
+        saveAs(data.body, this.detail.fileName);
+      });
+  }
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 }

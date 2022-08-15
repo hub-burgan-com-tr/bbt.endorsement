@@ -21,4 +21,5 @@ export enum ApiPaths {
   GetOrderFormTag = 'Endorsement/Forms/GetOrderFormTag',
   Login = 'Endorsement/Home/Login',
   GetOrderByFormId = 'Endorsement/FormDefinition/GetOrderByFormId',
+  GetDocumentPdf = 'Endorsement/get-document-pdf',
 }
