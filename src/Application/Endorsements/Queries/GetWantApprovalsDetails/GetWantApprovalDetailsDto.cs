@@ -47,6 +47,8 @@
         /// Belge Adı
         /// </summary>
         public string Name { get; set; }
+        public string FileName { get; set; }
+
         /// <summary>
         /// Belge Onay Ad
         /// </summary>

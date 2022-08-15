@@ -34,6 +34,7 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
             var response = await _context.Orders.Where(x => x.Person.CitizenshipNumber == request.CitizenshipNumber).Include(x=>x.Customer).Include(x => x.Documents).ThenInclude(x=>x.DocumentActions).Include(x=>x.OrderHistories).Where(x=>x.OrderId==request.OrderId).Select(x => new GetWantApprovalDetailsDto 
             {
                 OrderId = x.OrderId,
+               
                 Title = x.Title,
                 NameAndSurname =x.Customer.FirstName+" "+x.Customer.LastName,
                 Process=x.Reference.Process,
@@ -45,7 +46,8 @@ namespace Application.Endorsements.Queries.GetWantApprovalsDetails
                 OrderState=x.State,
              
                 History = x.OrderHistories.Where(x=>x.IsStaff).OrderByDescending(x=>x.Created).Select(x => new GetWantApprovalDetailsHistoryDto { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
-                Documents =x.Documents.OrderByDescending(x=>x.Created).Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name,MimeType=x.MimeType,TypeName= x.Type == ContentType.PlainText.ToString() ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault(y=>y.IsSelected).Title,Content = x.Type == ContentType.PlainText.ToString() ? DecodeBase64Services.DecodeBase64(x.Content) : x.Content, Type=x.FileType}).ToList() }).FirstOrDefaultAsync();
+                Documents =x.Documents.OrderByDescending(x=>x.Created).Select(x=>new GetWantApprovalDocumentDetailsDto { DocumentId=x.DocumentId,Name=x.Name, FileName = x.Name + ".pdf"
+                ,MimeType=x.MimeType,TypeName= x.Type == ContentType.PlainText.ToString() ? "Metin" : "Belge",Title=x.DocumentActions.FirstOrDefault(y=>y.IsSelected).Title,Content = x.Type == ContentType.PlainText.ToString() ? DecodeBase64Services.DecodeBase64(x.Content) : x.Content, Type=x.FileType}).ToList() }).FirstOrDefaultAsync();
                 return Response<GetWantApprovalDetailsDto>.Success(response, 200);
         }
     }
