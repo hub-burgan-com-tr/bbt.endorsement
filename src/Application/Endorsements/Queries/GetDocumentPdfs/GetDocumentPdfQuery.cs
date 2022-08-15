@@ -7,6 +7,7 @@ namespace Application.Endorsements.Queries.GetDocumentPdfs;
 public class GetDocumentPdfQuery : IRequest<Response<GetDocumentPdfDto>>
 {
     public string OrderId { get; set; }
+    public string DocumentId { get; set; }
 }
 
 public class GetDocumentPdfQueryHandler : IRequestHandler<GetDocumentPdfQuery, Response<GetDocumentPdfDto>>
@@ -20,7 +21,7 @@ public class GetDocumentPdfQueryHandler : IRequestHandler<GetDocumentPdfQuery, R
 
     public async Task<Response<GetDocumentPdfDto>> Handle(GetDocumentPdfQuery request, CancellationToken cancellationToken)
     {
-        var document = _context.Documents.FirstOrDefault(x => x.OrderId == request.OrderId);
+        var document = _context.Documents.FirstOrDefault(x => x.OrderId == request.OrderId && x.DocumentId == request.DocumentId);
         if (document == null)
             return null;
 

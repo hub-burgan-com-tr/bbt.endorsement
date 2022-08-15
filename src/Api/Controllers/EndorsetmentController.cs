@@ -396,10 +396,9 @@ namespace Api.Controllers
         [SwaggerResponse(404, "", typeof(void))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetDocumentPdfAsync([FromQuery] string orderId)
+        public async Task<IActionResult> GetDocumentPdfAsync([FromQuery] string orderId, string documentId)
         {
-            var response = await Mediator.Send(new GetDocumentPdfQuery { OrderId = orderId });
-
+            var response = await Mediator.Send(new GetDocumentPdfQuery { OrderId = orderId, DocumentId = documentId });
             return File(response.Data.Bytes, System.Net.Mime.MediaTypeNames.Application.Octet, response.Data.FileName);
 
             //HttpResponseMessage result = new HttpResponseMessage();
