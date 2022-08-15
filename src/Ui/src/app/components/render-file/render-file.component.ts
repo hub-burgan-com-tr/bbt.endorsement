@@ -15,13 +15,18 @@ export class RenderFileComponent implements OnInit, OnDestroy {
   constructor(private commonService: CommonService, private route: ActivatedRoute) {
     this.route.queryParams.subscribe(params => {
       this.orderId = params['orderId'];
+      if (!this.orderId) {
+        this.route.params.subscribe(p => {
+          this.orderId = p['orderId'];
+        })
+      }
     });
   }
 
   ngOnInit(): void {
   }
   getDocumentPdf() {
-    this.commonService.getDocumentPdf(this.orderId, this.detail.actions.documentId).pipe(takeUntil(this.destroy$)).subscribe(
+    this.commonService.getDocumentPdf(this.orderId, this.detail.documentId ? this.detail.documentId : this.detail.actions.documentId).pipe(takeUntil(this.destroy$)).subscribe(
       data => {
         saveAs(data.body, this.detail.fileName);
       });
