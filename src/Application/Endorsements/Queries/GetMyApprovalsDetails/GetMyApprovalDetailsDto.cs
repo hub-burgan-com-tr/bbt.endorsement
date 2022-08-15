@@ -17,7 +17,7 @@
         public bool State { get; internal set; }
         public string MimeType { get; set; }
         public string OrderState { get; internal set; }
-        public string FileName { get; set; }
+        public string FileName { get; internal set; }
     }
     public class Action
     {

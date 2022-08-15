@@ -56,7 +56,7 @@
         public string Content { get; internal set; }
         public string Type { get; internal set; }
         public string MimeType { get; internal set; }
-
+        public string FileName { get; internal set; }
     }
     public class GetWatchApprovalDetailsHistoryDto
     {
