@@ -42,6 +42,7 @@ namespace Application.Endorsements.Queries.GetMyApprovalsDetails
                     Title = x.Title,
                     Documents = x.Documents.OrderByDescending(x => x.Created).Select(x => new OrderDocument
                     {
+                        DocumentId=x.DocumentId,
                         Name = x.Name,
                         Content = x.Type == ContentType.PlainText.ToString() ? DecodeBase64Services.DecodeBase64(x.Content) : x.Content,
                         OrderState = x.Order.State,

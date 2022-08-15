@@ -18,6 +18,7 @@
         public string MimeType { get; set; }
         public string OrderState { get; internal set; }
         public string FileName { get; internal set; }
+        public string DocumentId { get; internal set; }
     }
     public class Action
     {
