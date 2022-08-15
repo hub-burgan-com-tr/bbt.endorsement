@@ -20,6 +20,8 @@ using Application.Endorsements.Commands.ApproveOrderDocuments;
 using Domain.Models;
 using Domain.Enums;
 using Api.Extensions;
+using Application.Endorsements.Queries.GetDocumentPdfs;
+using System.Net.Http.Headers;
 
 namespace Api.Controllers
 {
@@ -384,7 +386,38 @@ namespace Api.Controllers
         }
 
 
-       
+        [SwaggerOperation(
+             Summary = "Get document pdf",
+             Tags = new[] { "Endorsement" }
+         )]
+        [Route("get-document-pdf")]
+        [HttpGet]
+        [SwaggerResponse(200, "", typeof(GetWatchApprovalDetailsDto))]
+        [SwaggerResponse(404, "", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetDocumentPdfAsync([FromQuery] string orderId)
+        {
+            var response = await Mediator.Send(new GetDocumentPdfQuery { OrderId = orderId });
+
+            return File(response.Data.Bytes, System.Net.Mime.MediaTypeNames.Application.Octet, response.Data.FileName);
+
+            //HttpResponseMessage result = new HttpResponseMessage();
+            //try
+            //{
+            //    result.StatusCode = HttpStatusCode.OK;
+            //    result.Content = new ByteArrayContent(response.Data.Bytes);
+            //    result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+            //    result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = response.Data.FileName };
+            //}
+            //catch (Exception e)
+            //{
+            //    result.StatusCode = HttpStatusCode.InternalServerError;
+            //    result.ReasonPhrase = e.Message;
+            //}
+
+            //return Ok(result);
+        }
 
     }
 }
