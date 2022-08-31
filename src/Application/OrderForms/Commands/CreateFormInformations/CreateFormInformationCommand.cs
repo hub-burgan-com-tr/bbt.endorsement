@@ -142,6 +142,27 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     var response = restClient.ExecutePostAsync(restRequest).Result;
                 }
             }
+            else
+            {
+                htmlTemplate = htmlTemplate.Replace("\r\n", string.Empty);
+                htmlTemplate = htmlTemplate.Replace(@"\""", String.Empty);
+                htmlTemplate = htmlTemplate.Replace("\"", String.Empty);
+                htmlTemplate = htmlTemplate.Replace("\t", string.Empty);
+
+                var restClient = new RestClient(StaticValues.TemplateEngine);
+                var restRequest = new RestRequest("/Template/Definition", Method.Post);
+                restRequest.AddHeader("Content-Type", "application/json");
+                restRequest.AddHeader("Accept", "text/plain");
+
+                var body = new TemplateDefinitionRoot
+                {
+                    MasterTemplate = "",
+                    template = template,
+                    name = templateName,
+                };
+                restRequest.AddBody(body);
+                var response = restClient.ExecutePostAsync(restRequest).Result;
+            }
 
             return Response<bool>.Success(result > 0 ? true : false, 200);
         }
