@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
             RuleFor(v => v.ExpireInMinutes).NotEmpty().WithMessage("Geçerlilik girilmelidir.");
             RuleFor(v => v.RetryFrequence).NotEmpty().WithMessage("Hatırlatma frekansı girilmelidir.");
             RuleFor(v => v.MaxRetryCount).NotEmpty().WithMessage("Hatırlatma Sayısı girilmelidir.");
+            RuleFor(v => v.SemanticVersion).NotEmpty().WithMessage("Version  girilmelidir.");
             RuleFor(v => v.Json).NotEmpty().WithMessage("Formio json girilmelidir.");
             RuleFor(v => v.HtmlTemplate).NotEmpty().WithMessage("Html girilmelidir.");
 

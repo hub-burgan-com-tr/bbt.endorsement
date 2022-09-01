@@ -12,6 +12,7 @@ namespace Application.OrderForms.Commands.UpdateFormioFormInformations
     public class UpdateFormioFormInformationCommand : IRequest<Response<bool>>
     {
         public string FormDefinitionId { get; set; }
+        public string SemanticVersion { get; set; }
         public IFormFile Json { get; set; }
         public IFormFile HtmlTemplate { get; set; }
 
@@ -79,6 +80,7 @@ namespace Application.OrderForms.Commands.UpdateFormioFormInformations
                         MasterTemplate = "",
                         template = template,
                         name = form.TemplateName,
+                        SemanticVersion=request.SemanticVersion
                     };
                     restRequest.AddBody(body);
                     var response = restClient.ExecutePostAsync(restRequest).Result;

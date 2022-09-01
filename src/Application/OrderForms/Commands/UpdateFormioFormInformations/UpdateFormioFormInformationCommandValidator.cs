@@ -11,7 +11,8 @@ namespace Application.OrderForms.Commands.UpdateFormioFormInformations
     {
         public UpdateFormioFormInformationCommandValidator()
         {
-            RuleFor(v => v.FormDefinitionId).NotEmpty().WithMessage("Form Id  girilmelidir.");    
+            RuleFor(v => v.FormDefinitionId).NotEmpty().WithMessage("Form Id  girilmelidir.");
+            RuleFor(v => v.SemanticVersion).NotEmpty().WithMessage("Versiyon  girilmelidir.");
             RuleFor(v => v.Json).NotEmpty().WithMessage("Formio json girilmelidir.");
             RuleFor(v => v.HtmlTemplate).NotEmpty().WithMessage("Html girilmelidir.");
 

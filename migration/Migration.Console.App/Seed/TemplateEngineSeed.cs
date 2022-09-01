@@ -27,6 +27,8 @@ public static class TemplateEngineSeed
                 MasterTemplate = "",
                 template = htmlTemplate,
                 name = formDefinition.TemplateName,
+                SemanticVersion= "1.0.0"
+
             };
             restRequest.AddBody(body);
             var response = restClient.ExecutePostAsync(restRequest).Result;
@@ -41,4 +43,6 @@ public class TemplateDefinitionRoot
     [JsonProperty("master-template")]
     public string MasterTemplate { get; set; }
     public string template { get; set; }
+    [JsonProperty("semantic-version")]
+    public string SemanticVersion { get; set; }
 }

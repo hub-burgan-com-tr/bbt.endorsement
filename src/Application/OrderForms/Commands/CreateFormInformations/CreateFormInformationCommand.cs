@@ -20,6 +20,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
         public string ParameterId { get; set; }
         public string Name { get; set; }
         public string TemplateName { get; set; }
+        public string SemanticVersion { get; set; }
         public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
@@ -137,10 +138,28 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                         MasterTemplate = "",
                         template = template,
                         name = templateName,
+                        SemanticVersion=request.SemanticVersion
                     };
                     restRequest.AddBody(body);
                     var response = restClient.ExecutePostAsync(restRequest).Result;
                 }
+            }
+            else
+            {
+                var restClient = new RestClient(StaticValues.TemplateEngine);
+                var restRequest = new RestRequest("/Template/Definition", Method.Post);
+                restRequest.AddHeader("Content-Type", "application/json");
+                restRequest.AddHeader("Accept", "text/plain");
+
+                var body = new TemplateDefinitionRoot
+                {
+                    MasterTemplate = "",
+                    template = template,
+                    name = templateName,
+                    SemanticVersion = "1.0.6"
+                };
+                restRequest.AddBody(body);
+                var response = restClient.ExecutePostAsync(restRequest).Result;
             }
 
             return Response<bool>.Success(result > 0 ? true : false, 200);
