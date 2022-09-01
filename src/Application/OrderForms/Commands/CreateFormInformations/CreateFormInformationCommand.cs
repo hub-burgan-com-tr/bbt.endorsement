@@ -6,6 +6,7 @@ using Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using RestSharp;
 using System.Text;
 
@@ -123,11 +124,6 @@ namespace Application.OrderForms.Commands.CreateFormInformations
 
                 if(result > 0)
                 {
-                    htmlTemplate = htmlTemplate.Replace("\r\n", string.Empty);
-                    htmlTemplate = htmlTemplate.Replace(@"\""", String.Empty);
-                    htmlTemplate = htmlTemplate.Replace("\"", String.Empty);
-                    htmlTemplate = htmlTemplate.Replace("\t", string.Empty);
-
                     var restClient = new RestClient(StaticValues.TemplateEngine);
                     var restRequest = new RestRequest("/Template/Definition", Method.Post);
                     restRequest.AddHeader("Content-Type", "application/json");
@@ -140,7 +136,10 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                         name = templateName,
                         SemanticVersion=request.SemanticVersion
                     };
-                    restRequest.AddBody(body);
+                    var json = JsonConvert.SerializeObject(body);
+
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(json);
                     var response = restClient.ExecutePostAsync(restRequest).Result;
                 }
             }

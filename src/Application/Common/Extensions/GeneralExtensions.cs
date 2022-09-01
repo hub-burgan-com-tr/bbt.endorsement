@@ -17,7 +17,6 @@ public static class GeneralExtensions
     }
 }
 
-
 public class TemplateDefinitionRoot
 {
     public string name { get; set; }

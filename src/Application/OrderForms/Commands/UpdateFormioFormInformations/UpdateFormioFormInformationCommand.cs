@@ -4,6 +4,7 @@ using Application.Common.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using RestSharp;
 using System.Text;
 
@@ -65,15 +66,11 @@ namespace Application.OrderForms.Commands.UpdateFormioFormInformations
 
                 if (result > 0)
                 {
-                    htmlTemplate = htmlTemplate.Replace("\r\n", string.Empty);
-                    htmlTemplate = htmlTemplate.Replace(@"\""", String.Empty);
-                    htmlTemplate = htmlTemplate.Replace("\"", String.Empty);
-                    htmlTemplate = htmlTemplate.Replace("\t", string.Empty);
-
                     var restClient = new RestClient(StaticValues.TemplateEngine);
                     var restRequest = new RestRequest("/Template/Definition", Method.Post);
-                    restRequest.AddHeader("Content-Type", "application/json");
-                    restRequest.AddHeader("Accept", "text/plain");
+                    //restRequest.AddHeader("Content-Type", "application/json");
+                    //restRequest.AddHeader("Accept", "text/plain");
+                    //restRequest.AddHeader("Accept", "text/plain");
 
                     var body = new TemplateDefinitionRoot
                     {
@@ -82,7 +79,10 @@ namespace Application.OrderForms.Commands.UpdateFormioFormInformations
                         name = form.TemplateName,
                         SemanticVersion=request.SemanticVersion
                     };
-                    restRequest.AddBody(body);
+                    var json = JsonConvert.SerializeObject(body);
+
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(json);
                     var response = restClient.ExecutePostAsync(restRequest).Result;
                 }
             }
