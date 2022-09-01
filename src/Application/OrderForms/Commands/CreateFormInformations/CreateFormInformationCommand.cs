@@ -156,7 +156,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     MasterTemplate = "",
                     template = template,
                     name = templateName,
-                    SemanticVersion = "1.0.6"
+                    SemanticVersion = request.SemanticVersion
                 };
                 restRequest.AddBody(body);
                 var response = restClient.ExecutePostAsync(restRequest).Result;
