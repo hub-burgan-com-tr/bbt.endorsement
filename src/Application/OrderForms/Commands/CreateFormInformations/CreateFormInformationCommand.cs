@@ -119,11 +119,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                         FormDefinitionTagId = request.FormDefinitionTagId
                     });
                 }
-
-                result = _context.SaveChanges();
-
-                if(result > 0)
-                {
+               
                     var restClient = new RestClient(StaticValues.TemplateEngine);
                     var restRequest = new RestRequest("/Template/Definition", Method.Post);
                     restRequest.AddHeader("Content-Type", "application/json");
@@ -141,26 +137,18 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                     restRequest.RequestFormat = DataFormat.Json;
                     restRequest.AddJsonBody(json);
                     var response = restClient.ExecutePostAsync(restRequest).Result;
-                }
-            }
-            else
-            {
-                var restClient = new RestClient(StaticValues.TemplateEngine);
-                var restRequest = new RestRequest("/Template/Definition", Method.Post);
-                restRequest.AddHeader("Content-Type", "application/json");
-                restRequest.AddHeader("Accept", "text/plain");
-
-                var body = new TemplateDefinitionRoot
+                if (response.StatusCode.ToString() == "OK")
                 {
-                    MasterTemplate = "",
-                    template = template,
-                    name = templateName,
-                    SemanticVersion = request.SemanticVersion
-                };
-                restRequest.AddBody(body);
-                var response = restClient.ExecutePostAsync(restRequest).Result;
-            }
+                    result = _context.SaveChanges();
 
+                }
+                else
+                {
+                    return Response<bool>.NotFoundException(response.ErrorException.ToString(), 200);
+
+                }
+
+            }
             return Response<bool>.Success(result > 0 ? true : false, 200);
         }
     }

@@ -21,16 +21,18 @@ public static class TemplateEngineSeed
             var restRequest = new RestRequest("/Template/Definition", Method.Post);
             restRequest.AddHeader("Content-Type", "application/json");
             restRequest.AddHeader("Accept", "text/plain");
-
+   
             var body = new TemplateDefinitionRoot
             {
                 MasterTemplate = "",
                 template = htmlTemplate,
                 name = formDefinition.TemplateName,
-                SemanticVersion= "1.0.0"
-
+                SemanticVersion = "1.0.0"
             };
-            restRequest.AddBody(body);
+            var json = JsonConvert.SerializeObject(body);
+
+            restRequest.RequestFormat = DataFormat.Json;
+            restRequest.AddJsonBody(json);
             var response = restClient.ExecutePostAsync(restRequest).Result;
         }
     }

@@ -61,16 +61,10 @@ namespace Application.OrderForms.Commands.UpdateFormioFormInformations
                 form.Label = label;
                 form.HtmlTemplate = template;          
                 _context.FormDefinitions.Update(form);
-                result = _context.SaveChanges();
-
-
-                if (result > 0)
-                {
                     var restClient = new RestClient(StaticValues.TemplateEngine);
                     var restRequest = new RestRequest("/Template/Definition", Method.Post);
-                    //restRequest.AddHeader("Content-Type", "application/json");
-                    //restRequest.AddHeader("Accept", "text/plain");
-                    //restRequest.AddHeader("Accept", "text/plain");
+                    restRequest.AddHeader("Content-Type", "application/json");
+                    restRequest.AddHeader("Accept", "text/plain");
 
                     var body = new TemplateDefinitionRoot
                     {
@@ -84,7 +78,18 @@ namespace Application.OrderForms.Commands.UpdateFormioFormInformations
                     restRequest.RequestFormat = DataFormat.Json;
                     restRequest.AddJsonBody(json);
                     var response = restClient.ExecutePostAsync(restRequest).Result;
-                }
+                    if (response.StatusCode.ToString()=="OK")
+                    {
+                    result = _context.SaveChanges();
+
+                    }
+                    else
+                    {
+                    return Response<bool>.NotFoundException(response.ErrorException.ToString(), 200);
+
+                     }
+
+
             }
 
             return Response<bool>.Success(result > 0 ? true : false, 200);
