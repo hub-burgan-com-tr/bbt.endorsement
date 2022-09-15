@@ -10,7 +10,6 @@ namespace Application.Parameter.Commands.CreateParameters
         public string ParameterTypeId { get; set; }
         public string Text { get; set; }
         public int? DmsReferenceId { get; set; }
-        public int? DmsReferenceKey { get; set; }
         public string DmsReferenceName { get; set; }
     }
 
@@ -38,7 +37,6 @@ namespace Application.Parameter.Commands.CreateParameters
             var parameter = _context.Parameters.Add(new Domain.Entities.Parameter
             {
                 ParameterId=Guid.NewGuid().ToString(),
-                DmsReferenceKey = request.DmsReferenceKey,
                 DmsReferenceId = request.DmsReferenceId,
                 ParameterTypeId = request.ParameterTypeId,
                 Text = request.Text,

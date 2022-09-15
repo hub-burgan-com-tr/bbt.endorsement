@@ -12,6 +12,7 @@ namespace Application.Parameter.Commands.CreateParameters
         public CreateParameterCommandValidator()
         {
             RuleFor(v => v.ParameterTypeId).NotEmpty().WithMessage("Parametre Tipi girilmelidir.");
+            RuleFor(v => v.DmsReferenceId).NotEmpty().WithMessage("DmsReferenceId girilmelidir.");
             RuleFor(v => v.Text).NotEmpty().WithMessage("Text girilmelidir.");
           
         }
