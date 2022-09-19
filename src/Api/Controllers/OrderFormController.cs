@@ -8,6 +8,7 @@ using Application.OrderForms.Queries.GetFormInformations;
 using Application.OrderForms.Queries.GetForms;
 using Application.OrderForms.Queries.GetOrderFormParameters;
 using Application.OrderForms.Queries.GetOrderFormTags;
+using Application.OrderForms.Queries.GetPreviewPdf;
 using Application.OrderForms.Queries.GetTags;
 using Application.OrderForms.Queries.GetTagsFormName;
 using Application.TemplateEngines.Commands.Renders;
@@ -17,6 +18,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace Api.Controllers
 {
@@ -55,6 +57,19 @@ namespace Api.Controllers
             var person = UserExtensions.GetOrderPerson(User.Claims);
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
+        }
+
+        [Route("preview-pdf")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, preview pdf is returned successfully.", typeof(GetPreviewPdfDto))]
+        [SwaggerResponse(404, "pdf is not found.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<IActionResult> GetPreviewPdfAsync([FromBody] StartFormRequest request)
+        {
+
+            var result = await Mediator.Send(new GetPreviewPdfQuery() { FormId = request.FormId, Content = request.Content });
+            return Ok(result);
         }
 
         [SwaggerOperation(
