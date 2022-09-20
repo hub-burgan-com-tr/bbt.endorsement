@@ -5,7 +5,9 @@
     <button class="btn btn-primary" (click)="success.close()">Tamam</button>
   </div>
 </ngx-smart-modal>
-
+<ngx-smart-modal #document identifier="document" [customClass]="'custom-modal'">
+  <iframe [src]="pdfContent | safe:'resourceUrl'" width="100%" height="500"></iframe>
+</ngx-smart-modal>
 <app-main-content blockTitle="Form ile Emir Ekle" [subTitle]="formTitle">
   <form [formGroup]="formGroup">
     <div class="box p-5">
@@ -14,12 +16,8 @@
         <div class="col-4">
           <div class="form-group">
             <label for="tag">Form Türü</label>
-            <ng-select id="tag" formControlName="tag" (ngModelChange)="tagChanged($event)"
-                       [multiple]="true"
-                       placeholder="Seçiniz"
-                       notFoundText="Bulunamadı"
-                       [ngClass]="{ 'is-invalid': submitted && f.tag.invalid }"
-            >
+            <ng-select id="tag" formControlName="tag" (ngModelChange)="tagChanged($event)" [multiple]="true"
+              placeholder="Seçiniz" notFoundText="Bulunamadı" [ngClass]="{ 'is-invalid': submitted && f.tag.invalid }">
               <ng-option *ngFor="let i of tags" [value]="i.formDefinitionTagId">{{i.tag}}</ng-option>
             </ng-select>
             <div *ngIf="submitted && f.tag.errors" class="invalid-feedback">
@@ -35,8 +33,7 @@
           <div class="form-group">
             <label for="form">Form</label>
             <ng-select id="form" formControlName="form" notFoundText="Bulunamadı!" [clearable]="false"
-                       (ngModelChange)="formChanged($event)"
-                       [ngClass]="{ 'is-invalid': submitted && f.form.invalid }">
+              (ngModelChange)="formChanged($event)" [ngClass]="{ 'is-invalid': submitted && f.form.invalid }">
               <ng-option value="">Seçiniz</ng-option>
               <ng-option *ngFor="let i of formDropdown" [value]="i.formDefinitionId">{{i.name}}</ng-option>
             </ng-select>
@@ -76,7 +73,7 @@
           <div class="form-group">
             <label for="processNo">İşlem No</label>
             <input type="text" class="form-control" id="processNo" name="processNo" (change)="processNoChange()"
-                   formControlName="processNo" [ngClass]="{ 'is-invalid': submitted && f.processNo.invalid }">
+              formControlName="processNo" [ngClass]="{ 'is-invalid': submitted && f.processNo.invalid }">
             <div *ngIf="submitted && f.processNo.errors" class="invalid-feedback">
               <div *ngIf="f.processNo.errors.required">İşlem No girilmelidir.</div>
             </div>
@@ -89,8 +86,8 @@
           <div class="box-title mt-5 p-0 no-border">Müşteri Ekle</div>
           <div class="row mt-3">
             <div class="col-12">
-              <app-person-search (returnListEvent)="getPersonFromChild($event)"
-                                 [hasError]="submitted && !person"></app-person-search>
+              <app-person-search (returnListEvent)="getPersonFromChild($event)" [hasError]="submitted && !person">
+              </app-person-search>
               <small *ngIf="submitted && !person" class="text-danger">
                 Müşteri seçilmelidir.
               </small>
@@ -102,9 +99,7 @@
           <div class="row mt-3">
             <div class="col-12">
               <input type="file" class="form-control" id="file" name="file" formControlName="file"
-                     (change)="convertFileToBase64($event)"
-
-                     [ngClass]="{ 'is-invalid': submitted && f.file.invalid }">
+                (change)="convertFileToBase64($event)" [ngClass]="{ 'is-invalid': submitted && f.file.invalid }">
               <div *ngIf="submitted && f.file.errors" class="invalid-feedback">
                 <div *ngIf="f.file.errors.required">Dosya seçilmelidir.</div>
               </div>
@@ -116,9 +111,7 @@
           <div class="row mt-3">
             <div class="col-12">
               <ng-select id="dependencyOrderId" formControlName="dependencyOrderId" name="dependencyOrderId"
-                         notFoundText="Bulunamadı"
-                         [ngClass]="{ 'is-invalid': submitted && f.dependencyOrderId.invalid }"
-              >
+                notFoundText="Bulunamadı" [ngClass]="{ 'is-invalid': submitted && f.dependencyOrderId.invalid }">
                 <ng-option value="">Seçiniz</ng-option>
                 <ng-option *ngFor="let i of applicationForms" [value]="i.orderId">{{i.orderName}}</ng-option>
               </ng-select>
@@ -131,11 +124,14 @@
       </div>
       <div *ngIf="form&&source=='formio'">
         <div class="box-title mt-5 mb-3 p-0 no-border">Form</div>
-        <formio [form]="form" [options]="options" (submit)="submitForm($event)" (submissionLoad)="formLoaded()"></formio>
+        <formio [form]="form" [options]="options" (submit)="submitForm($event)" (submissionLoad)="formLoaded()">
+        </formio>
       </div>
     </div>
     <div class="button-group d-flex align-items-center justify-content-center mt-5">
-      <button class="btn btn-primary px-5" (click)="next()" [disabled]="sending">Kaydet</button>
+      <button class="btn btn-outline-primary px-5" *ngIf="isPreview" (click)="preview()"
+        [disabled]="waiting">{{waiting?'Bekleyiniz':'Önizleme'}}</button>
+      <button class="btn btn-primary px-5" (click)="next()" [disabled]="sending" *ngIf="!isPreview">Kaydet</button>
     </div>
   </form>
 </app-main-content>

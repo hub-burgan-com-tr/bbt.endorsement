@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {ApiPaths} from "../models/api-paths";
-import {Observable} from "rxjs";
+import { Injectable } from '@angular/core';
+import { environment } from "../../environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { ApiPaths } from "../models/api-paths";
+import { Observable } from "rxjs";
 import NewApprovalOrderForm from "../models/new-approval-order-form";
 
 @Injectable({
@@ -27,6 +27,11 @@ export class NewOrderFormService {
   getOrderByFormId(model): Observable<any> {
     const url = `${this.baseUrl}/${ApiPaths.GetOrderByFormId}`;
     return this.httpClient.post(url, model);
+  }
+
+  preview(data: NewApprovalOrderForm): Observable<any> {
+    const url = `${this.baseUrl}/${ApiPaths.Preview}`;
+    return this.httpClient.post<JSON>(url, data);
   }
 
   save(data: NewApprovalOrderForm) {
