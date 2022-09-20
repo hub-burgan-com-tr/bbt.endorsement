@@ -17,7 +17,6 @@ public static class GeneralExtensions
     }
 }
 
-
 public class TemplateDefinitionRoot
 {
     public string name { get; set; }
@@ -25,4 +24,6 @@ public class TemplateDefinitionRoot
     [JsonProperty("master-template")]
     public string MasterTemplate { get; set; }
     public string template { get; set; }
+    [JsonProperty("semantic-version")]
+    public string SemanticVersion { get; set; }
 }

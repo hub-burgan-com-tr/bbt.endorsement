@@ -4,6 +4,7 @@ using Application.OrderForms.Commands.CreateDependencyFormInformations;
 using Application.OrderForms.Commands.CreateFormInformations;
 using Application.OrderForms.Commands.UpdateFormDependencyReuse;
 using Application.OrderForms.Commands.UpdateFormInformations;
+using Application.OrderForms.Commands.UpdateFormioFormInformations;
 using Application.OrderForms.Queries.GetFormInformations;
 using Application.Orders.Queries.GetOrderByFormIds;
 using Microsoft.AspNetCore.Mvc;
@@ -50,10 +51,22 @@ namespace Api.Controllers
         [HttpPost]
         [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
-        public async Task<Response<bool>> UpdateFormInformation([FromBody] UpdateFormInformationCommand request)
+        public async Task<Response<bool>> UpdateFormInformation([FromForm] UpdateFormInformationCommand request)
         {
             return await Mediator.Send(request);
         }
+
+        [Route("UpdateFormioFormInformation")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
+        public async Task<Response<bool>> UpdateFormioFormInformation([FromForm] UpdateFormioFormInformationCommand request)
+        {
+            return await Mediator.Send(request);
+        }
+
+
+
 
         [SwaggerOperation(
          Summary = "updates form definition dependency reuse",

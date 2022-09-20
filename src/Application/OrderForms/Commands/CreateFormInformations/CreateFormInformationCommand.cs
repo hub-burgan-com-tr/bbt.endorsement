@@ -6,6 +6,7 @@ using Domain.Enums;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using RestSharp;
 using System.Text;
 
@@ -20,6 +21,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
         public string ParameterId { get; set; }
         public string Name { get; set; }
         public string TemplateName { get; set; }
+        public string SemanticVersion { get; set; }
         public int MaxRetryCount { get; set; }
         public int RetryFrequence { get; set; }
         public int ExpireInMinutes { get; set; }
@@ -117,16 +119,7 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                         FormDefinitionTagId = request.FormDefinitionTagId
                     });
                 }
-
-                result = _context.SaveChanges();
-
-                if(result > 0)
-                {
-                    htmlTemplate = htmlTemplate.Replace("\r\n", string.Empty);
-                    htmlTemplate = htmlTemplate.Replace(@"\""", String.Empty);
-                    htmlTemplate = htmlTemplate.Replace("\"", String.Empty);
-                    htmlTemplate = htmlTemplate.Replace("\t", string.Empty);
-
+               
                     var restClient = new RestClient(StaticValues.TemplateEngine);
                     var restRequest = new RestRequest("/Template/Definition", Method.Post);
                     restRequest.AddHeader("Content-Type", "application/json");
@@ -137,12 +130,25 @@ namespace Application.OrderForms.Commands.CreateFormInformations
                         MasterTemplate = "",
                         template = template,
                         name = templateName,
+                        SemanticVersion=request.SemanticVersion
                     };
-                    restRequest.AddBody(body);
-                    var response = restClient.ExecutePostAsync(restRequest).Result;
-                }
-            }
+                    var json = JsonConvert.SerializeObject(body);
 
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(json);
+                    var response = restClient.ExecutePostAsync(restRequest).Result;
+                if (response.StatusCode.ToString() == "OK")
+                {
+                    result = _context.SaveChanges();
+
+                }
+                else
+                {
+                    return Response<bool>.NotFoundException(response.ErrorException.ToString(), 200);
+
+                }
+
+            }
             return Response<bool>.Success(result > 0 ? true : false, 200);
         }
     }
