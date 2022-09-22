@@ -55,7 +55,7 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
                 customerNo = order.Customer.CustomerNumber,
                 phone = new Phone
                 {
-                    countryCode = request.GsmPhone.County,
+                    countryCode = request.GsmPhone.Country,
                     prefix = request.GsmPhone.Prefix,
                     number = request.GsmPhone.Number
                 },

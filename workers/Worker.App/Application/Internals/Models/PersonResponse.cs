@@ -37,8 +37,8 @@ namespace Worker.App.Application.Internals.Models
 
     public partial class GsmPhones
     {
-        [JsonProperty("county")]
-        public int County { get; set; }
+        [JsonProperty("country")]
+        public int Country { get; set; }
 
         [JsonProperty("prefix")]
         public int Prefix { get; set; }

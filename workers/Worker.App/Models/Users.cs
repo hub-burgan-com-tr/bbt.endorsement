@@ -9,10 +9,10 @@ public static class Users
         var list = new List<GsmPhones>
         {
            // new GsmPhones { County = 90, Prefix = 542, Number = 4729390 },
-            new GsmPhones { County = 90, Prefix = 554, Number = 3396048 },
-            new GsmPhones { County = 90, Prefix = 533, Number = 4571673 },
-            new GsmPhones { County = 90, Prefix = 530, Number = 5695988 },
-            new GsmPhones { County = 90, Prefix = 505, Number = 3121304 },
+            new GsmPhones { Country = 90, Prefix = 554, Number = 3396048 },
+            new GsmPhones { Country = 90, Prefix = 533, Number = 4571673 },
+            new GsmPhones { Country = 90, Prefix = 530, Number = 5695988 },
+            new GsmPhones { Country = 90, Prefix = 505, Number = 3121304 },
             //new GsmPhones { County = 90, Prefix = 539, Number = 6328222 },
             //new GsmPhones { County = 90, Prefix = 554, Number = 9456166 },
             //new GsmPhones { County = 90, Prefix = 552, Number = 8312703 }
