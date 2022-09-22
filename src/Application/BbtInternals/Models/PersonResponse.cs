@@ -40,8 +40,8 @@ namespace Application.BbtInternals.Models
 
     public partial class GsmPhones
     {
-        [JsonProperty("county")]
-        public long County { get; set; }
+        [JsonProperty("country")]
+        public long Country { get; set; }
 
         [JsonProperty("prefix")]
         public long Prefix { get; set; }
