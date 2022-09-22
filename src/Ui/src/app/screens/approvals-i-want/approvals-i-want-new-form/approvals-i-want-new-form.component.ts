@@ -1,15 +1,15 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {NgxSmartModalService} from "ngx-smart-modal";
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Components, FormioComponent, FormioOptions} from "@formio/angular";
-import {NewOrderFormService} from "../../../services/new-order-form.service";
-import {Subject, takeUntil} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgxSmartModalService } from "ngx-smart-modal";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Components, FormioComponent, FormioOptions } from "@formio/angular";
+import { NewOrderFormService } from "../../../services/new-order-form.service";
+import { Subject, takeUntil } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
 import NewApprovalOrderForm from "../../../models/new-approval-order-form";
-import {IApprover} from "../../../models/approver";
-import {IReference} from "../../../models/reference";
-import {CommonService} from "../../../services/common.service";
-import {NgSelectConfig} from "@ng-select/ng-select";
+import { IApprover } from "../../../models/approver";
+import { IReference } from "../../../models/reference";
+import { CommonService } from "../../../services/common.service";
+import { NgSelectConfig } from "@ng-select/ng-select";
 
 @Component({
   selector: 'app-approvals-i-want-new-form',
@@ -24,7 +24,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   source;
   formTitle;
   formDefinitionId;
-  @ViewChild(FormioComponent, {static: false}) formio: FormioComponent;
+  @ViewChild(FormioComponent, { static: false }) formio: FormioComponent;
   formGroup: FormGroup;
   submitted = false;
   options: FormioOptions = {
@@ -36,13 +36,16 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   applicationForms: any;
   tags: any;
   sending: boolean = false;
+  pdfContent: string;
+  waiting: boolean = false;
+  isPreview: boolean = true;
   isProcessRequired: boolean = false;
 
   constructor(private fb: FormBuilder,
-              private modal: NgxSmartModalService,
-              private newOrderFormService: NewOrderFormService,
-              private route: ActivatedRoute,
-              private router: Router, private commonService: CommonService) {
+    private modal: NgxSmartModalService,
+    private newOrderFormService: NewOrderFormService,
+    private route: ActivatedRoute,
+    private router: Router, private commonService: CommonService) {
     this.formGroup = this.fb.group({
       tag: ['', [Validators.required]],
       form: ['', [Validators.required]],
@@ -61,7 +64,9 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       this.tags = res.data;
     });
   }
-
+  preview() {
+    this.next();
+  }
 
   tagChanged(tags) {
     this.isProcessRequired = false;
@@ -83,10 +88,10 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       this.formDropdown = undefined;
     }
 
-    if (this.isProcessRequired){
+    if (this.isProcessRequired) {
       this.formGroup.controls.processNo.setValidators([Validators.required]);
       this.formGroup.controls.processNo.updateValueAndValidity();
-    }else{
+    } else {
       this.formGroup.controls.processNo.setValidators(null);
       this.formGroup.controls.processNo.updateValueAndValidity();
     }
@@ -101,7 +106,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
     if (val) {
       this.formDefinitionId = val;
       this.newOrderFormService.getFormContent(this.formDefinitionId).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        const {data} = res;
+        const { data } = res;
         this.form = data && JSON.parse(data.content);
         this.source = data && data.source;
         if (this.source === 'file') {
@@ -199,7 +204,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       let iTypes = '';
       if (e && e.data.sigortaTuru) {
         iTypes = Object.keys(e.data.sigortaTuru).map(k => {
-          return {text: k, data: e.data.sigortaTuru[k]};
+          return { text: k, data: e.data.sigortaTuru[k] };
         }).filter(i => i.data == true).map(m => {
           return m.text;
         }).join(',');
@@ -223,15 +228,31 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         tagId: this.f.tag.value,
         formId: this.f.form.value,
       }, this.formTitle, iTypes, this.source, this.f.dependencyOrderId.value);
-      this.newOrderFormService.save(model).pipe(takeUntil(this.destroy$)).subscribe({
-        next: () => {
-          this.modal.open('success');
-          this.sending = false;
-        },
-        error: () => {
-          this.sending = false;
-        }
-      })
+      if (this.isPreview) {
+        this.waiting = true;
+        this.newOrderFormService.preview(model).pipe(takeUntil(this.destroy$)).subscribe({
+          next: (res) => {
+            this.pdfContent = res && res.data && res.data.content;
+            this.modal.open('document');
+            this.waiting = true;
+            this.sending = false;
+            this.isPreview = false;
+          },
+          error: () => {
+            this.sending = false;
+          }
+        })
+      } else {
+        this.newOrderFormService.save(model).pipe(takeUntil(this.destroy$)).subscribe({
+          next: () => {
+            this.modal.open('success');
+            this.sending = false;
+          },
+          error: () => {
+            this.sending = false;
+          }
+        })
+      }
     }
   }
 
