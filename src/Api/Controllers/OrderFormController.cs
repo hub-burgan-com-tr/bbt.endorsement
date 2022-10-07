@@ -57,7 +57,7 @@ namespace Api.Controllers
 
             var person = UserExtensions.GetOrderPerson(User.Claims);
 
-            return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
+            return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder, ContentData = contentData });
         }
 
         [Route("preview-pdf")]
