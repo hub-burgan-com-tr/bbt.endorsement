@@ -41,6 +41,7 @@ namespace Api.Controllers
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 200);
 
             request.Id = Guid.NewGuid().ToString();
+            var contentData = request.Content;
 
             if (request.Source == "formio")
             {

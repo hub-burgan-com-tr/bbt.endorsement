@@ -36,7 +36,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 if (request.Model.FormType == Form.Order)
                     response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
                 else if (request.Model.FormType == Form.FormOrder)
-                    response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey);
+                    response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey, request.Model.ContentData);
 
                 //var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
                 //var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
@@ -53,7 +53,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return Response<SaveEntityResponse>.Success(response, 200);
         }
 
-        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest, OrderPerson person, long processInstanceKey)
+        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest, OrderPerson person, long processInstanceKey, string contentData)
         {
             if (startFormRequest == null) return null;
 
@@ -88,6 +88,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             {
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
+                ContentData = contentData,
                 Name = startFormRequest.Title,
                 Type = startFormRequest.Source == "formio" ? formDefinition.Type.ToString() : GetFileType(startFormRequest.FileType),
                 FileType = startFormRequest.Source == "formio" ? formDefinition.Type.ToString() : GetFileType(startFormRequest.FileType),
