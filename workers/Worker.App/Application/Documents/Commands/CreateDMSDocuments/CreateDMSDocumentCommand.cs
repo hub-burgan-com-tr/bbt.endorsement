@@ -44,7 +44,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
             {
                 var dmsReferenceId = document.FormDefinition.Parameter.DmsReferenceId.ToString();
                 var dmsReferenceKey = document.FormDefinition.Parameter.DmsReferenceKey;
-                var dmsReferenceName = document.FormDefinition.Parameter.DmsReferenceName;
+                var dmsReferenceName = document.FormDefinition.Parameter.DmsReferenceName + " - (" + document.Name + ")";
                 var dms = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName, request.InstanceId);
                 dmses.Add(dms);
             }
