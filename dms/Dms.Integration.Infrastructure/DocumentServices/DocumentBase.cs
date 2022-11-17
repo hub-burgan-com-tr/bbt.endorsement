@@ -33,13 +33,13 @@ public enum DocumentActionType
     /// <summary>
     /// Belge/bilgi goruldu onaylandi
     /// </summary>
-    [Name("Görüldü Onaylandı")]
+    [Name("Onaylandı")]
     Checked = 40,
 
     /// <summary>
     /// Belge/bilgi goruldu onaylanmadi
     /// </summary>
-    [Name("Belge görüldü onaylanmadı")]
+    [Name("Onaylanmadı")]
     NotChecked = 50,
 
     /// <summary>
