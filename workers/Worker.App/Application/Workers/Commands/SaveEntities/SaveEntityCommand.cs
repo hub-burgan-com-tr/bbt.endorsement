@@ -36,7 +36,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
                 else if (request.Model.FormType == Form.FormOrder)
                     response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey, request.Model.ContentData);
-
                 //var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
                 //var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
                 //foreach (var item in documentList)
