@@ -27,7 +27,6 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             _saveEntityService = saveEntityService;
             _dateTime = dateTime;
         }
-
         public async Task<Response<SaveEntityResponse>> Handle(SaveEntityCommand request, CancellationToken cancellationToken)
         {
             var response = new SaveEntityResponse();
