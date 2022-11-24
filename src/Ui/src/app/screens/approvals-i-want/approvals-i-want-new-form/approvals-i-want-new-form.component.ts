@@ -103,6 +103,12 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   }
 
   formChanged(val) {
+    this.isPreview = true;
+    this.waiting = false;
+    this.sending = false;
+    this.f.file.setValue(null);
+    this.f.file.updateValueAndValidity();
+    this.fileBase64 = '';
     if (val) {
       this.formDefinitionId = val;
       this.newOrderFormService.getFormContent(this.formDefinitionId).pipe(takeUntil(this.destroy$)).subscribe(res => {
@@ -230,18 +236,26 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
       }, this.formTitle, iTypes, this.source, this.f.dependencyOrderId.value);
       if (this.isPreview) {
         this.waiting = true;
-        this.newOrderFormService.preview(model).pipe(takeUntil(this.destroy$)).subscribe({
-          next: (res) => {
-            this.pdfContent = res && res.data && res.data.content;
-            this.modal.open('document');
-            this.waiting = true;
-            this.sending = false;
-            this.isPreview = false;
-          },
-          error: () => {
-            this.sending = false;
-          }
-        })
+        if (this.fileBase64) {
+          this.pdfContent = this.fileBase64;
+          this.modal.open('document');
+          this.waiting = false;
+          this.sending = false;
+          this.isPreview = false;
+        } else {
+          this.newOrderFormService.preview(model).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (res) => {
+              this.pdfContent = res && res.data && res.data.content;
+              this.modal.open('document');
+              this.waiting = true;
+              this.sending = false;
+              this.isPreview = false;
+            },
+            error: () => {
+              this.sending = false;
+            }
+          })
+        }
       } else {
         this.newOrderFormService.save(model).pipe(takeUntil(this.destroy$)).subscribe({
           next: () => {

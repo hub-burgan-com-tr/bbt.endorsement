@@ -22,6 +22,7 @@ namespace Domain.Entities
         [MaxLength(250)]
         public string Name { get; set; }
         public string Content { get; set; }
+        public string ContentData { get; set; }
         [MaxLength(50)]
         public string Type { get; set; }
         [MaxLength(50)]

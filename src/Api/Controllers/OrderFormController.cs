@@ -41,6 +41,7 @@ namespace Api.Controllers
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 200);
 
             request.Id = Guid.NewGuid().ToString();
+            var contentData = request.Content;
 
             if (request.Source == "formio")
             {
@@ -56,7 +57,7 @@ namespace Api.Controllers
 
             var person = UserExtensions.GetOrderPerson(User.Claims);
 
-            return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
+            return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder, ContentData = contentData });
         }
 
         [Route("preview-pdf")]

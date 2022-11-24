@@ -15,6 +15,7 @@ public class ContractModel
     public StartFormRequest StartFormRequest { get; set; }
     public OrderPerson Person { get; set; }
     public Form FormType { get; set; }
+    public string ContentData { get; set; }
 
     public string InstanceId { get; set; }
     public bool Device { get; set; }

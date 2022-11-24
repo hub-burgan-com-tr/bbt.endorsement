@@ -8,7 +8,7 @@ RUN npm install \
 ##RUN npm install  @angular-devkit/build-angular --force 
 ##RUN ng update @angular/cli @angular/core --allow-dirty --force 1>/dev/null 2>&1
 RUN npm uninstall @angular-devkit/build-angular 
-RUN npm install  @angular-devkit/build-angular --force
+RUN npm install  @angular-devkit/build-angular@13.2.6 --force
 RUN npm run build 
 RUN ng build --configuration=test   --project=dms --base-href / 
 ### STAGE 2: Run ###
