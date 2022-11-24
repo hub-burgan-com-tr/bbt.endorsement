@@ -18,7 +18,7 @@ IConfiguration Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 IWebHostEnvironment Environment = builder.Environment;
-Log.Information("Endorsement API running... - " + Environment.EnvironmentName);
+Log.Information("Endorsement API running - " + Environment.EnvironmentName);
 
 if (Environment.EnvironmentName == "Development")
     Configuration = builder
