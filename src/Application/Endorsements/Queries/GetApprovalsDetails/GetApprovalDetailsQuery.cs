@@ -47,7 +47,7 @@ namespace Application.Endorsements.Queries.GetApprovalsDetails
                         MimeType = y.MimeType,
                         DocumentId = y.DocumentId,
                         FileName = y.Name + ".pdf",
-                        Actions = y.DocumentActions.OrderByDescending(x => x.Created).Select(z => new DocumentAction { DocumentActionId = z.DocumentActionId, Value = z.DocumentActionId, Title = z.Title }).ToList()
+                        Actions = y.DocumentActions.OrderBy(x => x.Choice).Select(z => new DocumentAction { DocumentActionId = z.DocumentActionId, Value = z.DocumentActionId, Title = z.Title }).ToList()
                     }).ToList(),
                 }).FirstOrDefault();
           
