@@ -31,6 +31,7 @@ namespace Infrastructure.Services
         public async Task<Response<string>> PdfRender(string templateName, string content)
         {
             var responseContent = "";
+
             var jsonData = GetJsonData(templateName, content);
             var restClient = new RestClient(_templateEngineUrl);
             var restRequest = new RestRequest("/Template/Render/Pdf", Method.Post);

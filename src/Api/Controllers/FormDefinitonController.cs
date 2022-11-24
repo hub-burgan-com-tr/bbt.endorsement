@@ -2,6 +2,7 @@
 using Application.Common.Models;
 using Application.OrderForms.Commands.CreateDependencyFormInformations;
 using Application.OrderForms.Commands.CreateFormInformations;
+using Application.OrderForms.Commands.CreateFormInformationsText;
 using Application.OrderForms.Commands.UpdateFormDependencyReuse;
 using Application.OrderForms.Commands.UpdateFormInformations;
 using Application.OrderForms.Commands.UpdateFormioFormInformations;
@@ -29,6 +30,26 @@ namespace Api.Controllers
         {
             return await Mediator.Send(request);
         }
+
+
+
+        [SwaggerOperation(
+          Summary = "create form definition",
+          Description = "Form definitons create form information text"
+        )]
+        [Route("CreateFormInformationText")]
+        [HttpPost]
+        [SwaggerResponse(200, "Success, form is updated successfully.", typeof(bool))]
+        [SwaggerResponse(201, "Success, form is created successfully.", typeof(bool))]
+        public async Task<Response<bool>> CreateFormInformationText([FromForm] CreateFormInformationTextCommand request)
+        {
+            return await Mediator.Send(request);
+        }
+
+
+
+
+
 
         [SwaggerOperation(
           Summary = "create form definition",
