@@ -48,7 +48,7 @@ namespace Application.Endorsements.Commands.NewOrderForms
             {
                 StartFormRequest = request.Request,
                 FormType = request.FormType,
-                Device = false,
+                //Device = false,
                 InstanceId = orderId,
                 ExpireInMinutes = expireInMinutes,
                 RetryFrequence = retryFrequence,
