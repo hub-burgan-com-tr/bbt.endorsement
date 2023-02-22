@@ -19,6 +19,7 @@ public class ContractModel
 
     public string InstanceId { get; set; }
     public bool Device { get; set; }
+    public bool IsPersonalMail { get; set; }
 
     public bool Approved { get; set; }
     public bool Completed { get; set; }
@@ -123,8 +124,6 @@ public class OrderReference
     public string Process { get; set; }
     public string State { get; set; }
     public string ProcessNo { get; set; }
-    public bool Device { get; set; }
-    public bool IsPersonalMail { get; set; }
 
     public CallbackClass Callback { get; set; }
 }
@@ -140,6 +139,8 @@ public class OrderConfig
     public int MaxRetryCount { get; set; }
     public int RetryFrequence { get; set; }
     public int ExpireInMinutes { get; set; }
+    public bool IsPersonalMail { get; set; }
+    public bool Device { get; set; }
     public string NotifyMessageSMS { get; set; }
     public string NotifyMessagePush { get; set; }
     public string RenotifyMessageSMS { get; set; }
@@ -162,6 +163,7 @@ public class StartFormRequest
     public bool DependecyRules { get; set; }=false;
     public OrderReference Reference { get; set; }
     public OrderCustomer Approver { get; set; }
+    public OrderConfig OrderConfig { get; set; }
 }
 
 public class FormDefinitionClass

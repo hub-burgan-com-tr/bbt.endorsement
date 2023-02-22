@@ -195,7 +195,15 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("LoadContactInfo");
             if (variables != null)
+            {
                 variables.RetryEnd = true;
+                var orderConfig = _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
+                if (orderConfig != null)
+                {
+                    variables.Device = orderConfig.Data.Device;
+                    variables.IsPersonalMail = orderConfig.Data.IsPersonalMail;
+                }
+            }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             try
             {
@@ -422,6 +430,8 @@ public class ContractApprovalService : IContractApprovalService
                     variables.RetryFrequence = orderConfig.Data.RetryFrequence;
                     variables.ExpireInMinutes = orderConfig.Data.ExpireInMinutes;
                     variables.MaxRetryCount = orderConfig.Data.MaxRetryCount;
+                    variables.Device = orderConfig.Data.Device;
+                    variables.IsPersonalMail = orderConfig.Data.IsPersonalMail;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
