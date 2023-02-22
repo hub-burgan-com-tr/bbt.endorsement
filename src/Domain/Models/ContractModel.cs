@@ -123,6 +123,9 @@ public class OrderReference
     public string Process { get; set; }
     public string State { get; set; }
     public string ProcessNo { get; set; }
+    public bool Device { get; set; }
+    public bool IsPersonalMail { get; set; }
+
     public CallbackClass Callback { get; set; }
 }
 

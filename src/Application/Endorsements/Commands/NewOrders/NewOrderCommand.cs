@@ -42,7 +42,7 @@ namespace Application.Endorsements.Commands.NewOrders
             {
                 StartRequest = request.StartRequest,
                 FormType = request.FormType,
-                Device = false,
+                //Device = false,
                 InstanceId = instanceId,
                 ExpireInMinutes = expireInMinutes,
                 RetryFrequence = retryFrequence,
