@@ -62,7 +62,13 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 ExpireInMinutes = formDefinition.ExpireInMinutes,
                 MaxRetryCount = formDefinition.MaxRetryCount,
                 RetryFrequence = formDefinition.RetryFrequence,
+               
             };
+            if (startFormRequest.OrderConfig!=null)
+            {
+                config.Device = startFormRequest.OrderConfig.Device;
+                config.IsPersonalMail = startFormRequest.OrderConfig.IsPersonalMail;
+            }
 
             var actions = new List<DocumentAction>();
 
@@ -311,6 +317,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.MaxRetryCount = startRequest.Config.MaxRetryCount;
                 config.RetryFrequence = startRequest.Config.RetryFrequence;
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
+                config.IsPersonalMail = startRequest.Config.IsPersonalMail;
+                config.Device = startRequest.Config.Device; 
+
             }
             var customer = GetCustomerId(startRequest.Approver);
             if (customer.StatusCode != 200)
