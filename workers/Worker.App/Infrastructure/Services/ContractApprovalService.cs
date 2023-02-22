@@ -209,7 +209,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"LoadContactInfo");
 
-                variables.Device = false;
+                //variables.Device = false;
                 variables.IsProcess = true;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
