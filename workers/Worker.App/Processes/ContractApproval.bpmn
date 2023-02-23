@@ -285,10 +285,10 @@
         <bpmn:outgoing>Flow_1ngb2p4</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_1dn1jck" sourceRef="Gateway_19w66c5" targetRef="Activity_PersonalSendMail">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsPersonalMail = false</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= NotPersonalMail = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ngb2p4" sourceRef="Gateway_19w66c5" targetRef="Activity_17gtf8f">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsPersonalMail = true</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= NotPersonalMail = true</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_10ia34g" sourceRef="Event_TimeoutTimer" targetRef="Activity_TimeoutProcess" />
