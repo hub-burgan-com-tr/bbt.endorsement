@@ -201,7 +201,7 @@ public class ContractApprovalService : IContractApprovalService
                 if (orderConfig != null)
                 {
                     variables.Device = orderConfig.Data.Device;
-                    variables.IsPersonalMail = orderConfig.Data.IsPersonalMail;
+                    variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                 }
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -431,7 +431,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.ExpireInMinutes = orderConfig.Data.ExpireInMinutes;
                     variables.MaxRetryCount = orderConfig.Data.MaxRetryCount;
                     variables.Device = orderConfig.Data.Device;
-                    variables.IsPersonalMail = orderConfig.Data.IsPersonalMail;
+                    variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;

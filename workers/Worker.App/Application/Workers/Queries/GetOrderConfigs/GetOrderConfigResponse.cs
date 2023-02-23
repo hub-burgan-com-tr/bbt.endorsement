@@ -6,6 +6,6 @@
         public string RetryFrequence { get; set; }
         public int MaxRetryCount { get; set; }
         public bool Device { get; set; }
-        public bool IsPersonalMail { get; set; }
+        public bool NotPersonalMail { get; set; }
     }
 }

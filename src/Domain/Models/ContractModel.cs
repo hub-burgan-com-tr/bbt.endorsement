@@ -19,7 +19,7 @@ public class ContractModel
 
     public string InstanceId { get; set; }
     public bool Device { get; set; }
-    public bool IsPersonalMail { get; set; }
+    public bool NotPersonalMail { get; set; }
 
     public bool Approved { get; set; }
     public bool Completed { get; set; }
@@ -139,7 +139,7 @@ public class OrderConfig
     public int MaxRetryCount { get; set; }
     public int RetryFrequence { get; set; }
     public int ExpireInMinutes { get; set; }
-    public bool IsPersonalMail { get; set; }
+    public bool NotPersonalMail { get; set; }
     public bool Device { get; set; }
     public string NotifyMessageSMS { get; set; }
     public string NotifyMessagePush { get; set; }

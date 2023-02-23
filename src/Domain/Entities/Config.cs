@@ -30,7 +30,7 @@ namespace Domain.Entities
         public int MaxRetryCount { get; set; }
 
         public bool Device { get; set; }=false;
-        public bool IsPersonalMail { get; set; } = false;
+        public bool NotPersonalMail { get; set; } = false;
 
         public virtual Order Order { get; set; }
     }
