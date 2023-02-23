@@ -67,7 +67,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             if (startFormRequest.OrderConfig!=null)
             {
                 config.Device = startFormRequest.OrderConfig.Device;
-                config.IsPersonalMail = startFormRequest.OrderConfig.IsPersonalMail;
+                config.NotPersonalMail = startFormRequest.OrderConfig.NotPersonalMail;
             }
 
             var actions = new List<DocumentAction>();
@@ -317,7 +317,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.MaxRetryCount = startRequest.Config.MaxRetryCount;
                 config.RetryFrequence = startRequest.Config.RetryFrequence;
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
-                config.IsPersonalMail = startRequest.Config.IsPersonalMail;
+                config.NotPersonalMail = startRequest.Config.NotPersonalMail;
                 config.Device = startRequest.Config.Device; 
 
             }
