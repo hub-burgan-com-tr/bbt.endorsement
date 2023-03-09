@@ -13,6 +13,7 @@ namespace Domain.Entities
         [MaxLength(50)]
         public string Mode { get; set; }
         public string Url { get; set; }
+        public string ApiKey { get; set; }
         public virtual Reference Reference { get; set; } = null!;
     }
 }

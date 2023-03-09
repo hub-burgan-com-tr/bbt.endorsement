@@ -11,7 +11,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
     public class SaveEntityCommand : IRequest<Response<SaveEntityResponse>>
     {
-        public ContractModel Model { get; set; }   
+        public ContractModel Model { get; set; }
         public long ProcessInstanceKey { get; set; }
     }
 
@@ -62,9 +62,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 ExpireInMinutes = formDefinition.ExpireInMinutes,
                 MaxRetryCount = formDefinition.MaxRetryCount,
                 RetryFrequence = formDefinition.RetryFrequence,
-               
+
             };
-            if (startFormRequest.OrderConfig!=null)
+            if (startFormRequest.OrderConfig != null)
             {
                 config.Device = startFormRequest.OrderConfig.Device;
                 config.NotPersonalMail = startFormRequest.OrderConfig.NotPersonalMail;
@@ -80,7 +80,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     Created = _dateTime.Now,
                     Choice = action.Choice,
                     Title = action.Title,
-                    Type = action.Choice==(int)ActionType.Approve ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
+                    Type = action.Choice == (int)ActionType.Approve ? ActionType.Approve.ToString() : ActionType.Reject.ToString()
                 });
             }
 
@@ -106,7 +106,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var documents = new List<Domain.Entities.Document>();
 
             var customer = GetCustomerId(startFormRequest.Approver);
-            if(customer.StatusCode != 200)
+            if (customer.StatusCode != 200)
             {
                 customer = GetCustomerId(startFormRequest.Approver);
             }
@@ -158,8 +158,10 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                                 State = startFormRequest.Title,
                             },
                             Documents = documents
-                        }      
+                        }
                     }).Entity;
+                    CreateCallback(orderMap.Order, startFormRequest.Reference);
+
                     var entity = _context.OrderMaps.Add(orderMap).Entity;
                 }
             }
@@ -208,10 +210,11 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                         }
                     }
                 };
+                CreateCallback(orderGroup.OrderMaps.FirstOrDefault().Order, startFormRequest.Reference);
                 var entity = _context.OrderGroups.Add(orderGroup).Entity;
             }
 
-           var i = _context.SaveChanges();
+            var i = _context.SaveChanges();
 
             var order = _context.Orders
                 .Where(x => x.OrderId == startFormRequest.Id)
@@ -229,7 +232,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
 
         private List<DocumentInsuranceType> GetDocumentInsuranceType(string insuranceType)
         {
-            var documentInsuranceTypes= new List<DocumentInsuranceType>();
+            var documentInsuranceTypes = new List<DocumentInsuranceType>();
             foreach (var type in insuranceType.Split(","))
             {
                 var parameter = _context.Parameters.FirstOrDefault(x => x.DmsReferenceId != null && x.Text.ToLower() == type.ToLower().Trim());
@@ -318,7 +321,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.RetryFrequence = startRequest.Config.RetryFrequence;
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
                 config.NotPersonalMail = startRequest.Config.NotPersonalMail;
-                config.Device = startRequest.Config.Device; 
+                config.Device = startRequest.Config.Device;
 
             }
             var customer = GetCustomerId(startRequest.Approver);
@@ -350,7 +353,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 },
                 Documents = documents,
             };
-
+            CreateCallback(order, startRequest.Reference);
             //var orderGroup = new OrderGroup { IsCompleted = false, OrderMaps = new List<OrderMap>(), OrderGroupId = Guid.NewGuid().ToString() };
             //orderGroup.OrderMaps.Add(new OrderMap { OrderMapId = Guid.NewGuid().ToString(), OrderGroupId = orderGroup.OrderGroupId, Order = order });
             //var entity = _context.OrderGroups.Add(orderGroup).Entity;
@@ -368,6 +371,24 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             };
         }
 
+        private void CreateCallback(Order order, OrderReference orderReference)
+        {
+            #region Control
+            if (order == null)
+                return;
+            if (orderReference == null)
+                return;
+            if (orderReference.Callback == null)
+                return;
+            var callback = orderReference.Callback;
+            if (callback == null)
+                return;
+            if (callback.URL.Length<5)
+            return;
+            #endregion
+
+            order.Reference.Callbacks.Add( new Callback { Url = callback.URL, ApiKey = callback .ApiKey});
+        }
         private string GetFileType(string fileType)
         {
             if (fileType.Contains("image"))
