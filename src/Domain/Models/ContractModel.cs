@@ -132,6 +132,7 @@ public class CallbackClass
 {
     public CalbackMode Mode { get; set; }
     public string URL { get; set; }
+    public string ApiKey { get; set; }
 }
 
 public class OrderConfig
