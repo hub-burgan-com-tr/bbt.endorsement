@@ -130,6 +130,30 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     //}
 
                     documents = new List<Domain.Entities.Document> { document };
+                    var orderEntity = new Order
+                    {
+                        OrderId = startFormRequest.Id.ToString(),
+                        ProcessInstanceKey = processInstanceKey,
+                        DocumentSystemId = formDefinition.DocumentSystemId,
+
+                        State = OrderState.Pending.ToString(),
+                        Title = startFormRequest.Title,
+                        Created = _dateTime.Now,
+                        Config = config,
+                        CustomerId = customerId,
+                        PersonId = personId,
+
+                        Reference = new Reference
+                        {
+                            ProcessNo = startFormRequest.Reference.ProcessNo,
+                            Created = _dateTime.Now,
+                            Process = startFormRequest.Title,
+                            State = startFormRequest.Title,
+                        },
+                        Documents = documents
+                    };
+                    CreateCallback(orderEntity, startFormRequest.Reference);
+
                     var orderMap = _context.OrderMaps.Add(new OrderMap
                     {
                         OrderMapId = Guid.NewGuid().ToString(),
@@ -137,30 +161,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                         OrderId = startFormRequest.Id.ToString(),
                         OrderNumber = 2, // Teklif
                         DocumentId = document.DocumentId,
-                        Order = new Order
-                        {
-                            OrderId = startFormRequest.Id.ToString(),
-                            ProcessInstanceKey = processInstanceKey,
-                            DocumentSystemId = formDefinition.DocumentSystemId,
-
-                            State = OrderState.Pending.ToString(),
-                            Title = startFormRequest.Title,
-                            Created = _dateTime.Now,
-                            Config = config,
-                            CustomerId = customerId,
-                            PersonId = personId,
-
-                            Reference = new Reference
-                            {
-                                ProcessNo = startFormRequest.Reference.ProcessNo,
-                                Created = _dateTime.Now,
-                                Process = startFormRequest.Title,
-                                State = startFormRequest.Title,
-                            },
-                            Documents = documents
-                        }
+                        Order = orderEntity
                     }).Entity;
-                    CreateCallback(orderMap.Order, startFormRequest.Reference);
 
                     var entity = _context.OrderMaps.Add(orderMap).Entity;
                 }
