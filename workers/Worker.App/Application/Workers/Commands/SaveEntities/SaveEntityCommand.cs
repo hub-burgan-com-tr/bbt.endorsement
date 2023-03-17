@@ -389,8 +389,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return;
             #endregion
 
-            order.Reference.Callbacks.Add( new Callback { Url = callback.URL, ApiKey = callback.ApiKey});
-            //s
+            order.Reference.Callbacks.Add( new Callback {OrderId = order.OrderId, Url = callback.URL, ApiKey = callback.ApiKey});
         }
         private string GetFileType(string fileType)
         {
