@@ -1,10 +1,14 @@
 ﻿using Document.Infrastructure;
 using Elastic.Apm.NetCoreAll;
+using Elastic.Apm.SerilogEnricher;
+using Elastic.CommonSchema.Serilog;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 using Worker.App.Application;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Extensions;
@@ -73,8 +77,27 @@ else
 Log.Logger = new LoggerConfiguration()
    .ReadFrom.Configuration(Configuration)
    .CreateLogger();
-builder.Host.UseSerilog();
-
+//builder.Host.UseSerilog();
+builder.Host.UseSerilog((context, services, configuration) => configuration
+                    .ReadFrom.Configuration(context.Configuration)
+                    .ReadFrom.Services(services)
+                    .Enrich.WithElasticApmCorrelationInfo()
+                    .Enrich.FromLogContext().Enrich.WithEnvironmentName().Enrich.WithMachineName().Enrich.WithProcessId().Enrich.WithThreadId()
+                    .WriteTo.Async(e =>
+                    {
+                        e.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticSearchSettings:Uri"]))
+                        {
+                            ModifyConnectionSettings = x => x.BasicAuthentication(builder.Configuration["ElasticSearchSettings:Username"], builder.Configuration["ElasticSearchSettings:Password"]),
+                            AutoRegisterTemplate = true,
+                            OverwriteTemplate = true,
+                            IndexFormat = builder.Configuration["ElasticSearchSettings:IndexFormat"],
+                            MinimumLogEventLevel = LogEventLevel.Information,
+                            TypeName = null,
+                            BatchPostingLimit = 1,
+                            CustomFormatter = new EcsTextFormatter()
+                        });
+                        e.Console(outputTemplate: "[{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj} {NewLine}{Exception}");
+                    }));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);

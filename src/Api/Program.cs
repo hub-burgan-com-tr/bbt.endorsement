@@ -4,12 +4,16 @@ using Api.Extensions;
 using Application;
 using Application.Common.Models;
 using Elastic.Apm.NetCoreAll;
+using Elastic.Apm.SerilogEnricher;
+using Elastic.CommonSchema.Serilog;
 using Infrastructure;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 
 /// <summary>
 ///  
@@ -73,8 +77,28 @@ Log.Logger = new LoggerConfiguration()
 
 //builder.Logging.ClearProviders();
 //builder.Logging.AddSerilog(Log.Logger);
-builder.Host.UseSerilog(((ctx, lc) => lc.ReadFrom.Configuration(Configuration)));
+//builder.Host.UseSerilog(((ctx, lc) => lc.ReadFrom.Configuration(Configuration)));
 
+builder.Host.UseSerilog((context, services, configuration) => configuration
+                    .ReadFrom.Configuration(context.Configuration)
+                    .ReadFrom.Services(services)
+                    .Enrich.WithElasticApmCorrelationInfo()
+                    .Enrich.FromLogContext().Enrich.WithEnvironmentName().Enrich.WithMachineName().Enrich.WithProcessId().Enrich.WithThreadId()
+                    .WriteTo.Async(e =>
+                    {
+                        e.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticSearchSettings:Uri"]))
+                        {
+                            ModifyConnectionSettings = x => x.BasicAuthentication(builder.Configuration["ElasticSearchSettings:Username"], builder.Configuration["ElasticSearchSettings:Password"]),
+                            AutoRegisterTemplate = true,
+                            OverwriteTemplate = true,
+                            IndexFormat = builder.Configuration["ElasticSearchSettings:IndexFormat"],
+                            MinimumLogEventLevel = LogEventLevel.Information,
+                            TypeName = null,
+                            BatchPostingLimit = 1,
+                            CustomFormatter = new EcsTextFormatter()
+                        });
+                        e.Console(outputTemplate: "[{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj} {NewLine}{Exception}");
+                    }));
 builder.Services.Configure<FormOptions>(x =>
 {
     x.ValueLengthLimit = int.MaxValue;
