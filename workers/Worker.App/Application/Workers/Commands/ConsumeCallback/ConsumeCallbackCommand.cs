@@ -81,7 +81,7 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
                     requestRest.AddHeader("Authorization", callback.ApiKey);
                 }
                 var orderInfoJson = JsonSerializer.Serialize(orderInfo, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                Log.ForContext("CalbackBody", orderInfoJson).Information($"ConsumeCallback");
+                Log.ForContext("CalbackRequestBody", orderInfoJson).Information($"ConsumeCallback");
                 requestRest.AddHeader("Content-Type", "application/json");
                 requestRest.AddStringBody(orderInfoJson, DataFormat.Json);
                 Log.ForContext("CalbackRequestRest", JsonSerializer.Serialize(requestRest, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
