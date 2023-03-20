@@ -9,6 +9,7 @@ using System.Text.Json;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Application.Internals.Models;
+using Serilog;
 
 namespace Worker.App.Application.Workers.Commands.ConsumeCallback
 {
@@ -80,10 +81,13 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
                     requestRest.AddHeader("Authorization", callback.ApiKey);
                 }
                 var orderInfoJson = JsonSerializer.Serialize(orderInfo, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-
+                Log.ForContext("CalbackBody", orderInfoJson).Information($"ConsumeCallback");
                 requestRest.AddHeader("Content-Type", "application/json");
                 requestRest.AddStringBody(orderInfoJson, DataFormat.Json);
+                Log.ForContext("CalbackRequestRest", JsonSerializer.Serialize(requestRest, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
+
                 RestResponse responseRest = await client.ExecuteAsync(requestRest);
+
                 return Response<ConsumeCallbackResponse>.Success(new ConsumeCallbackResponse { Content = responseRest.Content }, 200);
 
             }

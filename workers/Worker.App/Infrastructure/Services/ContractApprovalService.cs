@@ -534,31 +534,21 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("ConsumeCallback");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.ForContext("OrderId", variables.InstanceId).Information($"ConsumeCallback");
+            Log.ForContext("variables", data).Information($"ConsumeCallback");
 
             var callback = await _mediator.Send(new ConsumeCallbackCommand
             {
                 OrderId = variables.InstanceId.ToString(),
 
             });
-            if (callback.StatusCode == 200)
+            Log.ForContext("CalbackResponse", JsonSerializer.Serialize(callback, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
+
+            var history = await _mediator.Send(new CreateOrderHistoryCommand
             {
-                var history = await _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Consume Callback",
-                    Description = callback.Data.Content
-                });
-            }
-            if (callback.StatusCode == 417)
-            {
-                var history = await _mediator.Send(new CreateOrderHistoryCommand
-                {
-                    OrderId = variables.InstanceId.ToString(),
-                    State = "Consume Callback Hata",
-                    Description = callback.Message
-                });
-            }
+                OrderId = variables.InstanceId.ToString(),
+                State = "Consume Callback status = " + callback.StatusCode,
+                Description = callback.Data.Content
+            });
 
 
             await jobClient.NewCompleteJobCommand(job.Key)
