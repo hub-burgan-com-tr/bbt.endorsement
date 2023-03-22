@@ -534,14 +534,13 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("ConsumeCallback");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.ForContext("variables", data).Information($"ConsumeCallback");
 
             var callback = await _mediator.Send(new ConsumeCallbackCommand
             {
                 OrderId = variables.InstanceId.ToString(),
 
             });
-            Log.ForContext("CalbackResponse", JsonSerializer.Serialize(callback, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
+            Log.ForContext("variables", data).ForContext("CalbackResponse", JsonSerializer.Serialize(callback, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
 
             var history = await _mediator.Send(new CreateOrderHistoryCommand
             {

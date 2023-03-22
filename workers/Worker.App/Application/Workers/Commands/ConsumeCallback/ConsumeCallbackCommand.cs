@@ -81,10 +81,10 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
                     requestRest.AddHeader("Authorization", callback.ApiKey);
                 }
                 var orderInfoJson = JsonSerializer.Serialize(orderInfo, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                Log.ForContext("CalbackRequestBody", orderInfoJson).Information($"ConsumeCallback");
+                 
                 requestRest.AddHeader("Content-Type", "application/json");
                 requestRest.AddStringBody(orderInfoJson, DataFormat.Json);
-                Log.ForContext("CalbackRequestRest", JsonSerializer.Serialize(requestRest, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
+                Log.ForContext("CalbackRequestBody", orderInfoJson).ForContext("CalbackRequestRest", JsonSerializer.Serialize(requestRest, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallbackCommand");
 
                 RestResponse responseRest = await client.ExecuteAsync(requestRest);
 
@@ -93,7 +93,9 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
             }
             catch (Exception ex)
             {
-                return Response<ConsumeCallbackResponse>.NotFoundException(ex.Message, 417);
+                Log.ForContext("CalbackRequestBody", ex).Error("ConsumeCallbackCommand");
+                return Response<ConsumeCallbackResponse>.Success(new ConsumeCallbackResponse { Content = ex.Message }, 417);
+
             }
 
 
