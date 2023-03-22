@@ -10,6 +10,7 @@ using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Application.Internals.Models;
 using Serilog;
+using Aspose.Pdf.Operators;
 
 namespace Worker.App.Application.Workers.Commands.ConsumeCallback
 {
@@ -33,9 +34,9 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
         {
             var callback = _context.Callbacks.FirstOrDefault(x => x.OrderId == request.OrderId);
             if (callback == null)
-                return Response<ConsumeCallbackResponse>.NotFoundException("callback not found", 404);
+                return Response<ConsumeCallbackResponse>.Success(new ConsumeCallbackResponse { Content = "OrderId  Bulunamadi" } ,404);
 
-            var orderInfo = await _context.Orders
+            var orderInfo =  _context.Orders
                 .Include(x => x.Customer)
                 .Include(x => x.Documents)
                 .ThenInclude(x => x.DocumentActions)
@@ -56,10 +57,11 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
                     OrderState = x.State,
 
                     History = x.OrderHistories.Where(x => x.IsStaff).OrderByDescending(x => x.Created)
-                            .Select(x => new { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), Description = x.Description, State = x.State }).ToList(),
+                            .Select(x => new { CreatedDate = x.Created.ToString("dd.MM.yyyy HH:mm"), x.Description, x.State }).ToList(),
                     Documents = x.Documents.OrderByDescending(x => x.Created).Select(x => new
                     {
                         x.DocumentId,
+                        x.DocumentDms.FirstOrDefault(a=>a.DocumentId ==x.DocumentId ).DocumentDmsId,
                         x.Name,
                         FileName = x.Name + ".pdf"
                     ,
@@ -68,10 +70,10 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
                         x.DocumentActions.FirstOrDefault(y => y.IsSelected).Title,
                         Type = x.FileType
                     }).ToList()
-                }).FirstOrDefaultAsync();
+                }).AsSplitQuery().FirstOrDefaultAsync();
 
             if (orderInfo == null)
-                return Response<ConsumeCallbackResponse>.NotFoundException("Order not found", 404);
+                return Response<ConsumeCallbackResponse>.Success(new ConsumeCallbackResponse { Content = "OrderId Bilgileri Bulunamadi" }, 404);
             try
             {
                 var client = new RestClient(callback.Url);
