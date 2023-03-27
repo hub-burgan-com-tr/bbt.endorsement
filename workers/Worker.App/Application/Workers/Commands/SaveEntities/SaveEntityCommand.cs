@@ -154,7 +154,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     };
                     CreateCallback(orderEntity, startFormRequest.Reference);
 
-                    var orderMap = _context.OrderMaps.Add(new OrderMap
+                    var orderMap =  new OrderMap
                     {
                         OrderMapId = Guid.NewGuid().ToString(),
                         OrderGroupId = orderGroup.OrderGroupId,
@@ -162,9 +162,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                         OrderNumber = 2, // Teklif
                         DocumentId = document.DocumentId,
                         Order = orderEntity
-                    }).Entity;
+                    };
 
-                    var entity = _context.OrderMaps.Add(orderMap).Entity;
+                    var entity = _context.OrderMaps.Add(orderMap);
                 }
             }
             else
@@ -213,7 +213,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     }
                 };
                 CreateCallback(orderGroup.OrderMaps.FirstOrDefault().Order, startFormRequest.Reference);
-                var entity = _context.OrderGroups.Add(orderGroup).Entity;
+                var entity = _context.OrderGroups.Add(orderGroup);
             }
 
             var i = _context.SaveChanges();

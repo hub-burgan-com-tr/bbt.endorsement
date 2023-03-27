@@ -46,7 +46,7 @@ namespace Api.Controllers
                 return Response<StartResponse>.Fail("Yetkiniz bulunmuyor.", 200);
 
             request.Id = Guid.NewGuid().ToString();
-            var person = UserExtensions.GetOrderPerson(User.Claims);
+            var person = UserExtensions.GetOrderPerson(User.Claims, Request.Headers["Username"]);
             return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
         }
 
@@ -292,9 +292,9 @@ namespace Api.Controllers
         {
             if (!User.IsCredentials())
                 return Ok(Response<PaginatedList<GetWantApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 200));
-            var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
+            var orderPerson = UserExtensions.GetOrderPerson(User.Claims, Request.Headers["Username"]);
 
-             var result = await Mediator.Send(new GetWantApprovalQuery { Person = orderPerson, PageNumber = pageNumber, PageSize = pageSize });
+            var result = await Mediator.Send(new GetWantApprovalQuery { Person = orderPerson, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(result);
         }
 
@@ -354,7 +354,7 @@ namespace Api.Controllers
         {
             if (!User.IsCredentials())
                 return Ok(Response<PaginatedList<GetWatchApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 200));
-            var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
+            var orderPerson = UserExtensions.GetOrderPerson(User.Claims, Request.Headers["Username"]);
 
             var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,Person=orderPerson });
             return Ok(result);
