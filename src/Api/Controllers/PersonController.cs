@@ -23,7 +23,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> CustomerSearch([FromQuery] string name)
         {
-            var person = UserExtensions.GetOrderPerson(User.Claims, Request.Headers["Username"]);
+            var person = UserExtensions.GetOrderPerson(User.Claims);
             var response = await Mediator.Send(new GetCustomerSearchQuery { Name = name, Person = person });
             return Ok(response);
         }
