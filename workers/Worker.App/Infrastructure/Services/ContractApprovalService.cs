@@ -324,6 +324,7 @@ public class ContractApprovalService : IContractApprovalService
                     });
 
                 }
+                Thread.Sleep(300);//bundan kaynaklı oldugunu test edip musait bi zamanda kaldıracam
             }
             catch (Exception ex)
             {

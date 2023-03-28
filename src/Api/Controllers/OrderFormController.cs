@@ -37,7 +37,7 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
-            if (!User.IsCredentials())
+            if (!User.IsCredentials(Request.Headers["User-Name"]))
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 200);
 
             request.Id = Guid.NewGuid().ToString();
@@ -55,7 +55,7 @@ namespace Api.Controllers
 
             //var person = UserExtensions.GetOrderPerson(User.Claims);
 
-            var person = UserExtensions.GetOrderPerson(User.Claims, Request.Headers["Username"]);
+            var person = UserExtensions.GetOrderPerson(User.Claims);
 
             return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder, ContentData = contentData });
         }
