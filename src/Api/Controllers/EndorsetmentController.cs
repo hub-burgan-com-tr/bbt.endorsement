@@ -42,7 +42,7 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
-            if (!User.IsCredentials(Request.Headers["User-Name"]))
+            if (!User.IsCredentials(Request.Headers["R-User-Name"]))
                 return Response<StartResponse>.Fail("Yetkiniz bulunmuyor.", 200);
 
             request.Id = Guid.NewGuid().ToString();
@@ -290,7 +290,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
-            if (!User.IsCredentials(Request.Headers["User-Name"]))
+            if (!User.IsCredentials(Request.Headers["R-User-Name"]))
                 return Ok(Response<PaginatedList<GetWantApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 200));
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
@@ -316,7 +316,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
-            if (!User.IsCredentials(Request.Headers["User-Name"]))
+            if (!User.IsCredentials(Request.Headers["R-User-Name"]))
                 return Ok(Response<GetWantApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 200));
             var citizenshipNumber = User.GetCitizenshipNumber();
             var result = await Mediator.Send(new GetWantApprovalDetailsQuery() {CitizenshipNumber=citizenshipNumber, OrderId = orderId });
@@ -352,7 +352,7 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWatchApprovalAsync(string customer, string approver, string process, string state,
          string processNo, int pageNumber = 1, int pageSize = 10)
         {
-            if (!User.IsCredentials(Request.Headers["User-Name"]))
+            if (!User.IsCredentials(Request.Headers["R-User-Name"]))
                 return Ok(Response<PaginatedList<GetWatchApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 200));
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
@@ -379,7 +379,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetWatchApprovalDetailAsync([FromQuery] string orderId)
         {
-            if (!User.IsCredentials(Request.Headers["User-Name"]))
+            if (!User.IsCredentials(Request.Headers["R-User-Name"]))
                 return Ok(Response<GetWatchApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 200));
             var response = await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
             return Ok(response);
