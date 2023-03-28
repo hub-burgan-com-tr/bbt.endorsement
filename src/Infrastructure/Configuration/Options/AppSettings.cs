@@ -18,7 +18,7 @@ public class Entegration
 {
     public string Internals { get; set; }
     public string TemplateEngine { get; set; }
-    public string SSOIntegrationService { get; set; }
+    public string SSoIntegrationService { get; set; }
     public string Sso { get; set; }
     public string DMSService { get; set; }
     public string ClientSecret { get; set; }
