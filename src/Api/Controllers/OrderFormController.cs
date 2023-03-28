@@ -17,6 +17,7 @@ using Domain.Enums;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 
@@ -37,7 +38,8 @@ namespace Api.Controllers
         [SwaggerResponse(201, "Success, form is created successfully.", typeof(void))]
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
-            if (!User.IsCredentials(Request.Headers["User-Name"]))
+            Log.Warning("Request.Headers[\"R-User-Name\"]" + Request.Headers["R-User-Name"]);
+            if (!User.IsCredentials(Request.Headers["R-User-Name"]))
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 200);
 
             request.Id = Guid.NewGuid().ToString();

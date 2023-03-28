@@ -7,6 +7,7 @@ using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Common.Models;
 using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 using Worker.App.Application.Messagings.Commands.PersonSendMailTemplates;
 using Worker.App.Application.Messagings.Commands.SendMailTemplates;
@@ -244,22 +245,31 @@ public class ContractApprovalService : IContractApprovalService
                 variables.IsProcess = true;
 
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendOtp");
+                var person = new Response<LoadContactInfoResponse>();
+                try
+                {
+                       person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Customer });
 
+                }
+                catch (Exception ex)
+                {
+                    Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
 
-                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Customer });
+                }
                 if (person.Data != null)
                 {
                     //foreach (var gsmPhone in Users.GsmPhones())
                     // {
-                    var responseSms = _mediator.Send(new SendSmsTemplateCommand
-                    {
-                        OrderId = variables.InstanceId,
-                        GsmPhone = person.Data.Customer.GsmPhone, // gsmPhone
-                        CustomerNumber = person.Data.Customer.CustomerNumber,
-                    }).Result;
+                 
 
                     try
                     {
+                        var responseSms = _mediator.Send(new SendSmsTemplateCommand
+                        {
+                            OrderId = variables.InstanceId,
+                            GsmPhone = person.Data.Customer.GsmPhone, // gsmPhone
+                            CustomerNumber = person.Data.Customer.CustomerNumber,
+                        }).Result;
                         var orderHistoryCommand = new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
@@ -279,19 +289,20 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(300);
                     //}
 
                     //foreach (var email in Users.Emails())
                     // {
-                    var responseMail = _mediator.Send(new SendMailTemplateCommand
-                    {
-                        OrderId = variables.InstanceId,
-                        Email = person.Data.Customer.Email,  // email,
-                    }).Result;
+                
 
                     try
                     {
+                        var responseMail = _mediator.Send(new SendMailTemplateCommand
+                        {
+                            OrderId = variables.InstanceId,
+                            Email = person.Data.Customer.Email,  // email,
+                        }).Result;
                         var emailHistory = new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
@@ -312,7 +323,7 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(300);
                     // }
 
                     var history = await _mediator.Send(new CreateOrderHistoryCommand
@@ -324,7 +335,6 @@ public class ContractApprovalService : IContractApprovalService
                     });
 
                 }
-                Thread.Sleep(300);//bundan kaynaklı oldugunu test edip musait bi zamanda kaldıracam
             }
             catch (Exception ex)
             {
