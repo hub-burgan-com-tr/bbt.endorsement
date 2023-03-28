@@ -12,9 +12,6 @@ namespace Api.Controllers
     [ApiController]
     public class ApiControllerBase : ControllerBase
     {
-        public ApiControllerBase() {
-            User.IsCredentials(Request.Headers["R-User-Name"]);
-        }
         private ISender _mediator = null!;
         private IZeebeService _zeebeService = null!;
        // private IHttpContextAccessor _httpContextAccessor;
