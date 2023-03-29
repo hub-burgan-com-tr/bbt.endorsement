@@ -289,11 +289,6 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
-                    Thread.Sleep(300);
-                    //}
-
-                    //foreach (var email in Users.Emails())
-                    // {
                 
 
                     try
@@ -323,8 +318,6 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
-                    Thread.Sleep(300);
-                    // }
 
                     var history = await _mediator.Send(new CreateOrderHistoryCommand
                     {
@@ -344,7 +337,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 // await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
             }
-            await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
