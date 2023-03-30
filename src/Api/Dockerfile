@@ -11,8 +11,8 @@ RUN apt-get update && \
 
 # Configure Nginx
 RUN rm /etc/nginx/sites-available/default
-COPY nginx.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/ && \
+COPY nginx.conf /etc/nginx/conf.d/
+RUN ln -s /etc/nginx/conf.d/nginx.conf /etc/nginx/sites-enabled/ && \
     rm /etc/nginx/sites-enabled/default
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
