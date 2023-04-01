@@ -248,7 +248,7 @@ public class ContractApprovalService : IContractApprovalService
                 var person = new Response<LoadContactInfoResponse>();
                 try
                 {
-                       person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Customer });
+                    person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Customer });
 
                 }
                 catch (Exception ex)
@@ -260,7 +260,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     //foreach (var gsmPhone in Users.GsmPhones())
                     // {
-                 
+
 
                     try
                     {
@@ -289,7 +289,7 @@ public class ContractApprovalService : IContractApprovalService
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
-                
+
 
                     try
                     {
@@ -337,7 +337,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 // await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
             }
-            var success =  jobClient.NewCompleteJobCommand(job.Key)
+            var success = jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -554,7 +554,7 @@ public class ContractApprovalService : IContractApprovalService
             });
 
 
-            var success =  jobClient.NewCompleteJobCommand(job.Key)
+            var success = jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
 
@@ -730,44 +730,39 @@ public class ContractApprovalService : IContractApprovalService
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("CreateDMSDocument");
-            try
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"CreateDMSDocument");
+            variables.DmsRetryLimit += 1;
 
-                if (variables != null)
+            Log.ForContext("OrderId", variables.InstanceId).Information($"CreateDMSDocument");
+
+            if (variables != null)
+            {
+                try
                 {
-                    try
+                    var dms = _mediator.Send(new CreateDMSDocumentCommand
                     {
-                        var dms = _mediator.Send(new CreateDMSDocumentCommand
-                        {
-                            InstanceId = variables.InstanceId
-                        }).Result;
+                        InstanceId = variables.InstanceId
+                    }).Result;
 
-                        variables.IsProcess = true;
-                        variables.DmsIds = dms.Data.Select(x => new DMSDocumentResponse { DmsReferenceKey = x.DmsReferenceKey, DmsReferenceName = x.DmsReferenceName, DmsRefId = x.DmsRefId }).ToList();
-                    }
-                    catch (Exception ex)
-                    {
-                        variables.Error = ex.Message;
-                    }
-
-                    var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                    var success =  jobClient.NewCompleteJobCommand(job.Key)
-                        .Variables(data)
-                        .Send();
+                    variables.IsProcess = true;
+                    variables.DmsIds = dms.Data.Select(x => new DMSDocumentResponse { DmsReferenceKey = x.DmsReferenceKey, DmsReferenceName = x.DmsReferenceName, DmsRefId = x.DmsRefId }).ToList();
+                    throw new Exception();
                 }
-            }
-            catch (Exception ex)
-            {
-                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
-                //variables.IsProcess = false;
-                variables.Error = ex.Message;
-                string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                catch (Exception ex)
+                {
+                    Log.ForContext("OrderId", variables.InstanceId)
+                    .ForContext("DmsRetryLimit", variables.DmsRetryLimit).Error(ex, "CreateDMSDocumentException");
+                    
+                    variables.Error = ex.Message;
+                    variables.IsProcess = false;
+                }
+
+                var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
                 var success = jobClient.NewCompleteJobCommand(job.Key)
-                    .Variables(data)
-                    .Send();
+                   .Variables(data)
+                   .Send();
             }
+
         });
     }
 
