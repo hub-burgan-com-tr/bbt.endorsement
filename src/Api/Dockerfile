@@ -4,17 +4,6 @@ EXPOSE 5070
 
 ENV ASPNETCORE_URLS=http://+:5070
 
-# Install Nginx and Node.js
-RUN apt-get update && \
-    apt-get install -y nginx nodejs npm && \
-    rm -rf /var/lib/apt/lists/*
-
-# Configure Nginx
-RUN rm /etc/nginx/sites-available/default
-COPY nginx.conf /etc/nginx/conf.d/
-RUN ln -s /etc/nginx/conf.d/nginx.conf /etc/nginx/sites-enabled/ && \
-    rm /etc/nginx/sites-enabled/default
-
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
