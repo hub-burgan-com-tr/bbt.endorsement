@@ -98,11 +98,7 @@
         <bpmn:incoming>Flow_1ji105p</bpmn:incoming>
         <bpmn:outgoing>Flow_0r37gwm</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:endEvent id="Event_00aphdy">
-        <bpmn:incoming>Flow_1cdusfq</bpmn:incoming>
-        <bpmn:errorEventDefinition id="ErrorEventDefinition_0m40ev8" errorRef="Error_01mpbq6" />
-      </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_1cdusfq" sourceRef="Gateway_CreateDMSDocument" targetRef="Event_00aphdy">
+      <bpmn:sequenceFlow id="Flow_1cdusfq" sourceRef="Gateway_CreateDMSDocument" targetRef="Gateway_1s3cs3q">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsProcess = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0r37gwm" sourceRef="Activity_SaveEntity" targetRef="Gateway_03lmmd2" />
@@ -181,6 +177,7 @@
           <zeebe:taskDefinition type="ApproveContract" retries="3" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1hecez8</bpmn:incoming>
+        <bpmn:incoming>Flow_0rm0lm6</bpmn:incoming>
         <bpmn:outgoing>Flow_13v97lz</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_13v97lz" sourceRef="Activity_ApproveContract" targetRef="Gateway_ApproveContract" />
@@ -201,6 +198,7 @@
           <zeebe:taskDefinition type="ConsumeCallback" retries="3" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1w383d7</bpmn:incoming>
+        <bpmn:incoming>Flow_14qj648</bpmn:incoming>
         <bpmn:outgoing>Flow_0st7chg</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_0st7chg" sourceRef="Activity_0jfywen" targetRef="Event_005sint" />
@@ -218,7 +216,7 @@
         <bpmn:incoming>Flow_1y9sd3f</bpmn:incoming>
         <bpmn:outgoing>Flow_0ozpbcc</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_15eg93e" sourceRef="Activity_11jscgz" targetRef="Gateway_SaveHistory" />
+      <bpmn:sequenceFlow id="Flow_15eg93e" sourceRef="Activity_11jscgz" targetRef="Gateway_0vuvde2" />
       <bpmn:serviceTask id="Activity_11jscgz" name="Save History">
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="SaveHistory" retries="3" />
@@ -226,16 +224,8 @@
         <bpmn:incoming>Flow_SaveEntity_IsProcess_True</bpmn:incoming>
         <bpmn:outgoing>Flow_15eg93e</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="Activity_17gtf8f" name="Create DMS Document">
-        <bpmn:extensionElements>
-          <zeebe:taskDefinition type="CreateDMSDocument" retries="3" />
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0zjiqeh</bpmn:incoming>
-        <bpmn:incoming>Flow_1ngb2p4</bpmn:incoming>
-        <bpmn:outgoing>Flow_1l91x7q</bpmn:outgoing>
-      </bpmn:serviceTask>
       <bpmn:exclusiveGateway id="Gateway_SaveHistory">
-        <bpmn:incoming>Flow_15eg93e</bpmn:incoming>
+        <bpmn:incoming>Flow_0u5v30q</bpmn:incoming>
         <bpmn:outgoing>Flow_1hrnyqj</bpmn:outgoing>
         <bpmn:outgoing>Flow_18uazzj</bpmn:outgoing>
       </bpmn:exclusiveGateway>
@@ -289,6 +279,45 @@
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ngb2p4" sourceRef="Gateway_19w66c5" targetRef="Activity_17gtf8f">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= NotPersonalMail = true</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:serviceTask id="Activity_17gtf8f" name="Create DMS Document">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CreateDMSDocument" retries="3" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1ngb2p4</bpmn:incoming>
+        <bpmn:incoming>Flow_0zjiqeh</bpmn:incoming>
+        <bpmn:incoming>Flow_0aeuzfv</bpmn:incoming>
+        <bpmn:outgoing>Flow_1l91x7q</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:exclusiveGateway id="Gateway_0vuvde2">
+        <bpmn:incoming>Flow_15eg93e</bpmn:incoming>
+        <bpmn:outgoing>Flow_0u5v30q</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0rm0lm6</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_0u5v30q" sourceRef="Gateway_0vuvde2" targetRef="Gateway_SaveHistory">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= MaxRetryCount &gt; 0</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0rm0lm6" sourceRef="Gateway_0vuvde2" targetRef="Activity_ApproveContract">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= MaxRetryCount &lt; 0</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:intermediateCatchEvent id="Event_13yqeel" name="Retry DMS">
+        <bpmn:incoming>Flow_012gow5</bpmn:incoming>
+        <bpmn:outgoing>Flow_0aeuzfv</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_0ofkee7">
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0aeuzfv" sourceRef="Event_13yqeel" targetRef="Activity_17gtf8f" />
+      <bpmn:exclusiveGateway id="Gateway_1s3cs3q">
+        <bpmn:incoming>Flow_1cdusfq</bpmn:incoming>
+        <bpmn:outgoing>Flow_012gow5</bpmn:outgoing>
+        <bpmn:outgoing>Flow_14qj648</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_012gow5" sourceRef="Gateway_1s3cs3q" targetRef="Event_13yqeel">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= DmsRetryLimit &lt; 6</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_14qj648" sourceRef="Gateway_1s3cs3q" targetRef="Activity_0jfywen">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= DmsRetryLimit &gt;= 6</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_10ia34g" sourceRef="Event_TimeoutTimer" targetRef="Activity_TimeoutProcess" />
@@ -489,6 +518,22 @@
       <bpmndi:BPMNShape id="Activity_1mqztst_di" bpmnElement="Activity_ContractApprovalProcess" isExpanded="true">
         <dc:Bounds x="250" y="80" width="3400" height="510" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0aeuzfv_di" bpmnElement="Flow_0aeuzfv">
+        <di:waypoint x="3052" y="510" />
+        <di:waypoint x="3030" y="510" />
+        <di:waypoint x="3030" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rm0lm6_di" bpmnElement="Flow_0rm0lm6">
+        <di:waypoint x="970" y="345" />
+        <di:waypoint x="970" y="110" />
+        <di:waypoint x="2230" y="110" />
+        <di:waypoint x="2230" y="320" />
+        <di:waypoint x="2223" y="331" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0u5v30q_di" bpmnElement="Flow_0u5v30q">
+        <di:waypoint x="995" y="370" />
+        <di:waypoint x="1035" y="370" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ngb2p4_di" bpmnElement="Flow_1ngb2p4">
         <di:waypoint x="2710" y="345" />
         <di:waypoint x="2710" y="300" />
@@ -530,16 +575,16 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18uazzj_di" bpmnElement="Flow_18uazzj">
-        <di:waypoint x="1040" y="395" />
-        <di:waypoint x="1040" y="434" />
+        <di:waypoint x="1060" y="395" />
+        <di:waypoint x="1060" y="472" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1hrnyqj_di" bpmnElement="Flow_1hrnyqj">
-        <di:waypoint x="1065" y="370" />
+        <di:waypoint x="1085" y="370" />
         <di:waypoint x="1160" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15eg93e_di" bpmnElement="Flow_15eg93e">
         <di:waypoint x="910" y="370" />
-        <di:waypoint x="1015" y="370" />
+        <di:waypoint x="945" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ozpbcc_di" bpmnElement="Flow_0ozpbcc">
         <di:waypoint x="2540" y="370" />
@@ -610,7 +655,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1cdusfq_di" bpmnElement="Flow_1cdusfq">
         <di:waypoint x="3230" y="395" />
-        <di:waypoint x="3230" y="442" />
+        <di:waypoint x="3230" y="485" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ji105p_di" bpmnElement="Flow_1ji105p">
         <di:waypoint x="338" y="370" />
@@ -659,6 +704,15 @@
         <di:waypoint x="2645" y="370" />
         <di:waypoint x="2685" y="370" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_012gow5_di" bpmnElement="Flow_012gow5">
+        <di:waypoint x="3205" y="510" />
+        <di:waypoint x="3088" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14qj648_di" bpmnElement="Flow_14qj648">
+        <di:waypoint x="3255" y="510" />
+        <di:waypoint x="3420" y="510" />
+        <di:waypoint x="3420" y="410" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0k9mjyd_di" bpmnElement="Event_0k9mjyd">
         <dc:Bounds x="302" y="352" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -697,9 +751,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0d1x6b7_di" bpmnElement="Activity_SaveEntity">
         <dc:Bounds x="430" y="330" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0niurt5_di" bpmnElement="Event_00aphdy">
-        <dc:Bounds x="3212" y="442" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_04s0wsw_di" bpmnElement="Gateway_CreateDMSDocument" isMarkerVisible="true">
         <dc:Bounds x="3205" y="345" width="50" height="50" />
@@ -758,14 +809,11 @@
       <bpmndi:BPMNShape id="Activity_118u9dx_di" bpmnElement="Activity_11jscgz">
         <dc:Bounds x="810" y="330" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nlha1i_di" bpmnElement="Activity_17gtf8f">
-        <dc:Bounds x="3020" y="330" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1rhyhl5_di" bpmnElement="Gateway_SaveHistory" isMarkerVisible="true">
-        <dc:Bounds x="1015" y="345" width="50" height="50" />
+        <dc:Bounds x="1035" y="345" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_12a0kgz_di" bpmnElement="Event_0wnv53f">
-        <dc:Bounds x="1022" y="434" width="36" height="36" />
+        <dc:Bounds x="1042" y="472" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_03lmmd2_di" bpmnElement="Gateway_03lmmd2" isMarkerVisible="true">
         <dc:Bounds x="645" y="345" width="50" height="50" />
@@ -781,6 +829,21 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2672" y="402" width="79" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nlha1i_di" bpmnElement="Activity_17gtf8f">
+        <dc:Bounds x="3020" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0vuvde2_di" bpmnElement="Gateway_0vuvde2" isMarkerVisible="true">
+        <dc:Bounds x="945" y="345" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1sweode_di" bpmnElement="Event_13yqeel">
+        <dc:Bounds x="3052" y="492" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3045" y="535" width="54" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1s3cs3q_di" bpmnElement="Gateway_1s3cs3q" isMarkerVisible="true">
+        <dc:Bounds x="3205" y="485" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_02uy4lu_di" bpmnElement="Event_LimitTime">
         <dc:Bounds x="2032" y="312" width="36" height="36" />

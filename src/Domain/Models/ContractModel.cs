@@ -26,6 +26,7 @@ public class ContractModel
     public bool IsProcess { get; set; } = true;
     public bool RetryEnd { get; set; }
     public int Limit { get; set; }
+    public int DmsRetryLimit { get; set; }
 
     public int MaxRetryCount { get; set; }
     public string RetryFrequence { get; set; }
