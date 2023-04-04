@@ -31,7 +31,8 @@ namespace Domain.Entities
 
         public bool Device { get; set; }=false;
         public bool NotPersonalMail { get; set; } = false;
-
+        public bool NoNotification { get; set; } = false;
+        
         public virtual Order Order { get; set; }
     }
 }

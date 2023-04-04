@@ -68,6 +68,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             {
                 config.Device = startFormRequest.OrderConfig.Device;
                 config.NotPersonalMail = startFormRequest.OrderConfig.NotPersonalMail;
+                config.NoNotification = startFormRequest.OrderConfig.NoNotification;
             }
 
             var actions = new List<DocumentAction>();
@@ -323,6 +324,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.RetryFrequence = startRequest.Config.RetryFrequence;
                 config.ExpireInMinutes = startRequest.Config.ExpireInMinutes;
                 config.NotPersonalMail = startRequest.Config.NotPersonalMail;
+                config.NoNotification = startRequest.Config.NoNotification;
                 config.Device = startRequest.Config.Device;
 
             }
