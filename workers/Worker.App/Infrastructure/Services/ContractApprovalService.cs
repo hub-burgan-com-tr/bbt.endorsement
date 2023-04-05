@@ -747,7 +747,7 @@ public class ContractApprovalService : IContractApprovalService
 
                     variables.IsProcess = true;
                     variables.DmsIds = dms.Data.Select(x => new DMSDocumentResponse { DmsReferenceKey = x.DmsReferenceKey, DmsReferenceName = x.DmsReferenceName, DmsRefId = x.DmsRefId }).ToList();
-                    throw new Exception();
+                    //throw new Exception();
                 }
                 catch (Exception ex)
                 {
