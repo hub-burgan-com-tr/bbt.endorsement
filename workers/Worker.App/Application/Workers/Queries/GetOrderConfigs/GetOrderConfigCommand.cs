@@ -35,6 +35,7 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                     x.Config.ExpireInMinutes,
                     x.Config.MaxRetryCount,
                     x.Config.NotPersonalMail,
+                    x.Config.NoNotification,
                     x.Config.Device
                 }).FirstOrDefault();
 
@@ -44,6 +45,7 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                 ExpireInMinutes = "PT" + data.ExpireInMinutes + "M",
                 RetryFrequence = "PT" + data.RetryFrequence + "M",
                 NotPersonalMail = data.NotPersonalMail,
+                NoNotification = data.NoNotification,
                 Device = data.Device,
             };
 

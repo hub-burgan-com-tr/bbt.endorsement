@@ -7,5 +7,7 @@
         public int MaxRetryCount { get; set; }
         public bool Device { get; set; }
         public bool NotPersonalMail { get; set; }
+        public bool NoNotification { get; set; }
+        
     }
 }

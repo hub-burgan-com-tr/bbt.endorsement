@@ -204,6 +204,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     variables.Device = orderConfig.Data.Device;
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
+                    variables.NoNotification = orderConfig.Data.NoNotification;
                 }
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -437,6 +438,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.MaxRetryCount = orderConfig.Data.MaxRetryCount;
                     variables.Device = orderConfig.Data.Device;
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
+                    variables.NoNotification = orderConfig.Data.NoNotification;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
