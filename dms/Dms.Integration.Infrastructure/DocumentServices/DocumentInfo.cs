@@ -88,7 +88,7 @@ public abstract class DocumentInfo
 /// </summary>
 public class BhsDocument : DocumentInfo
 {
-    public BhsDocument(DocumentBase document, DmsPerson owner, string channelReferenceId, int customerNo, string citizenshipNumber, string branchCode, string bhsOrderNo, string version)
+    public BhsDocument(DocumentBase document, DmsPerson owner, string channelReferenceId, UInt64 customerNo, string citizenshipNumber, string branchCode, string bhsOrderNo, string version)
         : base(document, owner.FirstName, owner.LastName, channelReferenceId)
     {
         //<M375><Field19SubeKodu>9620</Field19SubeKodu>

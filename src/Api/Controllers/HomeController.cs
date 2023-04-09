@@ -54,7 +54,7 @@ namespace Api.Controllers
                 {
                     CitizenshipNumber = response.CitizenshipNumber,
                     IsStaff = Convert.ToBoolean(response.IsStaff),
-                    CustomerNumber = Convert.ToInt32(response.CustomerNumber),
+                    CustomerNumber = Convert.ToUInt64(response.CustomerNumber),
                     First = response.FirstName,
                     Last = response.LastName,
                     BusinessLine = response.BusinessLine != null ? response.BusinessLine : "",

@@ -19,7 +19,7 @@ namespace Domain.Entities
         public string LastName { get; set; }
         [MaxLength(11)]
         public long CitizenshipNumber { get; set; }
-        public int CustomerNumber { get; set; }
+        public UInt64 CustomerNumber { get; set; }
         [MaxLength(250)]
         public string BranchCode { get; set; }
         [MaxLength(250)]

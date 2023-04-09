@@ -12,7 +12,7 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public string CitizenshipNumber { get; set; }
         public string First { get; set; }
         public string Last { get; set; }
-        public int CustomerNumber { get;  set; }
+        public UInt64 CustomerNumber { get;  set; }
         public string Token { get; set; }
         public bool IsStaff { get; set; }
         public string TaxNo { get; set; }

@@ -77,7 +77,7 @@ public class OrderCustomer
     public long CitizenshipNumber { get; set; }
     public string First { get; set; }
     public string Last { get; set; }
-    public int CustomerNumber { get; set; }
+    public UInt64 CustomerNumber { get; set; }
     public string BranchCode { get; set; }
     public string BusinessLine { get; set; }
 }
@@ -87,7 +87,7 @@ public class OrderPerson
     public long CitizenshipNumber { get; set; }
     public string First { get; set; }
     public string Last { get; set; }
-    public int CustomerNumber { get; set; }
+    public UInt64 CustomerNumber { get; set; }
     public string BranchCode { get; set; }
     public string BusinessLine { get; set; }
     public string Email { get; set; }

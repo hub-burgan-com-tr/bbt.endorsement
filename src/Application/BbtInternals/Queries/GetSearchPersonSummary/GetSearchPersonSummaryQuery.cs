@@ -32,8 +32,8 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
                 TaxNo=x.TaxNo,
                 GsmPhone = x.GsmPhone,
                 Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
-            });
-            return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
+            }).OrderBy(x => x.CustomerNumber);
+            return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons.OrderBy(x => x.CustomerNumber) }, 200);
         }
     }
 }
