@@ -42,7 +42,7 @@ public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQu
                 return Response<GetSearchPersonSummaryResponse>.Fail("Pesponse.Data.CustomerList NULL", 201);
 
 
-            var persons = response.Data.CustomerList.Where(x => x.RecordStatus.IndexOf("A") != -1).Select(x => new GetSearchPersonSummaryDto
+            var persons = response.Data.CustomerList.Select(x => new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = x.CitizenshipNumber,
                 First = x.Name.First,
