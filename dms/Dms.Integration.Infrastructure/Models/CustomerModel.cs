@@ -12,6 +12,6 @@ public class CustomerModel
     public string LastName { get; set; }
     [MaxLength(11)]
     public long CitizenshipNumber { get; set; }
-    public UInt64 CustomerNumber { get; set; }
+    public long CustomerNumber { get; set; }
 }
 

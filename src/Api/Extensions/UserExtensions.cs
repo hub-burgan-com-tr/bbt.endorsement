@@ -10,7 +10,7 @@ public static class UserExtensions
         var person = new OrderPerson();
 
         person.CitizenshipNumber = long.Parse(Claims.FirstOrDefault(c => c.Type == "username").Value);
-        person.CustomerNumber = UInt64.Parse(Claims.FirstOrDefault(c => c.Type == "customer_number").Value);
+        person.CustomerNumber = long.Parse(Claims.FirstOrDefault(c => c.Type == "customer_number").Value);
         person.First = Claims.FirstOrDefault(c => c.Type == "given_name").Value;
         person.Last = Claims.FirstOrDefault(c => c.Type == "family_name").Value;
         person.BranchCode = Claims.FirstOrDefault(c => c.Type == "branch_id") != null ? Claims.FirstOrDefault(c => c.Type == "branch_id").Value : "";
@@ -82,7 +82,7 @@ public static class UserExtensions
             person = new OrderPerson
             {
                 CitizenshipNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CitizenshipNumber")),
-                CustomerNumber = UInt64.Parse(_httpContextAccessor.HttpContext.Session.GetString("CustomerNumber")),
+                CustomerNumber = long.Parse(_httpContextAccessor.HttpContext.Session.GetString("CustomerNumber")),
                 BusinessLine = _httpContextAccessor.HttpContext.Session.GetString("BusinessLine"),
                 First = _httpContextAccessor.HttpContext.Session.GetString("First"),
                 Last = _httpContextAccessor.HttpContext.Session.GetString("Last"),
