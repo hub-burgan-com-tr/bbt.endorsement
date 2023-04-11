@@ -75,7 +75,7 @@ public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Respons
             TaxNo=x.TaxNo,
             
             // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
-        });
-        return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
+        }).OrderBy(x=>x.CustomerNumber);
+        return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons.OrderBy(x => x.CustomerNumber) }, 200);
     }
 }

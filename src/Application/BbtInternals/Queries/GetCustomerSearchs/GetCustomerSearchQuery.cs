@@ -50,21 +50,20 @@ public class GetCustomerSearchQueryHandler : IRequestHandler<GetCustomerSearchQu
                 CustomerNumber = x.CustomerNumber,
                 IsStaff = x.IsStaff,
                 Email = x.Email,
-                TaxNo=x.TaxNo,
+                TaxNo = x.TaxNo,
                 GsmPhone = x.GsmPhone,
                 BranchCode = x.BranchCode,
-                BusinessLine=x.BusinessLine,
+                BusinessLine = x.BusinessLine,
                 // Authory = x.IsPersonel == true && x.Authory != null ? new GetSearchPersonSummaryDto.AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
             });
-
-            persons = persons.Where(x => x.CitizenshipNumber != request.Person.CitizenshipNumber.ToString());    
+            persons = persons.Where(x => x.CitizenshipNumber != request.Person.CitizenshipNumber.ToString());
 
             if (request.Person.IsBranchApproval == false)
                 persons = persons.Where(x => x.BranchCode == request.Person.BranchCode);
 
-            
 
-            return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons }, 200);
+
+            return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons.OrderBy(x=>x.CustomerNumber) }, 200);
         }
         catch (Exception ex)
         {

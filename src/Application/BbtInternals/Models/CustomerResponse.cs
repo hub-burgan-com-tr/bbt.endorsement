@@ -23,7 +23,7 @@ public class CustomerList
     }
 
     [JsonProperty("customerNumber")]
-    public int CustomerNumber { get; set; }
+    public UInt64 CustomerNumber { get; set; }
     [JsonProperty("name")]
     public Name Name { get; set; }
     [JsonProperty("citizenshipNumber")]
@@ -44,5 +44,7 @@ public class CustomerList
     public string IdentityNumber { get; set; }
     [JsonProperty("branchCode")]
     public string BranchCode { get; set; }
+    [JsonProperty("recordStatus")]
+    public string RecordStatus { get; set; }
     public AuthoryModel Authory { get; set; }
 }

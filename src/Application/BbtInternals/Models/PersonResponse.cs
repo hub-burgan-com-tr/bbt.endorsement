@@ -5,7 +5,7 @@ namespace Application.BbtInternals.Models
     public partial class PersonResponse
     {
         [JsonProperty("customerNumber")]
-        public int CustomerNumber { get; set; }
+        public UInt64 CustomerNumber { get; set; }
         [JsonProperty("name")]
         public Name Name { get; set; }
         [JsonProperty("citizenshipNumber")]
@@ -41,13 +41,13 @@ namespace Application.BbtInternals.Models
     public partial class GsmPhones
     {
         [JsonProperty("country")]
-        public long Country { get; set; }
+        public long? Country { get; set; }
 
         [JsonProperty("prefix")]
-        public long Prefix { get; set; }
+        public long? Prefix { get; set; }
 
         [JsonProperty("number")]
-        public long Number { get; set; }
+        public long? Number { get; set; }
     }
 
     public partial class Name
