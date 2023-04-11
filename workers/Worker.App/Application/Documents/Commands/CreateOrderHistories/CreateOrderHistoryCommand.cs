@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 
@@ -32,7 +33,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
 
     public async Task<Response<bool>> Handle(CreateOrderHistoryCommand request, CancellationToken cancellationToken)
     {
-        var order = _context.Orders.FirstOrDefault(x => x.OrderId == request.OrderId);
+        var order =  await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == request.OrderId);
         _context.OrderHistories.Add(new OrderHistory
         {
             OrderHistoryId = Guid.NewGuid().ToString(),
@@ -47,7 +48,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             PersonId = order?.PersonId,
             CustomerId = request.CustomerId,
         });
-        var result = _context.SaveChanges();
-        return Response<bool>.Success(result > 0 ? true : false, 200);
+         await _context.SaveChangesAsync(cancellationToken);
+        return Response<bool>.Success(true,200);
     }
 }

@@ -147,7 +147,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     if (variables.IsProcess == true)
                     {
-                        var history = await _mediator.Send(new CreateOrderHistoryCommand
+                       await _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
                             State = "Yeni Onay Emri Oluşturuldu",
@@ -158,7 +158,7 @@ public class ContractApprovalService : IContractApprovalService
                         var response = await _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() });
                         foreach (var document in response.Data)
                         {
-                            var dHistory = await _mediator.Send(new CreateOrderHistoryCommand
+                             await _mediator.Send(new CreateOrderHistoryCommand
                             {
                                 OrderId = variables.InstanceId,
                                 State = "Onay Belgesi Geldi",
@@ -271,7 +271,7 @@ public class ContractApprovalService : IContractApprovalService
                             GsmPhone = person.Data.Customer.GsmPhone, // gsmPhone
                             CustomerNumber = person.Data.Customer.CustomerNumber,
                         }).Result;
-                        var orderHistoryCommand = new CreateOrderHistoryCommand
+                        var orderHistoryCommand =  new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
                             State = "Hatırlatma Mesajı(Sms)",
@@ -320,7 +320,7 @@ public class ContractApprovalService : IContractApprovalService
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
 
-                    var history = await _mediator.Send(new CreateOrderHistoryCommand
+                     await _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
                         State = "Hatırlatma Mesajı",
@@ -362,7 +362,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendPush");
 
-                var history = _mediator.Send(new CreateOrderHistoryCommand
+                 await _mediator.Send(new CreateOrderHistoryCommand
                 {
                     OrderId = variables.InstanceId.ToString(),
                     State = "Hatırlatma Mesajı (Push Notification)",
@@ -404,7 +404,7 @@ public class ContractApprovalService : IContractApprovalService
                 var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId });
                 if (response.StatusCode == 200)
                 {
-                    var history = _mediator.Send(new CreateOrderHistoryCommand
+                    await _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId,
                         State = "Yeni Onay Emri Zaman Aşımına Uğradı",
@@ -505,7 +505,7 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (response != null && response.Data.OrderState == OrderState.Cancel && response.Data.IsUpdated)
                 {
-                    var history = _mediator.Send(new CreateOrderHistoryCommand
+                    await _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
                         State = "Emir iptal edildi",
@@ -548,7 +548,7 @@ public class ContractApprovalService : IContractApprovalService
             });
             Log.ForContext("variables", data).ForContext("CalbackResponse", JsonSerializer.Serialize(callback, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
 
-            var history = await _mediator.Send(new CreateOrderHistoryCommand
+            await _mediator.Send(new CreateOrderHistoryCommand
             {
                 OrderId = variables.InstanceId.ToString(),
                 State = "Consume Callback status = " + callback.StatusCode,
