@@ -21,7 +21,14 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetSearchPersonSummaryQuery request, CancellationToken cancellationToken)
         {
             var response = await _internalsService.GetCustomerSearchByName(new Models.CustomerSearchRequest { name = request.Name , page = 1, size = 10});
-            var persons = response.Data.CustomerList.Select(x => new GetSearchPersonSummaryDto
+            if (response.Data == null)
+                return Response<GetSearchPersonSummaryResponse>.Fail("Pesponse.Data NULL", 201);
+            if (response.Data.CustomerList == null)
+                return Response<GetSearchPersonSummaryResponse>.Fail("Pesponse.Data.CustomerList NULL", 201);
+            if (!response.Data.CustomerList.Any(x => x.RecordStatus == "A"))
+                return Response<GetSearchPersonSummaryResponse>.NotFoundException("Müşteri bulunamadı", 404);
+            
+            var persons = response.Data.CustomerList.Where(x => x.RecordStatus == "A").Select(x => new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = x.CitizenshipNumber,
                 First = x.Name.First,

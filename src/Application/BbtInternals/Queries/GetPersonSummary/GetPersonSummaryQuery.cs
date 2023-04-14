@@ -21,6 +21,10 @@ namespace Application.BbtInternals.Queries.GetPersonSummary
         public async Task<Response<GetSearchPersonSummaryResponse>> Handle(GetPersonSummaryQuery request, CancellationToken cancellationToken)
         {
             var response = await _internalsService.GetPersonById(request.Id);
+
+            if (response.Data == null)
+                return Response<GetSearchPersonSummaryResponse>.Fail("Pesponse.Data NULL", 201);
+
             var person = new GetSearchPersonSummaryDto
             {
                 CitizenshipNumber = response.Data.CitizenshipNumber.ToString(),

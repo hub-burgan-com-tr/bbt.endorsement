@@ -13,6 +13,7 @@ namespace Infrastructure.InternalsServices
         {
             internalsUrl = StaticValues.Internals;
         }
+        //kullanılmıyor
         public async Task<Response<CustomerResponse>> GetCustomerSearch(CustomerRequest person)
         {
             var restClient = new RestClient(internalsUrl);
@@ -26,7 +27,7 @@ namespace Infrastructure.InternalsServices
             var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
             return Response<CustomerResponse>.Success(data, 200);
         }
-
+        //CustomerSearch & "person-search
         public async Task<Response<CustomerResponse>> GetCustomerSearchByName(CustomerSearchRequest request)
         {
             var restClient = new RestClient(internalsUrl);
@@ -40,7 +41,7 @@ namespace Infrastructure.InternalsServices
             var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
             return Response<CustomerResponse>.Success(data, 200);
         }
-
+        //person-get
         public async Task<Response<PersonResponse>> GetPersonById(long id)
         {
             var restClient = new RestClient(internalsUrl);

@@ -65,13 +65,17 @@ namespace Worker.App.Application.Workers.Commands.LoadContactInfos
 
             if (!string.IsNullOrEmpty(citizenshipNumber))
             {
-                var person = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
+                var persons = await _internalsService.GetCustomerSearchByName(new CustomerSearchRequest
                 {
                     name = citizenshipNumber,
                     page = 1,
                     size = 10
                 });
-                return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Customer = person.Data.CustomerList.FirstOrDefault() }, 200);
+                var person = persons.Data.CustomerList.Where(x => x.RecordStatus == "A").FirstOrDefault();
+                if (person != null)
+                {
+                    return Response<LoadContactInfoResponse>.Success(new LoadContactInfoResponse { Customer = person }, 200);
+                }
             }
 
             return Response<LoadContactInfoResponse>.Fail(request.EmailSendType.ToString() + " not found", 404);
