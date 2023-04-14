@@ -40,7 +40,7 @@ namespace Api.Controllers
         {
             Log.Warning("Request.Headers[\"R-User-Name\"]" + Request.Headers["R-User-Name"]);
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
-                return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 200);
+                return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 401);
 
             request.Id = Guid.NewGuid().ToString();
             var contentData = request.Content;
