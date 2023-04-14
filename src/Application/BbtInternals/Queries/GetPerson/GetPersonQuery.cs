@@ -1,4 +1,5 @@
 ﻿using Application.BbtInternals.Models;
+using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using MediatR;
@@ -20,7 +21,10 @@ namespace Application.BbtInternals.Queries.GetPerson
         }
         public async Task<Response<PersonResponse>> Handle(GetPersonQuery request, CancellationToken cancellationToken)
         {
-            var response = await _internalsService.GetPersonById(request.Id); 
+            var response = await _internalsService.GetPersonById(request.Id);
+            if (response.Data == null)
+                return Response<PersonResponse>.Fail("Pesponse.Data NULL", 201);
+
             return Response<PersonResponse>.Success(response.Data, 200);
         }
     }

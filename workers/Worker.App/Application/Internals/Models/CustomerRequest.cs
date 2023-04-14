@@ -57,4 +57,6 @@ public class CustomerList
     public Device[] Devices { get; set; }
     [JsonProperty("identityNumber")]
     public string IdentityNumber { get; set; }
+    [JsonProperty("recordStatus")]
+    public string RecordStatus { get; set; }
 }

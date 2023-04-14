@@ -18,19 +18,7 @@ namespace Worker.App.Infrastructure.InternalsServices
             internalsUrl = StaticValues.Internals;
         }
 
-        public async Task<Response<CustomerResponse>> GetCustomerSearch(CustomerRequest person)
-        {
-            var restClient = new RestClient(internalsUrl);
-            var restRequest = new RestRequest("/Customer", Method.Post);
-            restRequest.AddHeader("Content-Type", "application/json");
-            restRequest.AddHeader("Accept", "text/plain");
-
-            restRequest.AddBody(person);
-            var response = await restClient.ExecutePostAsync(restRequest);
-
-            var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
-            return Response<CustomerResponse>.Success(data, 200);
-        }
+       
 
         public async Task<Response<CustomerResponse>> GetCustomerSearchByName(CustomerSearchRequest request)
         {
@@ -45,7 +33,20 @@ namespace Worker.App.Infrastructure.InternalsServices
             var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
             return Response<CustomerResponse>.Success(data, 200);
         }
+        #region func
+        public async Task<Response<CustomerResponse>> GetCustomerSearch(CustomerRequest person)
+        {
+            var restClient = new RestClient(internalsUrl);
+            var restRequest = new RestRequest("/Customer", Method.Post);
+            restRequest.AddHeader("Content-Type", "application/json");
+            restRequest.AddHeader("Accept", "text/plain");
 
+            restRequest.AddBody(person);
+            var response = await restClient.ExecutePostAsync(restRequest);
+
+            var data = JsonConvert.DeserializeObject<CustomerResponse>(response.Content);
+            return Response<CustomerResponse>.Success(data, 200);
+        }
         public async Task<Response<PersonResponse>> GetPersonById(long id)
         {
             try
@@ -78,5 +79,7 @@ namespace Worker.App.Infrastructure.InternalsServices
                 return Response<List<PersonResponse>>.Fail(ex.Message, 201);
             }
         }
+        #endregion
+
     }
 }

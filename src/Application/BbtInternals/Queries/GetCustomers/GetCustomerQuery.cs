@@ -63,7 +63,10 @@ public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Respons
         if (response.Data == null)
             return Response<GetSearchPersonSummaryResponse>.NotFoundException("Müşteri bulunamadı", 404);
 
-        var persons = response.Data.CustomerList.Select(x => new GetSearchPersonSummaryDto
+        if (!response.Data.CustomerList.Any(x => x.RecordStatus == "A"))
+            return Response<GetSearchPersonSummaryResponse>.NotFoundException("Müşteri bulunamadı", 404);
+
+        var persons = response.Data.CustomerList.Where(x => x.RecordStatus == "A").Select(x => new GetSearchPersonSummaryDto
         {
             CitizenshipNumber = x.CitizenshipNumber,
             First = x.Name.First,
