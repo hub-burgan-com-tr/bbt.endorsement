@@ -313,7 +313,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     FileType = item.Type.ToString() == ((int)ContentType.PlainText).ToString() ? ContentType.PlainText.ToString() : GetFileType(item.FileType),
                     MimeType = item.FileType,
                     Created = _dateTime.Now,
-                    DocumentActions = actions
+                    DocumentActions = actions,
+                    FormDefinitionId = startRequest.FormDefinitionId
                 });
             }
 
