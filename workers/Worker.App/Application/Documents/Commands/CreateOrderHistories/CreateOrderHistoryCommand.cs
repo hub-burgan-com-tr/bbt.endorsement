@@ -48,7 +48,7 @@ public class CreateOrderHistoryCommandHandler : IRequestHandler<CreateOrderHisto
             PersonId = order?.PersonId,
             CustomerId = request.CustomerId,
         });
-         await _context.SaveChangesAsync(cancellationToken);
+         _context.SaveChanges();
         return Response<bool>.Success(true,200);
     }
 }

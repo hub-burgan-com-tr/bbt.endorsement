@@ -26,9 +26,9 @@ public class HeaderInfo
 
 public class Phone
 {
-    public int countryCode { get; set; } //ülke kodu 90
-    public int prefix { get; set; } //Gsm prefix 553,533 etc
-    public int number { get; set; } // Telefon numarası
+    public int? countryCode { get; set; } //ülke kodu 90
+    public int ?prefix { get; set; } //Gsm prefix 553,533 etc
+    public int ?number { get; set; } // Telefon numarası
 }
 
 public class Process
