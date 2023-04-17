@@ -147,7 +147,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     if (variables.IsProcess == true)
                     {
-                       await _mediator.Send(new CreateOrderHistoryCommand
+                      _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
                             State = "Yeni Onay Emri Oluşturuldu",
@@ -158,7 +158,7 @@ public class ContractApprovalService : IContractApprovalService
                         var response = await _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() });
                         foreach (var document in response.Data)
                         {
-                             await _mediator.Send(new CreateOrderHistoryCommand
+                            _mediator.Send(new CreateOrderHistoryCommand
                             {
                                 OrderId = variables.InstanceId,
                                 State = "Onay Belgesi Geldi",
@@ -284,7 +284,7 @@ public class ContractApprovalService : IContractApprovalService
                             orderHistoryCommand.Response = responseSms.Data.Response;
                             orderHistoryCommand.CustomerId = responseSms.Data.CustomerId;
                         }
-                        await _mediator.Send(orderHistoryCommand);
+                         _mediator.Send(orderHistoryCommand);
                     }
                     catch (Exception ex)
                     {
@@ -313,14 +313,14 @@ public class ContractApprovalService : IContractApprovalService
                             emailHistory.Response = responseMail.Data.Response;
                             emailHistory.CustomerId = responseMail.Data.CustomerId;
                         }
-                        await _mediator.Send(emailHistory);
+                         _mediator.Send(emailHistory);
                     }
                     catch (Exception ex)
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
 
-                     await _mediator.Send(new CreateOrderHistoryCommand
+                    _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
                         State = "Hatırlatma Mesajı",
@@ -362,7 +362,7 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"SendPush");
 
-                 await _mediator.Send(new CreateOrderHistoryCommand
+                _mediator.Send(new CreateOrderHistoryCommand
                 {
                     OrderId = variables.InstanceId.ToString(),
                     State = "Hatırlatma Mesajı (Push Notification)",
@@ -404,7 +404,7 @@ public class ContractApprovalService : IContractApprovalService
                 var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId });
                 if (response.StatusCode == 200)
                 {
-                    await _mediator.Send(new CreateOrderHistoryCommand
+                   _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId,
                         State = "Yeni Onay Emri Zaman Aşımına Uğradı",
@@ -463,7 +463,7 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     foreach (var item in orderState.Data.Documents)
                     {
-                        await _mediator.Send(new CreateOrderHistoryCommand
+                       _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId,
                             DocumentId = item.DocumentId,
@@ -505,7 +505,7 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (response != null && response.Data.OrderState == OrderState.Cancel && response.Data.IsUpdated)
                 {
-                    await _mediator.Send(new CreateOrderHistoryCommand
+                   _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
                         State = "Emir iptal edildi",
@@ -548,7 +548,7 @@ public class ContractApprovalService : IContractApprovalService
             });
             Log.ForContext("variables", data).ForContext("CalbackResponse", JsonSerializer.Serialize(callback, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
 
-            await _mediator.Send(new CreateOrderHistoryCommand
+           _mediator.Send(new CreateOrderHistoryCommand
             {
                 OrderId = variables.InstanceId.ToString(),
                 State = "Consume Callback status = " + callback.StatusCode,
@@ -582,7 +582,7 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (response.Data.OrderState == OrderState.Reject || response.Data.OrderState == OrderState.Approve)
                 {
-                    await _mediator.Send(new CreateOrderHistoryCommand
+                   _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId,
                         State = "Workflow tamamlandı",
@@ -660,7 +660,7 @@ public class ContractApprovalService : IContractApprovalService
                         createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
                     }
 
-                    await _mediator.Send(createOrderHistoryCommand);
+                     _mediator.Send(createOrderHistoryCommand);
 
                     data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 }
@@ -708,7 +708,7 @@ public class ContractApprovalService : IContractApprovalService
                     createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
                 }
 
-                await _mediator.Send(createOrderHistoryCommand);
+                 _mediator.Send(createOrderHistoryCommand);
             }
             else
             {

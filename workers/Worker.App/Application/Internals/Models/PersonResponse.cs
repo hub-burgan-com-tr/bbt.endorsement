@@ -38,13 +38,13 @@ namespace Worker.App.Application.Internals.Models
     public partial class GsmPhones
     {
         [JsonProperty("country")]
-        public int Country { get; set; }
+        public int ? Country { get; set; }
 
         [JsonProperty("prefix")]
-        public int Prefix { get; set; }
+        public int ? Prefix { get; set; }
 
         [JsonProperty("number")]
-        public int Number { get; set; }
+        public int ? Number { get; set; }
     }
 
     public partial class Name

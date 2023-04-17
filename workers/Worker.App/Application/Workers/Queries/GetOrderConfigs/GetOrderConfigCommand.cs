@@ -36,7 +36,7 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                     x.Config.MaxRetryCount,
                     x.Config.NotPersonalMail,
                     x.Config.NoNotification,
-                    x.Config.Device
+                    x.Config.Device,
                 }).FirstOrDefault();
 
             var response = new GetOrderConfigResponse
