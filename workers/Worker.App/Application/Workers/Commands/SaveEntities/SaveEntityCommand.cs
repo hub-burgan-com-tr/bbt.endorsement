@@ -69,6 +69,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.Device = startFormRequest.OrderConfig.Device;
                 config.NotPersonalMail = startFormRequest.OrderConfig.NotPersonalMail;
                 config.NoNotification = startFormRequest.OrderConfig.NoNotification;
+                config.ParameterId = string.IsNullOrWhiteSpace(startFormRequest.OrderConfig.ParameterId)?null: startFormRequest.OrderConfig.ParameterId;
             }
 
             var actions = new List<DocumentAction>();
@@ -313,8 +314,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     FileType = item.Type.ToString() == ((int)ContentType.PlainText).ToString() ? ContentType.PlainText.ToString() : GetFileType(item.FileType),
                     MimeType = item.FileType,
                     Created = _dateTime.Now,
-                    DocumentActions = actions,
-                    FormDefinitionId = startRequest.FormDefinitionId
+                    DocumentActions = actions
                 });
             }
 
@@ -327,6 +327,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.NotPersonalMail = startRequest.Config.NotPersonalMail;
                 config.NoNotification = startRequest.Config.NoNotification;
                 config.Device = startRequest.Config.Device;
+                config.ParameterId = string.IsNullOrWhiteSpace(startRequest.Config.ParameterId) ? null : startRequest.Config.ParameterId;
+
 
             }
             var customer = GetCustomerId(startRequest.Approver);

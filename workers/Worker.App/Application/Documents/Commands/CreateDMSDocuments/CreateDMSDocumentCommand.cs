@@ -33,29 +33,36 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
         var documents = _context.Documents.Include(x => x.FormDefinition.Parameter).Where(x => x.OrderId == request.InstanceId.ToString());
         var person = order.Person;
         var customer = order.Customer;
-
-        var dmses= new List<CreateDMSDocumentResponse>();
-        if(order.State != OrderState.Approve.ToString())
+        string dmsReferenceId, dmsReferenceName;
+        int? dmsReferenceKey = 0;
+        var dmses = new List<CreateDMSDocumentResponse>();
+        if (order.State != OrderState.Approve.ToString())
             return Response<List<CreateDMSDocumentResponse>>.Success(dmses, 200);
 
         foreach (var document in documents)
         {
             if (document.FormDefinition != null)
             {
-                var dmsReferenceId = document.FormDefinition.Parameter.DmsReferenceId.ToString();
-                var dmsReferenceKey = document.FormDefinition.Parameter.DmsReferenceKey;
-                var dmsReferenceName = document.FormDefinition.Parameter.DmsReferenceName + "-(" + document.Name + ")";
-                var dms = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName, request.InstanceId);
-                dmses.Add(dms);
+                dmsReferenceId = document.FormDefinition.Parameter.DmsReferenceId.ToString();
+                dmsReferenceKey = document.FormDefinition.Parameter.DmsReferenceKey;
+                dmsReferenceName = document.FormDefinition.Parameter.DmsReferenceName + "-(" + document.Name + ")";
+               
+            }
+            else if (!string.IsNullOrEmpty(order.Config.ParameterId))
+            {
+                dmsReferenceId = order.Config.Parameter.DmsReferenceId.ToString();
+                dmsReferenceKey = order.Config.Parameter.DmsReferenceKey;
+                dmsReferenceName = document.FormDefinition.Parameter.DmsReferenceName + "-(" + document.Name + ")";
             }
             else
             {
-                var dmsReferenceId = "1833";
-                var dmsReferenceKey = 1200;
-                var dmsReferenceName = "Diğer Elementer Sigorta Poliçesi";
-                var dms = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName,  request.InstanceId);
-                dmses.Add(dms);
+                dmsReferenceId = "1833";
+                dmsReferenceKey = 1200;
+                dmsReferenceName = "Diğer Elementer Sigorta Poliçesi";
+           
             }
+            var dms = CreateDMSDocumentSend(document, customer, dmsReferenceId, dmsReferenceKey, dmsReferenceName, request.InstanceId);
+            dmses.Add(dms);
         }
 
         return Response<List<CreateDMSDocumentResponse>>.Success(dmses, 200);

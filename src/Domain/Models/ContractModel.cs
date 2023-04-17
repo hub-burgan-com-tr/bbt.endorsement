@@ -65,7 +65,6 @@ public class StartRequest
     /// </summary>
     public string Id { get; set; }
     public string Title { get; set; }
-    public string FormDefinitionId { get; set; }
 
     public OrderConfig Config { get; set; }
     public OrderReference Reference { get; set; }
@@ -146,6 +145,7 @@ public class OrderConfig
     public bool NotPersonalMail { get; set; }
     public bool Device { get; set; }
     public bool NoNotification { get; set; }
+    public string ParameterId { get; set; }
     public string NotifyMessageSMS { get; set; }
     public string NotifyMessagePush { get; set; }
     public string RenotifyMessageSMS { get; set; }
