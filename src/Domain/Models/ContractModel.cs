@@ -65,6 +65,7 @@ public class StartRequest
     /// </summary>
     public string Id { get; set; }
     public string Title { get; set; }
+    public string FormDefinitionId { get; set; }
 
     public OrderConfig Config { get; set; }
     public OrderReference Reference { get; set; }
