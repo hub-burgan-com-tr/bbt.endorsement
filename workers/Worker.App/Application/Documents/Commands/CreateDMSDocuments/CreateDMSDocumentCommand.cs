@@ -52,7 +52,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
             {
                 dmsReferenceId = order.Config.Parameter.DmsReferenceId.ToString();
                 dmsReferenceKey = order.Config.Parameter.DmsReferenceKey;
-                dmsReferenceName = document.FormDefinition.Parameter.DmsReferenceName + "-(" + document.Name + ")";
+                dmsReferenceName = order.Config.Parameter.DmsReferenceName + "-(" + document.Name + ")";
             }
             else
             {
