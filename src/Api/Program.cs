@@ -80,6 +80,8 @@ Log.Logger = new LoggerConfiguration()
 //builder.Host.UseSerilog(((ctx, lc) => lc.ReadFrom.Configuration(Configuration)));
 
 builder.Host.UseSerilog((context, services, configuration) => configuration
+                    //.MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
+                    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
                     .ReadFrom.Configuration(context.Configuration)
                     .ReadFrom.Services(services)
                     .Enrich.WithElasticApmCorrelationInfo()
@@ -97,7 +99,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                             BatchPostingLimit = 1,
                             CustomFormatter = new EcsTextFormatter()
                         });
-                        e.Console(outputTemplate: "[{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj} {NewLine}{Exception}");
+                        e.Console(outputTemplate: "{Level}: [{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj} {NewLine}{Exception}");
                     }));
 builder.Services.Configure<FormOptions>(x =>
 {
