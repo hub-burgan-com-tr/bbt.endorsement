@@ -79,6 +79,7 @@ Log.Logger = new LoggerConfiguration()
    .CreateLogger();
 //builder.Host.UseSerilog();
 builder.Host.UseSerilog((context, services, configuration) => configuration
+                    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
                     .ReadFrom.Configuration(context.Configuration)
                     .ReadFrom.Services(services)
                     .Enrich.WithElasticApmCorrelationInfo()
