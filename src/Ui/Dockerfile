@@ -12,6 +12,6 @@ RUN npm install  @angular-devkit/build-angular@13.2.6 --force
 RUN npm run build 
 RUN ng build --configuration=test   --project=dms --base-href / 
 ### STAGE 2: Run ###
-FROM docker.io/nginx:1.21.6-alpine
+FROM docker.io/nginx:1.24.0-alpine
 COPY src/Ui/nginx-common.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist/dms /usr/share/nginx/html
