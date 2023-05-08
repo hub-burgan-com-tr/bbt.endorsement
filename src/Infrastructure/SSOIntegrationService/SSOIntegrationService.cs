@@ -28,7 +28,7 @@ namespace Infrastructure.SSOIntegration
             doc = new XmlDocument();
         }
         #region SearchUserInfo
-        public async Task<Response<string>> SearchUserInfo(string loginName, string firstName, string lastName)
+        public async Task<Response<string>> SearchUserInfo(string loginName, string firstName="", string lastName = "")
         {
 
             var restClient = new RestClient(_SSOIntegrationServiceUrl);

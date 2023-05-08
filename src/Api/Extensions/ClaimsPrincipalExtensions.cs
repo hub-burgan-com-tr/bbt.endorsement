@@ -18,18 +18,20 @@ public static class ClaimsPrincipalExtensions
 
         return citizenshipNumber;
     }
-    public static  bool IsCredentials(this ClaimsPrincipal principal, string requestUserName)
+    public static bool IsCredentials(this ClaimsPrincipal principal, string requestUserName)
     {
         try
         {
-            if (!string.IsNullOrEmpty(requestUserName)&& !principal.Claims.Any(c => c.Type == "credentials"))
+            if (!string.IsNullOrEmpty(requestUserName) && !principal.Claims.Any(c => c.Type == "credentials"))
             {
+                Log.Information("GetSSOClaims start " + requestUserName);
+
                 var sync = GetSSOClaims(principal, requestUserName).Result;
             }
         }
-        catch  
+        catch (Exception e)
         {
-            Log.Warning("GetSSOClaims Hata Alindi UserName= "  +requestUserName);
+            Log.Warning("GetSSOClaims Hata Alindi UserName= " + requestUserName + " " + e.Message);
         }
 
         var credentials = principal.Claims.Where(c => c.Type == "credentials").ToList();
@@ -37,7 +39,7 @@ public static class ClaimsPrincipalExtensions
         return credentials.Count > 0;
     }
 
-    private static async Task<ClaimsPrincipal> GetSSOClaims( ClaimsPrincipal principal,string requestUserName)
+    private static async Task<ClaimsPrincipal> GetSSOClaims(ClaimsPrincipal principal, string requestUserName)
     {
         var person = new OrderPerson();
 
@@ -50,22 +52,29 @@ public static class ClaimsPrincipalExtensions
             return null;
         }
         var res = new SSOIntegrationResponse();
-        res.RegisterId = Convert.ToInt32(Regex.Match(requestUserName, @"\d+").Value).ToString();
         var ssoService = new SSOIntegrationService();
 
-        var resUserByRegisterId = await ssoService.GetUserByRegisterId(res.RegisterId);
-        if (resUserByRegisterId.StatusCode == 200)
+        var responseRegisterId = await ssoService.SearchUserInfo(requestUserName);
+        Log.Information("SSOResponseMapClaims " + responseRegisterId);
+        if (responseRegisterId.StatusCode == 200)
         {
-            res.UserInfo = resUserByRegisterId.Data;
-            var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.UserInfo.LoginName);
-            res.UserAuthorities = resAuthorityForUser.Data;
+            res.RegisterId = responseRegisterId.Data;
+            Log.Information(" responseRegisterId.Data " + responseRegisterId.Data);
+
+            var resUserByRegisterId = await ssoService.GetUserByRegisterId(res.RegisterId);
+            if (resUserByRegisterId.StatusCode == 200)
+            {
+                var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.RegisterId);
+                Log.Information("resAuthorityForUser.Data " + resAuthorityForUser.Data);
+                res.UserAuthorities = resAuthorityForUser.Data;
+            }
         }
-        
+
         return SSOResponseMapClaims(principal, res);
     }
-    private static ClaimsPrincipal SSOResponseMapClaims( ClaimsPrincipal principal, SSOIntegrationResponse ssoResponse )
+    private static ClaimsPrincipal SSOResponseMapClaims(ClaimsPrincipal principal, SSOIntegrationResponse ssoResponse)
     {
-        var identity =  principal.Identity as ClaimsIdentity;
+        var identity = principal.Identity as ClaimsIdentity;
         identity.AddClaim(new Claim("username", ssoResponse.UserInfo.CitizenshipNumber));
         identity.AddClaim(new Claim("customer_number", ssoResponse.UserInfo.CustomerNo));
         identity.AddClaim(new Claim("given_name", ssoResponse.UserInfo.FirstName));
@@ -78,6 +87,8 @@ public static class ClaimsPrincipalExtensions
         identity.AddClaim(new Claim("credentials", ssoResponse.UserAuthorities.Where(x => x.Name == "isReadyFormCreator").Select(x => x.Name + "###" + x.Value).FirstOrDefault()));
         identity.AddClaim(new Claim("credentials", ssoResponse.UserAuthorities.Where(x => x.Name == "isNewFormCreator").Select(x => x.Name + "###" + x.Value).FirstOrDefault()));
         identity.AddClaim(new Claim("credentials", ssoResponse.UserAuthorities.Where(x => x.Name == "isFormReader").Select(x => x.Name + "###" + x.Value).FirstOrDefault()));
+        identity.AddClaim(new Claim("credentials", ssoResponse.UserAuthorities.Where(x => x.Name == "isUIVisible").Select(x => x.Name + "###" + x.Value).FirstOrDefault()));
+        Log.Information("SSOResponseMapClaims " + ssoResponse);
         return principal;
     }
 
