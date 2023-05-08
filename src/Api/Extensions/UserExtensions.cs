@@ -60,6 +60,12 @@ public static class UserExtensions
                         person.IsBranchFormReader = true;
                     else
                         person.IsBranchFormReader = false;
+                }  else if (value[0] == "isUIVisible")
+                {
+                    if (value[1] == "1")
+                        person.isUIVisible = true;
+                    else
+                        person.isUIVisible = false;
                 }
             }
         }
@@ -96,6 +102,7 @@ public static class UserExtensions
                 person.IsFormReader = Convert.ToBoolean(_httpContextAccessor.HttpContext.Session.GetString("IsFormReader"));
                 person.IsNewFormCreator = Convert.ToBoolean(_httpContextAccessor.HttpContext.Session.GetString("IsNewFormCreator"));
                 person.IsReadyFormCreator = Convert.ToBoolean(_httpContextAccessor.HttpContext.Session.GetString("IsReadyFormCreator"));
+                person.isUIVisible = Convert.ToBoolean(_httpContextAccessor.HttpContext.Session.GetString("isUIVisible"));
             }
         }
 

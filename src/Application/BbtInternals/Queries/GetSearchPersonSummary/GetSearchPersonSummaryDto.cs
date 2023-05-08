@@ -31,5 +31,6 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
         public bool IsFormReader { get; set; } // Tüm Onay Emirlerini İzleyebilir
         public bool IsBranchFormReader { get; set; } //Farklı Şube Onay İsteme
         public bool IsBranchApproval { get; set; } //Farklı Şube Onay Listeleme
+        public bool isUIVisible { get; set; } //UI Görüntüleme
     }
 }

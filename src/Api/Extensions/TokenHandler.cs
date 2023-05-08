@@ -37,6 +37,7 @@ public class TokenHandler
                 new Claim("Last",last),
                 new Claim("IsStaff",user.IsStaff.ToString()),
                 new Claim("IsBranchApproval",user.Authory.IsBranchApproval.ToString()),
+                new Claim("isUIVisible",user.Authory.isUIVisible.ToString()),
                 new Claim("IsBranchFormReader",user.Authory.IsBranchFormReader.ToString()),
                 new Claim("IsFormReader",user.Authory.IsFormReader.ToString()),
                 new Claim("IsNewFormCreator",user.Authory.IsNewFormCreator.ToString()),

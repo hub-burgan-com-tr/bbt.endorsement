@@ -38,7 +38,7 @@ namespace Application.BbtInternals.Queries.GetSearchPersonSummary
                 Email = x.Email,
                 TaxNo=x.TaxNo,
                 GsmPhone = x.GsmPhone,
-                Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader } : null,
+                Authory = x.IsStaff == true && x.Authory != null ? new AuthoryModel { IsBranchApproval = x.Authory.IsBranchApproval, IsReadyFormCreator = x.Authory.IsReadyFormCreator, IsNewFormCreator = x.Authory.IsNewFormCreator, IsFormReader = x.Authory.IsFormReader, IsBranchFormReader = x.Authory.IsBranchFormReader, isUIVisible = x.Authory.isUIVisible } : null,
             }).OrderBy(x => x.CustomerNumber);
             return Response<GetSearchPersonSummaryResponse>.Success(new GetSearchPersonSummaryResponse { Persons = persons.OrderBy(x => x.CustomerNumber) }, 200);
         }

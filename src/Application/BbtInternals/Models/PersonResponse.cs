@@ -71,6 +71,9 @@ namespace Application.BbtInternals.Models
         public bool IsBranchFormReader { get; set; } //Farklı Şube Onay İsteme
         [JsonProperty("isbranchapproval")]
         public bool IsBranchApproval { get; set; } //Farklı Şube Onay Listeleme
+                                                   //
+        [JsonProperty("isUIVisible")]
+        public bool isUIVisible { get; set; } //Farklı Şube Onay Listeleme
     }
 
 }
