@@ -20,11 +20,12 @@ public static class ClaimsPrincipalExtensions
     }
     public static bool IsCredentials(this ClaimsPrincipal principal, string requestUserName)
     {
+        Log.Information("IsCredentials start " + requestUserName);
         try
         {
-            if (!string.IsNullOrEmpty(requestUserName) && !principal.Claims.Any(c => c.Type == "credentials"))
+            if (!string.IsNullOrEmpty(requestUserName) && !principal.Claims.Any(c => c.Type == "credentials" && c.Value.IndexOf("isReadyFormCreator")==-1))
             {
-                Log.Information("GetSSOClaims start " + requestUserName);
+                Log.Information("GetSSOClaims start  " + requestUserName);
 
                 var sync = GetSSOClaims(principal, requestUserName).Result;
             }
