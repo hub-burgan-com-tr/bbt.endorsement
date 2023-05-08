@@ -104,6 +104,7 @@ public class OrderPerson
     public bool IsFormReader { get; set; }
     public bool IsNewFormCreator { get; set; }
     public bool IsReadyFormCreator { get; set; }
+    public bool isUIVisible { get; set; }
 }
 public class OrderDocument
 {
