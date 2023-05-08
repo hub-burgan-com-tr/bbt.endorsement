@@ -23,7 +23,7 @@ public static class ClaimsPrincipalExtensions
         Log.Information("IsCredentials start " + requestUserName);
         try
         {
-            if (!string.IsNullOrEmpty(requestUserName) && !principal.Claims.Any(c => c.Type == "credentials" && c.Value.IndexOf("isReadyFormCreator")==-1))
+            if (!string.IsNullOrEmpty(requestUserName) && !principal.Claims.Any(c => c.Type == "credentials" && c.Value.IndexOf("isReadyFormCreator") != -1))
             {
                 Log.Information("GetSSOClaims start  " + requestUserName);
 
@@ -65,7 +65,8 @@ public static class ClaimsPrincipalExtensions
             var resUserByRegisterId = await ssoService.GetUserByRegisterId(res.RegisterId);
             if (resUserByRegisterId.StatusCode == 200)
             {
-                var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.RegisterId);
+                res.UserInfo = resUserByRegisterId.Data;
+                var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.UserInfo.LoginName);
                 Log.Information("resAuthorityForUser.Data " + resAuthorityForUser.Data);
                 res.UserAuthorities = resAuthorityForUser.Data;
             }
@@ -76,6 +77,10 @@ public static class ClaimsPrincipalExtensions
     private static ClaimsPrincipal SSOResponseMapClaims(ClaimsPrincipal principal, SSOIntegrationResponse ssoResponse)
     {
         var identity = principal.Identity as ClaimsIdentity;
+        if (identity.FindFirst(x => x.Type == "username") != null)
+        {
+            identity.RemoveClaim(identity.FindFirst(x => x.Type == "username"));
+        }
         identity.AddClaim(new Claim("username", ssoResponse.UserInfo.CitizenshipNumber));
         identity.AddClaim(new Claim("customer_number", ssoResponse.UserInfo.CustomerNo));
         identity.AddClaim(new Claim("given_name", ssoResponse.UserInfo.FirstName));
