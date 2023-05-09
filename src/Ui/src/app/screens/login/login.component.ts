@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
               if (res.isStaff) {
                 console.log(res);
                 console.log("res");
+                console.log("res");
 
                 this.router.navigate(['approvals-i-want']);
               } else {

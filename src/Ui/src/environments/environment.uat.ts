@@ -4,7 +4,7 @@ export const environment = {
 
   baseUrl: 'https://test-bbt-endorsementapi.apps.nonprod.ebt.bankl',
 
-  loginUrl: 'https://test-bbt-endorsementui.apps.nonprod.ebt.bank/approvals-i-want',
+  loginUrl: 'https://test-bbt-endorsementui.apps.nonprod.ebt.bank/login',
 
   clientSecret: 'A615C904-4E98-4153-8C53-B9174D4FD32B',
 
