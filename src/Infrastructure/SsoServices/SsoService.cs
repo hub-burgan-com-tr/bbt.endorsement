@@ -24,9 +24,9 @@ public class SsoService : ISsoService
                     var content = new FormUrlEncodedContent(new[]
                     {
                         new KeyValuePair<string, string>("code", code),
-                        new KeyValuePair<string, string>("client_id", "Endorsement"),
-                        new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                        new KeyValuePair<string, string>("client_secret", "A615C904-4E98-4153-8C53-B9174D4FD32B"),
+                        new KeyValuePair<string, string>("client_id", ""),
+                        new KeyValuePair<string, string>("grant_type", ""),
+                        new KeyValuePair<string, string>("client_secret", ""),
                         new KeyValuePair<string, string>("redirect_uri", "login"),
                     });
                     var result = await client.PostAsync("/connect/token", content);
