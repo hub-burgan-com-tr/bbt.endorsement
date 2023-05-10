@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mssql-pvc
+  namespace: bbt-loyalty
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteOnce #  must be the same as PersistentVolume
+  resources:
+    requests:
+      storage: 50Gi

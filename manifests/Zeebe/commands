@@ -1,0 +1,4 @@
+helm repo add camunda-cloud https://helm.camunda.io
+helm repo update
+helm install camuda-zeebe camunda-cloud/ccsm-helm -n bbt-endorsement
+

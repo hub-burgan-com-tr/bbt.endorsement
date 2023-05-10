@@ -1,0 +1,21 @@
+<app-main-content blockTitle="Onayladıklarım" subTitle="Lütfen Seçim Yapınız">
+  <div class="box">
+    <app-list-item *ngFor="let d of data" [data]="d" [routerLink]="['./detail']"
+                   [queryParams]="{orderId:d.orderId}"></app-list-item>
+  </div>
+  <div class="d-flex align-items-center justify-content-end mt-3" *ngIf="data && data.length > 0">
+    <span>Page:</span>
+    <select class="form-control-sm ms-2 me-2" [(ngModel)]="pageNumber" (change)="getMyApproval()">
+      <option *ngFor='let i of counter(totalPages); let val = index' [value]="val+1">{{val + 1}}</option>
+    </select>
+    <span class="me-3">of {{totalPages}}</span>
+    <button class="bi-chevron-left me-2"
+            (click)="changePage(-1)"
+            [disabled]="!hasPreviousPage"
+            [ngClass]="{'disable-paging-button':!hasPreviousPage}"></button>
+    <button class="bi-chevron-right"
+            (click)="changePage(+1)"
+            [disabled]="!hasNextPage"
+            [ngClass]="{'disable-paging-button':!hasNextPage}"></button>
+  </div>
+</app-main-content>
