@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
           this.authService.login(res.access_token, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
             if (res) {
               if (res.isStaff) {
-                if(!res.authory.isUIvisible)
+                if(!res.authory.isUIVisible)
                 {
                   this.authService.logout();
                 }

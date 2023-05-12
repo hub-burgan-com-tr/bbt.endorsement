@@ -14,7 +14,7 @@ export interface User {
     "isFormReader": boolean,
     "isBranchFormReader": boolean,
     "isBranchApproval": boolean,
-    "isUIvisible": boolean
+    "isUIVisible": boolean
   },
   "email": string,
   "gsmPhone": string,
