@@ -13,7 +13,8 @@ export interface User {
     "isNewFormCreator": boolean,
     "isFormReader": boolean,
     "isBranchFormReader": boolean,
-    "isBranchApproval": boolean
+    "isBranchApproval": boolean,
+    "isUIvisible": boolean
   },
   "email": string,
   "gsmPhone": string,
