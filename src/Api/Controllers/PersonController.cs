@@ -36,7 +36,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> PersonSearch([FromQuery] string name)
         {
-            var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name });
+            var person = UserExtensions.GetOrderPerson(User.Claims);
+            var response = await Mediator.Send(new GetSearchPersonSummaryQuery() { Name = name, Person = person });
             return Ok(response);
         }
 
