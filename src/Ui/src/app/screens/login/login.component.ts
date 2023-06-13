@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
         this.authService.ssoLogin(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
           this.authService.login(res.access_token, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
             if (res) {
-              if (res.isStaff) {
+              if (res.isStaff && res.authory.isUIVisible) {
                 this.router.navigate(['approvals-i-want']);
               } else {
                 this.router.navigate(['my-approval']);
