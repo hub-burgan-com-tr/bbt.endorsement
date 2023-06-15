@@ -25,6 +25,7 @@ public class Entegration
 
     public string ApiSecret { get; set; }
     public string ClientId { get; set; }
+    public string TsizlUrl { get; set; }
 }
 
 public class TokenOptions

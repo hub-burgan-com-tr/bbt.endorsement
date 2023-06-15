@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
+using Infrastructure;
+using Infrastructure.TsizlLFora;
 
 namespace Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 
@@ -148,5 +150,33 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
         }
 
         return response;
+    }
+
+    public async Task<Response<ResponseTsizl>> TsizlForaHandle(CreateDMSDocumentCommand request, CancellationToken cancellationToken)
+    {
+        var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString() 
+                                                                                                    && x.Title == "Nitelikli Yatırımcı Beyanı - NYB");
+
+        if (order == null)
+            return Response<ResponseTsizl>.Success(null, 404);
+
+        //var documents = _context.Documents.Include(x => x.FormDefinition.Parameter).Where(x => x.OrderId == request.InstanceId.ToString());
+        //var person = order.Person;
+        var customer = order.Customer;
+        var dmses = new ResponseTsizl();
+        
+        if (order.State != OrderState.Approve.ToString())
+            return Response<ResponseTsizl>.Success(dmses, 200);
+        
+        TsizlFora tsizlFora = new TsizlFora();
+
+        dmses = tsizlFora.DoAutomaticEngagementPlain(customer.BranchCode, customer.CustomerNumber.ToString()).Result.Data;
+
+        if (dmses.HasError)
+        {
+            return Response<ResponseTsizl>.Fail(dmses.ErrorMessage, 417);
+        }
+
+        return Response<ResponseTsizl>.Success(dmses, 200);
     }
 }

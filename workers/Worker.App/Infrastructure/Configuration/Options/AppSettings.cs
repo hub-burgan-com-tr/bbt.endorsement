@@ -19,6 +19,7 @@ public class Entegration
     public string TemplateEngine { get; set; }
     public string Sso { get; set; }
     public string MessagingGateway { get; set; }
+    public string TsizlUrl { get; set; }
 }
 
 public class ServiceEndpoint

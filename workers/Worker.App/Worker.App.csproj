@@ -55,6 +55,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\dms\Dms.Integration.Infrastructure\Dms.Integration.Infrastructure.csproj" />
 	  <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
+	  <ProjectReference Include="..\..\src\Infrastructure\Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

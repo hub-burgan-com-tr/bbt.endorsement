@@ -7,5 +7,6 @@ public static class StaticValues
     public static string Sso { get; set; }
     public static string DMSService { get; set; }
     public static string MessagingGateway { get; set; }
+    public static string TsizlUrl { get; set; }
 }
 
