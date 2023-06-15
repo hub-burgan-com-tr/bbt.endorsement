@@ -12,6 +12,7 @@ public static class StaticValuesExtensions
         StaticValues.DMSService = settings.ServiceEndpoint.DMSService;
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
         StaticValues.MessagingGateway = settings.Entegration.MessagingGateway;
+        StaticValues.TsizlUrl = settings.Entegration.TsizlUrl;
     }
 }
 

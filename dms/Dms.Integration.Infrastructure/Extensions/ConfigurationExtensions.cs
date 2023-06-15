@@ -12,4 +12,8 @@ public static class ConfigurationExtensions
     {
         return config.GetSection("Entegration")["MessagingGateway"];
     }
+    public static string GetTsizlUrl(this IConfiguration config)
+    {
+        return config.GetSection("Entegration")["TsizlUrl"];
+    }
 }

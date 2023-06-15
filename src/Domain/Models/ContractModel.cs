@@ -28,7 +28,7 @@ public class ContractModel
     public bool RetryEnd { get; set; }
     public int Limit { get; set; }
     public int DmsRetryLimit { get; set; }
-
+    public bool IsTSIZL { get; set; }
     public int MaxRetryCount { get; set; }
     public string RetryFrequence { get; set; }
     public string ExpireInMinutes { get; set; }

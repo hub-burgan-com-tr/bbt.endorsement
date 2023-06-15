@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
+using Infrastructure;
 
 namespace Worker.App.Application.Documents.Commands.CreateDMSDocuments;
 
@@ -149,4 +150,6 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
         return response;
     }
+
+   
 }

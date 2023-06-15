@@ -7,6 +7,7 @@ public static class StaticValues
     public static string SSOIntegrationService { get; set; }
     //public static string Sso { get; set; }
     public static string DMSService { get; set; }
+    public static string TsizlUrl { get; set; }
 
     public static string Authority { get; set; }
     public static string ApiGateway { get; set; }
