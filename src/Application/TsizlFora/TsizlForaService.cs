@@ -9,25 +9,26 @@ using System.Net;
 using Application.Common.Interfaces;
 using System.Xml;
 using Application.Common.Models;
+using Application.TsizlFora.Model;
 
-namespace Infrastructure.TsizlLFora
+namespace Application.TsizlLFora
 {
-    public class TsizlFora
+    public class TsizlForaService
     {
         private readonly string _url;
         static XmlDocument doc;
 
-        static ResponseTsizl responseTsizl;
+        static TSIZLResponse responseTsizl;
 
-        public TsizlFora()
+        public TsizlForaService()
         {
             //_url = config.GetTsizlUrl();
             _url = StaticValues.TsizlUrl;
 
-            responseTsizl= new ResponseTsizl();
+            responseTsizl= new TSIZLResponse();
         }
 
-        public async Task<Response<ResponseTsizl>> DoAutomaticEngagementPlain(string accountBranchCode, string accountNumber)
+        public async Task<Response<TSIZLResponse>> DoAutomaticEngagementPlain(string accountBranchCode, string accountNumber)
         {
             var restClient = new RestClient(_url);
             var restRequest = new RestRequest("?op=DoAutomaticEngagementPlain", Method.Post);
@@ -78,10 +79,10 @@ namespace Infrastructure.TsizlLFora
                 responseTsizl.HasError = true; 
                 responseTsizl.ErrorMessage = "TSIZL(DoAutomaticEngagementPlain) servisine ulaşılamadı.";
 
-                return Response<ResponseTsizl>.Success(responseTsizl, 417);
+                return Response<TSIZLResponse>.Success(responseTsizl, 417);
             }
 
-            return Response<ResponseTsizl>.Success(responseTsizl, 200);
+            return Response<TSIZLResponse>.Success(responseTsizl, 200);
         }
 
         private void TsizlResponse(string content)
@@ -102,12 +103,5 @@ namespace Infrastructure.TsizlLFora
         }
     }
 
-    public class ResponseTsizl
-    {
-        public ResponseTsizl() { }
-
-        public string ReferenceNumber { get; set; }
-        public bool HasError { get; set; }
-        public string ErrorMessage { get; set; }
-    }
+ 
 }
