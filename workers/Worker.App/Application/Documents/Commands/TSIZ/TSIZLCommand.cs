@@ -46,9 +46,7 @@ public class TSIZLCommandHandler : IRequestHandler<TSIZLCommand, Response<TSIZLR
         if (order.State != OrderState.Approve.ToString())
             return Response<TSIZLResponse>.Success(dmses, 200);
         
-        var  tsizlForaService = new TsizlForaService();
-
-        dmses = tsizlForaService.DoAutomaticEngagementPlain(customer.BranchCode, customer.CustomerNumber.ToString()).Result.Data;
+        dmses = _tsizlForaService.DoAutomaticEngagementPlain(customer.BranchCode, customer.CustomerNumber.ToString()).Result.Data;
         if (dmses.HasError)
         {
             return Response<TSIZLResponse>.Fail(dmses.ErrorMessage, 417);
