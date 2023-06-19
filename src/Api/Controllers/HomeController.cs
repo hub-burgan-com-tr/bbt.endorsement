@@ -3,6 +3,7 @@ using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Infrastructure.SsoServices;
 using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Serilog;
 using System.Net;
 
@@ -28,6 +29,8 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public GetSearchPersonSummaryDto Login()
         {
+            Log.Information("Login-Start: " );
+
             try
             {
                 string access_token = "";
@@ -36,8 +39,11 @@ namespace Api.Controllers
                 {
                     access_token = value.Substring("Bearer ".Length);
                 }
+                Log.Information("Login-Start:Bearer ");
 
                 var response = _userService.AccessTokenResource(access_token).Result;
+
+                Log.Information("Login-Start:AccessTokenResource ");
 
                 if (response.IsLogin == false)
                 {
@@ -60,8 +66,10 @@ namespace Api.Controllers
                     BusinessLine = response.BusinessLine != null ? response.BusinessLine : "",
                     BranchCode = response.BranchCode != null ? response.BranchCode : ""
                 };
+                Log.Information("Login-Start result:  " + JsonConvert.SerializeObject(result));
 
                 GetCredentials(result, response);
+                Log.Information("Login-Start result2:  " + JsonConvert.SerializeObject(result));
 
 
                 if (result != null)
