@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Worker.App.Application.Documents.Commands.CreateDMSDocuments;
+using Worker.App.Application.Documents.Commands.TSIZL;
 using Worker.App.Application.Messagings.Commands.PersonSendMailTemplates;
 using Worker.App.Application.Messagings.Commands.SendMailTemplates;
 using Worker.App.Application.Messagings.Commands.SendSmsTemplates;
@@ -106,8 +107,7 @@ public class ContractApprovalService : IContractApprovalService
                         Model = variables,
                         ProcessInstanceKey = job.ProcessInstanceKey
                     }).Result;
-                    var search = "Nitelikli Yatırımcı Beyanı - NYB";//todo:sistem parametreleri gibi bir tablodan cekicegiz sonra 
-                    variables.IsTSIZL = variables.StartFormRequest.Title.IndexOf(search) + variables.StartRequest.Title.IndexOf(search) >=0;
+                  
 
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                     var success = jobClient.NewCompleteJobCommand(job.Key)
@@ -403,13 +403,16 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"CreateTSIZL");
-                _mediator.Send(new TSIZLCommand { InstanceId = variables.InstanceId.ToString() });
+                var command = _mediator.Send(new TSIZLCommand
+                {
+                    InstanceId = variables.InstanceId
+                }).Result;
 
                 _mediator.Send(new CreateOrderHistoryCommand
                 {
                     OrderId = variables.InstanceId.ToString(),
                     State = "CreateTSIZL Calistirildi",
-                    Description = "",
+                    Description = command.ToString(),
                     IsStaff = true
                 });
                 variables.IsProcess = true;
@@ -790,6 +793,11 @@ public class ContractApprovalService : IContractApprovalService
                     variables.IsProcess = true;
                     variables.DmsIds = dms.Data.Select(x => new DMSDocumentResponse { DmsReferenceKey = x.DmsReferenceKey, DmsReferenceName = x.DmsReferenceName, DmsRefId = x.DmsRefId }).ToList();
                     //throw new Exception();
+                    var tsizAny  = _mediator.Send(new TSIZLAnyCommand
+                    {
+                        InstanceId = variables.InstanceId
+                    }).Result;
+                    variables.IsTSIZL = tsizAny.Data;
                 }
                 catch (Exception ex)
                 {

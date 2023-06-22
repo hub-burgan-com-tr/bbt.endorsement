@@ -130,8 +130,9 @@ using (var scope = app.Services.CreateScope())
     var serviceProvider = scope.ServiceProvider;
 
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
-    if (zeebeService != null)
+    if (zeebeService != null &&( environment.EnvironmentName == "Prod "|| environment.EnvironmentName == "Uat"))
     {
+
         zeebeService.Deploy(settings.Zeebe.ModelFilename);
     }
 

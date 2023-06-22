@@ -44,6 +44,7 @@ namespace Infrastructure.Configuration
             services.AddSingleton<IContractApprovalService, ContractApprovalService>();
             services.AddSingleton<IInternalsService, InternalsService>();
             services.AddSingleton<IMessagingService, MessagingService>();
+            services.AddSingleton<ITsizlForaService, TsizlForaService>();
         }
     }
 }
