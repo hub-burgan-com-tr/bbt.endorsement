@@ -337,10 +337,10 @@
         <bpmn:outgoing>Flow_1twimsa</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_09przjm" sourceRef="Gateway_04j6rlm" targetRef="Activity_0ezh5nt">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsTSIZL= true</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsTSIZL = true</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1twimsa" sourceRef="Gateway_04j6rlm" targetRef="Activity_0jfywen">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsTSIZL= false</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">= IsTSIZL = false</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0ft0brt" sourceRef="Activity_0ezh5nt" targetRef="Activity_0jfywen" />
       <bpmn:sequenceFlow id="Flow_0bui9nd" sourceRef="Activity_0jfywen" targetRef="Event_005sint" />
