@@ -69,14 +69,15 @@ namespace Worker.App.Infrastructure.Services
                 #endregion
 
                 restRequest.AddParameter("application/soap+xml", body, ParameterType.RequestBody);
-                var restResponse = await restClient.ExecutePostAsync(restRequest);
-                TsizlResponse(restResponse.Content);
 
+                var restResponse = await restClient.ExecutePostAsync(restRequest);
                 if (!restResponse.IsSuccessful)
                 {
                     responseTsizl.HasError = true;
                     responseTsizl.ErrorMessage = "TSIZL(DoAutomaticEngagementPlain) servisine ulaşılamadı.";
                 }
+                TsizlResponse(restResponse.Content);
+              
                 return responseTsizl;
             }
             catch (Exception ex)
