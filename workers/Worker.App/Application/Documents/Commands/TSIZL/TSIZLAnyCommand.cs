@@ -32,6 +32,6 @@ public class TSIZLAnyCommandHandler : IRequestHandler<TSIZLAnyCommand, Response<
         var order = _context.Orders.Any(x => x.OrderId == request.InstanceId.ToString() && x.Title == "Nitelikli Yatırımcı Beyanı - NYB");
         //todo:sistem parametreleri tablosu eklenince burayıda degiştirecez
 
-        return Response<bool>.Success(true, 200);
+        return Response<bool>.Success(order, 200);
     }
 }
