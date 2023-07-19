@@ -52,6 +52,16 @@ else if (environment.EnvironmentName == "Uat")
         .AddUserSecrets<Program>()
         .Build();
 }
+else if (environment.EnvironmentName == "Preprod")
+{
+    Configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
+}
 else if (environment.EnvironmentName == "Test")
 {
     Configuration = builder
@@ -130,7 +140,7 @@ using (var scope = app.Services.CreateScope())
     var serviceProvider = scope.ServiceProvider;
 
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
-    if (zeebeService != null &&( environment.EnvironmentName == "Prod "|| environment.EnvironmentName == "Uat"))
+    if (zeebeService != null &&( environment.EnvironmentName == "Prod "|| environment.EnvironmentName == "Preprod"))
     {
 
         zeebeService.Deploy(settings.Zeebe.ModelFilename);

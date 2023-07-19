@@ -11,11 +11,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appsettings.Preprod.json" />
     <Content Remove="appsettings.Test.json" />
     <Content Remove="appsettings.Uat.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="appsettings.Preprod.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="appsettings.Uat.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

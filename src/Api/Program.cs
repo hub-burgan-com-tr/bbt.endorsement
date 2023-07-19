@@ -56,6 +56,14 @@ else if (Environment.EnvironmentName == "Test")
         .AddCommandLine(args)
         .AddUserSecrets<Program>()
         .Build();
+else if (Environment.EnvironmentName == "Preprod")
+    Configuration = builder
+        .Configuration
+        .AddJsonFile($"appsettings.{Environment.EnvironmentName}.json", false, true)
+        .AddEnvironmentVariables()
+        .AddCommandLine(args)
+        .AddUserSecrets<Program>()
+        .Build();
 else
     Configuration = builder
         .Configuration

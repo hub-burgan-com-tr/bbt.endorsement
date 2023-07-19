@@ -73,6 +73,14 @@
                 }
               ]
             },
+            "preprod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.preprod.ts"
+                }
+              ]
+            },
             "uat": {
               "fileReplacements": [
                 {
@@ -100,6 +108,9 @@
             },
             "test": {
               "browserTarget": "dms:build:test"
+            },
+            "preprod": {
+              "browserTarget": "dms:build:preprod"
             },
             "uat": {
               "browserTarget": "dms:build:uat"
