@@ -54,7 +54,7 @@ namespace Application.Endorsements.Commands.NewOrderForms
                 RetryFrequence = retryFrequence,
                 MaxRetryCount = config.MaxRetryCount,
                 Person = request.Person,
-                ContentData = request.ContentData,
+                ContentData = request.Request.Source=="file"?null: request.ContentData,
             };
             
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
