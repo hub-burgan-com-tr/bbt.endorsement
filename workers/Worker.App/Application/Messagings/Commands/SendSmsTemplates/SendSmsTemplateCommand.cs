@@ -14,7 +14,7 @@ public class SendSmsTemplateCommand : IRequest<Response<MessageResponse>>
 {
     public string OrderId { get; set; }
     public GsmPhones GsmPhone { get; set; }
-    public int CustomerNumber { get; set; }
+    public UInt64 CustomerNumber { get; set; }
 }
 
 public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateCommand, Response<MessageResponse>>

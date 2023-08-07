@@ -33,7 +33,7 @@ public class CustomerResponse
 public class CustomerList
 {
     [JsonProperty("customerNumber")]
-    public int CustomerNumber { get; set; }
+    public UInt64 CustomerNumber { get; set; }
     [JsonProperty("name")]
     public Name Name { get; set; }
     [JsonProperty("citizenshipNumber")]
