@@ -66,6 +66,7 @@ public class ContractApprovalService : IContractApprovalService
         ErrorHandler();
 
         PersonalSendMail();
+        PersonalSendMailTimeout();
         CheckAllApproved();
         CreateDMSDocument();
         CreateTSIZL();
@@ -739,6 +740,68 @@ public class ContractApprovalService : IContractApprovalService
                 Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
             }
             Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"PersonalSendMail");
+
+            var success = jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
+        });
+    }
+
+    private void PersonalSendMailTimeout()
+    {
+        CreateWorker("PersonalSendMailTimeout", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("PersonalSendMailTimeout");
+
+            if (variables != null)
+                variables.Limit += 1;
+            variables.IsProcess = true;
+
+            string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+            var instanceId = variables.InstanceId;
+            try
+            {
+                // var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
+
+                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Person });
+                if (person.Data != null)
+                {
+                    var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+                    {
+                        OrderId = instanceId,
+                        Email = person.Data.Customer.BusinessEmail
+                    });
+
+                    var createOrderHistoryCommand = new CreateOrderHistoryCommand
+                    {
+                        OrderId = instanceId,
+                        State = "PY Zamanaşımı Hatırlatma Mesajı(Email)",
+                        Description = "",
+                        IsStaff = false
+                    };
+                    if (responseEmail.Data != null)
+                    {
+                        createOrderHistoryCommand.Request = responseEmail.Data.Request;
+                        createOrderHistoryCommand.Response = responseEmail.Data.Response;
+                        createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
+                    }
+
+                    _mediator.Send(createOrderHistoryCommand);
+
+                    data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                }
+                else
+                {
+                    Log.ForContext("OrderId", instanceId).Information(person.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
+            }
+            Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"PersonalSendMailTimeout");
 
             var success = jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)

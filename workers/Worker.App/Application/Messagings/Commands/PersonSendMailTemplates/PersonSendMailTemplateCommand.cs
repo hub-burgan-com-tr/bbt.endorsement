@@ -77,6 +77,12 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
                 messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
             }
+            else if (order.State == OrderState.Timeout.ToString())
+            {
+                sendMailTemplate.template = "Zaman Aşımı Bildirimi PY";
+                var messageResponse = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
+                messages = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(messageResponse) };
+            }
         }
         catch (Exception ex)
         {
