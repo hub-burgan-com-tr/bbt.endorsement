@@ -30,8 +30,8 @@ public class TSIZLCommandHandler : IRequestHandler<TSIZLCommand, Response<TSIZLR
 
     public async Task<Response<TSIZLResponse>> Handle(TSIZLCommand request, CancellationToken cancellationToken)
     {
-        var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString()
-                                                                                                    && x.Title == "Nitelikli Yatırımcı Beyanı - NYB");
+        var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString() 
+                                    && (x.Title == "Nitelikli Yatırımcı Beyanı - NYB" || x.Title == "Hesap Açılış Sözleşmesi - Fonlu Mevduat"));
         //todo:sistem parametreleri tablosu eklenince burayıda degiştirecez
 
         if (order == null)
@@ -45,7 +45,8 @@ public class TSIZLCommandHandler : IRequestHandler<TSIZLCommand, Response<TSIZLR
 
         try
         {
-            var serviceTSIZLResponse = await _tsizlForaService.DoAutomaticEngagementPlain(customer.BranchCode, customer.CustomerNumber.ToString());
+            string engagementKind = order.Title == "Nitelikli Yatırımcı Beyanı - NYB" ? "S9" : order.Title == "Hesap Açılış Sözleşmesi - Fonlu Mevduat" ? "FM" : "";
+            var serviceTSIZLResponse = await _tsizlForaService.DoAutomaticEngagementPlain(customer.BranchCode, customer.CustomerNumber.ToString(), engagementKind);
             if (serviceTSIZLResponse != null)
             {
 

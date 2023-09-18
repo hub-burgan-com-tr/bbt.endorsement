@@ -29,7 +29,8 @@ public class TSIZLAnyCommandHandler : IRequestHandler<TSIZLAnyCommand, Response<
 
     public async Task<Response<bool>> Handle(TSIZLAnyCommand request, CancellationToken cancellationToken)
     {
-        var order = _context.Orders.Any(x => x.OrderId == request.InstanceId.ToString() && x.Title == "Nitelikli Yatırımcı Beyanı - NYB");
+        var order = _context.Orders.Any(x => x.OrderId == request.InstanceId.ToString() 
+                                    && (x.Title == "Nitelikli Yatırımcı Beyanı - NYB" || x.Title == "Hesap Açılış Sözleşmesi - Fonlu Mevduat"));
         //todo:sistem parametreleri tablosu eklenince burayıda degiştirecez
 
         return Response<bool>.Success(order, 200);
