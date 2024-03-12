@@ -4,6 +4,7 @@ using Infrastructure.Cache;
 using Infrastructure.SSOIntegration;
 using Serilog;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Api.Extensions;
 
@@ -13,8 +14,8 @@ public static class ClaimsPrincipalExtensions
 
     static ClaimsPrincipalExtensions()
     {
-        
-        _cacheProvider = new InMemoryCacheProvider();  
+
+        _cacheProvider = new InMemoryCacheProvider();
     }
     public static long GetCitizenshipNumber(this ClaimsPrincipal principal)
     {
@@ -73,18 +74,20 @@ public static class ClaimsPrincipalExtensions
                 {
                     res.UserInfo = resUserByRegisterId.Data;
                     var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.UserInfo.LoginName);
-                    Log.Information("resAuthorityForUser.Data " + resAuthorityForUser.Data);
-                    res.UserAuthorities = resAuthorityForUser.Data;
+                    Log.Information("resAuthorityForUser.Data " +
+                    JsonSerializer.Serialize(resAuthorityForUser.Data), new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
 
                     if (resAuthorityForUser.StatusCode == 200)
-
                     {
-                        Log.Information("GetSSOClaims start _ICacheProvider" + requestUserName + " Res" + res + "FromSeconds" + 100);
-
-                        _cacheProvider.Set(requestUserName, res, TimeSpan.FromSeconds(100));//TODO: Default 1 saat e çek
-
-                        Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " Res" + res + "FromSeconds" + 100);
-
+                        Log.Information("GetSSOClaims start _ICacheProvider" + requestUserName + " Res" + JsonSerializer.Serialize(res, new JsonSerializerOptions
+                        {
+                            WriteIndented = true
+                        }));
+                        _cacheProvider.Set(requestUserName, res,
+                         TimeSpan.FromMinutes(45));//TODO: Default 1 saat e çek
                     }
                 }
             }
@@ -95,8 +98,10 @@ public static class ClaimsPrincipalExtensions
 
             var resCache = _cacheProvider.Get(requestUserName) as SSOIntegrationResponse;
 
-            Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " resCache" + resCache + "FromSeconds" + 100);
-
+            Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " resCache =" + JsonSerializer.Serialize(resCache, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            }));
             return SSOResponseMapClaims(principal, resCache);
         }
         return SSOResponseMapClaims(principal, res);
