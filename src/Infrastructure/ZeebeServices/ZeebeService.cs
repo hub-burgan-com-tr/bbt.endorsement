@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Zeebe.Client;
 using Zeebe.Client.Api.Responses;
 
@@ -35,7 +36,8 @@ namespace Infrastructure.ZeebeServices
 
         public async Task<string> SendMessage(string instanceId, string messageName, string payload)
         {
-            _logger.LogInformation("instanceId: " + instanceId + " - messageName: " + messageName + " - payload: " + payload);
+            _logger.LogInformation("instanceId: " + instanceId + " - messageName: " + messageName + " - payload: " + ModifyContentField(payload));
+
             await client.NewPublishMessageCommand()
                 .MessageName(messageName)
                 .CorrelationKey(instanceId)
@@ -48,7 +50,20 @@ namespace Infrastructure.ZeebeServices
 
             return jsonText;
         }
+        private static string ModifyContentField(string input)
+        {
+            Regex regex = new Regex(@"(""Content"":""data[^\""]*"")");
+            Match match = regex.Match(input);
 
+            if (match.Success)
+            {
+                return match.Groups[1].Value + "..." + "\"";
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public void StartWorkers(string url)
         {
