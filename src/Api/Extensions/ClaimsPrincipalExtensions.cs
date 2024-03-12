@@ -9,8 +9,13 @@ namespace Api.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
-    private static readonly ICacheProvider _ICacheProvider;
+    private static ICacheProvider _cacheProvider;
 
+    static ClaimsPrincipalExtensions()
+    {
+        
+        _cacheProvider = new InMemoryCacheProvider();  
+    }
     public static long GetCitizenshipNumber(this ClaimsPrincipal principal)
     {
         var citizenshipNumber = long.Parse(principal.Claims.FirstOrDefault(c => c.Type == "username").Value.ToString());
@@ -54,7 +59,7 @@ public static class ClaimsPrincipalExtensions
         }
         var res = new SSOIntegrationResponse();
         var ssoService = new SSOIntegrationService();
-        if (!_ICacheProvider.Contains(requestUserName))
+        if (!_cacheProvider.Contains(requestUserName))
         {
             var responseRegisterId = await ssoService.SearchUserInfo(requestUserName);
             Log.Information("SSOResponseMapClaims " + responseRegisterId);
@@ -72,13 +77,13 @@ public static class ClaimsPrincipalExtensions
                     res.UserAuthorities = resAuthorityForUser.Data;
 
                     if (resAuthorityForUser.StatusCode == 200)
-                    
+
                     {
-                        Log.Information("GetSSOClaims start _ICacheProvider" + requestUserName +" Res"+ res + "FromSeconds"+ 100);
+                        Log.Information("GetSSOClaims start _ICacheProvider" + requestUserName + " Res" + res + "FromSeconds" + 100);
 
-                        _ICacheProvider.Set(requestUserName, res, TimeSpan.FromSeconds(100));//TODO: Default 1 saat e çek
+                        _cacheProvider.Set(requestUserName, res, TimeSpan.FromSeconds(100));//TODO: Default 1 saat e çek
 
-                        Log.Information("GetSSOClaims _ICacheProvider" + requestUserName +" Res"+ res + "FromSeconds"+ 100);
+                        Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " Res" + res + "FromSeconds" + 100);
 
                     }
                 }
@@ -86,10 +91,11 @@ public static class ClaimsPrincipalExtensions
         }
         else
         {
-                        Log.Information("GetSSOClaims _ICacheProvider" + requestUserName +" resCache = start"  + "FromSeconds"+ 100);
+            Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " resCache = start" + "FromSeconds" + 100);
 
-            var resCache = _ICacheProvider.Get(requestUserName) as SSOIntegrationResponse;
-                        Log.Information("GetSSOClaims _ICacheProvider" + requestUserName +" resCache"+ resCache + "FromSeconds"+ 100);
+            var resCache = _cacheProvider.Get(requestUserName) as SSOIntegrationResponse;
+
+            Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " resCache" + resCache + "FromSeconds" + 100);
 
             return SSOResponseMapClaims(principal, resCache);
         }
