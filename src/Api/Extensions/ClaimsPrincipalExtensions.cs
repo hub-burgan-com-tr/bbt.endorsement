@@ -1,17 +1,16 @@
 ﻿using Application.SSOIntegrationService.Commands;
 using Domain.Models;
-using Google.Protobuf.WellKnownTypes;
+using Infrastructure.Cache;
 using Infrastructure.SSOIntegration;
-using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Serilog;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 namespace Api.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
+    private static readonly ICacheProvider _ICacheProvider;
+
     public static long GetCitizenshipNumber(this ClaimsPrincipal principal)
     {
         var citizenshipNumber = long.Parse(principal.Claims.FirstOrDefault(c => c.Type == "username").Value.ToString());
@@ -42,6 +41,7 @@ public static class ClaimsPrincipalExtensions
 
     private static async Task<ClaimsPrincipal> GetSSOClaims(ClaimsPrincipal principal, string requestUserName)
     {
+
         var person = new OrderPerson();
 
         if (string.IsNullOrEmpty(requestUserName))
@@ -54,24 +54,33 @@ public static class ClaimsPrincipalExtensions
         }
         var res = new SSOIntegrationResponse();
         var ssoService = new SSOIntegrationService();
-
-        var responseRegisterId = await ssoService.SearchUserInfo(requestUserName);
-        Log.Information("SSOResponseMapClaims " + responseRegisterId);
-        if (responseRegisterId.StatusCode == 200)
+        if (!_ICacheProvider.Contains(requestUserName))
         {
-            res.RegisterId = responseRegisterId.Data;
-            Log.Information(" responseRegisterId.Data " + responseRegisterId.Data);
-
-            var resUserByRegisterId = await ssoService.GetUserByRegisterId(res.RegisterId);
-            if (resUserByRegisterId.StatusCode == 200)
+            var responseRegisterId = await ssoService.SearchUserInfo(requestUserName);
+            Log.Information("SSOResponseMapClaims " + responseRegisterId);
+            if (responseRegisterId.StatusCode == 200)
             {
-                res.UserInfo = resUserByRegisterId.Data;
-                var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.UserInfo.LoginName);
-                Log.Information("resAuthorityForUser.Data " + resAuthorityForUser.Data);
-                res.UserAuthorities = resAuthorityForUser.Data;
+                res.RegisterId = responseRegisterId.Data;
+                Log.Information(" responseRegisterId.Data " + responseRegisterId.Data);
+
+                var resUserByRegisterId = await ssoService.GetUserByRegisterId(res.RegisterId);
+                if (resUserByRegisterId.StatusCode == 200)
+                {
+                    res.UserInfo = resUserByRegisterId.Data;
+                    var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.UserInfo.LoginName);
+                    Log.Information("resAuthorityForUser.Data " + resAuthorityForUser.Data);
+                    res.UserAuthorities = resAuthorityForUser.Data;
+
+                    if (resAuthorityForUser.StatusCode == 200)
+                        _ICacheProvider.Set(requestUserName, res, TimeSpan.FromSeconds(100));//TODO: Default 1 saat e çek
+                }
             }
         }
-
+        else
+        {
+            var resCache = _ICacheProvider.Get(requestUserName) as SSOIntegrationResponse;
+            return SSOResponseMapClaims(principal, resCache);
+        }
         return SSOResponseMapClaims(principal, res);
     }
     private static ClaimsPrincipal SSOResponseMapClaims(ClaimsPrincipal principal, SSOIntegrationResponse ssoResponse)

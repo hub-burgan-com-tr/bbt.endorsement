@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Infrastructure.Cache;
 using Infrastructure.InternalsServices;
 using Infrastructure.Notification.Web.SignalR;
 using Infrastructure.Persistence;
@@ -47,6 +48,7 @@ public static class ConfigureServiceContainer
         services.AddSingleton<ITemplateEngineService, TemplateEngineService>();
         services.AddSingleton<ISSOIntegrationService, SSOIntegrationService>();
         services.AddSingleton<IUserService, UserService>();
+        services.AddSingleton<ICacheProvider,InMemoryCacheProvider>();
     }
 
     public static void AddServices(this IServiceCollection services)
