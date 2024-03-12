@@ -72,7 +72,10 @@ public static class ClaimsPrincipalExtensions
                     res.UserAuthorities = resAuthorityForUser.Data;
 
                     if (resAuthorityForUser.StatusCode == 200)
+                    
                     {
+                        Log.Information("GetSSOClaims start _ICacheProvider" + requestUserName +" Res"+ res + "FromSeconds"+ 100);
+
                         _ICacheProvider.Set(requestUserName, res, TimeSpan.FromSeconds(100));//TODO: Default 1 saat e çek
 
                         Log.Information("GetSSOClaims _ICacheProvider" + requestUserName +" Res"+ res + "FromSeconds"+ 100);
@@ -83,6 +86,8 @@ public static class ClaimsPrincipalExtensions
         }
         else
         {
+                        Log.Information("GetSSOClaims _ICacheProvider" + requestUserName +" resCache = start"  + "FromSeconds"+ 100);
+
             var resCache = _ICacheProvider.Get(requestUserName) as SSOIntegrationResponse;
                         Log.Information("GetSSOClaims _ICacheProvider" + requestUserName +" resCache"+ resCache + "FromSeconds"+ 100);
 
