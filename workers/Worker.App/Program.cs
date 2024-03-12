@@ -107,7 +107,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                             BatchPostingLimit = 1,
                             CustomFormatter = new EcsTextFormatter()
                         });
-                        e.Console(outputTemplate: "{Level} {ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj} {NewLine}{Exception}");
+                        e.Console(outputTemplate: "{Level} {ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 

@@ -7,6 +7,7 @@ using Elastic.Apm.NetCoreAll;
 using Elastic.Apm.SerilogEnricher;
 using Elastic.CommonSchema.Serilog;
 using Infrastructure;
+using Infrastructure.Cache;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
 using Microsoft.AspNetCore.Http.Features;
@@ -105,9 +106,10 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                             MinimumLogEventLevel = LogEventLevel.Information,
                             TypeName = null,
                             BatchPostingLimit = 1,
-                            CustomFormatter = new EcsTextFormatter()
+                            CustomFormatter = new EcsTextFormatter(),
+                           
                         });
-                        e.Console(outputTemplate: "{Level}: [{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj} {NewLine}{Exception}");
+                        e.Console(outputTemplate: "{Level}: [{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
 builder.Services.Configure<FormOptions>(x =>
 {
@@ -123,7 +125,6 @@ builder.Services.AddControllers()
     {
         opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
@@ -189,14 +190,14 @@ StaticValuesExtensions.SetStaticValues(settings);
 //{
 //    option.TokenValidationParameters = new TokenValidationParameters
 //    {
-//        ValidateAudience = false, // Oluþturulacak token deðerini kimlerin/hangi originlerin/sitelerin kullanacaðýný belirlediðimiz alandýr.
-//        ValidateIssuer = false, // Oluþturulacak token deðerini kimin daðýttýðýný ifade edeceðimiz alandýr.
-//        ValidateLifetime = true, // Oluþturulan token deðerinin süresini kontrol edecek olan doðrulamadýr.
-//        ValidateIssuerSigningKey = true, // Üretilecek token deðerinin uygulamamýza ait bir deðer olduðunu ifade eden security key verisinin doðrulamasýdýr.
+//        ValidateAudience = false, // Oluï¿½turulacak token deï¿½erini kimlerin/hangi originlerin/sitelerin kullanacaï¿½ï¿½nï¿½ belirlediï¿½imiz alandï¿½r.
+//        ValidateIssuer = false, // Oluï¿½turulacak token deï¿½erini kimin daï¿½ï¿½ttï¿½ï¿½ï¿½nï¿½ ifade edeceï¿½imiz alandï¿½r.
+//        ValidateLifetime = true, // Oluï¿½turulan token deï¿½erinin sï¿½resini kontrol edecek olan doï¿½rulamadï¿½r.
+//        ValidateIssuerSigningKey = true, // ï¿½retilecek token deï¿½erinin uygulamamï¿½za ait bir deï¿½er olduï¿½unu ifade eden security key verisinin doï¿½rulamasï¿½dï¿½r.
 //        ValidIssuer = StaticValues.Issuer,
 //        ValidAudience = StaticValues.Audience,
 //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.SecurityKey)),
-//        ClockSkew = TimeSpan.Zero // Üretilecek token deðerinin expire süresinin belirtildiði deðer kadar uzatýlmasýný saðlayan özelliktir. 
+//        ClockSkew = TimeSpan.Zero // ï¿½retilecek token deï¿½erinin expire sï¿½resinin belirtildiï¿½i deï¿½er kadar uzatï¿½lmasï¿½nï¿½ saï¿½layan ï¿½zelliktir. 
 //    };
 //});
 
