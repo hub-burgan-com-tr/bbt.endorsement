@@ -52,17 +52,7 @@ namespace Infrastructure.ZeebeServices
         }
         private static string ModifyContentField(string input)
         {
-            Regex regex = new Regex(@"(""Content"":""data[^\""]*"")");
-            Match match = regex.Match(input);
-
-            if (match.Success)
-            {
-                return match.Groups[1].Value + "..." + "\"";
-            }
-            else
-            {
-                return null;
-            }
+            return Regex.Replace(input, "\"Content\":\"data:[^\"]+\"", "\"Content\":\"...\"");
         }
 
         public void StartWorkers(string url)
