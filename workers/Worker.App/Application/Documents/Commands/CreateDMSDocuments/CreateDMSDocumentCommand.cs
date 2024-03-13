@@ -30,7 +30,7 @@ public class CreateDMSDocumentCommandHandler : IRequestHandler<CreateDMSDocument
 
     public async Task<Response<List<CreateDMSDocumentResponse>>> Handle(CreateDMSDocumentCommand request, CancellationToken cancellationToken)
     {
-        var order = _context.Orders.Include(x => x.Person).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString());
+        var order = _context.Orders.Include(x => x.Person).Include(x=>x.Config.Parameter).Include(x => x.Customer).FirstOrDefault(x => x.OrderId == request.InstanceId.ToString());
         var documents = _context.Documents.Include(x => x.FormDefinition.Parameter).Where(x => x.OrderId == request.InstanceId.ToString());
         var person = order.Person;
         var customer = order.Customer;
