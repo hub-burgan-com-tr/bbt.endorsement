@@ -78,6 +78,7 @@ public static class ClaimsPrincipalExtensions
 
                     if (resAuthorityForUser.StatusCode == 200)
                     {
+                         res.UserAuthorities = resAuthorityForUser.Data;
                         Log.Information("GetSSOClaims start _ICacheProvider" + requestUserName + " Res" + res);
                         _cacheProvider.Set(requestUserName, res,
                          TimeSpan.FromMinutes(45));//TODO: Default 1 saat e çek
