@@ -111,7 +111,7 @@ public class ContractApprovalService : IContractApprovalService
 
 
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                      System.Text.RegularExpressions.Regex.Replace(data, "\"Content\":\"data:[^\"]+\"", "\"Content\":\"...\"");
+                    data = System.Text.RegularExpressions.Regex.Replace(data, "\"Content\":\"data:[^\"]+\"", "\"Content\":\"...\"");
                     Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"SaveEntity");
 
                     var success = jobClient.NewCompleteJobCommand(job.Key)
@@ -350,7 +350,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 // await jobClient.NewThrowErrorCommand(job.Key).ErrorCode("500").ErrorMessage(ex.Message).Send();
             }
-             
+
 
             var success = jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
@@ -564,7 +564,7 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("DeleteEntity");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-             
+
 
             try
             {
@@ -623,7 +623,7 @@ public class ContractApprovalService : IContractApprovalService
                 Description = callback.Data.Content
             });
 
-     
+
             var success = jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
@@ -877,7 +877,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.IsProcess = true;
                     variables.DmsIds = dms.Data.Select(x => new DMSDocumentResponse { DmsReferenceKey = x.DmsReferenceKey, DmsReferenceName = x.DmsReferenceName, DmsRefId = x.DmsRefId }).ToList();
                     //throw new Exception();
-                    var tsizAny  = _mediator.Send(new TSIZLAnyCommand
+                    var tsizAny = _mediator.Send(new TSIZLAnyCommand
                     {
                         InstanceId = variables.InstanceId
                     }).Result;
@@ -913,7 +913,7 @@ public class ContractApprovalService : IContractApprovalService
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("ErrorHandler");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-            Log.ForContext("variable",data).Error($"ErrorEntity data");
+            Log.ForContext("variable", data).Error($"ErrorEntity data");
 
             var success = jobClient.NewCompleteJobCommand(job.Key)
                 .Variables("{\"Approve\":\"" + false + "\"}")
