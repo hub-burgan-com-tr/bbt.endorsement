@@ -111,6 +111,7 @@ public class ContractApprovalService : IContractApprovalService
 
 
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                      System.Text.RegularExpressions.Regex.Replace(data, "\"Content\":\"data:[^\"]+\"", "\"Content\":\"...\"");
                     Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"SaveEntity");
 
                     var success = jobClient.NewCompleteJobCommand(job.Key)
