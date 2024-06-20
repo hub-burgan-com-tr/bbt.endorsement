@@ -1,5 +1,15 @@
 ﻿namespace Worker.App.Models;
 
+public class SendMailTemplateRequestV2
+{
+    public bool checkIsVerified { get; set; }
+    public string sender { get; set; }
+    public string templateParams { get; set; }
+    public string template { get; set; }
+    public long customerNo { get; set; }
+    public string email { get; set; }
+    public Process process { get; set; }
+}
 public class SendMailTemplateRequest
 {
     public HeaderInfo headerInfo { get; set; }

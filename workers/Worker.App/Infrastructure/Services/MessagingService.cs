@@ -12,7 +12,7 @@ public interface IMessagingService
     Task<Response> SendSmsMessageAsync(SendSmsRequest request);
     Task<Response> SendMailMessageAsync(SendMailRequest request);
 
-    Task<Response> SendMailTemplateAsync(SendMailTemplateRequest request, string instanceId);
+    Task<Response> SendMailTemplateAsync(SendMailTemplateRequestV2 request, string instanceId);
     Task<Response> SendSmsTemplateAsync(SendSmsTemplateRequest request);
 }
 
@@ -36,15 +36,15 @@ public class MessagingService : IMessagingService
         return Task.FromResult(data);
     }
 
-    public Task<Response> SendMailTemplateAsync(SendMailTemplateRequest request, string instanceId)
+    public Task<Response> SendMailTemplateAsync(SendMailTemplateRequestV2 request, string instanceId)
     {
         var restClient = new RestClient(messagingGateway);
-        var restRequest = new RestRequest("/api/v1/Messaging/email/templated", Method.Post);
+        var restRequest = new RestRequest("/api/v2/Messaging/email/templated", Method.Post);
         restRequest.RequestFormat = DataFormat.Json;
         restRequest.AddJsonBody(request);
 
         var response = restClient.ExecuteAsync(restRequest).Result;
-        if(response.Content != null)
+        if (response.Content != null)
             Log.ForContext("OrderId", instanceId).Information(response.Content.ToString());
         if (response.Content == "Template Not Found")
         {

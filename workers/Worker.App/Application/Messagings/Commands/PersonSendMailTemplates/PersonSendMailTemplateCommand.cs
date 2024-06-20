@@ -35,7 +35,7 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
         try
         {
             var order = _context.Orders
-                .Include(x=> x.Person)
+                .Include(x => x.Person)
                 .FirstOrDefault(x => x.OrderId == request.OrderId);
 
             if (order == null)
@@ -50,12 +50,9 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 Title = order.Title
             };
             var templateParams = JsonConvert.SerializeObject(param);
-            var sendMailTemplate = new SendMailTemplateRequest
+            var sendMailTemplate = new SendMailTemplateRequestV2
             {
-                headerInfo = new HeaderInfo
-                {
-                    sender = "AutoDetect"
-                },
+                sender = "AutoDetect",
                 templateParams = templateParams,
                 customerNo = order.Person.CustomerNumber,
                 email = request.Email,

@@ -34,7 +34,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
         try
         {
             var order = _context.Orders
-                    .Include(x => x.Documents).Include(x=>x.Customer)
+                    .Include(x => x.Documents).Include(x => x.Customer)
                     .FirstOrDefault(x => x.OrderId == request.OrderId);
 
             if (order == null)
@@ -45,14 +45,12 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                 Title = order.Title
             };
             var templateParams = JsonConvert.SerializeObject(param);
-            var sendMailTemplate = new SendMailTemplateRequest
+            var sendMailTemplate = new SendMailTemplateRequestV2
             {
-                headerInfo = new HeaderInfo
-                {
-                    sender = "AutoDetect"
-                },
+                sender = "AutoDetect",
                 templateParams = templateParams,
                 customerNo = order.Customer.CustomerNumber,
+                checkIsVerified = true,
                 email = request.Email,
                 template = "Müşteriye Giden Başvuru Onay Talebi",
                 process = new Process
@@ -63,11 +61,11 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
 
             var response = await _messagingService.SendMailTemplateAsync(sendMailTemplate, request.OrderId);
             messageResponse = new MessageResponse { Request = JsonConvert.SerializeObject(sendMailTemplate), Response = JsonConvert.SerializeObject(response) };
-            messageResponse.CustomerId = order.CustomerId; 
+            messageResponse.CustomerId = order.CustomerId;
             return Response<MessageResponse>.Success(messageResponse, 200);
         }
         catch (Exception ex)
-        {        
+        {
             Log.ForContext("OrderId", request.OrderId).Error(ex, ex.Message);
             return Response<MessageResponse>.Fail(ex.Message, 201);
         }
