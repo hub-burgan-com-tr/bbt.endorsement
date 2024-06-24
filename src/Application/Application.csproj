@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.31" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="RestSharp" Version="111.3.0" />
-    <PackageReference Include="zb-client" Version="1.2.1" />
+    <PackageReference Include="zb-client" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
