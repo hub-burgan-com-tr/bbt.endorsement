@@ -34,9 +34,9 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
         {
             var callback = _context.Callbacks.FirstOrDefault(x => x.OrderId == request.OrderId);
             if (callback == null)
-                return Response<ConsumeCallbackResponse>.Success(new ConsumeCallbackResponse { Content = "OrderId  Bulunamadi" } ,404);
+                return Response<ConsumeCallbackResponse>.Success(new ConsumeCallbackResponse { Content = "OrderId  Bulunamadi" }, 404);
 
-            var orderInfo =  _context.Orders
+            var orderInfo = _context.Orders
                 .Include(x => x.Customer)
                 .Include(x => x.Documents)
                 .ThenInclude(x => x.DocumentActions)
@@ -61,12 +61,12 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
                     Documents = x.Documents.OrderByDescending(x => x.Created).Select(x => new
                     {
                         x.DocumentId,
-                        x.DocumentDms.FirstOrDefault(a=>a.DocumentId ==x.DocumentId ).DocumentDmsId,
+                        x.DocumentDms.FirstOrDefault(a => a.DocumentId == x.DocumentId).DocumentDmsId,
                         x.Name,
                         FileName = x.Name + ".pdf"
                     ,
                         x.MimeType,
-                        TypeName = x.Type == ContentType.PlainText.ToString() ? "Metin" : "Belge",
+                        TypeName = x.Type == Domain.Enums.ContentType.PlainText.ToString() ? "Metin" : "Belge",
                         x.DocumentActions.FirstOrDefault(y => y.IsSelected).Title,
                         Type = x.FileType
                     }).ToList()
@@ -83,7 +83,7 @@ namespace Worker.App.Application.Workers.Commands.ConsumeCallback
                     requestRest.AddHeader("Authorization", callback.ApiKey);
                 }
                 var orderInfoJson = JsonSerializer.Serialize(orderInfo, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
-                 
+
                 requestRest.AddHeader("Content-Type", "application/json");
                 requestRest.AddStringBody(orderInfoJson, DataFormat.Json);
                 Log.ForContext("CalbackRequestBody", orderInfoJson).ForContext("CalbackRequestRest", JsonSerializer.Serialize(requestRest, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallbackCommand");
