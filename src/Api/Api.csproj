@@ -45,6 +45,9 @@
 	  <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1" />
 	  
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
