@@ -21,7 +21,6 @@ public class Testing
 {
     private static IConfigurationRoot configuration = null!;
     private static IServiceScopeFactory _scopeFactory = null!;
-    private static Checkpoint _checkpoint = null!;
     private static string? _currentUserId;
 
     [OneTimeSetUp]
@@ -86,7 +85,7 @@ public class Testing
 
     public static async Task ResetState()
     {
-       // await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
+        // await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
         _currentUserId = null;
     }
 

@@ -58,7 +58,7 @@ namespace Application.OrderForms.Commands.CreateFormInformationsText
 
 
             var parametre = _context.Parameters.FirstOrDefault(x => x.ParameterId == request.ParameterId);
-            if(parametre == null)
+            if (parametre == null)
                 return Response<bool>.NotFoundException("parametre bulunamadı", 200);
             var label = request.Json; //.Replace("\"", String.Empty);
             var template = GeneralExtensions.HtmlToString(request.HtmlTemplate);
@@ -82,7 +82,7 @@ namespace Application.OrderForms.Commands.CreateFormInformationsText
                     RetryFrequence = request.RetryFrequence,
                     Mode = "Completed",
                     Url = "",
-                    Type = ContentType.PDF.ToString(),
+                    Type = Domain.Enums.ContentType.PDF.ToString(),
                     ExpireInMinutes = request.ExpireInMinutes,
                     MaxRetryCount = request.MaxRetryCount,
                     DependencyReuse = false,
@@ -101,24 +101,24 @@ namespace Application.OrderForms.Commands.CreateFormInformationsText
                         FormDefinitionTagId = request.FormDefinitionTagId
                     });
                 }
-               
-                    var restClient = new RestClient(StaticValues.TemplateEngine);
-                    var restRequest = new RestRequest("/Template/Definition", Method.Post);
-                    restRequest.AddHeader("Content-Type", "application/json");
-                    restRequest.AddHeader("Accept", "text/plain");
 
-                    var body = new TemplateDefinitionRoot
-                    {
-                        MasterTemplate = "",
-                        template = template,
-                        name = templateName,
-                        SemanticVersion=request.SemanticVersion
-                    };
-                    var json = JsonConvert.SerializeObject(body);
+                var restClient = new RestClient(StaticValues.TemplateEngine);
+                var restRequest = new RestRequest("/Template/Definition", Method.Post);
+                restRequest.AddHeader("Content-Type", "application/json");
+                restRequest.AddHeader("Accept", "text/plain");
 
-                    restRequest.RequestFormat = DataFormat.Json;
-                    restRequest.AddJsonBody(json);
-                    var response = restClient.ExecutePostAsync(restRequest).Result;
+                var body = new TemplateDefinitionRoot
+                {
+                    MasterTemplate = "",
+                    template = template,
+                    name = templateName,
+                    SemanticVersion = request.SemanticVersion
+                };
+                var json = JsonConvert.SerializeObject(body);
+
+                restRequest.RequestFormat = DataFormat.Json;
+                restRequest.AddJsonBody(json);
+                var response = restClient.ExecutePostAsync(restRequest).Result;
                 if (response.StatusCode.ToString() == "OK")
                 {
                     result = _context.SaveChanges();
