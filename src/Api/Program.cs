@@ -86,6 +86,7 @@ Log.Logger = new LoggerConfiguration()
 //    Debug.Print(msg);
 //    Debugger.Break();
 //});
+//
 
 //builder.Logging.ClearProviders();
 //builder.Logging.AddSerilog(Log.Logger);
