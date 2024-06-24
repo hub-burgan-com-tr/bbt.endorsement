@@ -1,4 +1,4 @@
-﻿using AspNet.Security.OAuth.Validation;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Providers;
@@ -11,7 +11,7 @@ public static class PolicyProvider
     {
         options.AddPolicy(DefaultAuthorizedPolicyManager,
               policyBuilder => policyBuilder
-                    .AddAuthenticationSchemes(OAuthValidationDefaults.AuthenticationScheme)
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .AddRequirements(new CredentialsRequirement(SecurityCredentials.DefaultRegisterActionRequirements.ToDictionary())));
     }
 }

@@ -7,7 +7,6 @@ using Application.Parameter.Commands.UpdateTags;
 using Application.Parameter.Queries.GetParameters;
 using Application.Parameter.Queries.GetParametersDys;
 using Application.Parameter.Queries.GetParameterTypes;
-using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
