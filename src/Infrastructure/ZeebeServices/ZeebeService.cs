@@ -62,7 +62,7 @@ namespace Infrastructure.ZeebeServices
             _serverEventService.Register(baseUri);
         }
 
-        public async Task<IDeployResponse> Deploy(string modelFilename)
+        public async Task<IDeployResourceResponse> Deploy(string modelFilename)
         {
             var filename = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Processes", modelFilename);
             var deployment = await client.NewDeployCommand().AddResourceFile(filename).Send();
