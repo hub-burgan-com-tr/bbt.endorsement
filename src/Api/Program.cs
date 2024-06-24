@@ -15,6 +15,9 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 /// <summary>
 ///  
@@ -107,7 +110,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                             TypeName = null,
                             BatchPostingLimit = 1,
                             CustomFormatter = new EcsTextFormatter(),
-                           
+
                         });
                         e.Console(outputTemplate: "{Level}: [{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
@@ -133,28 +136,28 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 
 //if (!Environment.IsProduction())
 
-    builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        options.SwaggerDoc("v1", new OpenApiInfo
-        {
-            Version = "v1.5",
-            Title = "Endorsement API",
-            Description = "Provides validation infrastructure for contracts that customers need to approve."
-        });
+        Version = "v1.5",
+        Title = "Endorsement API",
+        Description = "Provides validation infrastructure for contracts that customers need to approve."
+    });
 
 
-        // To Enable authorization using Swagger (JWT)  
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-        {
-            In = ParameterLocation.Header,
-            Description = "Specify token with Bearer tag. example: Bearer {access_token}",
-            BearerFormat = "JWT",
-            Name = "Authorization",
-            Type = SecuritySchemeType.ApiKey,
-           // Scheme = "Bearer",
-        });
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
+    // To Enable authorization using Swagger (JWT)  
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        In = ParameterLocation.Header,
+        Description = "Specify token with Bearer tag. example: Bearer {access_token}",
+        BearerFormat = "JWT",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        // Scheme = "Bearer",
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                         {
                               new OpenApiSecurityScheme
                                 {
@@ -167,18 +170,18 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
                                 new string[] {}
 
                         }
-                    });
+                });
 
 
-        // options.SchemaFilter<EnumSchemaFilter>();
-        options.UseInlineDefinitionsForEnums();
+    // options.SchemaFilter<EnumSchemaFilter>();
+    options.UseInlineDefinitionsForEnums();
 
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
-        options.IncludeXmlComments(xmlPath);
-        options.CustomSchemaIds(x => x.FullName);
-        options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
-    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+    options.IncludeXmlComments(xmlPath);
+    options.CustomSchemaIds(x => x.FullName);
+    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+});
 
 
 
@@ -201,17 +204,57 @@ StaticValuesExtensions.SetStaticValues(settings);
 //    };
 //});
 
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddJwtBearer("Bearer", options =>
+//     {
+//         options.Authority = StaticValues.Authority;
+//         options.Audience = StaticValues.ClientId;
+//         options.
+
+//         options.Authority = new Uri(StaticValues.Authority);
+// //     options.Audiences.Add(StaticValues.ClientId);
+// //     options.ClientId = StaticValues.ClientId;
+// //     options.ClientSecret = StaticValues.ApiSecret;
+// //     options.RequireHttpsMetadata = Environment.IsProduction();
+
+//         options.TokenValidationParameters = new TokenValidationParameters
+//         {
+//              cl
+//         };
+//     });
+
 builder.Services.AddAuthentication(options =>
 {
-    // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
-}).AddOAuthIntrospection(options =>
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
 {
-    options.Authority = new Uri(StaticValues.Authority);
-    options.Audiences.Add(StaticValues.ClientId);
-    options.ClientId = StaticValues.ClientId;
-    options.ClientSecret = StaticValues.ApiSecret;
-    options.RequireHttpsMetadata = Environment.IsProduction();
+    options.Authority = StaticValues.Authority; // Yetkilendirme sunucusunun URL'si
+    options.Audience = StaticValues.ClientId;   // API'nın kimliği (ClientId)
+    options.RequireHttpsMetadata = !Environment.IsDevelopment(); // Geliştirme ortamında HTTPS gereksinimini devre dışı bırak
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true, // Jetonun yetkilendirici tarafından oluşturulduğunu doğrula
+        ValidIssuer = StaticValues.Authority,
+        ValidateAudience = true, // Jetonun belirlenen izleyici için olduğunu doğrula
+        ValidAudience = StaticValues.ClientId,
+        ValidateLifetime = true, // Jetonun süresinin dolup dolmadığını kontrol et
+        ValidateIssuerSigningKey = true, // Jetonun imza anahtarını doğrula
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.ApiSecret)) // İmza anahtarı
+    };
 });
+
+
+// builder.Services.AddAuthentication(options =>
+// {
+//     // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+//     options.Authority = new Uri(StaticValues.Authority);
+//     options.Audiences.Add(StaticValues.ClientId);
+//     options.ClientId = StaticValues.ClientId;
+//     options.ClientSecret = StaticValues.ApiSecret;
+//     options.RequireHttpsMetadata = Environment.IsProduction();
+// });
 
 Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ApiSecret);
 
