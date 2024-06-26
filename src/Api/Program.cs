@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
 using Application;
@@ -7,17 +8,15 @@ using Elastic.Apm.NetCoreAll;
 using Elastic.Apm.SerilogEnricher;
 using Elastic.CommonSchema.Serilog;
 using Infrastructure;
-using Infrastructure.Cache;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 /// <summary>
 ///  
@@ -204,51 +203,30 @@ StaticValuesExtensions.SetStaticValues(settings);
 //    };
 //});
 
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddJwtBearer("Bearer", options =>
-//     {
-//         options.Authority = StaticValues.Authority;
-//         options.Audience = StaticValues.ClientId;
-//         options.
-
-//         options.Authority = new Uri(StaticValues.Authority);
-// //     options.Audiences.Add(StaticValues.ClientId);
-// //     options.ClientId = StaticValues.ClientId;
-// //     options.ClientSecret = StaticValues.ApiSecret;
-// //     options.RequireHttpsMetadata = Environment.IsProduction();
-
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//              cl
-//         };
-//     });
-
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(o =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
 })
 .AddJwtBearer(options =>
 {
-    options.Authority = StaticValues.Authority; // Yetkilendirme sunucusunun URL'si
-    options.Audience = StaticValues.ClientId;   // API'nın kimliği (ClientId)
-    options.RequireHttpsMetadata = !Environment.IsDevelopment(); // Geliştirme ortamında HTTPS gereksinimini devre dışı bırak
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true, // Jetonun yetkilendirici tarafından oluşturulduğunu doğrula
+        ValidateIssuer = true,
         ValidIssuer = StaticValues.Authority,
-        ValidateAudience = true, // Jetonun belirlenen izleyici için olduğunu doğrula
+        ValidateAudience = true,
         ValidAudience = StaticValues.ClientId,
-        ValidateLifetime = true, // Jetonun süresinin dolup dolmadığını kontrol et
-        ValidateIssuerSigningKey = true, // Jetonun imza anahtarını doğrula
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.ApiSecret)) // İmza anahtarı
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.ApiSecret))
     };
 });
 
-
 // builder.Services.AddAuthentication(options =>
 // {
-//     // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+//     //options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+// }).AddOAuthIntrospection(options =>
+// {
 //     options.Authority = new Uri(StaticValues.Authority);
 //     options.Audiences.Add(StaticValues.ClientId);
 //     options.ClientId = StaticValues.ClientId;
@@ -284,7 +262,6 @@ var app = builder.Build();
 
 if (Environment.EnvironmentName == "Prod" || Environment.EnvironmentName == "Uat")
     app.UseAllElasticApm(Configuration);
-
 app.UseSerilogRequestLogging();
 app.AddUseMiddleware();
 app.UseSession();
