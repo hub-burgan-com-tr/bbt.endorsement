@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0.28-alpine3.18-amd64 AS base
 WORKDIR /app
 EXPOSE 5070
 
@@ -9,7 +9,7 @@ ENV ASPNETCORE_URLS=http://+:5070
 RUN adduser bbtendorsementuser --disabled-password --gecos "" && chown -R bbtendorsementuser:bbtendorsementuser	 /app
 USER bbtendorsementuser
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0.420-alpine3.18-amd64 AS build
 WORKDIR /src
 COPY ["src/Api/Api.csproj", "src/Api/"]
 RUN dotnet restore "src/Api/Api.csproj"
