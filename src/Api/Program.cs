@@ -107,7 +107,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                             TypeName = null,
                             BatchPostingLimit = 1,
                             CustomFormatter = new EcsTextFormatter(),
-                           
+
                         });
                         e.Console(outputTemplate: "{Level}: [{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
@@ -133,28 +133,28 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 
 //if (!Environment.IsProduction())
 
-    builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        options.SwaggerDoc("v1", new OpenApiInfo
-        {
-            Version = "v1.5",
-            Title = "Endorsement API",
-            Description = "Provides validation infrastructure for contracts that customers need to approve."
-        });
+        Version = "v1.5",
+        Title = "Endorsement API",
+        Description = "Provides validation infrastructure for contracts that customers need to approve."
+    });
 
 
-        // To Enable authorization using Swagger (JWT)  
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-        {
-            In = ParameterLocation.Header,
-            Description = "Specify token with Bearer tag. example: Bearer {access_token}",
-            BearerFormat = "JWT",
-            Name = "Authorization",
-            Type = SecuritySchemeType.ApiKey,
-           // Scheme = "Bearer",
-        });
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
+    // To Enable authorization using Swagger (JWT)  
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        In = ParameterLocation.Header,
+        Description = "Specify token with Bearer tag. example: Bearer {access_token}",
+        BearerFormat = "JWT",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        // Scheme = "Bearer",
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                         {
                               new OpenApiSecurityScheme
                                 {
@@ -167,21 +167,22 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
                                 new string[] {}
 
                         }
-                    });
+                });
 
 
-        // options.SchemaFilter<EnumSchemaFilter>();
-        options.UseInlineDefinitionsForEnums();
+    // options.SchemaFilter<EnumSchemaFilter>();
+    options.UseInlineDefinitionsForEnums();
 
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
-        options.IncludeXmlComments(xmlPath);
-        options.CustomSchemaIds(x => x.FullName);
-        options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
-    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+    options.IncludeXmlComments(xmlPath);
+    options.CustomSchemaIds(x => x.FullName);
+    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+});
 
 
 
+AppContext.SetSwitch("System.Globalization.Invariant", false);
 var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
 StaticValuesExtensions.SetStaticValues(settings);
