@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Text;
 using System.Text.Json.Serialization;
 using Api.Extensions;
 using Application;
@@ -8,11 +7,10 @@ using Elastic.Apm.NetCoreAll;
 using Elastic.Apm.SerilogEnricher;
 using Elastic.CommonSchema.Serilog;
 using Infrastructure;
+using Infrastructure.Cache;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
@@ -203,36 +201,17 @@ StaticValuesExtensions.SetStaticValues(settings);
 //    };
 //});
 
-builder.Services.AddAuthentication(o =>
+builder.Services.AddAuthentication(options =>
 {
-    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-})
-.AddJwtBearer(options =>
+    // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+}).AddOAuthIntrospection(options =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidIssuer = StaticValues.Authority,
-        ValidateAudience = true,
-        ValidAudience = StaticValues.ClientId,
-        ValidateLifetime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(StaticValues.ApiSecret))
-    };
+    options.Authority = new Uri(StaticValues.Authority);
+    options.Audiences.Add(StaticValues.ClientId);
+    options.ClientId = StaticValues.ClientId;
+    options.ClientSecret = StaticValues.ApiSecret;
+    options.RequireHttpsMetadata = Environment.IsProduction();
 });
-
-// builder.Services.AddAuthentication(options =>
-// {
-//     //options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
-// }).AddOAuthIntrospection(options =>
-// {
-//     options.Authority = new Uri(StaticValues.Authority);
-//     options.Audiences.Add(StaticValues.ClientId);
-//     options.ClientId = StaticValues.ClientId;
-//     options.ClientSecret = StaticValues.ApiSecret;
-//     options.RequireHttpsMetadata = Environment.IsProduction();
-// });
 
 Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ApiSecret);
 
@@ -262,6 +241,7 @@ var app = builder.Build();
 
 if (Environment.EnvironmentName == "Prod" || Environment.EnvironmentName == "Uat")
     app.UseAllElasticApm(Configuration);
+
 app.UseSerilogRequestLogging();
 app.AddUseMiddleware();
 app.UseSession();
