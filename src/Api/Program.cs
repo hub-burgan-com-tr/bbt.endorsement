@@ -182,6 +182,7 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 
 
 
+AppContext.SetSwitch("System.Globalization.Invariant", true);
 var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
 StaticValuesExtensions.SetStaticValues(settings);

@@ -7,7 +7,7 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <UserSecretsId>574a7eed-88ce-46c2-aa32-bd27abaacff0</UserSecretsId>
-
+    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
