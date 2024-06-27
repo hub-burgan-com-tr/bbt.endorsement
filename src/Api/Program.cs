@@ -200,6 +200,7 @@ StaticValuesExtensions.SetStaticValues(settings);
 //        ClockSkew = TimeSpan.Zero // �retilecek token de�erinin expire s�resinin belirtildi�i de�er kadar uzat�lmas�n� sa�layan �zelliktir. 
 //    };
 //});
+//
 
 builder.Services.AddAuthentication(options =>
 {
