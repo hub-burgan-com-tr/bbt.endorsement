@@ -109,6 +109,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                         });
                         e.Console(outputTemplate: "{Level} {ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
+AppContext.SetSwitch("System.Globalization.Invariant", false);
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
@@ -140,7 +141,7 @@ using (var scope = app.Services.CreateScope())
     var serviceProvider = scope.ServiceProvider;
 
     var zeebeService = serviceProvider.GetRequiredService<IZeebeService>();
-    if (zeebeService != null &&( environment.EnvironmentName == "Prod "|| environment.EnvironmentName == "Preprod"))
+    if (zeebeService != null && (environment.EnvironmentName == "Prod " || environment.EnvironmentName == "Preprod"))
     {
 
         zeebeService.Deploy(settings.Zeebe.ModelFilename);
