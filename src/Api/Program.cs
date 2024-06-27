@@ -180,9 +180,6 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
 });
 
-
-
-AppContext.SetSwitch("System.Globalization.Invariant", false);
 var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
 StaticValuesExtensions.SetStaticValues(settings);

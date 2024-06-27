@@ -109,7 +109,6 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                         });
                         e.Console(outputTemplate: "{Level} {ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
-AppContext.SetSwitch("System.Globalization.Invariant", false);
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
