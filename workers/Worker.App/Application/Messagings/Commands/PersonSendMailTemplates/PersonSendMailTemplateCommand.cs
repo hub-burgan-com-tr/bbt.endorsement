@@ -58,7 +58,9 @@ public class PersonSendMailTemplateCommandHandler : IRequestHandler<PersonSendMa
                 email = request.Email,
                 process = new Process
                 {
-                    name = "bbt.endorsement -  PersonalSendMail"
+                    name = "bbt.endorsement -  PersonalSendMail",
+                    identity = "bbt.endorsement",
+                    itemId = Guid.NewGuid().ToString()
                 }
             };
 

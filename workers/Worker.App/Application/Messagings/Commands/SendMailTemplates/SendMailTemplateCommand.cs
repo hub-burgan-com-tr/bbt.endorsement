@@ -55,7 +55,9 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                 template = "Müşteriye Giden Başvuru Onay Talebi",
                 process = new Process
                 {
-                    name = "bbt.endorsement - SendOtp"
+                    name = "bbt.endorsement - SendOtp",
+                    identity = "bbt.endorsement",
+                    itemId = Guid.NewGuid().ToString()
                 }
             };
 
