@@ -34,21 +34,17 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
     {
         try
         {
-            var order = _context.Orders.Include(x=>x.Customer).FirstOrDefault(o => o.OrderId == request.OrderId);
-            var gsmPhone = request.GsmPhone; 
-            
+            var order = _context.Orders.Include(x => x.Customer).FirstOrDefault(o => o.OrderId == request.OrderId);
+            var gsmPhone = request.GsmPhone;
+
             var param = new SendMailTemplate
             {
                 Title = order.Title
             };
             var templateParams = JsonConvert.SerializeObject(param);
 
-            var messageRequest = new SendSmsTemplateRequest
+            var messageRequest = new SendSmsTemplateRequestV2
             {
-                headerInfo = new HeaderInfo
-                {
-                    sender = "AutoDetect"
-                },
                 templateParams = templateParams,
                 template = "Müşteriden Talep Edilen Onay SMS'i",
                 title = order.Title,
@@ -63,7 +59,8 @@ public class SendSmsTemplateCommandHandler : IRequestHandler<SendSmsTemplateComm
                 process = new Process
                 {
                     name = "Zeebe - bbt.endorsement",
-                    //itemId = request.OrderId,
+                    itemId = request.OrderId,
+                    identity = "bbt.endorsement"
                     //action = "SendOtp"
                 }
             };
