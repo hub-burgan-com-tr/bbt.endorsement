@@ -13,7 +13,7 @@ public interface IMessagingService
     Task<Response> SendMailMessageAsync(SendMailRequest request);
 
     Task<Response> SendMailTemplateAsync(SendMailTemplateRequestV2 request, string instanceId);
-    Task<Response> SendSmsTemplateAsync(SendSmsTemplateRequest request);
+    Task<Response> SendSmsTemplateAsync(SendSmsTemplateRequestV2 request);
 }
 
 public class MessagingService : IMessagingService
@@ -69,10 +69,10 @@ public class MessagingService : IMessagingService
         return Task.FromResult(data);
     }
 
-    public Task<Response> SendSmsTemplateAsync(SendSmsTemplateRequest request)
+    public Task<Response> SendSmsTemplateAsync(SendSmsTemplateRequestV2 request)
     {
         var restClient = new RestClient(messagingGateway);
-        var restRequest = new RestRequest("/api/v1/Messaging/sms/templated", Method.Post);
+        var restRequest = new RestRequest("/api/v2/Messaging/sms/templated", Method.Post);
         restRequest.RequestFormat = DataFormat.Json;
         restRequest.AddJsonBody(request);
 

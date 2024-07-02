@@ -57,7 +57,7 @@ public class SendMailTemplateCommandHandler : IRequestHandler<SendMailTemplateCo
                 {
                     name = "bbt.endorsement - SendOtp",
                     identity = "bbt.endorsement",
-                    itemId = Guid.NewGuid().ToString()
+                    itemId = request.OrderId
                 }
             };
 
