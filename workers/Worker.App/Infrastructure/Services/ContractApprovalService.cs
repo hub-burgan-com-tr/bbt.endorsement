@@ -20,7 +20,9 @@ using Worker.App.Application.Workers.Commands.ConsumeCallback;
 using Worker.App.Application.Workers.Commands.DeleteEntities;
 using Worker.App.Application.Workers.Commands.LoadContactInfos;
 using Worker.App.Application.Workers.Commands.SaveEntities;
+using Worker.App.Application.Workers.Commands.StartFreeContractApprovals;
 using Worker.App.Application.Workers.Commands.UpdateEntities;
+using Worker.App.Application.Workers.Commands.UploadContractDocumentInstances;
 using Worker.App.Application.Workers.Queries.GetOrderConfigs;
 using Worker.App.Application.Workers.Queries.GetOrderStates;
 using Worker.App.Models;
@@ -70,6 +72,9 @@ public class ContractApprovalService : IContractApprovalService
         CheckAllApproved();
         CreateDMSDocument();
         CreateTSIZL();
+
+        StartFreeContractApproval();
+        UploadContractDocumentInstance();
     }
 
     private void SaveEntity()
@@ -214,6 +219,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.Device = orderConfig.Data.Device;
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                     variables.NoNotification = orderConfig.Data.NoNotification;
+                    variables.UseContractManagement = orderConfig.Data.UseContractManagement;
                 }
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -504,6 +510,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.Device = orderConfig.Data.Device;
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                     variables.NoNotification = orderConfig.Data.NoNotification;
+                    variables.UseContractManagement = orderConfig.Data.UseContractManagement;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
@@ -921,6 +928,109 @@ public class ContractApprovalService : IContractApprovalService
         });
     }
 
+    private void StartFreeContractApproval()
+    {
+        CreateWorker("StartFreeContractApproval", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("StartFreeContractApproval");
+            if (variables != null)
+            {
+                var orderConfig = _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
+                if (orderConfig != null)
+                {
+                    variables.RetryFrequence = orderConfig.Data.RetryFrequence;
+                    variables.ExpireInMinutes = orderConfig.Data.ExpireInMinutes;
+                    variables.MaxRetryCount = orderConfig.Data.MaxRetryCount;
+                    variables.Device = orderConfig.Data.Device;
+                    variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
+                    variables.NoNotification = orderConfig.Data.NoNotification;
+                    variables.UseContractManagement = orderConfig.Data.UseContractManagement;
+                }
+                variables.IsProcess = true;
+                variables.Completed = false;
+            }
+            string data = "";
+
+            try
+            {
+                var response = await _mediator.Send(new StartFreeContractApprovalCommand { 
+                    ContractInstanceId = variables.ContractInstanceId.HasValue ? variables.ContractInstanceId.Value : Guid.NewGuid(),
+                    ContractCode = variables.ContractCode,
+                    ContractTitle = variables.FormType == Form.Order ? variables.StartRequest.Title : variables.StartFormRequest.Title,
+                    ToLangCode = variables.Language,
+                    ToUserReference = "",
+                    ToCustomerNo = variables.Person.CustomerNumber.ToString(), //Bu reference mı ?
+                    SetTimeout = variables.ExpireInMinutes,
+                    OrderId = variables.InstanceId
+                });
+
+                Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"StartFreeContractApproval");
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                // variables.IsProcess = false;
+                variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
+
+            var success = jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
+        });
+    }
+
+    private void UploadContractDocumentInstance()
+    {
+        CreateWorker("UploadContractDocumentInstance", async (jobClient, job) =>
+        {
+            var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
+            variables.Services.Add("UploadContractDocumentInstance");
+            if (variables != null)
+            {
+                var orderConfig = _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
+                if (orderConfig != null)
+                {
+                    variables.RetryFrequence = orderConfig.Data.RetryFrequence;
+                    variables.ExpireInMinutes = orderConfig.Data.ExpireInMinutes;
+                    variables.MaxRetryCount = orderConfig.Data.MaxRetryCount;
+                    variables.Device = orderConfig.Data.Device;
+                    variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
+                    variables.NoNotification = orderConfig.Data.NoNotification;
+                    variables.UseContractManagement = orderConfig.Data.UseContractManagement;
+                }
+                variables.IsProcess = true;
+                variables.Completed = false;
+            }
+            string data = "";
+
+            try
+            {
+                var response = await _mediator.Send(new UploadContractDocumentInstanceCommand { 
+                    OrderId = variables.InstanceId
+                });
+
+                variables.ContractInstanceId = response.Data.ContractInstanceId;
+                variables.ContractCode = response.Data.ContractCode;
+                variables.Language = response.Data.Language;
+                Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"UploadContractDocumentInstance");
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
+            catch (Exception ex)
+            {
+                Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
+                // variables.IsProcess = false;
+                variables.Error = ex.Message;
+                data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+            }
+
+            var success = jobClient.NewCompleteJobCommand(job.Key)
+                .Variables(data)
+                .Send();
+        });
+    }
 
     private void CreateWorker(String jobType, JobHandler handleJob)
     {
