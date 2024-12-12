@@ -29,6 +29,9 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public GetSearchPersonSummaryDto Login()
         {
+            var json = JsonConvert.SerializeObject(Request.Headers);
+            Log.Information("Headers: " + json);
+
             Log.Information("Login-Start: " );
 
             try

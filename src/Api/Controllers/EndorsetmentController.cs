@@ -22,6 +22,8 @@ using Domain.Enums;
 using Api.Extensions;
 using Application.Endorsements.Queries.GetDocumentPdfs;
 using System.Net.Http.Headers;
+using Serilog;
+using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
@@ -42,6 +44,8 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
+            var json = JsonConvert.SerializeObject(Request.Headers);
+            Log.Information("Headers: " + json);
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
                 return Response<StartResponse>.Fail("Yetkiniz bulunmuyor.", 401);
 
