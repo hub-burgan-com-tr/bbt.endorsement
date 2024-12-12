@@ -13,7 +13,6 @@ public static class StaticValuesExtensions
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
         StaticValues.SSOIntegrationService = settings.Entegration.SSoIntegrationService;
         StaticValues.ClientSecret = settings.Entegration.ClientSecret;
-        StaticValues.ContractUrl = settings.Entegration.ContractUrl;
         StaticValues.TsizlUrl = settings.Entegration.TsizlUrl;
 
         StaticValues.ApiSecret = settings.Entegration.ApiSecret;

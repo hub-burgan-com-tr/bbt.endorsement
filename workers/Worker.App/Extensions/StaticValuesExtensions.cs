@@ -13,7 +13,6 @@ public static class StaticValuesExtensions
         StaticValues.TemplateEngine = settings.Entegration.TemplateEngine;
         StaticValues.MessagingGateway = settings.Entegration.MessagingGateway;
         StaticValues.TsizlUrl = settings.Entegration.TsizlUrl;
-        StaticValues.ContractUrl = settings.Entegration.ContractUrl;
     }
 }
 
