@@ -49,7 +49,7 @@ public static class ClaimsPrincipalExtensions
             identity.AddClaim(new Claim("credential", credential));
              
         }
-        Log.Information("SSOResponseMapClaims: {CitizenshipNumber}, {CustomerNumber}, {BranchCode}, {FirstName}, {LastName}, {BusinessLine}, {IsStaff}, {Credentials},{allCredentials[0]}",
+        Log.Information("SetClaimLogs: {CitizenshipNumber}, {CustomerNumber}, {BranchCode}, {FirstName}, {LastName}, {BusinessLine}, {IsStaff}, {Credentials},{allCredentials[0]}",
             accessToken.CitizenshipNumber, accessToken.CustomerNumber, accessToken.BranchCode, accessToken.FirstName,
             accessToken.LastName, accessToken.BusinessLine, accessToken.IsStaff, allCredentials,allCredentials[0]);
 

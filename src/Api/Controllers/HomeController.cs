@@ -15,7 +15,7 @@ namespace Api.Controllers
     {
         private readonly IUserService _userService;
 
-        public HomeController( IUserService userService)
+        public HomeController(IUserService userService)
         {
             _userService = userService;
         }
@@ -32,7 +32,7 @@ namespace Api.Controllers
             var json = JsonConvert.SerializeObject(Request.Headers);
             Log.Information("Headers: " + json);
 
-            Log.Information("Login-Start: " );
+            Log.Information("Login-Start: ");
 
             try
             {
@@ -72,9 +72,9 @@ namespace Api.Controllers
                 Log.Information("Login-Start result:  " + JsonConvert.SerializeObject(result));
 
                 GetCredentials(result, response);
-                
-                User.SetClaim(response);
 
+                User.SetClaim(response);
+                HttpContext.User = User;
                 Log.Information("Login-Start result2:  " + JsonConvert.SerializeObject(result));
 
 
@@ -96,7 +96,7 @@ namespace Api.Controllers
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
         {
 
-            
+
             if (response.Credentials != null)
             {
                 foreach (var credential in response.Credentials)
@@ -138,7 +138,7 @@ namespace Api.Controllers
                                 result.Authory.IsBranchFormReader = true;
                             else
                                 result.Authory.IsBranchFormReader = false;
-                        } 
+                        }
                         else if (value[0] == "isUIVisible")
                         {
                             if (value[1] == "1")
@@ -247,11 +247,11 @@ namespace Api.Controllers
 
         //}
 
-     
+
 
         public class UserModel
         {
-        
+
             public int CustomerNumber { get; set; }
             public long CitizenshipNumber { get; set; }
             public string Token { get; set; }
