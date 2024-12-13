@@ -2,6 +2,7 @@
 using Domain.Models;
 using Infrastructure.Cache;
 using Infrastructure.SSOIntegration;
+using Infrastructure.SsoServices.Models;
 using Serilog;
 using System.Security.Claims;
 using System.Text.Json;
@@ -22,6 +23,36 @@ public static class ClaimsPrincipalExtensions
         var citizenshipNumber = long.Parse(principal.Claims.FirstOrDefault(c => c.Type == "username").Value.ToString());
 
         return citizenshipNumber;
+    }
+    public static void SetClaim(this ClaimsPrincipal principal, AccessToken accessToken)
+    {
+        var identity = principal.Identity as ClaimsIdentity;
+
+        if (identity == null)
+        {
+            throw new InvalidOperationException("Principal Identity is not of type ClaimsIdentity. SetClaim ");
+        }
+
+        identity.AddClaim(new Claim("username", accessToken.CitizenshipNumber));
+        identity.AddClaim(new Claim("customer_number", accessToken.CustomerNumber));
+        identity.AddClaim(new Claim("branch_id", accessToken.BranchCode));
+        identity.AddClaim(new Claim("first_name", accessToken.FirstName));
+        identity.AddClaim(new Claim("last_name", accessToken.LastName));
+        identity.AddClaim(new Claim("business_line", accessToken.BusinessLine));
+        identity.AddClaim(new Claim("is_staff", accessToken.IsStaff));
+
+        
+        var allCredentials = string.Join(",", accessToken.Credentials);
+
+        foreach (var credential in accessToken.Credentials)
+        {
+            identity.AddClaim(new Claim("credential", credential));
+             
+        }
+        Log.Information("SSOResponseMapClaims: {CitizenshipNumber}, {CustomerNumber}, {BranchCode}, {FirstName}, {LastName}, {BusinessLine}, {IsStaff}, {Credentials},{allCredentials[0]}",
+            accessToken.CitizenshipNumber, accessToken.CustomerNumber, accessToken.BranchCode, accessToken.FirstName,
+            accessToken.LastName, accessToken.BusinessLine, accessToken.IsStaff, allCredentials,allCredentials[0]);
+
     }
     public static bool IsCredentials(this ClaimsPrincipal principal, string requestUserName)
     {
@@ -78,7 +109,7 @@ public static class ClaimsPrincipalExtensions
 
                     if (resAuthorityForUser.StatusCode == 200)
                     {
-                         res.UserAuthorities = resAuthorityForUser.Data;
+                        res.UserAuthorities = resAuthorityForUser.Data;
                         Log.Information("GetSSOClaims start _ICacheProvider" + requestUserName + " Res" + res);
                         _cacheProvider.Set(requestUserName, res,
                          TimeSpan.FromMinutes(45));//TODO: Default 1 saat e çek
@@ -92,7 +123,7 @@ public static class ClaimsPrincipalExtensions
 
             var resCache = _cacheProvider.Get(requestUserName) as SSOIntegrationResponse;
 
-            Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " resCache ="+resCache );
+            Log.Information("GetSSOClaims _ICacheProvider" + requestUserName + " resCache =" + resCache);
             return SSOResponseMapClaims(principal, resCache);
         }
         return SSOResponseMapClaims(principal, res);

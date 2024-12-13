@@ -72,14 +72,14 @@ namespace Api.Controllers
                 Log.Information("Login-Start result:  " + JsonConvert.SerializeObject(result));
 
                 GetCredentials(result, response);
+                
+                User.SetClaim(response);
+
                 Log.Information("Login-Start result2:  " + JsonConvert.SerializeObject(result));
 
 
                 if (result != null)
                 {
-                    //TokenHandler tokenHandler = new TokenHandler();
-                   // Token token = tokenHandler.CreateAccessToken(result);
-                    //result.Token = token.AccessToken;
                     Log.Information("Login-Token: " + result.Token);
                 }
 
@@ -95,6 +95,8 @@ namespace Api.Controllers
 
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
         {
+
+            
             if (response.Credentials != null)
             {
                 foreach (var credential in response.Credentials)
