@@ -29,9 +29,6 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public GetSearchPersonSummaryDto Login()
         {
-            var json = JsonConvert.SerializeObject(Request.Headers);
-            Log.Information("Headers: " + json);
-
             Log.Information("Login-Start: ");
 
             try
@@ -72,14 +69,14 @@ namespace Api.Controllers
                 Log.Information("Login-Start result:  " + JsonConvert.SerializeObject(result));
 
                 GetCredentials(result, response);
-
-                User.SetClaim(response);
-                HttpContext.User = User;
                 Log.Information("Login-Start result2:  " + JsonConvert.SerializeObject(result));
 
 
                 if (result != null)
                 {
+                    //TokenHandler tokenHandler = new TokenHandler();
+                    // Token token = tokenHandler.CreateAccessToken(result);
+                    //result.Token = token.AccessToken;
                     Log.Information("Login-Token: " + result.Token);
                 }
 
@@ -92,7 +89,6 @@ namespace Api.Controllers
 
             return null;
         }
-
         private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
         {
 
