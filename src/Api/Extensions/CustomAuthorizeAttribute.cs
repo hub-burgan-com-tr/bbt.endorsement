@@ -9,12 +9,21 @@ public class AuthorizeUserAttribute : AuthorizeAttribute, IActionFilter
 {
     public void OnActionExecuted(ActionExecutedContext context)
     {
-         Log.Information("OnActionExecuted Headers geldi" );
-        // Log.Information("OnActionExecuted User:" + JsonConvert.SerializeObject(context.HttpContext?.User));
-    }
+        Log.Information("OnActionExecuted Headers geldi");
+        if (context?.HttpContext?.User?.Identity?.IsAuthenticated == true)
+        {
+            Log.Information("OnActionExecuted Headers IsAuthenticated");
 
+        }
+
+        Log.Information("OnActionExecuted Headers username" + context?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "username").Value?.ToString());
+        Log.Information("OnActionExecuted Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
+        Log.Information("OnActionExecuted Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
+    }
     public void OnActionExecuting(ActionExecutingContext context)
     {
+
+
         Log.Information("OnActionExecuting Headers:" + JsonConvert.SerializeObject(context.HttpContext?.Request?.Headers));
         // Log.Information("OnActionExecuting User: " + JsonConvert.SerializeObject(context.HttpContext?.User));
     }
