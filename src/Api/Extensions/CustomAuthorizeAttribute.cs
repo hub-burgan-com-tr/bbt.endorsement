@@ -15,7 +15,7 @@ public class AuthorizeUserAttribute : AuthorizeAttribute, IActionFilter
     public void OnActionExecuting(ActionExecutingContext context)
     {
         Log.Information("OnActionExecuting Headers:" + JsonConvert.SerializeObject(context.HttpContext?.Request?.Headers));
-        Log.Information("OnActionExecuting User: " + JsonConvert.SerializeObject(context.HttpContext?.User));
+        // Log.Information("OnActionExecuting User: " + JsonConvert.SerializeObject(context.HttpContext?.User));
     }
 }
 // public class CustomAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
