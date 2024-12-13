@@ -75,8 +75,8 @@ else
         .Build();
 
 Log.Logger = new LoggerConfiguration()
-  .ReadFrom.Configuration(Configuration)
-  .CreateLogger();
+   .ReadFrom.Configuration(Configuration)
+   .CreateLogger();
 
 //Serilog.Debugging.SelfLog.Enable(msg =>
 //{
@@ -89,28 +89,28 @@ Log.Logger = new LoggerConfiguration()
 //builder.Host.UseSerilog(((ctx, lc) => lc.ReadFrom.Configuration(Configuration)));
 
 builder.Host.UseSerilog((context, services, configuration) => configuration
-                   //.MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
-                   .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
-                   .ReadFrom.Configuration(context.Configuration)
-                   .ReadFrom.Services(services)
-                   .Enrich.WithElasticApmCorrelationInfo()
-                   .Enrich.FromLogContext().Enrich.WithEnvironmentName().Enrich.WithMachineName().Enrich.WithProcessId().Enrich.WithThreadId()
-                   .WriteTo.Async(e =>
-                   {
-                       e.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticSearchSettings:Uri"]))
-                       {
-                           ModifyConnectionSettings = x => x.BasicAuthentication(builder.Configuration["ElasticSearchSettings:Username"], builder.Configuration["ElasticSearchSettings:Password"]),
-                           AutoRegisterTemplate = true,
-                           OverwriteTemplate = true,
-                           IndexFormat = builder.Configuration["ElasticSearchSettings:IndexFormat"],
-                           MinimumLogEventLevel = LogEventLevel.Information,
-                           TypeName = null,
-                           BatchPostingLimit = 1,
-                           CustomFormatter = new EcsTextFormatter(),
+                    //.MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
+                    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+                    .ReadFrom.Configuration(context.Configuration)
+                    .ReadFrom.Services(services)
+                    .Enrich.WithElasticApmCorrelationInfo()
+                    .Enrich.FromLogContext().Enrich.WithEnvironmentName().Enrich.WithMachineName().Enrich.WithProcessId().Enrich.WithThreadId()
+                    .WriteTo.Async(e =>
+                    {
+                        e.Elasticsearch(new ElasticsearchSinkOptions(new Uri(builder.Configuration["ElasticSearchSettings:Uri"]))
+                        {
+                            ModifyConnectionSettings = x => x.BasicAuthentication(builder.Configuration["ElasticSearchSettings:Username"], builder.Configuration["ElasticSearchSettings:Password"]),
+                            AutoRegisterTemplate = true,
+                            OverwriteTemplate = true,
+                            IndexFormat = builder.Configuration["ElasticSearchSettings:IndexFormat"],
+                            MinimumLogEventLevel = LogEventLevel.Information,
+                            TypeName = null,
+                            BatchPostingLimit = 1,
+                            CustomFormatter = new EcsTextFormatter(),
 
-                       });
-                       e.Console(outputTemplate: "{Level}: [{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
-                   }));
+                        });
+                        e.Console(outputTemplate: "{Level}: [{ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
+                    }));
 builder.Services.Configure<FormOptions>(x =>
 {
     x.ValueLengthLimit = int.MaxValue;
@@ -144,30 +144,30 @@ builder.Services.AddSwaggerGen(options =>
 
 
     // To Enable authorization using Swagger (JWT)  
-    // options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    // {
-    //     In = ParameterLocation.Header,
-    //     Description = "Specify token with Bearer tag. example: Bearer {access_token}",
-    //     BearerFormat = "JWT",
-    //     Name = "Authorization",
-    //     Type = SecuritySchemeType.ApiKey,
-    //     // Scheme = "Bearer",
-    // });
-    // options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    //             {
-    //                     {
-    //                           new OpenApiSecurityScheme
-    //                             {
-    //                                 Reference = new OpenApiReference
-    //                                 {
-    //                                     Type = ReferenceType.SecurityScheme,
-    //                                     Id = "Bearer"
-    //                                 }
-    //                             },
-    //                             new string[] {}
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        In = ParameterLocation.Header,
+        Description = "Specify token with Bearer tag. example: Bearer {access_token}",
+        BearerFormat = "JWT",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        // Scheme = "Bearer",
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                        {
+                              new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    }
+                                },
+                                new string[] {}
 
-    //                     }
-    //             });
+                        }
+                });
 
 
     // options.SchemaFilter<EnumSchemaFilter>();
@@ -263,7 +263,7 @@ app.UseCors("corsapp");
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
