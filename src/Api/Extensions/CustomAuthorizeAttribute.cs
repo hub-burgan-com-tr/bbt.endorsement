@@ -9,7 +9,8 @@ public class AuthorizeUserAttribute : AuthorizeAttribute, IActionFilter
 {
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        Log.Information("OnActionExecuted User:" + JsonConvert.SerializeObject(context.HttpContext?.User));
+         Log.Information("OnActionExecuted Headers geldi" );
+        // Log.Information("OnActionExecuted User:" + JsonConvert.SerializeObject(context.HttpContext?.User));
     }
 
     public void OnActionExecuting(ActionExecutingContext context)
