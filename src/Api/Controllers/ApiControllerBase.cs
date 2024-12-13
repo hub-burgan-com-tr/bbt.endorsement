@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+    [AuthorizeUserAttribute(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class ApiControllerBase : ControllerBase

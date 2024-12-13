@@ -199,17 +199,17 @@ StaticValuesExtensions.SetStaticValues(settings);
 //    };
 //});
 
-// builder.Services.AddAuthentication(options =>
-// {
-//     // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
-// }).AddOAuthIntrospection(options =>
-// {
-//     options.Authority = new Uri(StaticValues.Authority);
-//     options.Audiences.Add(StaticValues.ClientId);
-//     options.ClientId = StaticValues.ClientId;
-//     options.ClientSecret = StaticValues.ApiSecret;
-//     options.RequireHttpsMetadata = Environment.IsProduction();
-// });
+builder.Services.AddAuthentication(options =>
+{
+    // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+}).AddOAuthIntrospection(options =>
+{
+    options.Authority = new Uri(StaticValues.Authority);
+    options.Audiences.Add(StaticValues.ClientId);
+    options.ClientId = StaticValues.ClientId;
+    options.ClientSecret = StaticValues.ApiSecret;
+    options.RequireHttpsMetadata = Environment.IsProduction();
+});
 
 Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ApiSecret);
 
@@ -264,7 +264,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 // app.UseAuthentication();
-// app.UseAuthorization();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
