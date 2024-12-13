@@ -1,31 +1,47 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.OpenApi.Services;
 using Newtonsoft.Json;
 using Serilog;
 using System.Linq;
 [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
-public class AuthorizeUserAttribute : AuthorizeAttribute, IActionFilter
+public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
 {
-    public void OnActionExecuted(ActionExecutedContext context)
+    // public void OnActionExecuted(ActionExecutedContext context)
+    // {
+    //     Log.Information("OnActionExecuted Headers geldi");
+    //     if (context?.HttpContext?.User?.Identity?.IsAuthenticated == true)
+    //     {
+    //         Log.Information("OnActionExecuted Headers IsAuthenticated");
+    //     }
+
+    //     Log.Information("OnActionExecuted Headers username" + context?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "username").Value?.ToString());
+    //     Log.Information("OnActionExecuted Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
+    //     Log.Information("OnActionExecuted Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
+    // }
+    // public void OnActionExecuting(ActionExecutingContext context)
+    // {
+    //     Log.Information("OnActionExecuting Headers:" + JsonConvert.SerializeObject(context.HttpContext?.Request?.Headers));
+    // }
+    private readonly string _authenticationScheme;
+
+    public AuthorizeUserAttribute(string authenticationScheme)
     {
-        Log.Information("OnActionExecuted Headers geldi");
+        _authenticationScheme = authenticationScheme;
+    }
+    public void OnAuthorization(AuthorizationFilterContext context)
+    {
+        Log.Information("OnAuthorization Headers geldi");
         if (context?.HttpContext?.User?.Identity?.IsAuthenticated == true)
         {
             Log.Information("OnActionExecuted Headers IsAuthenticated");
-
         }
 
-        Log.Information("OnActionExecuted Headers username" + context?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "username").Value?.ToString());
-        Log.Information("OnActionExecuted Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
-        Log.Information("OnActionExecuted Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
-    }
-    public void OnActionExecuting(ActionExecutingContext context)
-    {
-
-
-        Log.Information("OnActionExecuting Headers:" + JsonConvert.SerializeObject(context.HttpContext?.Request?.Headers));
-        // Log.Information("OnActionExecuting User: " + JsonConvert.SerializeObject(context.HttpContext?.User));
+        Log.Information("OnAuthorization Headers username" + context?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "username").Value?.ToString());
+        Log.Information("OnAuthorization Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
+        Log.Information("OnAuthorization Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
+        return;
     }
 }
 // public class CustomAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
