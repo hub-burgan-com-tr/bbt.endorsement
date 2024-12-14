@@ -61,10 +61,11 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
         var response = userService.AccessTokenResource(access_token).Result;
         if (response == null)
         {
-            Log.Information(log+"-AccessTokenResourceif: {ResponseObject}", JsonConvert.SerializeObject(response));
+            Log.Information(log+"-AccessTokenResourceifnull");
             context.Result = new UnauthorizedResult();
             return;
         }
+            Log.Information(log+"-AccessTokenResourceif: {ResponseObject}", JsonConvert.SerializeObject(response));
 
         Log.Information(log+"-end");
 
