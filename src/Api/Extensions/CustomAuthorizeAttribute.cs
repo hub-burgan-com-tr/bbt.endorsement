@@ -92,6 +92,7 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
         context.HttpContext.User = principal;
 
         Log.Information(log + "-end");
+        return;
 
         // if (!string.IsNullOrEmpty(response.Token))
         // {
@@ -124,13 +125,7 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
         //     return;//token yok
         // }
 
-        // // if (context?.HttpContext?.User?.Identity?.IsAuthenticated == true)
-        // // {
-        // //     Log.Information("OnActionExecuted Headers IsAuthenticated");
-        // //     Log.Information("OnAuthorization Headers username" + context?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "username").Value?.ToString());
-        // //     Log.Information("OnAuthorization Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
-        // //     Log.Information("OnAuthorization Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
-        // // }
+      
     }
 
     private ClaimsPrincipal ValidateToken(string token)
