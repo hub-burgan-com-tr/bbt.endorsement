@@ -88,8 +88,18 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
 
         var identity = new ClaimsIdentity(claims, _authenticationScheme);
         var principal = new ClaimsPrincipal(identity);
-
         context.HttpContext.User = principal;
+
+        if (context.HttpContext.User is null)
+        {
+            Log.Information(log + "-User null");
+        }
+        else
+        {
+            Log.Information("OnAuthorization Headers username" + context?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "username").Value?.ToString());
+            Log.Information("OnAuthorization Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
+            Log.Information("OnAuthorization Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
+        }
 
         Log.Information(log + "-end");
         return;
@@ -125,7 +135,13 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
         //     return;//token yok
         // }
 
-      
+        // if (context?.HttpContext?.User?.Identity?.IsAuthenticated == true)
+        // {
+        //     Log.Information("OnActionExecuted Headers IsAuthenticated");
+        //     Log.Information("OnAuthorization Headers username" + context?.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == "username").Value?.ToString());
+        //     Log.Information("OnAuthorization Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
+        //     Log.Information("OnAuthorization Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
+        // }
     }
 
     private ClaimsPrincipal ValidateToken(string token)
