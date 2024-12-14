@@ -45,30 +45,53 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
         {
             access_token = value.Substring("Bearer ".Length);
         }
-        Log.Information(log+"-Bearer ");
+        Log.Information(log + "-Bearer ");
         var userService = context.HttpContext.RequestServices.GetService<IUserService>();
-        Log.Information(log+"-userService ");
+        Log.Information(log + "-userService ");
 
         if (userService == null)
         {
-            Log.Information(log+"userServiceif");
+            Log.Information(log + "userServiceif");
 
             context.Result = new UnauthorizedResult();
             return;
         }
-        Log.Information(log+"-AccessTokenResource");
+        Log.Information(log + "-AccessTokenResource");
 
         var response = userService.AccessTokenResource(access_token).Result;
         if (response == null)
         {
-            Log.Information(log+"-AccessTokenResourceifnull");
+            Log.Information(log + "-AccessTokenResourceifnull");
             context.Result = new UnauthorizedResult();
             return;
         }
-            Log.Information(log+"-AccessTokenResourceif: {ResponseObject}", JsonConvert.SerializeObject(response));
+        Log.Information(log + "-AccessTokenResourceif: {ResponseObject}", JsonConvert.SerializeObject(response));
+        var claims = new List<Claim>
+    {
+        new Claim("CitizenshipNumber", response.CitizenshipNumber ?? ""),
+        new Claim("CustomerNumber", response.CustomerNumber ?? ""),
+        new Claim("FirstName", response.FirstName ?? ""),
+        new Claim("LastName", response.LastName ?? ""),
+        new Claim("IsStaff", response.IsStaff ?? ""),
+        new Claim("BranchCode", response.BranchCode ?? ""),
+        new Claim("BusinessLine", response.BusinessLine ?? ""),
+        new Claim("IsLogin", response.IsLogin.ToString())
+    };
 
-        Log.Information(log+"-end");
+        if (response.Credentials != null)
+        {
+            foreach (var credential in response.Credentials)
+            {
+                claims.Add(new Claim("Credential", credential));
+            }
+        }
 
+        var identity = new ClaimsIdentity(claims, _authenticationScheme);
+        var principal = new ClaimsPrincipal(identity);
+
+        context.HttpContext.User = principal;
+
+        Log.Information(log + "-end");
         // if (!string.IsNullOrEmpty(response.Token))
         // {
         //     try
