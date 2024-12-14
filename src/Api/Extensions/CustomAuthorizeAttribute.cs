@@ -92,6 +92,8 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
         context.HttpContext.User = principal;
 
         Log.Information(log + "-end");
+        return;
+
         // if (!string.IsNullOrEmpty(response.Token))
         // {
         //     try
@@ -130,7 +132,6 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
             Log.Information("OnAuthorization Headers FirstOrDefault" + context?.HttpContext?.User?.Claims?.FirstOrDefault().Value?.ToString());
             Log.Information("OnAuthorization Headers LastOrDefault" + context?.HttpContext?.User?.Claims?.LastOrDefault().Value?.ToString());
         }
-        return;
     }
 
     private ClaimsPrincipal ValidateToken(string token)
