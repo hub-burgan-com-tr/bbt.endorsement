@@ -37,6 +37,7 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
     }
     public void OnAuthorization(AuthorizationFilterContext context)
     {
+        var log = "OnAuthorizationLogs";
         Log.Information("OnAuthorization Headers geldi");
         string access_token = "";
         string value = context?.HttpContext?.Request?.Headers["Authorization"];
@@ -44,30 +45,28 @@ public class AuthorizeUserAttribute : Attribute, IAuthorizationFilter
         {
             access_token = value.Substring("Bearer ".Length);
         }
-        Log.Information("Login-Start:Bearer ");
+        Log.Information(log+"-Bearer ");
         var userService = context.HttpContext.RequestServices.GetService<IUserService>();
-        Log.Information("Login-Start-userService ");
+        Log.Information(log+"-userService ");
 
         if (userService == null)
         {
-            Log.Information("Login-Start-userServiceif");
+            Log.Information(log+"userServiceif");
 
             context.Result = new UnauthorizedResult();
             return;
         }
-        Log.Information("Login-Start-AccessTokenResource");
+        Log.Information(log+"-AccessTokenResource");
 
         var response = userService.AccessTokenResource(access_token).Result;
         if (response == null)
         {
-            Log.Information("Login-Start-AccessTokenResourceif");
-            Log.Information("Login-Start-AccessTokenResourceif: {ResponseObject}", JsonConvert.SerializeObject(response));
-
+            Log.Information(log+"-AccessTokenResourceif: {ResponseObject}", JsonConvert.SerializeObject(response));
             context.Result = new UnauthorizedResult();
             return;
         }
 
-        Log.Information("Login-Start:AccessTokenResource ");
+        Log.Information(log+"-end");
 
         // if (!string.IsNullOrEmpty(response.Token))
         // {
