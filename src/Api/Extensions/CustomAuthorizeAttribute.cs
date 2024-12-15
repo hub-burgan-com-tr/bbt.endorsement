@@ -54,7 +54,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
             var response = await userService.AccessTokenResource(accessToken);
 
 
-            if (response == null)
+            if (response.CitizenshipNumber == null)
             {
                 Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie for token: {R-User-Name}", logPrefix, context.HttpContext.Request.Headers["R-User-Name"]);
                 var claims2 = new List<Claim>
