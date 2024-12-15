@@ -57,14 +57,15 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
             if (response == null || string.IsNullOrEmpty(response.CitizenshipNumber))
             {
                 var userNameHeader = context.HttpContext.Request.Headers["R-User-Name"].FirstOrDefault() ?? "Unknown";
-                Log.Warning("{LogPrefix} - AccessTokenResource returned no user data for token: {R-User-Name}", logPrefix, userNameHeader);
+                Log.Warning("{LogPrefix} - AccessTokenResource returned no user data for token: {userNameHeader}", logPrefix, userNameHeader);
+
                 if (string.IsNullOrEmpty(userNameHeader))
                 {
                     Log.Warning("{LogPrefix} - Missing R-User-Name header", logPrefix);
                 }
                 var claims2 = new List<Claim>
                         {
-                            new Claim("username", response.CitizenshipNumber),
+                            new Claim("username", userNameHeader),
                         };
                 var identity2 = new ClaimsIdentity(claims2, _authenticationScheme);
                 var principal2 = new ClaimsPrincipal(identity2);
