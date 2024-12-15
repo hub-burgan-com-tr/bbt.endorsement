@@ -53,16 +53,24 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
             Log.Information("{LogPrefix} - Fetching user data from AccessTokenResource", logPrefix);
             var response = await userService.AccessTokenResource(accessToken);
 
+
             if (response == null)
             {
-                Log.Warning("{LogPrefix} - AccessTokenResource returned null for token: {Token}", logPrefix, accessToken);
-                context.Result = new UnauthorizedResult();
+                Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie for token: {R-User-Name}", logPrefix, context.HttpContext.Request.Headers["R-User-Name"]);
+                var claims2 = new List<Claim>
+                        {
+                            new Claim("username", response.CitizenshipNumber),
+                        };
+                var identity2 = new ClaimsIdentity(claims2, _authenticationScheme);
+                var principal2 = new ClaimsPrincipal(identity2);
+                context.HttpContext.User = principal2;
+                Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, context.HttpContext.Request.Headers["R-User-Name"]);
+                context.HttpContext.User = principal2;
+                Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie end token: {R-User-Name}", logPrefix, context.HttpContext.Request.Headers["R-User-Name"]);
                 return;
             }
 
             Log.Information("{LogPrefix} - User data fetched successfully: {Response}", logPrefix, JsonConvert.SerializeObject(response));
-
-            // Create claims
             var claims = new List<Claim>
             {
                 new Claim("CitizenshipNumber", response.CitizenshipNumber ?? ""),
@@ -78,6 +86,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                 new Claim("given_name",response.FirstName),
                 new Claim("branch_id", response.BranchCode),
             };
+            // Create claims
 
             Log.Information("{LogPrefix} - Core claims added: {Claims}", logPrefix, claims.Select(c => c.Type));
 
