@@ -54,9 +54,14 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
             var response = await userService.AccessTokenResource(accessToken);
 
 
-            if (response.CitizenshipNumber == null)
+            if (response == null || string.IsNullOrEmpty(response.CitizenshipNumber))
             {
-                Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie for token: {R-User-Name}", logPrefix, context.HttpContext.Request.Headers["R-User-Name"]);
+                var userNameHeader = context.HttpContext.Request.Headers["R-User-Name"].FirstOrDefault() ?? "Unknown";
+                Log.Warning("{LogPrefix} - AccessTokenResource returned no user data for token: {R-User-Name}", logPrefix, userNameHeader);
+                if (string.IsNullOrEmpty(userNameHeader))
+                {
+                    Log.Warning("{LogPrefix} - Missing R-User-Name header", logPrefix);
+                }
                 var claims2 = new List<Claim>
                         {
                             new Claim("username", response.CitizenshipNumber),
@@ -64,9 +69,9 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                 var identity2 = new ClaimsIdentity(claims2, _authenticationScheme);
                 var principal2 = new ClaimsPrincipal(identity2);
                 context.HttpContext.User = principal2;
-                Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, context.HttpContext.Request.Headers["R-User-Name"]);
+                Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, userNameHeader);
                 context.HttpContext.User = principal2;
-                Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie end token: {R-User-Name}", logPrefix, context.HttpContext.Request.Headers["R-User-Name"]);
+                Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie end token: {R-User-Name}", logPrefix, userNameHeader);
                 return;
             }
 
