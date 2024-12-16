@@ -46,7 +46,7 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Serilog.Log.Information("NewOrder - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Response<StartResponse>.Fail("Yetkiniz bulunmuyor.", 401);
             }
@@ -329,7 +329,7 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Serilog.Log.Information("GetWantApprovalDetailAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Ok(Response<GetWantApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 401));
 
@@ -371,7 +371,7 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Serilog.Log.Information("GetWatchApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Ok(Response<PaginatedList<GetWatchApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 401));
             }
@@ -403,7 +403,7 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Serilog.Log.Information("GetWatchApprovalDetailAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Ok(Response<GetWatchApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 401));
             }
