@@ -37,9 +37,7 @@ namespace Infrastructure.SSOIntegration
             {
                 var requestBody = GenerateSoapRequestBody("SearchUserInfo", new
                 {
-                    loginName,
-                    firstName,
-                    lastName
+                    loginName
                 });
 
                 var restRequest = CreateRestRequest("?op=SearchUserInfo", requestBody);
