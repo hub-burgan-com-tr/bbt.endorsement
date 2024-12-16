@@ -104,7 +104,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                 context.HttpContext.User = principal2;
                 Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, userNameHeader);
                 context.HttpContext.User = principal2;
-                Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie end token: {R-User-Name}", logPrefix, userNameHeader);
+                Log.Warning("{LogPrefix} - AccessTokenResource returned amorphie end token: {userNameHeader}", logPrefix, userNameHeader);
                 return;
             }
 
