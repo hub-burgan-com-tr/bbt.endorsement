@@ -101,7 +101,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
             {
                 foreach (var credential in response.Credentials)
                 {
-                    claims.Add(new Claim("Credential", credential));
+                    claims.Add(new Claim("credentials", credential));
                 }
 
                 Log.Information("{LogPrefix} - Credentials added to claims: {Credentials}", logPrefix, response.Credentials);
