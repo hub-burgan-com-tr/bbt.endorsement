@@ -220,6 +220,7 @@ namespace Infrastructure.SSOIntegration
 
         private string GetCustomerByCitizenshipNoResponse(string content)
         {
+            Log.Information("GetCustomerByCitizenshipNoResponse:" +content);
             doc.LoadXml(content);
             return GetCustomerByCitizenshipNoDocSelectField("ExternalClientNo");
         }
