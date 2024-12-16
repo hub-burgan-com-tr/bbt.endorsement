@@ -43,7 +43,7 @@ public static class ClaimsPrincipalExtensions
         }
 
         var credentials = principal.Claims.Where(c => c.Type == "credentials").ToList();
-
+        
         return credentials.Count > 0;
     }
 

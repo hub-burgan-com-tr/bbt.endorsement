@@ -91,6 +91,8 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                 new Claim("customer_number", response.CustomerNumber?? ""),
                 new Claim("given_name",response.FirstName?? ""),
                 new Claim("branch_id", response.BranchCode?? ""),
+                new Claim("family_name", response.LastName?? ""),
+                new Claim("business_line", response.BusinessLine?? ""),
             };
             // Create claims
 
