@@ -17,6 +17,7 @@ using Domain.Enums;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
@@ -40,7 +41,12 @@ namespace Api.Controllers
         {
             Log.Warning("Request.Headers[\"R-User-Name\"]" + Request.Headers["R-User-Name"]);
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
+            {
+                var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                 Response.StatusCode = 401; 
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 401);
+            }
 
             request.Id = Guid.NewGuid().ToString();
             var contentData = request.Content;
