@@ -194,21 +194,15 @@ namespace Infrastructure.SSOIntegration
             restRequest.AddHeader("Content-Type", "application/soap+xml");
 
             #region body
-            var body = string.Format(@"<?xml version=""1.0"" encoding=""utf-8""?>
-" + "\n" +
-        @"<soap12:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap12=""http://www.w3.org/2003/05/soap-envelope"">
-" + "\n" +
-        @"  <soap12:Body>
-" + "\n" +
-        @"    <GetCustomerByCitizenshipNo xmlns=""http://tempuri.org/"">
-" + "\n" +
-        @"      <citizenshipNo>{0}</citizenshipNo>
-" + "\n" +
-        @"    </GetCustomerByCitizenshipNo>
-" + "\n" +
-        @"  </soap12:Body>
-" + "\n" +
-        @"</soap12:Envelope>", citizenshipNo);
+
+            var body = string.Format(@"<?xml version=""1.0"" encoding=""utf-8""?>" + "\n" +
+    @"<soap12:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap12=""http://www.w3.org/2003/05/soap-envelope"">" + "\n" +
+    @"  <soap12:Body>" + "\n" +
+    @"    <GetCustomerByCitizenshipNo xmlns=""http://intertech.com.tr/Pusula"">" + "\n" +
+    @"      <citizenshipNo>35765082602</citizenshipNo>" + "\n" +
+    @"    </GetCustomerByCitizenshipNo>" + "\n" +
+    @"  </soap12:Body>" + "\n" +
+    @"</soap12:Envelope>", citizenshipNo);
             #endregion
 
             restRequest.AddParameter("application/soap+xml", body, ParameterType.RequestBody);
@@ -262,7 +256,7 @@ namespace Infrastructure.SSOIntegration
             return DocSelectField("LoginName");
         }
 
-       
+
     }
 
 
