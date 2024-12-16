@@ -21,10 +21,11 @@ using Newtonsoft.Json;
 using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using System.Security.Claims;
 
 namespace Api.Controllers
 {
-   // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("Forms")]
     [ApiController]
     public class FormController : ApiControllerBase
@@ -42,9 +43,11 @@ namespace Api.Controllers
             Log.Warning("Request.Headers[\"R-User-Name\"]" + Request.Headers["R-User-Name"]);
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
-                var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
-                 Response.StatusCode = 401; 
+                var userClaims = HttpContext.User?.Claims
+                        .Select(c => new { c.Type, c.Value })
+                        .ToList() ;
+                Serilog.Log.Information("CreateOrUpdateFormAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Response.StatusCode = 401;
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 401);
             }
 
@@ -83,7 +86,7 @@ namespace Api.Controllers
 
         [SwaggerOperation(
            Summary = "Get forms by tag",
-           Description = "Get forms by tag" 
+           Description = "Get forms by tag"
        )]
         [Route("GetByTagForm")]
         [HttpGet]
@@ -169,7 +172,7 @@ Description = "Returns process and tags form by name")]
         public async Task<Response<bool>> UpdateFormInformation([FromBody] UpdateFormInformationCommand request)
         {
             return await Mediator.Send(request);
-          
+
         }
         [SwaggerOperation(
   Summary = "Get process and form information",
