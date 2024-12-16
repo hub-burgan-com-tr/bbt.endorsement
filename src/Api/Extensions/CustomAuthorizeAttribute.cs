@@ -86,11 +86,11 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                 new Claim("IsStaff", response.IsStaff ?? ""),
                 new Claim("BranchCode", response.BranchCode ?? ""),
                 new Claim("BusinessLine", response.BusinessLine ?? ""),
-                new Claim("IsLogin", response.IsLogin.ToString()),
-                new Claim("username", response.CitizenshipNumber),
-                new Claim("customer_number", response.CustomerNumber),
-                new Claim("given_name",response.FirstName),
-                new Claim("branch_id", response.BranchCode),
+                new Claim("IsLogin", response.IsLogin.ToString()?? ""),
+                new Claim("username", response.CitizenshipNumber?? ""),
+                new Claim("customer_number", response.CustomerNumber?? ""),
+                new Claim("given_name",response.FirstName?? ""),
+                new Claim("branch_id", response.BranchCode?? ""),
             };
             // Create claims
 
