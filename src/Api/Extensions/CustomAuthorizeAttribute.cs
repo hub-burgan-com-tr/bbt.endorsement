@@ -73,7 +73,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                     if(string.IsNullOrEmpty(citizenship)) return;
 
                     var getCustomerByCitizenshipNo = await ssoIntegrationService.GetCustomerByCitizenshipNo(citizenship);
-                    if (getCustomerByCitizenshipNo.Data == 0)
+                    if (getCustomerByCitizenshipNo.Data.Length > 1)
                     {
                         return;
                     }
