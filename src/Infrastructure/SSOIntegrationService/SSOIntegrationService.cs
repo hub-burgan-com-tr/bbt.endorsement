@@ -4,6 +4,7 @@ using Application.SSOIntegrationService.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using RestSharp;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -186,7 +187,12 @@ namespace Infrastructure.SSOIntegration
 
 
         }
-
+        private string GetCustomerByCitizenshipNoDocSelectField(string field)
+        {
+            // diffgram içindeki NewDataSet -> Table1 -> field (örn: ExternalClientNo) alanını seçmek için XPath
+            var xpath = $"//NewDataSet/Table1/{field}";
+            return doc.SelectSingleNode(xpath)?.InnerText?.Trim() ?? "";
+        }
         public async Task<Response<string>> GetCustomerByCitizenshipNo(string citizenshipNo)
         {
             var restClient = new RestClient(_SSOIntegrationPusulaServiceUrl);
@@ -215,7 +221,7 @@ namespace Infrastructure.SSOIntegration
         private string GetCustomerByCitizenshipNoResponse(string content)
         {
             doc.LoadXml(content);
-            return DocSelectField("ExternalClientNo");
+            return GetCustomerByCitizenshipNoDocSelectField("ExternalClientNo");
         }
 
 
