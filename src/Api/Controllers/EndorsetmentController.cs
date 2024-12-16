@@ -22,6 +22,7 @@ using Domain.Enums;
 using Api.Extensions;
 using Application.Endorsements.Queries.GetDocumentPdfs;
 using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace Api.Controllers
 {
@@ -43,11 +44,15 @@ namespace Api.Controllers
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
+            {
+                var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Response.StatusCode = 401;
                 return Response<StartResponse>.Fail("Yetkiniz bulunmuyor.", 401);
-
+            }
             request.Id = Guid.NewGuid().ToString();
             var person = UserExtensions.GetOrderPerson(User.Claims);
-            return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person= person, FormType = Form.Order });
+            return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person = person, FormType = Form.Order });
         }
 
         [SwaggerOperation(
@@ -215,7 +220,7 @@ namespace Api.Controllers
             var result = await Mediator.Send(new GetApprovalDetailsQuery() { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
         }
-       
+
 
         /// <summary>
         ///  Onayladıklarım Listesi
@@ -260,7 +265,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetMyApprovalDetailAsync([FromQuery] string orderId)
         {
-           // var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
+            // var citizenshipNumber = long.Parse(User.Claims.FirstOrDefault(c => c.Type == "CitizenshipNumber").Value);
             var citizenshipNumber = User.GetCitizenshipNumber();
 
             var result = await Mediator.Send(new GetMyApprovalDetailsQuery { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
@@ -291,7 +296,12 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWantApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
+            {
+                var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Response.StatusCode = 401;
                 return Ok(Response<PaginatedList<GetWantApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 401));
+            }
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
             var result = await Mediator.Send(new GetWantApprovalQuery { Person = orderPerson, PageNumber = pageNumber, PageSize = pageSize });
@@ -317,9 +327,15 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWantApprovalDetailAsync([FromQuery] string orderId)
         {
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
+            {
+                var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Response.StatusCode = 401;
                 return Ok(Response<GetWantApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 401));
+
+            }
             var citizenshipNumber = User.GetCitizenshipNumber();
-            var result = await Mediator.Send(new GetWantApprovalDetailsQuery() {CitizenshipNumber=citizenshipNumber, OrderId = orderId });
+            var result = await Mediator.Send(new GetWantApprovalDetailsQuery() { CitizenshipNumber = citizenshipNumber, OrderId = orderId });
             return Ok(result);
         }
 
@@ -353,10 +369,15 @@ namespace Api.Controllers
          string processNo, int pageNumber = 1, int pageSize = 10)
         {
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
+            {
+                var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Response.StatusCode = 401;
                 return Ok(Response<PaginatedList<GetWatchApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 401));
+            }
             var orderPerson = UserExtensions.GetOrderPerson(User.Claims);
 
-            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize,Person=orderPerson });
+            var result = await Mediator.Send(new GetWatchApprovalQuery { Approver = approver, Customer = customer, Process = process, State = state, ProcessNo = processNo, PageNumber = pageNumber, PageSize = pageSize, Person = orderPerson });
             return Ok(result);
         }
 
@@ -380,7 +401,12 @@ namespace Api.Controllers
         public async Task<IActionResult> GetWatchApprovalDetailAsync([FromQuery] string orderId)
         {
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
+            {
+                var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
+                Response.StatusCode = 401;
                 return Ok(Response<GetWatchApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 401));
+            }
             var response = await Mediator.Send(new GetWatchApprovalDetailsQuery() { OrderId = orderId });
             return Ok(response);
         }
