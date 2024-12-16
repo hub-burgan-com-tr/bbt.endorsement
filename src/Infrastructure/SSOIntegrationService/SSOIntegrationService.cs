@@ -79,7 +79,7 @@ namespace Infrastructure.SSOIntegration
         }
         #endregion
         #region GetCustomerByCitizenshipNo
-        public async Task<Response<string>> GetCustomerByCitizenshipNo(string  citizenshipNo)
+        public async Task<Response<long>> GetCustomerByCitizenshipNo(string  citizenshipNo)
         {
             try
             {
@@ -90,14 +90,14 @@ namespace Infrastructure.SSOIntegration
 
                 var restRequest = CreateRestRequest("?op=GetCustomerByCitizenshipNo", requestBody);
                 var restResponse = await _restClientPusula.ExecutePostAsync(restRequest);
-                var response = ParseResponse<string>(restResponse.Content, "ExternalClientNo");
+                var response = ParseResponse<long>(restResponse.Content, "ExternalClientNo");
 
-                return Response<string>.Success(response, 200);
+                return Response<long>.Success(response, 200);
             }
             catch (Exception ex)
             {
                 // Log and handle error as needed
-                return Response<string>.Fail(ex.Message, 500);
+                return Response<long>.Fail(ex.Message, 500);
             }
         }
         #endregion
