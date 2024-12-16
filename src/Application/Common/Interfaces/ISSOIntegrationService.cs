@@ -13,5 +13,7 @@ namespace Application.Common.Interfaces
         Task<Response<string>> SearchUserInfo(string loginName, string firstName, string lastName);
         Task<Response<List<UserAuthority>>> GetAuthorityForUser(string applicationCode, string authorityName, string loginAndDomainName);
         Task<Response<UserInfo>> GetUserByRegisterId(string registerId);
+        Task<Response<string>> GetCustomerByCitizenshipNo(string  citizenshipNo);
+         Task<Response<string>> GetUserInfoByCustomerNo(string customerNo);
     }
 }

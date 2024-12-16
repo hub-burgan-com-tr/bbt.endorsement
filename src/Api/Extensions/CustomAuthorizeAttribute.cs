@@ -1,3 +1,4 @@
+using Application.Common.Interfaces;
 using Infrastructure.SsoServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -56,13 +57,44 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
 
             if (response == null || string.IsNullOrEmpty(response.CitizenshipNumber))
             {
-                var userNameHeader = context.HttpContext.Request.Headers["R-User-Name"].FirstOrDefault() ?? "Unknown";
-                Log.Warning("{LogPrefix} - AccessTokenResource returned no user data for token: {userNameHeader}", logPrefix, userNameHeader);
+                    Log.Warning("{LogPrefix} - Missing R-User-Name header", logPrefix);
+
+                var userNameHeader = context.HttpContext.Request.Headers["R-User-Name"].FirstOrDefault() ?? string.Empty;
+                    Log.Warning("{LogPrefix} - Missing R-User-Name {userNameHeader}", logPrefix,userNameHeader);
 
                 if (string.IsNullOrEmpty(userNameHeader))
                 {
-                    Log.Warning("{LogPrefix} - Missing R-User-Name header", logPrefix);
+                    var ssoIntegrationService = context.HttpContext.RequestServices.GetService<ISSOIntegrationService>();
+                    Log.Warning("{LogPrefix} - ssoIntegrationService start ", logPrefix,userNameHeader);
+
+                    var citizenship = context.HttpContext.Request.Headers["user.reference"].FirstOrDefault() ??  string.Empty;
+                    Log.Warning("{LogPrefix} - ssoIntegrationService {citizenship} ", logPrefix,citizenship);
+
+                    if(string.IsNullOrEmpty(citizenship)) return;
+
+                    var getCustomerByCitizenshipNo = await ssoIntegrationService.GetCustomerByCitizenshipNo(citizenship);
+                    if (getCustomerByCitizenshipNo.Data == null)
+                    {
+                        return;
+                    }
+                    Log.Warning("{LogPrefix} - ssoIntegrationService getCustomerByCitizenshipNo  {getCustomerByCitizenshipNo.Data } ", logPrefix,getCustomerByCitizenshipNo.Data );
+
+                    var getUserInfoByCustomerNo = await ssoIntegrationService.GetUserInfoByCustomerNo(getCustomerByCitizenshipNo.Data);
+                    if (getUserInfoByCustomerNo.Data == null)
+                    {
+                        return;
+                    }
+                    Log.Warning("{LogPrefix} - ssoIntegrationService getUserInfoByCustomerNo  {getUserInfoByCustomerNo.Data } ", logPrefix,getUserInfoByCustomerNo.Data );
+
+                    if (getUserInfoByCustomerNo.Data.IndexOf('\\') != -1)
+                    {
+                        var parts = getUserInfoByCustomerNo.Data.Split('\\');
+                        userNameHeader = (parts != null && parts.Length > 1) ? parts[1] : string.Empty;
+                    }
                 }
+                Log.Warning("{LogPrefix} - AccessTokenResource returned no user data for token: {userNameHeader}", logPrefix, userNameHeader);
+
+               
                 var claims2 = new List<Claim>
                         {
                             new Claim("username", userNameHeader),

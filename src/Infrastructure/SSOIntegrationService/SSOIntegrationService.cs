@@ -17,10 +17,12 @@ namespace Infrastructure.SSOIntegration
     {
         private readonly string _SSOIntegrationServiceUrl;
         private static readonly RestClient _restClient;
+        private static readonly RestClient _restClientPusula;
 
         static SSOIntegrationService()
         {
             _restClient = new RestClient(StaticValues.SSOIntegrationService);
+            _restClientPusula = new RestClient(StaticValues.SSOIntegrationService.Replace("SSOIntegrationWebService/Service.asmx", "Pusula/Customerservices.asmx"));
         }
 
         public SSOIntegrationService()
@@ -53,7 +55,52 @@ namespace Infrastructure.SSOIntegration
             }
         }
         #endregion
+         #region GetUserInfoByCustomerNo
+        public async Task<Response<string>> GetUserInfoByCustomerNo(string customerNo)
+        {
+            try
+            {
+                var requestBody = GenerateSoapRequestBody("GetUserInfoByCustomerNo", new
+                {
+                    customerNo
+                });
 
+                var restRequest = CreateRestRequest("?op=GetUserInfoByCustomerNo", requestBody);
+                var restResponse = await _restClient.ExecutePostAsync(restRequest);
+                var response = ParseResponse<string>(restResponse.Content, "LoginName");
+
+                return Response<string>.Success(response, 200);
+            }
+            catch (Exception ex)
+            {
+                // Log and handle error as needed
+                return Response<string>.Fail(ex.Message, 500);
+            }
+        }
+        #endregion
+        #region GetCustomerByCitizenshipNo
+        public async Task<Response<string>> GetCustomerByCitizenshipNo(string  citizenshipNo)
+        {
+            try
+            {
+                var requestBody = GenerateSoapRequestBody("GetCustomerByCitizenshipNo", new
+                {
+                    citizenshipNo
+                });
+
+                var restRequest = CreateRestRequest("?op=GetCustomerByCitizenshipNo", requestBody);
+                var restResponse = await _restClientPusula.ExecutePostAsync(restRequest);
+                var response = ParseResponse<string>(restResponse.Content, "ExternalClientNo");
+
+                return Response<string>.Success(response, 200);
+            }
+            catch (Exception ex)
+            {
+                // Log and handle error as needed
+                return Response<string>.Fail(ex.Message, 500);
+            }
+        }
+        #endregion
         #region GetAuthorityForUser
         public async Task<Response<List<UserAuthority>>> GetAuthorityForUser(string applicationCode, string authorityName, string loginAndDomainName)
         {
