@@ -213,7 +213,7 @@ namespace Infrastructure.SSOIntegration
         {
             var restClient = new RestClient(_SSOIntegrationPusulaServiceUrl);
             var restRequest = new RestRequest("?op=GetCustomerByCitizenshipNo", Method.Post);
-            restRequest.AddHeader("Content-Type", "application/soap+xml; charset=utf-8");
+            restRequest.AddHeader("Content-Type", "application/soap+xml");
 
             #region body
 
@@ -227,7 +227,7 @@ namespace Infrastructure.SSOIntegration
     @"</soap12:Envelope>", citizenshipNo);
             #endregion
 
-            restRequest.AddParameter("application/soap+xml; charset=utf-8", body, ParameterType.RequestBody);
+            restRequest.AddParameter("application/soap+xml", body, ParameterType.RequestBody);
             var restResponse = await restClient.ExecutePostAsync(restRequest);
             var response = GetCustomerByCitizenshipNoResponse(restResponse.Content);
 
