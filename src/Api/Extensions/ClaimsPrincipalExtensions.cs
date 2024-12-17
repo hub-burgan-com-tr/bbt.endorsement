@@ -74,9 +74,10 @@ public static class ClaimsPrincipalExtensions
                 var resUserByRegisterId = await ssoService.GetUserByRegisterId(res.RegisterId);
                 if (resUserByRegisterId.StatusCode == 200)
                 {
+                    Log.Information("resUserByRegisterId.Data "+resUserByRegisterId.Data);
                     res.UserInfo = resUserByRegisterId.Data;
                     var resAuthorityForUser = await ssoService.GetAuthorityForUser("MOBIL_ONAY", "Credentials", res.UserInfo.LoginName);
-                    Log.Information("resAuthorityForUser.Data ");
+                    Log.Information("resAuthorityForUser.Data"+ resAuthorityForUser.Data);
 
                     if (resAuthorityForUser.StatusCode == 200)
                     {
