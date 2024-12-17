@@ -221,7 +221,7 @@ namespace Infrastructure.SSOIntegration
     @"<soap12:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap12=""http://www.w3.org/2003/05/soap-envelope"">" + "\n" +
     @"  <soap12:Body>" + "\n" +
     @"    <GetCustomerByCitizenshipNo xmlns=""http://intertech.com.tr/Pusula"">" + "\n" +
-    @"      <citizenshipNo>35765082602</citizenshipNo>" + "\n" +
+    @"      <citizenshipNo>{0}</citizenshipNo>" + "\n" +
     @"    </GetCustomerByCitizenshipNo>" + "\n" +
     @"  </soap12:Body>" + "\n" +
     @"</soap12:Envelope>", citizenshipNo);
