@@ -199,6 +199,7 @@ namespace Infrastructure.SSOIntegration
             // Eğer başlangıç ve bitiş etiketleri bulunursa, aradaki değeri alıyoruz
             if (startIndex >= 0 && endIndex > startIndex)
             {
+                 Log.Information("GetCustomerByCitizenshipNoResponse:substring" + content.Substring(startIndex, endIndex - startIndex).Trim());
                 return content.Substring(startIndex, endIndex - startIndex).Trim();
             }
 
