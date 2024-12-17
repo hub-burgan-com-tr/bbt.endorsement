@@ -189,9 +189,15 @@ namespace Infrastructure.SSOIntegration
         }
         private string GetCustomerByCitizenshipNoDocSelectField(string field)
         {
-            // diffgram içindeki NewDataSet -> Table1 -> field (örn: ExternalClientNo) alanını seçmek için XPath
-            var xpath = $"//NewDataSet/Table1/{field}";
-            return doc.SelectSingleNode(xpath)?.InnerText?.Trim() ?? "";
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+            nsmgr.AddNamespace("soap", "http://www.w3.org/2003/05/soap-envelope");
+            nsmgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            nsmgr.AddNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
+            nsmgr.AddNamespace("diffgr", "urn:schemas-microsoft-com:xml-diffgram-v1");
+            nsmgr.AddNamespace("", "http://intertech.com.tr/Pusula"); // Add the default namespace
+
+            var xpath = "//diffgr:diffgram/NewDataSet/Table1/" + field;
+            return doc.SelectSingleNode(xpath, nsmgr)?.InnerText?.Trim() ?? "";
         }
         public async Task<Response<string>> GetCustomerByCitizenshipNo(string citizenshipNo)
         {
@@ -220,7 +226,7 @@ namespace Infrastructure.SSOIntegration
 
         private string GetCustomerByCitizenshipNoResponse(string content)
         {
-            Log.Information("GetCustomerByCitizenshipNoResponse:" +content);
+            Log.Information("GetCustomerByCitizenshipNoResponse:" + content);
             doc.LoadXml(content);
             return GetCustomerByCitizenshipNoDocSelectField("ExternalClientNo");
         }
