@@ -267,6 +267,7 @@ namespace Infrastructure.SSOIntegration
 
         private string GetUserInfoByCustomerNoResponse(string content)
         {
+            Log.Information("GetUserInfoByCustomerNoResponse:" + content);
             return GetExternalClientNoWithSubstring(content, "LoginName");
         }
 
