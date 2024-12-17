@@ -187,18 +187,24 @@ namespace Infrastructure.SSOIntegration
 
 
         }
-        private string GetCustomerByCitizenshipNoDocSelectField(string field)
+        private string GetExternalClientNoWithSubstring(string content)
         {
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
-            nsmgr.AddNamespace("soap", "http://www.w3.org/2003/05/soap-envelope");
-            nsmgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            nsmgr.AddNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
-            nsmgr.AddNamespace("diffgr", "urn:schemas-microsoft-com:xml-diffgram-v1");
-            nsmgr.AddNamespace("", "http://intertech.com.tr/Pusula"); // Add the default namespace
+            var startTag = "<ExternalClientNo>";
+            var endTag = "</ExternalClientNo>";
 
-            var xpath = "//diffgr:diffgram/NewDataSet/Table1/" + field;
-            return doc.SelectSingleNode(xpath, nsmgr)?.InnerText?.Trim() ?? "";
+            // Başlangıç ve bitiş etiketlerinin yerini buluyoruz
+            var startIndex = content.IndexOf(startTag) + startTag.Length;
+            var endIndex = content.IndexOf(endTag);
+
+            // Eğer başlangıç ve bitiş etiketleri bulunursa, aradaki değeri alıyoruz
+            if (startIndex >= 0 && endIndex > startIndex)
+            {
+                return content.Substring(startIndex, endIndex - startIndex).Trim();
+            }
+
+            return string.Empty; // Eğer etiketler bulunmazsa boş döndürüyoruz
         }
+
         public async Task<Response<string>> GetCustomerByCitizenshipNo(string citizenshipNo)
         {
             var restClient = new RestClient(_SSOIntegrationPusulaServiceUrl);
@@ -227,8 +233,7 @@ namespace Infrastructure.SSOIntegration
         private string GetCustomerByCitizenshipNoResponse(string content)
         {
             Log.Information("GetCustomerByCitizenshipNoResponse:" + content);
-            doc.LoadXml(content);
-            return GetCustomerByCitizenshipNoDocSelectField("ExternalClientNo");
+            return GetExternalClientNoWithSubstring(content);
         }
 
 
