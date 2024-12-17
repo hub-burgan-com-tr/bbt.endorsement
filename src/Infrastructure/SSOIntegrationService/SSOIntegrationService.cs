@@ -206,7 +206,7 @@ namespace Infrastructure.SSOIntegration
             }
                  Log.Information("GetCustomerByCitizenshipNoResponse-manuel");
 
-            return "97609565"; // Eğer etiketler bulunmazsa boş döndürüyoruz
+            return "0"; // Eğer etiketler bulunmazsa boş döndürüyoruz
         }
 
         public async Task<Response<string>> GetCustomerByCitizenshipNo(string citizenshipNo)
