@@ -247,21 +247,15 @@ namespace Infrastructure.SSOIntegration
             restRequest.AddHeader("Content-Type", "application/soap+xml");
 
             #region body
-            var body = string.Format(@"<?xml version=""1.0"" encoding=""utf-8""?>
-" + "\n" +
-        @"<soap12:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap12=""http://www.w3.org/2003/05/soap-envelope"">
-" + "\n" +
-        @"  <soap12:Body>
-" + "\n" +
-        @"    <GetUserInfoByCustomerNo xmlns=""http://tempuri.org/"">
-" + "\n" +
-        @"      <customerNo>{0}</customerNo>
-" + "\n" +
-        @"    </GetUserInfoByCustomerNo>
-" + "\n" +
-        @"  </soap12:Body>
-" + "\n" +
-        @"</soap12:Envelope>", customerNo);
+ 
+        var body = string.Format(@"<?xml version=""1.0"" encoding=""utf-8""?>" + "\n" +
+@"<soap12:Envelope xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:soap12=""http://www.w3.org/2003/05/soap-envelope"">" + "\n" +
+@"  <soap12:Body>" + "\n" +
+@"    <GetUserInfoByCustomerNo xmlns=""http://tempuri.org/"">" + "\n" +
+@"      <CustomerNumber>{0}</CustomerNumber>" + "\n" +
+@"    </GetUserInfoByCustomerNo>" + "\n" +
+@"  </soap12:Body>" + "\n" +
+@"</soap12:Envelope>",customerNo);
             #endregion
 
             restRequest.AddParameter("application/soap+xml", body, ParameterType.RequestBody);
