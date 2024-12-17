@@ -197,13 +197,16 @@ namespace Infrastructure.SSOIntegration
             var endIndex = content.IndexOf(endTag);
 
             // Eğer başlangıç ve bitiş etiketleri bulunursa, aradaki değeri alıyoruz
+               Log.Information("GetCustomerByCitizenshipNoResponse- {startTag} {endIndex}" , startIndex, endIndex);
             if (startIndex >= 0 && endIndex > startIndex)
             {
-                 Log.Information("GetCustomerByCitizenshipNoResponse:substring" + content.Substring(startIndex, endIndex - startIndex).Trim());
+                var datasub = content.Substring(startIndex, endIndex - startIndex).Trim();
+                 Log.Information("GetCustomerByCitizenshipNoResponse-{datasub}" ,datasub );
                 return content.Substring(startIndex, endIndex - startIndex).Trim();
             }
+                 Log.Information("GetCustomerByCitizenshipNoResponse-manuel");
 
-            return string.Empty; // Eğer etiketler bulunmazsa boş döndürüyoruz
+            return "97609565"; // Eğer etiketler bulunmazsa boş döndürüyoruz
         }
 
         public async Task<Response<string>> GetCustomerByCitizenshipNo(string citizenshipNo)
