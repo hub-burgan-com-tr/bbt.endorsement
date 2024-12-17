@@ -72,14 +72,14 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
 
                     if(string.IsNullOrEmpty(citizenship)) return;
 
-                    var getCustomerByCitizenshipNo = await ssoIntegrationService.GetCustomerByCitizenshipNo(citizenship);
+                    var getCustomerByCitizenshipNo =  ssoIntegrationService.GetCustomerByCitizenshipNo(citizenship).Result;
                     if (getCustomerByCitizenshipNo.Data.Length < 2)
                     {
                         return;
                     }
                     Log.Warning("{LogPrefix} - ssoIntegrationService getCustomerByCitizenshipNo  {getCustomerByCitizenshipNo.Data } ", logPrefix,getCustomerByCitizenshipNo.Data );
 
-                    var getUserInfoByCustomerNo = await ssoIntegrationService.GetUserInfoByCustomerNo(getCustomerByCitizenshipNo.Data.ToString());
+                    var getUserInfoByCustomerNo =  ssoIntegrationService.GetUserInfoByCustomerNo(getCustomerByCitizenshipNo.Data.ToString()).Result;
                     if (getUserInfoByCustomerNo.Data == null)
                     {
                         return;
