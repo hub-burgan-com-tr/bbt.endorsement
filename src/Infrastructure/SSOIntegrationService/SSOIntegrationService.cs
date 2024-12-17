@@ -187,25 +187,24 @@ namespace Infrastructure.SSOIntegration
 
 
         }
-        private string GetExternalClientNoWithSubstring(string content)
+        private string GetExternalClientNoWithSubstring(string content, string tag)
         {
-            var startTag = "<ExternalClientNo>";
-            var endTag = "</ExternalClientNo>";
+            var startTag = "<" + tag + ">";
+            var endTag = "</" + tag + ">";
 
             // Başlangıç ve bitiş etiketlerinin yerini buluyoruz
             var startIndex = content.IndexOf(startTag) + startTag.Length;
             var endIndex = content.IndexOf(endTag);
 
             // Eğer başlangıç ve bitiş etiketleri bulunursa, aradaki değeri alıyoruz
-               Log.Information("GetCustomerByCitizenshipNoResponse- {startTag} {endIndex}" , startIndex, endIndex);
+            Log.Information("GetExternalClientNoWithSubstring- {startTag} {endIndex}", startIndex, endIndex);
             if (startIndex >= 0 && endIndex > startIndex)
             {
                 var datasub = content.Substring(startIndex, endIndex - startIndex).Trim();
-                 Log.Information("GetCustomerByCitizenshipNoResponse-{datasub}" ,datasub );
+                Log.Information("GetExternalClientNoWithSubstring-{datasub}", datasub);
                 return content.Substring(startIndex, endIndex - startIndex).Trim();
             }
-                 Log.Information("GetCustomerByCitizenshipNoResponse-manuel");
-
+            Log.Information("GetExternalClientNoWithSubstring-manuel");
             return "0"; // Eğer etiketler bulunmazsa boş döndürüyoruz
         }
 
@@ -237,7 +236,7 @@ namespace Infrastructure.SSOIntegration
         private string GetCustomerByCitizenshipNoResponse(string content)
         {
             Log.Information("GetCustomerByCitizenshipNoResponse:" + content);
-            return GetExternalClientNoWithSubstring(content);
+            return GetExternalClientNoWithSubstring(content, "ExternalClientNo");
         }
 
 
@@ -274,8 +273,7 @@ namespace Infrastructure.SSOIntegration
 
         private string GetUserInfoByCustomerNoResponse(string content)
         {
-            doc.LoadXml(content);
-            return DocSelectField("LoginName");
+            return GetExternalClientNoWithSubstring(content, "LoginName");
         }
 
 
