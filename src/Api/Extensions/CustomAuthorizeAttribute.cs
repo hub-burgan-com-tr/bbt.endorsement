@@ -67,7 +67,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                     var ssoIntegrationService = context.HttpContext.RequestServices.GetService<ISSOIntegrationService>();
                     Log.Warning("{LogPrefix} - ssoIntegrationService start ", logPrefix,userNameHeader);
 
-                    var citizenship = context.HttpContext.Request.Headers["user.reference"].FirstOrDefault() ??  string.Empty;
+                    var citizenship = context.HttpContext.Request.Headers["User-Reference"].FirstOrDefault() ??  string.Empty;
                     Log.Warning("{LogPrefix} - ssoIntegrationService {citizenship} ", logPrefix,citizenship);
 
                     if(string.IsNullOrEmpty(citizenship)) return;
