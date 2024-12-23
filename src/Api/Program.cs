@@ -133,52 +133,52 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 
 //if (!Environment.IsProduction())
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "v1.5",
-        Title = "Endorsement API",
-        Description = "Provides validation infrastructure for contracts that customers need to approve."
-    });
+// builder.Services.AddSwaggerGen(options =>
+// {
+//     options.SwaggerDoc("v1", new OpenApiInfo
+//     {
+//         Version = "v1.5",
+//         Title = "Endorsement API",
+//         Description = "Provides validation infrastructure for contracts that customers need to approve."
+//     });
 
 
-    // To Enable authorization using Swagger (JWT)  
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        In = ParameterLocation.Header,
-        Description = "Specify token with Bearer tag. example: Bearer {access_token}",
-        BearerFormat = "JWT",
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        // Scheme = "Bearer",
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                        {
-                              new OpenApiSecurityScheme
-                                {
-                                    Reference = new OpenApiReference
-                                    {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "Bearer"
-                                    }
-                                },
-                                new string[] {}
+//     // To Enable authorization using Swagger (JWT)  
+//     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+//     {
+//         In = ParameterLocation.Header,
+//         Description = "Specify token with Bearer tag. example: Bearer {access_token}",
+//         BearerFormat = "JWT",
+//         Name = "Authorization",
+//         Type = SecuritySchemeType.ApiKey,
+//         // Scheme = "Bearer",
+//     });
+//     options.AddSecurityRequirement(new OpenApiSecurityRequirement
+//                 {
+//                         {
+//                               new OpenApiSecurityScheme
+//                                 {
+//                                     Reference = new OpenApiReference
+//                                     {
+//                                         Type = ReferenceType.SecurityScheme,
+//                                         Id = "Bearer"
+//                                     }
+//                                 },
+//                                 new string[] {}
 
-                        }
-                });
+//                         }
+//                 });
 
 
-    // options.SchemaFilter<EnumSchemaFilter>();
-    options.UseInlineDefinitionsForEnums();
+//     // options.SchemaFilter<EnumSchemaFilter>();
+//     options.UseInlineDefinitionsForEnums();
 
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
-    options.IncludeXmlComments(xmlPath);
-    options.CustomSchemaIds(x => x.FullName);
-    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
-});
+//     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+//     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+//     options.IncludeXmlComments(xmlPath);
+//     options.CustomSchemaIds(x => x.FullName);
+//     options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+// });
 
 var settings = builder.Configuration.Get<AppSettings>();
 builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
@@ -199,19 +199,19 @@ StaticValuesExtensions.SetStaticValues(settings);
 //    };
 //});
 
-builder.Services.AddAuthentication(options =>
-{
-    // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
-}).AddOAuthIntrospection(options =>
-{
-    options.Authority = new Uri(StaticValues.Authority);
-    options.Audiences.Add(StaticValues.ClientId);
-    options.ClientId = StaticValues.ClientId;
-    options.ClientSecret = StaticValues.ClientSecret;
-    options.RequireHttpsMetadata = Environment.IsProduction();
-});
+// builder.Services.AddAuthentication(options =>
+// {
+//     // options.DefaultAuthenticateScheme = OAuthIntrospectionDefaults.AuthenticationScheme;
+// }).AddOAuthIntrospection(options =>
+// {
+//     options.Authority = new Uri(StaticValues.Authority);
+//     options.Audiences.Add(StaticValues.ClientId);
+//     options.ClientId = StaticValues.ClientId;
+//     options.ClientSecret = StaticValues.ClientSecret;
+//     options.RequireHttpsMetadata = Environment.IsProduction();
+// });
 
-Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ClientSecret);
+// Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ClientSecret);
 
 //builder.Services.AddAuthorization(options =>
 //{
@@ -263,8 +263,8 @@ app.UseCors("corsapp");
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
