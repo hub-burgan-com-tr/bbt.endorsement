@@ -34,8 +34,9 @@ export class AuthService {
     return this.tokenSubject.value;
   }
 
-  login(access_token: any, state: any) {
-    const url = `${this.baseUrl}/${ApiPaths.Login}`;
+  login(code: any) {
+    const url = `${this.baseUrl}/${ApiPaths.Login}?code=${code}`;
+    console.log('Login URL:', url);
     return this.httpClient.get<User>(url).pipe(map(user => {
       localStorage.setItem('currentUser', JSON.stringify(user));
       this.currentUserSubject.next(user);
