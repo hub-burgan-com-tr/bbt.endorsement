@@ -47,7 +47,7 @@ public class UserService : IUserService
 
                     var token = JsonConvert.DeserializeObject<AccessToken>(responseContent);
                     accessToken = token.Access_token;
-                    Log.Information("Login-SSOToken: " + accessToken);
+                    Log.Information("Login-SSOToken2: " + accessToken);
                 }
 
                 // using (var client = new HttpClient())
