@@ -20,11 +20,12 @@ export class LoginComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
-      this.state = params['state'];
+      // this.state = params['state'];
       this.returnUrl = params['returnUrl'] || '/';
-      if (this.code && this.state) {
+      // if (this.code && this.state) {
+      if (this.code) {
         // this.authService.ssoLogin(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
-          this.authService.login(this.code, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
+          this.authService.login(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
             if (res) {
               if (res.isStaff && res.authory.isUIVisible) {
                 this.router.navigate(['approvals-i-want']);
