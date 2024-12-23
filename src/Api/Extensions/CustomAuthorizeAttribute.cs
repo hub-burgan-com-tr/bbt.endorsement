@@ -52,7 +52,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
 
             // Fetch user data using access token
             Log.Information("{LogPrefix} - Fetching user data from AccessTokenResource", logPrefix);
-            var response = await userService.AccessTokenResource(accessToken);
+            var response = await userService.AccessToken("Endorsement","EndorsementGondor");
 
 
             if (response == null || string.IsNullOrEmpty(response.CitizenshipNumber))
