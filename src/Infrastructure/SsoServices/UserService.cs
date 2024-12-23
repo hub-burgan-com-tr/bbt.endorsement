@@ -1,7 +1,9 @@
-﻿using Application.Common.Models;
+﻿using System.Text;
+using System.Text.Json;
+using Application.Common.Models;
 using Infrastructure.SsoServices.Models;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+
 using Serilog;
 
 namespace Infrastructure.SsoServices;
@@ -31,21 +33,26 @@ public class UserService : IUserService
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(StaticValues.Authority);
-                    var content = new FormUrlEncodedContent(new[]
+                    var requestData = new
                     {
-                        new KeyValuePair<string, string>("code", code),
-                        new KeyValuePair<string, string>("client_id", StaticValues.ClientId),
-                        new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                        new KeyValuePair<string, string>("client_secret", StaticValues.ClientSecret),
-                        new KeyValuePair<string, string>("redirect_uri", StaticValues.RedirectUri),
-                    });
+                        client_id = StaticValues.ClientId,
+                        client_secret = StaticValues.ClientSecret,
+                        grant_type = "authorization_code",
+                        code = StaticValues.ClientId,
+                        code_challenge = "",
+                        scopes = new[] { "openid", "profile" }
+                    };
+                    string json = JsonSerializer.Serialize(requestData);
+
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
                     var result = await client.PostAsync("/token", content);
 
                     var responseContent = result.Content.ReadAsStringAsync().Result;
 
                     Log.Information("Login-SSO Result: {responseContent} " + responseContent);
 
-                    var token = JsonConvert.DeserializeObject<AccessToken>(responseContent);
+                    var token = JsonSerializer.Deserialize<AccessToken>(responseContent);
                     accessToken = token.Access_token;
                     Log.Information("Login-SSOToken2: " + accessToken);
                 }
@@ -93,7 +100,7 @@ public class UserService : IUserService
 
 
     //         }
-        
+
     //     return response;
     // }
 }
