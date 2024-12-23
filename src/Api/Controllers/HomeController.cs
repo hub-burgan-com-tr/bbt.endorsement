@@ -35,13 +35,19 @@ namespace Api.Controllers
             {
                 string access_token = "";
                 string value = Request.Headers["Authorization"];
+                var code = HttpContext.Request.Query["code"].ToString();
+                if (string.IsNullOrEmpty(code))
+                {
+                    Log.Information("Login-Start:{code}",code);
+                    throw new ArgumentException("Endorsement Login Code :Authorization code is missing or invalid.");
+                }
                 if (value.StartsWith("Bearer "))
                 {
                     access_token = value.Substring("Bearer ".Length);
                 }
                 Log.Information("Login-Start:Bearer ");
 
-                var response = _userService.AccessTokenResource(access_token).Result;
+                var response = _userService.AccessToken(code, "EndorsementGondor").Result;
 
                 Log.Information("Login-Start:AccessTokenResource ");
 
@@ -49,13 +55,7 @@ namespace Api.Controllers
                 {
                     return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
                 }
-                //response = new AccessToken()
-                //{
-                //    CitizenshipNumber = "12345678901",
-                //    CustomerNumber = "0",
-                //    IsStaff = "true",
-                //};
-                //return new GetSearchPersonSummaryDto { Data = "Giriş" };
+       
                 var result = new GetSearchPersonSummaryDto
                 {
                     CitizenshipNumber = response.CitizenshipNumber,
