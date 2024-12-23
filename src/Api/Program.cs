@@ -207,11 +207,11 @@ builder.Services.AddAuthentication(options =>
     options.Authority = new Uri(StaticValues.Authority);
     options.Audiences.Add(StaticValues.ClientId);
     options.ClientId = StaticValues.ClientId;
-    options.ClientSecret = StaticValues.ApiSecret;
+    options.ClientSecret = StaticValues.ClientSecret;
     options.RequireHttpsMetadata = Environment.IsProduction();
 });
 
-Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ApiSecret);
+Log.Information("StaticValues: " + StaticValues.Authority + " - " + StaticValues.ClientId + " - " + StaticValues.ClientSecret);
 
 //builder.Services.AddAuthorization(options =>
 //{
