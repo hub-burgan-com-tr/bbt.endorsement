@@ -47,7 +47,7 @@ namespace Api.Controllers
                 }
                 Log.Information("Login-Start:Bearer ");
 
-                var response = _userService.AccessToken(code, "EndorsementGondor").Result;
+                var response = _userService.AccessToken(code).Result;
 
                 Log.Information("Login-Start:AccessTokenResource ");
 
