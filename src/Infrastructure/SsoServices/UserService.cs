@@ -9,7 +9,7 @@ using Serilog;
 namespace Infrastructure.SsoServices;
 public interface IUserService
 {
-    Task<AccessToken> AccessToken(string code, string state);
+    Task<AccessToken> AccessToken(string code);
     // Task<AccessToken> AccessTokenResource(string accessToken);
 }
 
@@ -22,40 +22,40 @@ public class UserService : IUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<AccessToken> AccessToken(string code, string state)
+    public async Task<AccessToken> AccessToken(string code)
     {
         string accessToken = "";
         var response = new AccessToken();
         try
         {
-            if (state == "EndorsementGondor")
+
+            using (var client = new HttpClient())
             {
-                using (var client = new HttpClient())
+                client.BaseAddress = new Uri(StaticValues.Authority);
+                var requestData = new
                 {
-                    client.BaseAddress = new Uri(StaticValues.Authority);
-                    var requestData = new
-                    {
-                        client_id = StaticValues.ClientId,
-                        client_secret = StaticValues.ClientSecret,
-                        grant_type = "authorization_code",
-                        code = code,
-                        code_challenge = "",
-                        scopes = new[] { "openid", "profile" }
-                    };
-                    string json = JsonSerializer.Serialize(requestData);
+                    client_id = StaticValues.ClientId,
+                    client_secret = StaticValues.ClientSecret,
+                    grant_type = "authorization_code",
+                    code = code,
+                    code_challenge = "",
+                    scopes = new[] { "openid", "profile" }
+                };
+                string json = JsonSerializer.Serialize(requestData);
+                Log.Information("Login-SSO Result json: {json} " + json);
 
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    var result = await client.PostAsync("/token", content);
+                var result = await client.PostAsync("/token", content);
 
-                    var responseContent = result.Content.ReadAsStringAsync().Result;
+                var responseContent = result.Content.ReadAsStringAsync().Result;
 
-                    Log.Information("Login-SSO Result: {responseContent} " + responseContent);
+                Log.Information("Login-SSO Result: {responseContent} " + responseContent);
 
-                    var token = JsonSerializer.Deserialize<AccessToken>(responseContent);
-                    accessToken = token.Access_token;
-                    Log.Information("Login-SSOToken2: " + accessToken);
-                }
+                var token = JsonSerializer.Deserialize<AccessToken>(responseContent);
+                accessToken = token.Access_token;
+                Log.Information("Login-SSOToken2: " + accessToken);
+
 
                 // using (var client = new HttpClient())
                 // {

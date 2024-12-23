@@ -52,39 +52,46 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
 
             // Fetch user data using access token
             Log.Information("{LogPrefix} - Fetching user data from AccessTokenResource", logPrefix);
-            var response = await userService.AccessToken("Endorsement","EndorsementGondor");
+            var code = context.HttpContext.Request.Query["code"].ToString();
+            Log.Information("{LogPrefix} Code :{code}", logPrefix,code);
+
+            if (string.IsNullOrEmpty(code))
+            {
+                throw new ArgumentException("Endorsement Login Code :Authorization code is missing or invalid.");
+            }
+            var response = await userService.AccessToken(code);
 
 
             if (response == null || string.IsNullOrEmpty(response.CitizenshipNumber))
             {
-                    Log.Warning("{LogPrefix} - Missing R-User-Name header", logPrefix);
+                Log.Warning("{LogPrefix} - Missing R-User-Name header", logPrefix);
 
                 var userNameHeader = context.HttpContext.Request.Headers["R-User-Name"].FirstOrDefault() ?? string.Empty;
-                    Log.Warning("{LogPrefix} - Missing R-User-Name {userNameHeader}", logPrefix,userNameHeader);
+                Log.Warning("{LogPrefix} - Missing R-User-Name {userNameHeader}", logPrefix, userNameHeader);
 
                 if (string.IsNullOrEmpty(userNameHeader))
                 {
                     var ssoIntegrationService = context.HttpContext.RequestServices.GetService<ISSOIntegrationService>();
-                    Log.Warning("{LogPrefix} - ssoIntegrationService start ", logPrefix,userNameHeader);
+                    Log.Warning("{LogPrefix} - ssoIntegrationService start ", logPrefix, userNameHeader);
 
-                    var citizenship = context.HttpContext.Request.Headers["User-Reference"].FirstOrDefault() ??  string.Empty;
-                    Log.Warning("{LogPrefix} - ssoIntegrationService {citizenship} ", logPrefix,citizenship);
+                    var citizenship = context.HttpContext.Request.Headers["User-Reference"].FirstOrDefault() ?? string.Empty;
+                    Log.Warning("{LogPrefix} - ssoIntegrationService {citizenship} ", logPrefix, citizenship);
 
-                    if(string.IsNullOrEmpty(citizenship)) return;
+                    if (string.IsNullOrEmpty(citizenship)) return;
 
-                    var getCustomerByCitizenshipNo =  ssoIntegrationService.GetCustomerByCitizenshipNo(citizenship).Result;
+                    var getCustomerByCitizenshipNo = ssoIntegrationService.GetCustomerByCitizenshipNo(citizenship).Result;
                     if (getCustomerByCitizenshipNo.Data.Length < 2)
                     {
                         return;
                     }
-                    Log.Warning("{LogPrefix} - ssoIntegrationService getCustomerByCitizenshipNo  {getCustomerByCitizenshipNo.Data } ", logPrefix,getCustomerByCitizenshipNo.Data );
+                    Log.Warning("{LogPrefix} - ssoIntegrationService getCustomerByCitizenshipNo  {getCustomerByCitizenshipNo.Data } ", logPrefix, getCustomerByCitizenshipNo.Data);
 
-                    var getUserInfoByCustomerNo =  ssoIntegrationService.GetUserInfoByCustomerNo(getCustomerByCitizenshipNo.Data.ToString()).Result;
+                    var getUserInfoByCustomerNo = ssoIntegrationService.GetUserInfoByCustomerNo(getCustomerByCitizenshipNo.Data.ToString()).Result;
                     if (getUserInfoByCustomerNo.Data == null)
                     {
                         return;
                     }
-                    Log.Warning("{LogPrefix} - ssoIntegrationService getUserInfoByCustomerNo  {getUserInfoByCustomerNo.Data } ", logPrefix,getUserInfoByCustomerNo.Data );
+                    Log.Warning("{LogPrefix} - ssoIntegrationService getUserInfoByCustomerNo  {getUserInfoByCustomerNo.Data } ", logPrefix, getUserInfoByCustomerNo.Data);
 
                     if (getUserInfoByCustomerNo.Data.IndexOf('\\') != -1)
                     {
@@ -94,7 +101,7 @@ public class AuthorizeUserAttribute : Attribute, IAsyncAuthorizationFilter
                 }
                 Log.Warning("{LogPrefix} - AccessTokenResource returned no user data for token: {userNameHeader}", logPrefix, userNameHeader);
 
-               
+
                 var claims2 = new List<Claim>
                         {
                             new Claim("username", userNameHeader),
