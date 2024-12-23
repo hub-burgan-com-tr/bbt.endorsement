@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
       this.state = params['state'];
       this.returnUrl = params['returnUrl'] || '/';
       if (this.code && this.state) {
-        this.authService.ssoLogin(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
-          this.authService.login(res.access_token, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
+        // this.authService.ssoLogin(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
+          this.authService.login(this.code, this.state).pipe(takeUntil(this.destroy$)).subscribe(res => {
             if (res) {
               if (res.isStaff && res.authory.isUIVisible) {
                 this.router.navigate(['approvals-i-want']);
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
               }
             }
           });
-        });
+        // });
 
       }
     });
