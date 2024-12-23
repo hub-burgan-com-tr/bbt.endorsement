@@ -38,7 +38,7 @@ public class UserService : IUserService
                         client_id = StaticValues.ClientId,
                         client_secret = StaticValues.ClientSecret,
                         grant_type = "authorization_code",
-                        code = StaticValues.ClientId,
+                        code = code,
                         code_challenge = "",
                         scopes = new[] { "openid", "profile" }
                     };
