@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using Application.Common.Models;
 using Infrastructure.SsoServices.Models;
@@ -33,23 +34,21 @@ public class UserService : IUserService
 
                 Log.Information("Login-SSO-url {url} ", StaticValues.Authority);
 
-                client.BaseAddress = new Uri(StaticValues.Authority);
-                client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-                var requestData = new
-                {
-                    client_id = StaticValues.ClientId,
-                    client_secret = StaticValues.ClientSecret,
-                    grant_type = "authorization_code",
-                    code = code,
-                    code_challange = "",
-                    scopes = new[] { "openid", "profile" }
-                };
-                string json = JsonSerializer.Serialize(requestData);
+
+                var json = @$"{{
+                        ""client_id"": ""{StaticValues.ClientId}"",
+                        ""client_secret"": ""{StaticValues.ClientSecret}"",
+                        ""grant_type"": ""authorization_code"",
+                        ""code"": ""{code}"",
+                        ""code_challange"": """",
+                        ""scopes"": [""openid"", ""profile""]
+                    }}";
+
                 Log.Information("Login-SSO Result json: {json} " + json);
-
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var result = await client.PostAsync("/token", content);
+                var request = new HttpRequestMessage(HttpMethod.Post, StaticValues.Authority + "/token");
+                var content = new StringContent(json);
+                request.Content = content;
+                var result = await client.SendAsync(request);
 
                 if (result.IsSuccessStatusCode)
                 {
