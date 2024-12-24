@@ -70,22 +70,6 @@ public class UserService : IUserService
                 var token = JsonSerializer.Deserialize<AccessToken>(responseContent);
                 accessToken = token.Access_token;
                 Log.Information("Login-SSOToken2: " + accessToken);
-
-
-                // using (var client = new HttpClient())
-                // {
-                //     client.BaseAddress = new Uri(StaticValues.ApiGateway);
-                //     var content = new FormUrlEncodedContent(new[]
-                //     {
-                //         new KeyValuePair<string, string>("access_token", accessToken),
-                //     });
-                //     var result = await client.PostAsync("/ib/Resource", content);
-                //     var responseContent = result.Content.ReadAsStringAsync().Result;
-                //     response = JsonConvert.DeserializeObject<AccessToken>(responseContent);
-                //     Log.Information("Login-SSO: " + responseContent);
-                //     if (!string.IsNullOrEmpty(response.CitizenshipNumber))
-                //         response.IsLogin = true;
-                // }
             }
         }
         catch (Exception ex)
