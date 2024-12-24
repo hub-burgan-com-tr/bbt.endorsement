@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.SsoServices.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Infrastructure.SsoServices.Models;
 
 public class AccessToken
 {
@@ -16,11 +18,25 @@ public class AccessToken
 }
 public class AuthTokenResponse
 {
+    [JsonPropertyName("access_token")]
     public string AccessToken { get; set; }
+
+    [JsonPropertyName("id_token")]
     public string IdToken { get; set; }
+
+    [JsonPropertyName("refresh_token")]
     public string RefreshToken { get; set; }
+
+    [JsonPropertyName("token_type")]
     public string TokenType { get; set; }
+
+    [JsonPropertyName("expires_in")]
     public int ExpiresIn { get; set; }
+
+    [JsonPropertyName("refresh_token_expires_in")]
     public int RefreshTokenExpiresIn { get; set; }
+
+    [JsonPropertyName("scope")]
     public string Scope { get; set; }
 }
+
