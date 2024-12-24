@@ -246,19 +246,19 @@ app.UseSession();
 
 
 // Configure the HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-{
-    //app.ConfigureSwagger();
-    app.UseSwagger(options =>
-    {
-        options.SerializeAsV2 = true;
-    });
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "bbt.endorsement.api v1");
-        c.RoutePrefix = "";
-    });
-}
+// if (!app.Environment.IsDevelopment())
+// {
+//     //app.ConfigureSwagger();
+//     app.UseSwagger(options =>
+//     {
+//         options.SerializeAsV2 = true;
+//     });
+//     app.UseSwaggerUI(c =>
+//     {
+//         c.SwaggerEndpoint("/swagger/v1/swagger.json", "bbt.endorsement.api v1");
+//         c.RoutePrefix = "";
+//     });
+// }
 app.UseCors("corsapp");
 app.UseHttpsRedirection();
 app.UseRouting();
