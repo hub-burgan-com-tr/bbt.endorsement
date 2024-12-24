@@ -32,6 +32,8 @@ public class UserService : IUserService
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(StaticValues.Authority);
+                Log.Information("Login-SSO Authority: {StaticValues.Authority} " + StaticValues.Authority);
+
                 var requestData = new
                 {
                     client_id = StaticValues.ClientId,
