@@ -9,7 +9,7 @@ using Serilog;
 namespace Infrastructure.SsoServices;
 public interface IUserService
 {
-    Task<AccessToken> AccessToken(string code);
+    Task<string> AccessToken(string code);
     // Task<AccessToken> AccessTokenResource(string accessToken);
 }
 
@@ -22,10 +22,8 @@ public class UserService : IUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<AccessToken> AccessToken(string code)
+    public async Task<string> AccessToken(string code)
     {
-        string accessToken = "";
-        var response = new AccessToken();
         var responseContent = string.Empty;
         try
         {
@@ -66,7 +64,7 @@ public class UserService : IUserService
                 Log.Information("Login-SSO Result: {responseContent} " + responseContent);
                 var token = JsonSerializer.Deserialize<AuthTokenResponse>(responseContent);
 
-                    response.Access_token = token.AccessToken;
+                responseContent = token.AccessToken;
                 // accessToken = token.Access_token;
                 Log.Information("Login-SSOToken2: " + token.AccessToken);
             }
@@ -75,7 +73,7 @@ public class UserService : IUserService
         {
             Log.Error(ex, ex.Message);
         }
-        return response;
+        return responseContent;
     }
 
     // public async Task<AccessToken> AccessTokenResource(string accessToken)

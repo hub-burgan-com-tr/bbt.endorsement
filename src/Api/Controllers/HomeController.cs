@@ -43,35 +43,34 @@ namespace Api.Controllers
                 Log.Information("Login-Start-AccessTokenResource ");
 
                 var response = _userService.AccessToken(code).Result;
-
                 Log.Information("Login-Start-end-AccessTokenResource ");
 
-                if (response.IsLogin == false)
-                {
-                    return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
-                }
+                // if (response.IsLogin == false)
+                // {
+                //     return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
+                // }
        
                 var result = new GetSearchPersonSummaryDto
                 {
-                    CitizenshipNumber = response.CitizenshipNumber,
-                    IsStaff = Convert.ToBoolean(response.IsStaff),
-                    CustomerNumber = Convert.ToUInt64(response.CustomerNumber),
-                    First = response.FirstName,
-                    Last = response.LastName,
-                    BusinessLine = response.BusinessLine != null ? response.BusinessLine : "",
-                    BranchCode = response.BranchCode != null ? response.BranchCode : ""
+                    Token = response
+                    // CitizenshipNumber = response.CitizenshipNumber,
+                    // IsStaff = Convert.ToBoolean(response.IsStaff),
+                    // CustomerNumber = Convert.ToUInt64(response.CustomerNumber),
+                    // First = response.FirstName,
+                    // Last = response.LastName,
+                    // BusinessLine = response.BusinessLine != null ? response.BusinessLine : "",
+                    // BranchCode = response.BranchCode != null ? response.BranchCode : ""
+                     
                 };
                 Log.Information("Login-Start result:  " + JsonConvert.SerializeObject(result));
 
-                GetCredentials(result, response);
+                // GetCredentials(result, response);
                 Log.Information("Login-Start result2:  " + JsonConvert.SerializeObject(result));
 
 
                 if (result != null)
                 {
-                    //TokenHandler tokenHandler = new TokenHandler();
-                    // Token token = tokenHandler.CreateAccessToken(result);
-                    //result.Token = token.AccessToken;
+                    
                     Log.Information("Login-Token: " + result.Token);
                 }
 
