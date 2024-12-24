@@ -15,14 +15,14 @@ export class AuthService {
   baseUrl = environment.baseUrl;
   identityServerUrl = environment.identityServerUrl;
   private currentUserSubject: BehaviorSubject<User>;
-  private tokenSubject: BehaviorSubject<User>;
+  private tokenSubject: BehaviorSubject<string>;
   public currentUser: Observable<User>;
-  public token: Observable<any>;
+  public token: Observable<string>;
 
   constructor(private httpClient: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
-    this.tokenSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('token')));
+    this.tokenSubject = new BehaviorSubject<string>(JSON.parse(localStorage.getItem('token')));
     this.token = this.tokenSubject.asObservable();
   }
 
@@ -40,7 +40,7 @@ export class AuthService {
     return this.httpClient.get<User>(url).pipe(map(user => {
       localStorage.setItem('currentUser', JSON.stringify(user));
       // localStorage.setItem('token', JSON.stringify(user.token));
-      this.tokenSubject.next(user);
+      this.tokenSubject.next(user.token);
       this.currentUserSubject.next(user);
       return user;
     }));
