@@ -33,23 +33,18 @@ namespace Api.Controllers
 
             try
             {
-                string access_token = "";
-                string value = Request.Headers["Authorization"];
                  
                 if (string.IsNullOrEmpty(code))
                 {
                     Log.Information("Login-Start-string.IsNullOrEmpty {code}",code);
                     throw new ArgumentException("Endorsement Login Code :Authorization code is missing or invalid.");
                 }
-                if (value.StartsWith("Bearer "))
-                {
-                    access_token = value.Substring("Bearer ".Length);
-                }
-                Log.Information("Login-Start:Bearer ");
+            
+                Log.Information("Login-Start-AccessTokenResource ");
 
                 var response = _userService.AccessToken(code).Result;
 
-                Log.Information("Login-Start:AccessTokenResource ");
+                Log.Information("Login-Start-end-AccessTokenResource ");
 
                 if (response.IsLogin == false)
                 {
@@ -84,7 +79,7 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(ex, ex.Message);
+                Log.Error(ex, "LoginError" + ex.Message);
             }
 
             return null;
