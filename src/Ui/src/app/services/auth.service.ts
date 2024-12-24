@@ -39,7 +39,8 @@ export class AuthService {
     console.log('Login URL:', url);
     return this.httpClient.get<User>(url).pipe(map(user => {
       localStorage.setItem('currentUser', JSON.stringify(user));
-      localStorage.setItem('token', JSON.stringify(user.token));
+      // localStorage.setItem('token', JSON.stringify(user.token));
+      this.tokenSubject.next(user.token);
       this.currentUserSubject.next(user);
       return user;
     }));
