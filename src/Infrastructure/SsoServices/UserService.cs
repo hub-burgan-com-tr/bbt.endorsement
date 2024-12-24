@@ -26,6 +26,7 @@ public class UserService : IUserService
     public async Task<string> AccessToken(string code)
     {
         var responseContent = string.Empty;
+        var responseToken = string.Empty;
         try
         {
 
@@ -62,7 +63,7 @@ public class UserService : IUserService
             Log.Information("Login-SSO Result: {responseContent} " + responseContent);
             var token = JsonSerializer.Deserialize<AuthTokenResponse>(responseContent);
 
-            responseContent = token.AccessToken;
+            responseToken = token.AccessToken;
             // accessToken = token.Access_token;
             Log.Information("Login-SSOToken2: " + token.AccessToken);
         }
@@ -70,7 +71,7 @@ public class UserService : IUserService
         {
             Log.Error(ex, ex.Message);
         }
-        return responseContent;
+        return responseToken;
     }
 
     // public async Task<AccessToken> AccessTokenResource(string accessToken)
