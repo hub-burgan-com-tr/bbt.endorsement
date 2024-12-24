@@ -34,7 +34,7 @@ public class UserService : IUserService
                 Log.Information("Login-SSO-url {url} ", StaticValues.Authority);
 
                 client.BaseAddress = new Uri(StaticValues.Authority);
-
+                client.DefaultRequestHeaders.Add("Content-Type", "application/json");
                 var requestData = new
                 {
                     client_id = StaticValues.ClientId,
