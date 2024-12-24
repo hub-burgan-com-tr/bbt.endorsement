@@ -27,7 +27,7 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public GetSearchPersonSummaryDto Login()
+        public GetSearchPersonSummaryDto Login([FromQuery] string code)
         {
             Log.Information("Login-Start: ");
 
@@ -35,10 +35,10 @@ namespace Api.Controllers
             {
                 string access_token = "";
                 string value = Request.Headers["Authorization"];
-                var code = HttpContext.Request.Query["code"].ToString();
+                 
                 if (string.IsNullOrEmpty(code))
                 {
-                    Log.Information("Login-Start:{code}",code);
+                    Log.Information("Login-Start-string.IsNullOrEmpty {code}",code);
                     throw new ArgumentException("Endorsement Login Code :Authorization code is missing or invalid.");
                 }
                 if (value.StartsWith("Bearer "))
