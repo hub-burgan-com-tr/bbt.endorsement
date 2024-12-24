@@ -39,31 +39,32 @@ export class AuthService {
     console.log('Login URL:', url);
     return this.httpClient.get<User>(url).pipe(map(user => {
       localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('token', JSON.stringify(user.token));
       this.currentUserSubject.next(user);
       return user;
     }));
   }
 
-  ssoLogin(code) {
-    const url = `${this.identityServerUrl}/${GatewayPaths.connectToken}`;
-    let header = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+  // ssoLogin(code) {
+  //   const url = `${this.identityServerUrl}/${GatewayPaths.connectToken}`;
+  //   let header = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
 
-    let p = new HttpParams()
-      .append('code', code)
-      .append('client_id', environment.clientId)
-      .append('grant_type', environment.grantType)
-      .append('client_secret', environment.clientSecret)
-      .append('redirect_uri', environment.redirectUri);
+  //   let p = new HttpParams()
+  //     .append('code', code)
+  //     .append('client_id', environment.clientId)
+  //     .append('grant_type', environment.grantType)
+  //     .append('client_secret', environment.clientSecret)
+  //     .append('redirect_uri', environment.redirectUri);
 
-    let requestBody = p.toString();
+  //   let requestBody = p.toString();
 
-    return this.httpClient.post<any>(url, requestBody, {headers: header}).pipe(map(data => {
-      localStorage.setItem('token', JSON.stringify(data.access_token));
-      this.tokenSubject.next(data.access_token);
-      return data;
-    }));
-    ;
-  }
+  //   return this.httpClient.post<any>(url, requestBody, {headers: header}).pipe(map(data => {
+  //     localStorage.setItem('token', JSON.stringify(data.access_token));
+  //     this.tokenSubject.next(data.access_token);
+  //     return data;
+  //   }));
+  //   ;
+  // }
 
   logout() {
     localStorage.removeItem('currentUser');
