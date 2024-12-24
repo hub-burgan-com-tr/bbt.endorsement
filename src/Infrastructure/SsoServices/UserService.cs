@@ -26,6 +26,7 @@ public class UserService : IUserService
     {
         string accessToken = "";
         var response = new AccessToken();
+        var responseContent = string.Empty;
         try
         {
 
@@ -54,7 +55,6 @@ public class UserService : IUserService
 
                 var result = await client.PostAsync(url, content);
 
-                var responseContent = string.Empty;
                 if (result.IsSuccessStatusCode)
                 {
                     responseContent = await result.Content.ReadAsStringAsync();
@@ -66,9 +66,9 @@ public class UserService : IUserService
                 }
 
                 Log.Information("Login-SSO Result: {responseContent} " + responseContent);
-
-                var token = JsonSerializer.Deserialize<AccessToken>(responseContent);
-                accessToken = token.Access_token;
+                    response.Access_token = responseContent;
+                // var token = JsonSerializer.Deserialize<AccessToken>(responseContent);
+                // accessToken = token.Access_token;
                 Log.Information("Login-SSOToken2: " + accessToken);
             }
         }
