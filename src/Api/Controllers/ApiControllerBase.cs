@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    // [AuthorizeUserAttribute(  OAuthValidationDefaults.AuthenticationScheme)]
+    
     [Route("api/[controller]")]
     [ApiController]
+    [UserAttribute]
     public class ApiControllerBase : ControllerBase
     {
         private ISender _mediator = null!;
