@@ -32,12 +32,10 @@ public class UserService : IUserService
 
             using (var client = new HttpClient())
             {
-                var url = new Uri(new Uri(StaticValues.Authority), "/token").ToString();
-                Log.Information("Login-SSO Authority: {StaticValues.Authority} " + StaticValues.Authority);
 
-                Log.Information("Login-SSO {url} ", url);
+                Log.Information("Login-SSO-url {url} ", StaticValues.Authority);
 
-                client.BaseAddress = new Uri(url);
+                client.BaseAddress = new Uri(StaticValues.Authority);
 
                 var requestData = new
                 {
@@ -53,7 +51,7 @@ public class UserService : IUserService
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var result = await client.PostAsync(url, content);
+                var result = await client.PostAsync("/token", content);
 
                 if (result.IsSuccessStatusCode)
                 {
