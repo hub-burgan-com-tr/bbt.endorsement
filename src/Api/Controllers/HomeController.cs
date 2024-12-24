@@ -43,7 +43,7 @@ namespace Api.Controllers
                 Log.Information("Login-Start-AccessTokenResource ");
 
                 var response = _userService.AccessToken(code).Result;
-                Log.Information("Login-Start-end-AccessTokenResource ");
+                Log.Information("Login-Start-end-AccessToken {response}" ,response);
 
                 // if (response.IsLogin == false)
                 // {
