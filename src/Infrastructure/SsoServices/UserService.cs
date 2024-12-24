@@ -33,23 +33,34 @@ public class UserService : IUserService
 
                 Log.Information("Login-SSO-url {url} ", StaticValues.Authority);
 
-                client.BaseAddress = new Uri(StaticValues.Authority);
-                client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-                var requestData = new
-                {
-                    client_id = StaticValues.ClientId,
-                    client_secret = StaticValues.ClientSecret,
-                    grant_type = "authorization_code",
-                    code = code,
-                    code_challange = "",
-                    scopes = new[] { "openid", "profile" }
-                };
-                string json = JsonSerializer.Serialize(requestData);
+                // client.BaseAddress = new Uri(StaticValues.Authority);
+                //     var requestData = new
+                // {
+                //     client_id = StaticValues.ClientId,
+                //     client_secret = StaticValues.ClientSecret,
+                //     grant_type = "authorization_code",
+                //     code = code,
+                //     code_challange = "",
+                //     scopes = new[] { "openid", "profile" }
+                // };
+                // string json = JsonSerializer.Serialize(requestData);
+                // Log.Information("Login-SSO Result json: {json} " + json);
+
+                // var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var json = @$"{{
+                        ""client_id"": ""{StaticValues.ClientId}"",
+                        ""client_secret"": ""{StaticValues.ClientSecret}"",
+                        ""grant_type"": ""authorization_code"",
+                        ""code"": ""{code}"",
+                        ""code_challange"": """",
+                        ""scopes"": [""openid"", ""profile""]
+                    }}";
+
                 Log.Information("Login-SSO Result json: {json} " + json);
 
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var result = await client.PostAsync("/token", content);
+                var result = await client.PostAsync(StaticValues.Authority+"/token", content);
 
                 if (result.IsSuccessStatusCode)
                 {
