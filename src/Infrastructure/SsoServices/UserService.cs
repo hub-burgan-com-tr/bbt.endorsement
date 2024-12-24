@@ -43,7 +43,7 @@ public class UserService : IUserService
                     client_secret = StaticValues.ClientSecret,
                     grant_type = "authorization_code",
                     code = code,
-                    code_challenge = "",
+                    code_challange = "",
                     scopes = new[] { "openid", "profile" }
                 };
                 string json = JsonSerializer.Serialize(requestData);
@@ -64,10 +64,11 @@ public class UserService : IUserService
                 }
 
                 Log.Information("Login-SSO Result: {responseContent} " + responseContent);
-                    response.Access_token = responseContent;
-                // var token = JsonSerializer.Deserialize<AccessToken>(responseContent);
+                var token = JsonSerializer.Deserialize<AuthTokenResponse>(responseContent);
+
+                    response.Access_token = token.AccessToken;
                 // accessToken = token.Access_token;
-                Log.Information("Login-SSOToken2: " + accessToken);
+                Log.Information("Login-SSOToken2: " + token.AccessToken);
             }
         }
         catch (Exception ex)

@@ -14,3 +14,13 @@ public class AccessToken
     public string BranchCode { get; set; }
     public string BusinessLine { get; set; }
 }
+public class AuthTokenResponse
+{
+    public string AccessToken { get; set; }
+    public string IdToken { get; set; }
+    public string RefreshToken { get; set; }
+    public string TokenType { get; set; }
+    public int ExpiresIn { get; set; }
+    public int RefreshTokenExpiresIn { get; set; }
+    public string Scope { get; set; }
+}
