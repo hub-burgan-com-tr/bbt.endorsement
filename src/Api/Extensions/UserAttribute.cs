@@ -38,9 +38,9 @@ public class UserAttribute : Attribute, IActionFilter
         // JSON formatındaki header bilgisini logla
         Log.Information("Request Headers: {Headers}", headersJson);
         var isbankpersonel = Convert.ToBoolean(GetHeaderValue(headers, "isbankpersonel", "false"));
-        var login_name = GetHeaderValue(headers, "r-user-name");
+        var rUserName = GetHeaderValue(headers, "r-user-name");
 
-        if (!isbankpersonel && !string.IsNullOrEmpty(login_name))
+        if (!isbankpersonel && string.IsNullOrEmpty(rUserName))
         {
             var customerNo = GetHeaderValue(headers, "customer_no");
             var user_reference = GetHeaderValue(headers, "user_reference");
@@ -62,7 +62,7 @@ public class UserAttribute : Attribute, IActionFilter
         }
         else
         {
-            login_name = GetHeaderValue(headers, "login_name");
+            var login_name = GetHeaderValue(headers, "login_name");
             Log.Information("UserAttribute-login_name {loginName}", login_name);
             if (string.IsNullOrEmpty(login_name))
             {
