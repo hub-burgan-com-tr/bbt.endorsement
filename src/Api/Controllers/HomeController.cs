@@ -81,21 +81,21 @@ namespace Api.Controllers
         {
 
             var claims = HttpContext.User.Claims;
-            var token  = string.Empty;
-            if (HttpContext.Request.Headers.ContainsKey("Authorization"))
-            {
-                var value = HttpContext.Request.Headers["Authorization"].ToString();
-                Log.Information("GetUserInfo {Key}: {Value}", "Authorization", value);
-                token = value.Replace("Bearer","").Trim();
-            }
-            else
-            {
-                Log.Information("GetUserInfo {Key} header not found.", "Authorization");
-            }
+            // var token  = string.Empty;
+            // if (HttpContext.Request.Headers.ContainsKey("Authorization"))
+            // {
+            //     var value = HttpContext.Request.Headers["Authorization"].ToString();
+            //     Log.Information("GetUserInfo {Key}: {Value}", "Authorization", value);
+            //     token = value.Replace("Bearer","").Trim();
+            // }
+            // else
+            // {
+            //     Log.Information("GetUserInfo {Key} header not found.", "Authorization");
+            // }
             // DTO oluşturuluyor
             var dto = new GetSearchPersonSummaryDto
             {
-                Token =token,
+                // Token =token,
                 First = claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
                 Last = claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
                 CustomerNumber = UInt64.TryParse(claims.FirstOrDefault(c => c.Type == "customer_number")?.Value, out var customerNumber)
