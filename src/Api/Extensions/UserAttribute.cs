@@ -50,7 +50,7 @@ public class UserAttribute : Attribute, IActionFilter
         if (!isbankpersonel)
         {
           
-            var claims2 = new List<Claim>
+            var claims = new List<Claim>
                         {
                             new Claim("username", user_reference),
                             new Claim("customer_number", customerNo),
@@ -59,9 +59,9 @@ public class UserAttribute : Attribute, IActionFilter
                             new Claim("business_line", "B"),
                             new Claim("credentials", "isBranchFormReader###1")
                         };
-            var identity2 = new ClaimsIdentity(claims2);
-            var principal2 = new ClaimsPrincipal(identity2);
-            context.HttpContext.User = principal2;
+            var identity = new ClaimsIdentity(claims);
+            var principal = new ClaimsPrincipal(identity);
+            context.HttpContext.User = principal;
         }
         else
         {
@@ -81,13 +81,9 @@ public class UserAttribute : Attribute, IActionFilter
                         };
             var identity2 = new ClaimsIdentity(claims2);
             var principal2 = new ClaimsPrincipal(identity2);
-            context.HttpContext.User = principal2;
             Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, login_name);
+            context.HttpContext.User = principal2;
         }
-
-        // Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
-
-
     }
     public void OnActionExecuted(ActionExecutedContext context)
     {

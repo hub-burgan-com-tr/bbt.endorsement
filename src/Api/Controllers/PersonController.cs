@@ -12,7 +12,7 @@ using System.Text.Json;
 
 namespace Api.Controllers
 {
-   // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("")]
     [ApiController]
     public class PersonController : ApiControllerBase
@@ -40,60 +40,59 @@ namespace Api.Controllers
             //     Log.Information("GetUserInfo {Key} header not found.", "Authorization");
             // }
             // DTO oluşturuluyor
+            //  new Claim("username", user_reference),
+            //             new Claim("customer_number", customerNo),
+            //             new Claim("given_name", given_name),
+            //             new Claim("family_name", family_name),
+            //             new Claim("business_line", "B"),
+            //             new Claim("credentials", "isBranchFormReader###1")
             var dto = new GetSearchPersonSummaryDto
             {
-                // Token =token,
-                First = claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
-                Last = claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
+                CitizenshipNumber = claims.FirstOrDefault(c => c.Type == "user_reference")?.Value ?? "",
+                First = claims.FirstOrDefault(c => c.Type == "given_name")?.Value ?? "",
+                Last = claims.FirstOrDefault(c => c.Type == "family_name")?.Value ?? "",
                 CustomerNumber = UInt64.TryParse(claims.FirstOrDefault(c => c.Type == "customer_number")?.Value, out var customerNumber)
                                  ? customerNumber : 0,
-                BusinessLine = claims.FirstOrDefault(c => c.Type == "business_line")?.Value,
+                BusinessLine = claims.FirstOrDefault(c => c.Type == "business_line")?.Value ?? "B",
             };
-            var credentials = claims.FirstOrDefault(c => c.Type == "credentials")?.Value;
-            if (!string.IsNullOrEmpty(credentials))
-            {
-                var credentialsList = credentials.Split(',').ToList();  // credentials'ı ',' ile ayırıp listeye çeviriyoruz
-                GetCredentials(dto, credentialsList);  // Listeyi metota gönderiyoruz
-            }
+            var credentials = claims.Where(c => c.Type == "credentials").Select(x => x.Value).ToList();
+            GetCredentials(dto, credentials);
+
+
             Log.Information("Login-Start GetSearchPersonSummaryDto: {dto} ", JsonSerializer.Serialize(dto));
 
             return dto;
         }
         private void GetCredentials(GetSearchPersonSummaryDto result, List<string> Credentials)
         {
-
+            var authory = result.Authory;
 
             foreach (var credential in Credentials)
             {
                 var value = credential.Split("###");
+
                 if (value.Length == 2)
                 {
-                    bool isActive = value[1] == "1"; // 1 olduğunda aktif, diğer durumda pasif
+                    bool isActive = value[1] == "1";
+                    var claimMapping = new Dictionary<string, Action<bool>>
+                        {
+                            { "isFormReader", (status) => authory.IsFormReader = status },
+                            { "isNewFormCreator", (status) => authory.IsNewFormCreator = status },
+                            { "isReadyFormCreator", (status) => authory.IsReadyFormCreator = status },
+                            { "isBranchApproval", (status) => authory.IsBranchApproval = status },
+                            { "isBranchFormReader", (status) => authory.IsBranchFormReader = status },
+                            { "isUIVisible", (status) => authory.isUIVisible = status }
+                        };
 
-                    switch (value[0])
+                    // Eğer dictionary'de bu credential varsa, aktif/pasif değerini atıyoruz.
+                    if (claimMapping.ContainsKey(value[0]))
                     {
-                        case "isFormReader":
-                            result.Authory.IsFormReader = isActive;
-                            break;
-                        case "isNewFormCreator":
-                            result.Authory.IsNewFormCreator = isActive;
-                            break;
-                        case "isReadyFormCreator":
-                            result.Authory.IsReadyFormCreator = isActive;
-                            break;
-                        case "isBranchApproval":
-                            result.Authory.IsBranchApproval = isActive;
-                            break;
-                        case "isBranchFormReader":
-                            result.Authory.IsBranchFormReader = isActive;
-                            break;
-                        case "isUIVisible":
-                            result.Authory.isUIVisible = isActive;
-                            break;
+                        claimMapping[value[0]](isActive);
                     }
                 }
             }
         }
+
         [Route("CustomerSearch")]
         [HttpGet]
         [SwaggerResponse(200, "Success, queried person search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
