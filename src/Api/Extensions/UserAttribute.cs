@@ -69,16 +69,6 @@ public class UserAttribute : Attribute, IActionFilter
             var identity2 = new ClaimsIdentity(claims2);
             var principal2 = new ClaimsPrincipal(identity2);
             context.HttpContext.User = principal2;
-            var userClaims = context.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "username");
-            if (userClaims is not null)
-            {
-                Log.Information("UserAttribute-User-claims: {Claims}", JsonSerializer.Serialize(userClaims));
-            }
-            else
-            {
-                Log.Information("UserAttribute-User-claims-bos ");
-            }
-
         }
 
         // Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
