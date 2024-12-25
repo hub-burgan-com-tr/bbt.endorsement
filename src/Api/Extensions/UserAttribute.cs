@@ -62,7 +62,7 @@ public class UserAttribute : Attribute, IActionFilter
         }
         else
         {
-            // var login_name = GetHeaderValue(headers, "login_name");
+            login_name = GetHeaderValue(headers, "login_name");
             Log.Information("UserAttribute-login_name {loginName}", login_name);
             if (string.IsNullOrEmpty(login_name))
             {
