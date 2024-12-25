@@ -10,15 +10,16 @@ using Serilog;
 
 public class UserAttribute : Attribute, IActionFilter
 {
-    public void OnActionExecuted(ActionExecutedContext context)
+    public void OnActionExecuting(ActionExecutingContext context)
     {
+
         var controllerName = context.RouteData.Values["controller"]?.ToString();
         if (controllerName == "Home")
         {
             Log.Information("HomeController is excluded from UserAttribute");
             return;
         }
-        Log.Information("OnActionExecutedStart");
+        Log.Information("OnActionExecuting");
 
         // Başlıkları al
         var headers = context.HttpContext.Request.Headers;
@@ -68,17 +69,26 @@ public class UserAttribute : Attribute, IActionFilter
             var identity2 = new ClaimsIdentity(claims2);
             var principal2 = new ClaimsPrincipal(identity2);
             context.HttpContext.User = principal2;
+            var userClaims = context.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "username");
+            if (userClaims is not null)
+            {
+                Log.Information("UserAttribute-User-claims: {Claims}", JsonSerializer.Serialize(userClaims));
+            }
+            else
+            {
+                Log.Information("UserAttribute-User-claims-bos ");
+            }
+
         }
 
         // Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
 
 
     }
-
-    public void OnActionExecuting(ActionExecutingContext context)
+    public void OnActionExecuted(ActionExecutedContext context)
     {
-        Log.Information("OnActionExecutingStart2");
-        Log.Information("OnActionExecutingEnd2");
+        Log.Information("OnActionExecuted");
+        Log.Information("OnActionExecuted2");
 
     }
     private string GetHeaderValue(IHeaderDictionary headers, string key, string defaultValue = "")
