@@ -38,18 +38,16 @@ public class UserAttribute : Attribute, IActionFilter
         // JSON formatındaki header bilgisini logla
         Log.Information("Request Headers: {Headers}", headersJson);
         Log.Information("OnActionExecutedEnd");
-
-        var customerNo = GetHeaderValue(headers, "customer_no");
         var isbankpersonel = Convert.ToBoolean(GetHeaderValue(headers, "isbankpersonel", "false"));
-        var user_reference = GetHeaderValue(headers, "user_reference");
-        var given_name = GetHeaderValue(headers, "given_name");
-        var family_name = GetHeaderValue(headers, "family_name");
-        var login_name = GetHeaderValue(headers, "login_name");
 
 
         if (!isbankpersonel)
         {
-          
+            var customerNo = GetHeaderValue(headers, "customer_no");
+            var user_reference = GetHeaderValue(headers, "user_reference");
+            var given_name = GetHeaderValue(headers, "given_name");
+            var family_name = GetHeaderValue(headers, "family_name");
+
             var claims = new List<Claim>
                         {
                             new Claim("username", user_reference),
@@ -65,6 +63,7 @@ public class UserAttribute : Attribute, IActionFilter
         }
         else
         {
+           var login_name = GetHeaderValue(headers, "login_name");
             Log.Information("UserAttribute-login_name {loginName}", login_name);
             if (string.IsNullOrEmpty(login_name))
             {
@@ -77,7 +76,7 @@ public class UserAttribute : Attribute, IActionFilter
             }
             var claims2 = new List<Claim>
                         {
-                            new Claim("username", user_reference),
+                            new Claim("username", "user_reference"),
                             new Claim("isStaff", isbankpersonel.ToString()),
                         };
             var identity2 = new ClaimsIdentity(claims2);
