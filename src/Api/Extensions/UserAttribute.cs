@@ -45,7 +45,7 @@ public class UserAttribute : Attribute, IActionFilter
         var given_name = GetHeaderValue(headers, "given_name");
         var family_name = GetHeaderValue(headers, "family_name");
         var login_name = GetHeaderValue(headers, "login_name");
-        
+
 
         if (!isbankpersonel)
         {
@@ -75,6 +75,15 @@ public class UserAttribute : Attribute, IActionFilter
         else
         {
             Log.Information("UserAttribute-login_name {loginName}", login_name);
+            if (string.IsNullOrEmpty(login_name))
+            {
+                login_name = GetHeaderValue(headers, "r-user-name");
+            }
+            if (login_name.IndexOf('\\') != -1)
+            {
+                var parts = login_name.Split('\\');
+                login_name = (parts != null && parts.Length > 1) ? parts[1] : string.Empty;
+            }
             var claims2 = new List<Claim>
                         {
                             new Claim("username", user_reference),
