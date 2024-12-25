@@ -70,6 +70,31 @@ public class UserAttribute : Attribute, IActionFilter
             var principal2 = new ClaimsPrincipal(identity2);
             context.HttpContext.User = principal2;
         }
+        else
+        {
+            var ssoIntegrationService = context.HttpContext.RequestServices.GetService<ISSOIntegrationService>();
+            var getUserInfoByCustomerNo = ssoIntegrationService.GetUserInfoByCustomerNo(customerNo).Result;
+            var loginName = "";
+            if (getUserInfoByCustomerNo.Data == null)
+            {
+                Log.Information("UserAttribute getUserInfoByCustomerNo.Data = null", loginName);
+                return;
+            }
+             Log.Information("UserAttribute {getUserInfoByCustomerNo.Data}", getUserInfoByCustomerNo.Data);
+            if (getUserInfoByCustomerNo.Data.IndexOf('\\') != -1)
+            {
+                var parts = getUserInfoByCustomerNo.Data.Split('\\');
+                loginName = (parts != null && parts.Length > 1) ? parts[1] : string.Empty;
+            }
+            Log.Information("UserAttribute {loginName}", loginName);
+            var claims2 = new List<Claim>
+                        {
+                            new Claim("username", user_reference),
+                        };
+            var identity2 = new ClaimsIdentity(claims2);
+            var principal2 = new ClaimsPrincipal(identity2);
+            Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, loginName);
+        }
 
         // Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
 
