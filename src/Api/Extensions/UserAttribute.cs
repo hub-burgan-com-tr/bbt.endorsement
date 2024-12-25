@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using Application.Common.Interfaces;
 using Infrastructure.SsoServices;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Serilog;
 
 public class UserAttribute : Attribute, IActionFilter
@@ -30,27 +32,39 @@ public class UserAttribute : Attribute, IActionFilter
         Log.Information("Request Headers: {Headers}", headersJson);
         Log.Information("OnActionExecutedEnd");
 
-        var customerNo = string.Empty;
-        // customer_no başlığını almak
-        if (headers.ContainsKey("customer_no"))
-        {
-            customerNo = headers["customer_no"].ToString();
+        var customerNo = GetHeaderValue(headers, "customer_no");
+        var isbankpersonel = Convert.ToBoolean(GetHeaderValue(headers, "isbankpersonel", "false"));
+        var user_reference = GetHeaderValue(headers, "user_reference");
+        var given_name = GetHeaderValue(headers, "given_name");
+        var family_name = GetHeaderValue(headers, "family_name");
 
-            // customer_no değerini logla
-            Log.Information("Customer No: {CustomerNo}", customerNo);
-        }
-        else
+        if (!isbankpersonel)
         {
-            Log.Information("Customer No header not found.");
+            var result = new GetSearchPersonSummaryDto
+            {
+                CitizenshipNumber = user_reference,
+                IsStaff = false,
+                CustomerNumber = Convert.ToUInt64(customerNo),
+                First = given_name,
+                Last = family_name,
+                BusinessLine = "B",
+            };
         }
         var claims2 = new List<Claim>
                         {
-                            new Claim("username", "f"),
+                            new Claim("username", user_reference),
+                            new Claim("customer_number", customerNo),
+                            new Claim("given_name", given_name),
+                            new Claim("family_name", family_name),
+                            new Claim("business_line", "B"),
+                            new Claim("credentials", "isBranchFormReader###1")
                         };
         var identity2 = new ClaimsIdentity(claims2);
         var principal2 = new ClaimsPrincipal(identity2);
         context.HttpContext.User = principal2;
         Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
+
+
     }
 
     public void OnActionExecuting(ActionExecutingContext context)
@@ -59,4 +73,19 @@ public class UserAttribute : Attribute, IActionFilter
         Log.Information("OnActionExecutingEnd2");
 
     }
+    private string GetHeaderValue(IHeaderDictionary headers, string key, string defaultValue = "")
+    {
+        if (headers.ContainsKey(key))
+        {
+            var value = headers[key].ToString();
+            Log.Information("{Key}: {Value}", key, value);
+            return value;
+        }
+        else
+        {
+            Log.Information("{Key} header not found.", key);
+            return defaultValue;
+        }
+    }
+
 }
