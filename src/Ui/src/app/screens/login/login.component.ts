@@ -21,14 +21,11 @@ export class LoginComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
     this.route.queryParams.subscribe(params => {
       this.code = params['code'];
-      // this.state = params['state'];
       this.returnUrl = params['returnUrl'] || '/';
-      // if (this.code && this.state) {
       if (this.code) {
-        // this.authService.ssoLogin(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
         this.authService.login(this.code).pipe(
           throttleTime(1000),
-          takeUntil(this.destroy$)).subscribe(res => {
+          takeUntil(this.destroy$)).subscribe(rest => {
             this.authService.getUserInfo(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
               if (res) {
                 if (res.isStaff && res.authory.isUIVisible) {
