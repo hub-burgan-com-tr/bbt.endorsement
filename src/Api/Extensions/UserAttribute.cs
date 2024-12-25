@@ -90,6 +90,7 @@ public class UserAttribute : Attribute, IActionFilter
                         };
             var identity2 = new ClaimsIdentity(claims2);
             var principal2 = new ClaimsPrincipal(identity2);
+            context.HttpContext.User = principal2;
             Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, login_name);
         }
 
