@@ -12,6 +12,12 @@ public class UserAttribute : Attribute, IActionFilter
 {
     public void OnActionExecuted(ActionExecutedContext context)
     {
+        var controllerName = context.RouteData.Values["controller"]?.ToString();
+        if (controllerName == "Home")
+        {
+            Log.Information("HomeController is excluded from UserAttribute");
+            return;
+        }
         Log.Information("OnActionExecutedStart");
 
         // Başlıkları al
