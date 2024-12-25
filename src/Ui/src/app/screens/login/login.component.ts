@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../../services/auth.service";
-import {Subject, takeUntil} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {environment} from "../../../environments/environment";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from "../../services/auth.service";
+import { Subject, takeUntil } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { environment } from "../../../environments/environment";
 import { throttleTime } from 'rxjs/operators';
 
 @Component({
@@ -26,18 +26,19 @@ export class LoginComponent implements OnInit {
       // if (this.code && this.state) {
       if (this.code) {
         // this.authService.ssoLogin(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
-          this.authService.login(this.code).pipe(
-            throttleTime(1000),
-            takeUntil(this.destroy$)).subscribe(res => {
-            if (res) {
-              if (res.isStaff && res.authory.isUIVisible) {
-                this.router.navigate(['approvals-i-want']);
-              } else {
-                this.router.navigate(['my-approval']);
+        this.authService.login(this.code).pipe(
+          throttleTime(1000),
+          takeUntil(this.destroy$)).subscribe(res => {
+            this.authService.getUserInfo(this.code).pipe(takeUntil(this.destroy$)).subscribe(res => {
+              if (res) {
+                if (res.isStaff && res.authory.isUIVisible) {
+                  this.router.navigate(['approvals-i-want']);
+                } else {
+                  this.router.navigate(['my-approval']);
+                }
               }
-            }
+            });
           });
-        // });
 
       }
     });

@@ -49,16 +49,7 @@ public class UserAttribute : Attribute, IActionFilter
 
         if (!isbankpersonel)
         {
-            var result = new GetSearchPersonSummaryDto
-            {
-                CitizenshipNumber = user_reference,
-                IsStaff = false,
-                CustomerNumber = Convert.ToUInt64(customerNo),
-                First = given_name,
-                Last = family_name,
-                BusinessLine = "B",
-            };
-            Log.Information("UserAttribute Result object created: {@Result}", result);
+          
             var claims2 = new List<Claim>
                         {
                             new Claim("username", user_reference),

@@ -33,34 +33,21 @@ namespace Api.Controllers
 
             try
             {
-                 
+
                 if (string.IsNullOrEmpty(code))
                 {
-                    Log.Information("Login-Start-string.IsNullOrEmpty {code}",code);
+                    Log.Information("Login-Start-string.IsNullOrEmpty {code}", code);
                     throw new ArgumentException("Endorsement Login Code :Authorization code is missing or invalid.");
                 }
-            
+
                 Log.Information("Login-Start-AccessTokenResource ");
 
                 var response = _userService.AccessToken(code).Result;
-                Log.Information("Login-Start-end-AccessToken {response}" ,response);
+                Log.Information("Login-Start-end-AccessToken {response}", response);
 
-                // if (response.IsLogin == false)
-                // {
-                //     return new GetSearchPersonSummaryDto { Data = response.IsLogin.ToString() };
-                // }
-       
                 var result = new GetSearchPersonSummaryDto
                 {
                     Token = response
-                    // CitizenshipNumber = response.CitizenshipNumber,
-                    // IsStaff = Convert.ToBoolean(response.IsStaff),
-                    // CustomerNumber = Convert.ToUInt64(response.CustomerNumber),
-                    // First = response.FirstName,
-                    // Last = response.LastName,
-                    // BusinessLine = response.BusinessLine != null ? response.BusinessLine : "",
-                    // BranchCode = response.BranchCode != null ? response.BranchCode : ""
-                     
                 };
                 Log.Information("Login-Start result:  " + JsonConvert.SerializeObject(result));
 
@@ -70,7 +57,7 @@ namespace Api.Controllers
 
                 if (result != null)
                 {
-                    
+
                     Log.Information("Login-Token: " + result.Token);
                 }
 
@@ -83,59 +70,79 @@ namespace Api.Controllers
 
             return null;
         }
-        private void GetCredentials(GetSearchPersonSummaryDto result, AccessToken response)
+        [Route("GetUserInfo")]
+        [HttpGet]
+        //[SwaggerResponse(200, "Success, queried user search are returned successfully.", typeof(GetSearchPersonSummaryDto))]
+        //[SwaggerResponse(404, "Success but there is no user search  available for the query.", typeof(void))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public GetSearchPersonSummaryDto GetUserInfo()
+        {
+
+            var claims = HttpContext.User.Claims;
+            var token  = string.Empty;
+            if (HttpContext.Request.Headers.ContainsKey("Authorization"))
+            {
+                var value = HttpContext.Request.Headers["Authorization"].ToString();
+                Log.Information("GetUserInfo {Key}: {Value}", "Authorization", value);
+                token = value.Replace("Bearer","").Trim();
+            }
+            else
+            {
+                Log.Information("GetUserInfo {Key} header not found.", "Authorization");
+            }
+            // DTO oluşturuluyor
+            var dto = new GetSearchPersonSummaryDto
+            {
+                Token =token,
+                First = claims.FirstOrDefault(c => c.Type == "given_name")?.Value,
+                Last = claims.FirstOrDefault(c => c.Type == "family_name")?.Value,
+                CustomerNumber = UInt64.TryParse(claims.FirstOrDefault(c => c.Type == "customer_number")?.Value, out var customerNumber)
+                                 ? customerNumber : 0,
+                BusinessLine = claims.FirstOrDefault(c => c.Type == "business_line")?.Value,
+            };
+            var credentials = claims.FirstOrDefault(c => c.Type == "credentials")?.Value;
+            if (!string.IsNullOrEmpty(credentials))
+            {
+                var credentialsList = credentials.Split(',').ToList();  // credentials'ı ',' ile ayırıp listeye çeviriyoruz
+                GetCredentials(dto, credentialsList);  // Listeyi metota gönderiyoruz
+            }
+            Log.Information("Login-Start GetSearchPersonSummaryDto: {dto} ", JsonConvert.SerializeObject(dto));
+
+            return dto;
+        }
+        private void GetCredentials(GetSearchPersonSummaryDto result, List<string> Credentials)
         {
 
 
-            if (response.Credentials != null)
+            foreach (var credential in Credentials)
             {
-                foreach (var credential in response.Credentials)
+                var value = credential.Split("###");
+                if (value.Length == 2)
                 {
-                    var value = credential.Split("###");
-                    if (value.Length == 2)
+                    bool isActive = value[1] == "1"; // 1 olduğunda aktif, diğer durumda pasif
+
+                    switch (value[0])
                     {
-                        if (value[0] == "isFormReader")
-                        {
-                            if (value[1] == "1")
-                                result.Authory.IsFormReader = true;
-                            else
-                                result.Authory.IsFormReader = false;
-                        }
-                        else if (value[0] == "isNewFormCreator")
-                        {
-                            if (value[1] == "1")
-                                result.Authory.IsNewFormCreator = true;
-                            else
-                                result.Authory.IsNewFormCreator = false;
-                        }
-                        else if (value[0] == "isReadyFormCreator")
-                        {
-                            if (value[1] == "1")
-                                result.Authory.IsReadyFormCreator = true;
-                            else
-                                result.Authory.IsReadyFormCreator = false;
-                        }
-                        else if (value[0] == "isBranchApproval")
-                        {
-                            if (value[1] == "1")
-                                result.Authory.IsBranchApproval = true;
-                            else
-                                result.Authory.IsBranchApproval = false;
-                        }
-                        else if (value[0] == "isBranchFormReader")
-                        {
-                            if (value[1] == "1")
-                                result.Authory.IsBranchFormReader = true;
-                            else
-                                result.Authory.IsBranchFormReader = false;
-                        }
-                        else if (value[0] == "isUIVisible")
-                        {
-                            if (value[1] == "1")
-                                result.Authory.isUIVisible = true;
-                            else
-                                result.Authory.isUIVisible = false;
-                        }
+                        case "isFormReader":
+                            result.Authory.IsFormReader = isActive;
+                            break;
+                        case "isNewFormCreator":
+                            result.Authory.IsNewFormCreator = isActive;
+                            break;
+                        case "isReadyFormCreator":
+                            result.Authory.IsReadyFormCreator = isActive;
+                            break;
+                        case "isBranchApproval":
+                            result.Authory.IsBranchApproval = isActive;
+                            break;
+                        case "isBranchFormReader":
+                            result.Authory.IsBranchFormReader = isActive;
+                            break;
+                        case "isUIVisible":
+                            result.Authory.isUIVisible = isActive;
+                            break;
                     }
                 }
             }
