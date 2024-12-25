@@ -44,6 +44,8 @@ public class UserAttribute : Attribute, IActionFilter
         var user_reference = GetHeaderValue(headers, "user_reference");
         var given_name = GetHeaderValue(headers, "given_name");
         var family_name = GetHeaderValue(headers, "family_name");
+        var login_name = GetHeaderValue(headers, "login_name");
+        
 
         if (!isbankpersonel)
         {
@@ -72,28 +74,14 @@ public class UserAttribute : Attribute, IActionFilter
         }
         else
         {
-            var ssoIntegrationService = context.HttpContext.RequestServices.GetService<ISSOIntegrationService>();
-            var getUserInfoByCustomerNo = ssoIntegrationService.GetUserInfoByCustomerNo(customerNo).Result;
-            var loginName = "";
-            if (getUserInfoByCustomerNo.Data == null)
-            {
-                Log.Information("UserAttribute getUserInfoByCustomerNo.Data = null", loginName);
-                return;
-            }
-             Log.Information("UserAttribute {getUserInfoByCustomerNo.Data}", getUserInfoByCustomerNo.Data);
-            if (getUserInfoByCustomerNo.Data.IndexOf('\\') != -1)
-            {
-                var parts = getUserInfoByCustomerNo.Data.Split('\\');
-                loginName = (parts != null && parts.Length > 1) ? parts[1] : string.Empty;
-            }
-            Log.Information("UserAttribute {loginName}", loginName);
+            Log.Information("UserAttribute-login_name {loginName}", login_name);
             var claims2 = new List<Claim>
                         {
                             new Claim("username", user_reference),
                         };
             var identity2 = new ClaimsIdentity(claims2);
             var principal2 = new ClaimsPrincipal(identity2);
-            Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, loginName);
+            Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, login_name);
         }
 
         // Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
