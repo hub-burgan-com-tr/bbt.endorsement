@@ -55,8 +55,7 @@ public class UserAttribute : Attribute, IActionFilter
                 Last = family_name,
                 BusinessLine = "B",
             };
-        }
-        var claims2 = new List<Claim>
+            var claims2 = new List<Claim>
                         {
                             new Claim("username", user_reference),
                             new Claim("customer_number", customerNo),
@@ -65,10 +64,12 @@ public class UserAttribute : Attribute, IActionFilter
                             new Claim("business_line", "B"),
                             new Claim("credentials", "isBranchFormReader###1")
                         };
-        var identity2 = new ClaimsIdentity(claims2);
-        var principal2 = new ClaimsPrincipal(identity2);
-        context.HttpContext.User = principal2;
-        Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
+            var identity2 = new ClaimsIdentity(claims2);
+            var principal2 = new ClaimsPrincipal(identity2);
+            context.HttpContext.User = principal2;
+        }
+
+        // Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
 
 
     }
