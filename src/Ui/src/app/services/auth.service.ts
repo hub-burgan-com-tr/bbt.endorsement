@@ -45,6 +45,16 @@ export class AuthService {
       return user;
     }));
   }
+  getUserInfo(code: any) {
+    const url = `${this.baseUrl}/${ApiPaths.GetUserInfo}`;
+    return this.httpClient.get<User>(url).pipe(map(user => {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      // localStorage.setItem('token', JSON.stringify(user.token));
+      this.tokenSubject.next(user.token);
+      this.currentUserSubject.next(user);
+      return user;
+    }));
+  }
 
   // ssoLogin(code) {
   //   const url = `${this.identityServerUrl}/${GatewayPaths.connectToken}`;
