@@ -65,7 +65,6 @@ public class UserAttribute : Attribute, IActionFilter
                             new Claim("business_line", "B"),
                             new Claim("credentials", "isBranchFormReader###1")
                         };
-            Log.Information("UserAttribute Claims created: {@Claims}", claims2);
             var identity2 = new ClaimsIdentity(claims2);
             var principal2 = new ClaimsPrincipal(identity2);
             context.HttpContext.User = principal2;
