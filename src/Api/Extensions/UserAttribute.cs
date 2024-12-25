@@ -55,8 +55,8 @@ public class UserAttribute : Attribute, IActionFilter
                 Last = family_name,
                 BusinessLine = "B",
             };
-        }
-        var claims2 = new List<Claim>
+            Log.Information("UserAttribute Result object created: {@Result}", result);
+            var claims2 = new List<Claim>
                         {
                             new Claim("username", user_reference),
                             new Claim("customer_number", customerNo),
@@ -65,10 +65,13 @@ public class UserAttribute : Attribute, IActionFilter
                             new Claim("business_line", "B"),
                             new Claim("credentials", "isBranchFormReader###1")
                         };
-        var identity2 = new ClaimsIdentity(claims2);
-        var principal2 = new ClaimsPrincipal(identity2);
-        context.HttpContext.User = principal2;
-        Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
+            Log.Information("UserAttribute Claims created: {@Claims}", claims2);
+            var identity2 = new ClaimsIdentity(claims2);
+            var principal2 = new ClaimsPrincipal(identity2);
+            context.HttpContext.User = principal2;
+        }
+
+        // Api.Extensions.ClaimsPrincipalExtensions.IsCredentials(principal2, customerNo);
 
 
     }
@@ -84,12 +87,12 @@ public class UserAttribute : Attribute, IActionFilter
         if (headers.ContainsKey(key))
         {
             var value = headers[key].ToString();
-            Log.Information("{Key}: {Value}", key, value);
+            Log.Information("UserAttribute {Key}: {Value}", key, value);
             return value;
         }
         else
         {
-            Log.Information("{Key} header not found.", key);
+            Log.Information("UserAttribute {Key} header not found.", key);
             return defaultValue;
         }
     }
