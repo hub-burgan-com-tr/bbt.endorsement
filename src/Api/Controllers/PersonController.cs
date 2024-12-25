@@ -39,13 +39,7 @@ namespace Api.Controllers
             {
                 Log.Information("GetUserInfo {Key} header not found.", "Authorization");
             }
-            // DTO oluşturuluyor
-            //  new Claim("username", user_reference),
-            //             new Claim("customer_number", customerNo),
-            //             new Claim("given_name", given_name),
-            //             new Claim("family_name", family_name),
-            //             new Claim("business_line", "B"),
-            //             new Claim("credentials", "isBranchFormReader###1")
+
             var dto = new GetSearchPersonSummaryDto
             {
                 Token = token,
@@ -55,6 +49,8 @@ namespace Api.Controllers
                 CustomerNumber = UInt64.TryParse(claims.FirstOrDefault(c => c.Type == "customer_number")?.Value, out var customerNumber)
                                  ? customerNumber : 0,
                 BusinessLine = claims.FirstOrDefault(c => c.Type == "business_line")?.Value ?? "B",
+                IsStaff =  bool.TryParse(claims.FirstOrDefault(c => c.Type == "isStaff")?.Value, out var isStaff)
+                                 ? isStaff : false
             };
             var credentials = claims.Where(c => c.Type == "credentials").Select(x => x.Value).ToList();
             GetCredentials(dto, credentials);

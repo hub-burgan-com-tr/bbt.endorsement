@@ -78,6 +78,7 @@ public class UserAttribute : Attribute, IActionFilter
             var claims2 = new List<Claim>
                         {
                             new Claim("username", user_reference),
+                            new Claim("isStaff", isbankpersonel.ToString()),
                         };
             var identity2 = new ClaimsIdentity(claims2);
             var principal2 = new ClaimsPrincipal(identity2);
