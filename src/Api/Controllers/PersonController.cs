@@ -28,17 +28,17 @@ namespace Api.Controllers
         {
 
             var claims = HttpContext.User.Claims;
-            // var token  = string.Empty;
-            // if (HttpContext.Request.Headers.ContainsKey("Authorization"))
-            // {
-            //     var value = HttpContext.Request.Headers["Authorization"].ToString();
-            //     Log.Information("GetUserInfo {Key}: {Value}", "Authorization", value);
-            //     token = value.Replace("Bearer","").Trim();
-            // }
-            // else
-            // {
-            //     Log.Information("GetUserInfo {Key} header not found.", "Authorization");
-            // }
+            var token  = string.Empty;
+            if (HttpContext.Request.Headers.ContainsKey("Authorization"))
+            {
+                var value = HttpContext.Request.Headers["Authorization"].ToString();
+                Log.Information("GetUserInfo {Key}: {Value}", "Authorization", value);
+                token = value.Replace("Bearer","").Trim();
+            }
+            else
+            {
+                Log.Information("GetUserInfo {Key} header not found.", "Authorization");
+            }
             // DTO oluşturuluyor
             //  new Claim("username", user_reference),
             //             new Claim("customer_number", customerNo),
@@ -48,6 +48,7 @@ namespace Api.Controllers
             //             new Claim("credentials", "isBranchFormReader###1")
             var dto = new GetSearchPersonSummaryDto
             {
+                Token = token,
                 CitizenshipNumber = claims.FirstOrDefault(c => c.Type == "user_reference")?.Value ?? "",
                 First = claims.FirstOrDefault(c => c.Type == "given_name")?.Value ?? "",
                 Last = claims.FirstOrDefault(c => c.Type == "family_name")?.Value ?? "",
