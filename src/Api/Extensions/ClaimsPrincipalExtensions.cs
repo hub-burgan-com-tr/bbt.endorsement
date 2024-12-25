@@ -120,7 +120,7 @@ public static class ClaimsPrincipalExtensions
         identity.AddClaim(new Claim("credentials", ssoResponse.UserAuthorities.Where(x => x.Name == "isNewFormCreator").Select(x => x.Name + "###" + x.Value).FirstOrDefault()));
         identity.AddClaim(new Claim("credentials", ssoResponse.UserAuthorities.Where(x => x.Name == "isFormReader").Select(x => x.Name + "###" + x.Value).FirstOrDefault()));
         identity.AddClaim(new Claim("credentials", ssoResponse.UserAuthorities.Where(x => x.Name == "isUIVisible").Select(x => x.Name + "###" + x.Value).FirstOrDefault()));
-        Log.Information("SSOResponseMapClaims " + ssoResponse);
+        Log.Information("SSOResponseMapClaims {ssoResponse}", JsonSerializer.Serialize(ssoResponse) );
         return principal;
     }
 
