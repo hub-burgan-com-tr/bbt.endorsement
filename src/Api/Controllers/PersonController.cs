@@ -49,7 +49,7 @@ namespace Api.Controllers
             var dto = new GetSearchPersonSummaryDto
             {
                 Token = token,
-                CitizenshipNumber = claims.FirstOrDefault(c => c.Type == "user_reference")?.Value ?? "",
+                CitizenshipNumber = claims.FirstOrDefault(c => c.Type == "username")?.Value ?? "",
                 First = claims.FirstOrDefault(c => c.Type == "given_name")?.Value ?? "",
                 Last = claims.FirstOrDefault(c => c.Type == "family_name")?.Value ?? "",
                 CustomerNumber = UInt64.TryParse(claims.FirstOrDefault(c => c.Type == "customer_number")?.Value, out var customerNumber)
