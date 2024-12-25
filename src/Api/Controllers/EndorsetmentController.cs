@@ -243,6 +243,8 @@ namespace Api.Controllers
         public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
             var citizenshipNumber = User.GetCitizenshipNumber();
+            Serilog.Log.Information("GetMyApprovalAsync - User citizenshipNumber: {citizenshipNumber}", citizenshipNumber);
+
             var data = await Mediator.Send(new GetMyApprovalQuery { CitizenshipNumber = citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(data);
         }
