@@ -5,8 +5,10 @@ using Application.BbtInternals.Queries.GetSearchPersonSummary;
 using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -53,7 +55,7 @@ namespace Api.Controllers
                 var credentialsList = credentials.Split(',').ToList();  // credentials'ı ',' ile ayırıp listeye çeviriyoruz
                 GetCredentials(dto, credentialsList);  // Listeyi metota gönderiyoruz
             }
-            Log.Information("Login-Start GetSearchPersonSummaryDto: {dto} ", JsonConvert.SerializeObject(dto));
+            Log.Information("Login-Start GetSearchPersonSummaryDto: {dto} ", JsonSerializer.Serialize(dto));
 
             return dto;
         }
