@@ -33,13 +33,13 @@ public class ErrorHandlerMiddleware
         var response = context.Response;
 
         response.ContentType = "application/json";
-        response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        var message = "";
+        response.StatusCode = 417;
+        var message = "Endorsement Error: ";
         if (ex.Message is not null)
-            message = ex.Message.ToString();
+            message += ex.Message.ToString();
 
         var result = Response<object>.Fail(message, response.StatusCode);
-        Log.Error(ex, $"{DateTime.UtcNow.ToString("HH:mm:ss")} : {ex.Message}");
+        Log.Error(ex, $"{DateTime.UtcNow.ToString("HH:mm:ss")} : {message}");
 
         return response.WriteAsync(result.ToString());
     }
