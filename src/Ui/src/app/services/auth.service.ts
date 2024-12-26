@@ -13,7 +13,6 @@ import password = Components.components.password;
 })
 export class AuthService {
   baseUrl = environment.baseUrl;
-  identityServerUrl = environment.identityServerUrl;
   private currentUserSubject: BehaviorSubject<User>;
   private tokenSubject: BehaviorSubject<string>;
   public currentUser: Observable<User>;
