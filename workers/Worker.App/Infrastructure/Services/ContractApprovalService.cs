@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Enum;
+using Domain.Enums;
 using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -954,13 +955,16 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
+                var approver = variables.FormType == Form.Order ? variables.StartRequest.Approver : variables.StartFormRequest.Approver;
+
                 var response = await _mediator.Send(new StartFreeContractApprovalCommand { 
                     ContractInstanceId = variables.ContractInstanceId.HasValue ? variables.ContractInstanceId.Value : Guid.NewGuid(),
                     ContractCode = variables.ContractCode,
                     ContractTitle = variables.FormType == Form.Order ? variables.StartRequest.Title : variables.StartFormRequest.Title,
                     ToLangCode = variables.Language,
-                    ToUserReference = "",
-                    ToCustomerNo = variables.Person.CustomerNumber.ToString(), //Bu reference mı ?
+                    ToUserReference = approver.CitizenshipNumber.ToString(),
+                    ToCustomerNo = approver.CustomerNumber.ToString(),
+                    ToBusinessLine = approver.BusinessLine,
                     SetTimeout = variables.ExpireInMinutes,
                     OrderId = variables.InstanceId
                 });

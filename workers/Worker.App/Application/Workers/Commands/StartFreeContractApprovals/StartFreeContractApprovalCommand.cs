@@ -16,6 +16,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
         public string ToLangCode { get; set; }
         public string SetTimeout { get; set; }
         public string OrderId { get; set; }
+        public string ToBusinessLine { get; set; }
         public Guid ContractInstanceId { get; set; }
     }
 
@@ -69,6 +70,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                     ToLangCode = request.ToLangCode,
                     ContractTitle = request.ContractTitle,
                     SetTimeout = request.SetTimeout,
+                    ToBusinessLine = request.ToBusinessLine,
                     FreeDocuments = freeDocuments
                 };
 
