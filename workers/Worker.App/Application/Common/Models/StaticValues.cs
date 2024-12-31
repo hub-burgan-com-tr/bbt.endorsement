@@ -8,5 +8,6 @@ public static class StaticValues
     public static string DMSService { get; set; }
     public static string MessagingGateway { get; set; }
     public static string TsizlUrl { get; set; }
+    public static string ContractUrl { get; set; }
 }
 
