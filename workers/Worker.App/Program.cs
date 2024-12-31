@@ -1,7 +1,9 @@
-﻿using Document.Infrastructure;
+﻿using bbt.framework.kafka;
+using Document.Infrastructure;
 using Elastic.Apm.NetCoreAll;
 using Elastic.Apm.SerilogEnricher;
 using Elastic.CommonSchema.Serilog;
+using Infrastructure.Kafka.SettingModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -110,6 +112,8 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                         e.Console(outputTemplate: "{Level} {ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
+builder.Services.Configure<ContractApprovedSettings>(Configuration.GetSection(nameof(ContractApprovedSettings)));
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
