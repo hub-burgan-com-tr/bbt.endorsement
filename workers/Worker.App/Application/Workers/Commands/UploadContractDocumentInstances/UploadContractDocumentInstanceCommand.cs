@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Application.Common.Interfaces;
-using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
+using Worker.App.Application.Common.Interfaces;
+using Worker.App.Application.Common.Models;
 
 namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstances
 {

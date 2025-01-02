@@ -26,7 +26,8 @@ namespace Worker.App.Application.Common.Interfaces
         DbSet<FormDefinitionTagMap> FormDefinitionTagMaps { get; }
         DbSet<OrderDefinition> OrderDefinitions { get; }
         DbSet<OrderDefinitionAction> OrderDefinitionActions { get; }
-
+        DbSet<ContractMap> ContractMaps { get; }
+        DbSet<ContractStart> ContractStarts { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         int SaveChanges();
     }
