@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Entities;
 using MediatR;
@@ -26,64 +28,86 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
         public async Task<Response<UploadContractDocumentInstanceResponse>> Handle(UploadContractDocumentInstanceCommand request, CancellationToken cancellationToken)
         {
-            Guid contractInstanceId = Guid.NewGuid();
-            var orderDocuments = _context.Documents.Where(x => x.OrderId == request.OrderId).ToList();
-            var documentNames = orderDocuments.Select(x => x.Name.Replace(".pdf", "")).ToList();
-            var maps = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && x.RequiresFullMatch).GroupBy(x => x.ContractCode).ToDictionary(x => x.Key, x => x.ToList()); //ASK: serbest döküman için ContractCode boş bırakma?
-            var currentContract = new KeyValuePair<string, List<ContractMap>>();
-
-            foreach (var contract in maps)
+            using (var client = new HttpClient())
             {
-                var fullMatchList = contract.Value.Select(x => x.EndorsementCode).ToList();
-                bool areEqual = new HashSet<string>(fullMatchList).SetEquals(documentNames);
-                if (areEqual)
+                Guid contractInstanceId = Guid.NewGuid();
+                var orderDocuments = _context.Documents.Where(x => x.OrderId == request.OrderId).ToList();
+                var documentNames = orderDocuments.Select(x => x.Name.Replace(".pdf", "")).ToList();
+
+                var maps = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && x.RequiresFullMatch)
+                .GroupBy(x => x.ContractCode)
+                .Select(g => new
                 {
-                    currentContract = contract;
-                    break;
-                }
-            }
+                    ContractCode = g.Key,
+                    Items = g.ToList()
+                }).ToDictionary(x => x.ContractCode, x => x.Items); //ASK: serbest döküman için ContractCode boş bırakma?
 
-            if (String.IsNullOrEmpty(currentContract.Key))
-                currentContract = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && !x.RequiresFullMatch).GroupBy(x => x.ContractCode).ToDictionary(x => x.Key, x => x.ToList()).FirstOrDefault();
+                var currentContract = new KeyValuePair<string, List<ContractMap>>();
 
-            if (String.IsNullOrEmpty(currentContract.Key))
-            {
-                throw new Exception("ContractCode not found!");
-            }
-
-            foreach (var orderDoc in orderDocuments)
-            {
-                if (orderDoc.Type != "PlainText")
+                foreach (var contract in maps)
                 {
-                    var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name);
-                    UploadContractDocumentInstanceModel uploadDoc = new UploadContractDocumentInstanceModel
+                    var fullMatchList = contract.Value.Select(x => x.EndorsementCode).ToList();
+                    bool areEqual = new HashSet<string>(fullMatchList).SetEquals(documentNames);
+                    if (areEqual)
                     {
-                        ContractCode = currentContract.Key,
-                        ContractInstanceId = contractInstanceId,
-                    };
-
-                    uploadDoc.DocumentInstanceId = Guid.NewGuid();
-                    uploadDoc.DocumentCode = currentMap.DocumentCode;
-                    uploadDoc.DocumentVersion = currentMap.DocumentVersion;
-
-                    var documentInfos = orderDoc.Content.Split(';');
-                    uploadDoc.DocumentContent = new DocumentContent
-                    {
-                        ContentType = documentInfos[0].Replace("Data:", ""),
-                        FileContext = documentInfos[1].Replace("Base64,", ""),
-                        FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
-                    };
+                        currentContract = contract;
+                        break;
+                    }
                 }
+
+                if (String.IsNullOrEmpty(currentContract.Key))
+                    currentContract = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && !x.RequiresFullMatch)
+                    .GroupBy(x => x.ContractCode).Select(g => new
+                    {
+                        ContractCode = g.Key,
+                        Items = g.ToList()
+                    }).ToDictionary(x => x.ContractCode, x => x.Items).FirstOrDefault();
+
+                if (String.IsNullOrEmpty(currentContract.Key))
+                {
+                    throw new Exception("ContractCode not found!");
+                }
+
+                client.BaseAddress = new Uri(StaticValues.ContractUrl);
+                foreach (var orderDoc in orderDocuments)
+                {
+                    if (orderDoc.Type != "PlainText")
+                    {
+                        var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name);
+                        UploadContractDocumentInstanceModel uploadDoc = new UploadContractDocumentInstanceModel
+                        {
+                            ContractCode = currentContract.Key,
+                            ContractInstanceId = contractInstanceId,
+                        };
+
+                        uploadDoc.DocumentInstanceId = Guid.NewGuid();
+                        uploadDoc.DocumentCode = currentMap.DocumentCode;
+                        uploadDoc.DocumentVersion = currentMap.DocumentVersion;
+
+                        var documentInfos = orderDoc.Content.Split(';');
+                        uploadDoc.DocumentContent = new DocumentContent
+                        {
+                            ContentType = documentInfos[0].Replace("Data:", ""),
+                            FileContext = documentInfos[1].Replace("Base64,", ""),
+                            FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
+                        };
+
+                        var json = JsonSerializer.Serialize(uploadDoc);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        var result = await client.PostAsync("/document/uploadInstance", content);
+                        var responseContent = result.Content.ReadAsStringAsync().Result;
+                    }
+                }
+
+                var response = new UploadContractDocumentInstanceResponse
+                {
+                    ContractInstanceId = contractInstanceId,
+                    ContractCode = currentContract.Key
+                };
+
+                return Response<UploadContractDocumentInstanceResponse>.Success(response, 200);
             }
-
-            var response = new UploadContractDocumentInstanceResponse
-            {
-                ContractInstanceId = contractInstanceId,
-                ContractCode = currentContract.Key
-            };
-
-
-            return Response<UploadContractDocumentInstanceResponse>.Success(response, 200);
         }
     }
 
