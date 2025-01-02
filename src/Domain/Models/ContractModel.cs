@@ -39,6 +39,7 @@ public class ContractModel
     public string ContractCode { get; set; }
     public string Language { get; set; }
     public bool UseContractManagement { get; set; }
+    public string ContractAuthToken { get; set; }
     public string Error { get; set; }
 
     public string[] Urls { get; set; }

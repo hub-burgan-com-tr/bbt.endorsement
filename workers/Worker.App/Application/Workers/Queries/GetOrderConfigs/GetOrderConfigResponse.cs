@@ -9,6 +9,7 @@
         public bool NotPersonalMail { get; set; }
         public bool NoNotification { get; set; }
         public bool UseContractManagement { get; set; }
+        public string ContractAuthToken { get; set; }
         
     }
 }
