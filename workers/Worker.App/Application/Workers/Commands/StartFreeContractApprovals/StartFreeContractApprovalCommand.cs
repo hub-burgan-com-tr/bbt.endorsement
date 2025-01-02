@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.Json;
-using Application.Common.Interfaces;
 using MediatR;
-using Application.Common.Models;
 using Domain.Entities;
+using Worker.App.Application.Common.Models;
+using Worker.App.Application.Common.Interfaces;
 
 namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
 {
