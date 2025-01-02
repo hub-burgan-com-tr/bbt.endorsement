@@ -41,6 +41,7 @@ namespace Api.Controllers
         public async Task<Response<NewOrderFormResponse>> CreateOrUpdateFormAsync([FromBody] StartFormRequest request)
         {
             Log.Warning("Request.Headers[\"R-User-Name\"]" + Request.Headers["R-User-Name"]);
+            var token = Request.Headers["Authorization"];
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User?.Claims
@@ -68,7 +69,7 @@ namespace Api.Controllers
 
             var person = UserExtensions.GetOrderPerson(User.Claims);
 
-            return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder, ContentData = contentData });
+            return await Mediator.Send(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder, ContentData = contentData, AuthToken = token });
         }
 
         [Route("preview-pdf")]

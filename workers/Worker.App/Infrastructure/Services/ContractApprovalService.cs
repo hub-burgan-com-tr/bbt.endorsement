@@ -221,6 +221,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
+                    variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
                 }
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -512,6 +513,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
+                    variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
@@ -948,6 +950,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
+                    variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
@@ -1006,6 +1009,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NotPersonalMail = orderConfig.Data.NotPersonalMail;
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
+                    variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
