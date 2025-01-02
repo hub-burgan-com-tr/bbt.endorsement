@@ -84,7 +84,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 var json = JsonSerializer.Serialize(reqObj);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                 var result = await client.PostAsync("/workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start", content);
                 var responseContent = result.Content.ReadAsStringAsync().Result;
 

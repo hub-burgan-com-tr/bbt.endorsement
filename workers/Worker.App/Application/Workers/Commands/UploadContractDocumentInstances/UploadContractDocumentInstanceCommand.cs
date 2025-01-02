@@ -102,7 +102,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         var json = JsonSerializer.Serialize(uploadDoc);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken);
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                         var result = await client.PostAsync("document/uploadInstance", content);
                         if (result.IsSuccessStatusCode)
                         {
