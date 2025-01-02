@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
@@ -16,6 +17,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
     public class UploadContractDocumentInstanceCommand : IRequest<Response<UploadContractDocumentInstanceResponse>>
     {
         public string OrderId { get; set; }
+        public string AuthToken { get; set; }
     }
 
     public class UploadContractDocumentInstanceCommandHandler : IRequestHandler<UploadContractDocumentInstanceCommand, Response<UploadContractDocumentInstanceResponse>>
@@ -100,6 +102,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         var json = JsonSerializer.Serialize(uploadDoc);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken);
                         var result = await client.PostAsync("document/uploadInstance", content);
                         if (result.IsSuccessStatusCode)
                         {
