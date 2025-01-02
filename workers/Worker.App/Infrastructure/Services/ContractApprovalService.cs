@@ -970,7 +970,8 @@ public class ContractApprovalService : IContractApprovalService
                     ToCustomerNo = approver.CustomerNumber.ToString(),
                     ToBusinessLine = approver.BusinessLine,
                     SetTimeout = variables.ExpireInMinutes,
-                    OrderId = variables.InstanceId
+                    OrderId = variables.InstanceId,
+                    AuthToken = variables.ContractAuthToken
                 });
 
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"StartFreeContractApproval");
@@ -1019,7 +1020,8 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 var response = await _mediator.Send(new UploadContractDocumentInstanceCommand { 
-                    OrderId = variables.InstanceId
+                    OrderId = variables.InstanceId,
+                    AuthToken = variables.ContractAuthToken
                 });
 
                 variables.ContractInstanceId = response.Data.ContractInstanceId;
