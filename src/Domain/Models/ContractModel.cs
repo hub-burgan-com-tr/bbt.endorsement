@@ -149,6 +149,7 @@ public class OrderConfig
     public bool NotPersonalMail { get; set; }
     public bool Device { get; set; }
     public bool NoNotification { get; set; }
+    public bool UseContractManagement { get; set; }
     public string ParameterId { get; set; }
     public string NotifyMessageSMS { get; set; }
     public string NotifyMessagePush { get; set; }

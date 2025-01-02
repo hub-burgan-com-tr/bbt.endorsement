@@ -69,6 +69,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.Device = startFormRequest.OrderConfig.Device;
                 config.NotPersonalMail = startFormRequest.OrderConfig.NotPersonalMail;
                 config.NoNotification = startFormRequest.OrderConfig.NoNotification;
+                config.UseContractManagement = startFormRequest.OrderConfig.UseContractManagement;
                 config.ParameterId = string.IsNullOrWhiteSpace(startFormRequest.OrderConfig.ParameterId)?null: startFormRequest.OrderConfig.ParameterId;
             }
 
