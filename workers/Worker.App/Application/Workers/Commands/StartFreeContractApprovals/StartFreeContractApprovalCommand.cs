@@ -4,7 +4,6 @@ using MediatR;
 using Domain.Entities;
 using Worker.App.Application.Common.Models;
 using Worker.App.Application.Common.Interfaces;
-using System.Net.Http.Headers;
 
 namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
 {
@@ -19,7 +18,6 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
         public string OrderId { get; set; }
         public string ToBusinessLine { get; set; }
         public Guid ContractInstanceId { get; set; }
-        public string AuthToken { get; set; }
     }
 
     public class StartFreeContractApprovalCommandHandler : IRequestHandler<StartFreeContractApprovalCommand, Response<StartFreeContractApprovalResponse>>
@@ -84,7 +82,6 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 var json = JsonSerializer.Serialize(reqObj);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken);
                 var result = await client.PostAsync("/workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start", content);
                 var responseContent = result.Content.ReadAsStringAsync().Result;
 
