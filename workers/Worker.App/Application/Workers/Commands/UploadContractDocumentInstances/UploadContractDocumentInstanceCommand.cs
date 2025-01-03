@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Entities;
 using MediatR;
-using Serilog;
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 
@@ -32,7 +31,6 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
             using (var client = new HttpClient())
             {
                 Guid contractInstanceId = Guid.NewGuid();
-                Log.ForContext("ContractInstanceId", contractInstanceId).Information($"UploadContractDocumentInstanceCommand Started.");
                 var orderDocuments = _context.Documents.Where(x => x.OrderId == request.OrderId).ToList();
                 var documentNames = orderDocuments.Select(x => x.Name.Replace(".pdf", "")).ToList();
 
@@ -53,21 +51,17 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     if (areEqual)
                     {
                         currentContract = contract;
-                        Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"UploadContractDocumentInstanceCommand Contract Found From RequiresFullMatch.");
                         break;
                     }
                 }
 
                 if (String.IsNullOrEmpty(currentContract.Key))
-                {
                     currentContract = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && !x.RequiresFullMatch)
                     .GroupBy(x => x.ContractCode).Select(g => new
                     {
                         ContractCode = g.Key,
                         Items = g.ToList()
                     }).ToDictionary(x => x.ContractCode, x => x.Items).FirstOrDefault();
-                    Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"UploadContractDocumentInstanceCommand Contract Found From Not RequiresFullMatch.");
-                }
 
                 if (String.IsNullOrEmpty(currentContract.Key))
                 {
@@ -97,19 +91,12 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                             FileContext = documentInfos[1].Replace("Base64,", ""),
                             FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
                         };
+
                         var json = JsonSerializer.Serialize(uploadDoc);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                         var result = await client.PostAsync("/document/uploadInstance", content);
-                        if(result.IsSuccessStatusCode) 
-                        {
-                            Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("UploadedDocument", json).Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
-                        }
-                        else
-                        {
-                           Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("UploadedDocument", json).Error($"UploadContractDocumentInstanceCommand Document Upload Error.");
-                        }
-                        // var responseContent = result.Content.ReadAsStringAsync().Result;
+                        var responseContent = result.Content.ReadAsStringAsync().Result;
                     }
                 }
 
