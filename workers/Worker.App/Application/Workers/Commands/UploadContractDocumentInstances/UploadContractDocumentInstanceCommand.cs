@@ -93,27 +93,21 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         var documentInfos = orderDoc.Content.Split(';');
                         uploadDoc.DocumentContent = new DocumentContent
                         {
-                            ContentType = documentInfos[0].Replace("Data:", "").Replace("data:", ""),
-                            FileContext = documentInfos[1].Replace("Base64,", "").Replace("base64,", ""),
+                            ContentType = documentInfos[0].Replace("Data:", ""),
+                            FileContext = documentInfos[1].Replace("Base64,", ""),
                             FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
                         };
                         var json = JsonSerializer.Serialize(uploadDoc);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                         var result = await client.PostAsync("/document/uploadInstance", content);
-                        if (result.IsSuccessStatusCode)
+                        if(result.IsSuccessStatusCode) 
                         {
-                            Log.ForContext("ContractInstanceId", contractInstanceId)
-                            .ForContext("UploadedDocument", json)
-                            .ForContext("HttpResponseStatus", result.StatusCode)
-                            .Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
+                            Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("UploadedDocument", json).Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
                         }
                         else
                         {
-                            Log.ForContext("ContractInstanceId", contractInstanceId)
-                            .ForContext("UploadedDocument", json)
-                            .ForContext("HttpResponseStatus", result.StatusCode)
-                            .Error($"UploadContractDocumentInstanceCommand Document Upload Error.");
+                           Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("UploadedDocument", json).Error($"UploadContractDocumentInstanceCommand Document Upload Error.");
                         }
                         // var responseContent = result.Content.ReadAsStringAsync().Result;
                     }
