@@ -30,7 +30,6 @@ namespace Infrastructure.Kafka
 
         public override async Task<bool> Process(ContractDocumentCreatedModel kafkaModel)
         {
-            _logger.LogInformation("ContractDocumentCreatedConsumer receive the message.");
             var instance = _context.ContractStarts.Where(x => x.ContractInstanceId == kafkaModel.Data.ContractInstanceId).FirstOrDefault();
             var documentCount = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).Count();
             if (documentCount == 1)
