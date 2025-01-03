@@ -37,8 +37,7 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                     x.Config.NotPersonalMail,
                     x.Config.NoNotification,
                     x.Config.Device,
-                    x.Config.UseContractManagement,
-                    x.Config.ContractAuthToken
+                    x.Config.UseContractManagement
                 }).FirstOrDefault();
 
             var response = new GetOrderConfigResponse
@@ -49,8 +48,7 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                 NotPersonalMail = data.NotPersonalMail,
                 NoNotification = data.NoNotification,
                 Device = data.Device,
-                UseContractManagement = data.UseContractManagement,
-                ContractAuthToken = data.ContractAuthToken
+                UseContractManagement = data.UseContractManagement
             };
 
             return Response<GetOrderConfigResponse>.Success(response, 200);

@@ -16,7 +16,6 @@ namespace Application.Endorsements.Commands.NewOrderForms
         public OrderPerson Person { get; set; }
         public Form FormType { get; set; }
         public string ContentData { get; set; }
-        public string AuthToken { get; set; }
     }
 
     public class NewFormOrderCommandHandler : IRequestHandler<NewOrderFormCommand, Response<NewOrderFormResponse>>
@@ -56,7 +55,6 @@ namespace Application.Endorsements.Commands.NewOrderForms
                 MaxRetryCount = config.MaxRetryCount,
                 Person = request.Person,
                 ContentData = request.Request.Source=="file"?null: request.ContentData,
-                ContractAuthToken = request.AuthToken
             };
             
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
