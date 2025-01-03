@@ -100,7 +100,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         var json = JsonSerializer.Serialize(uploadDoc);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        var result = await client.PostAsync("document/uploadInstance", content);
+                        var result = await client.PostAsync("/document/uploadInstance", content);
                         if (result.IsSuccessStatusCode)
                         {
                             Log.ForContext("ContractInstanceId", contractInstanceId)
