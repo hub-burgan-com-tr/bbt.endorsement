@@ -933,7 +933,6 @@ public class ContractApprovalService : IContractApprovalService
     {
         CreateWorker("StartFreeContractApproval", async (jobClient, job) =>
         {
-            Log.Information("StartFreeContractApproval Process Started.");
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("StartFreeContractApproval");
             if (variables != null)
@@ -991,7 +990,6 @@ public class ContractApprovalService : IContractApprovalService
     {
         CreateWorker("UploadContractDocumentInstance", async (jobClient, job) =>
         {
-            Log.Information("UploadContractDocumentInstance Process Started.");
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("UploadContractDocumentInstance");
             if (variables != null)
