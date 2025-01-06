@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {ApiPaths} from "../models/api-paths";
-import {BehaviorSubject, map, Observable} from "rxjs";
-import {User} from "../models/user";
-import {GatewayPaths} from "../models/gateway-paths";
-import {Components} from "formiojs";
+import { Injectable } from '@angular/core';
+import { environment } from "../../environments/environment";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { ApiPaths } from "../models/api-paths";
+import { BehaviorSubject, map, Observable } from "rxjs";
+import { User } from "../models/user";
+import { GatewayPaths } from "../models/gateway-paths";
+import { Components } from "formiojs";
 import password = Components.components.password;
 
 @Injectable({
@@ -55,32 +55,33 @@ export class AuthService {
     }));
   }
 
-  // ssoLogin(code) {
-  //   const url = `${this.identityServerUrl}/${GatewayPaths.connectToken}`;
-  //   let header = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
-
-  //   let p = new HttpParams()
-  //     .append('code', code)
-  //     .append('client_id', environment.clientId)
-  //     .append('grant_type', environment.grantType)
-  //     .append('client_secret', environment.clientSecret)
-  //     .append('redirect_uri', environment.redirectUri);
-
-  //   let requestBody = p.toString();
-
-  //   return this.httpClient.post<any>(url, requestBody, {headers: header}).pipe(map(data => {
-  //     localStorage.setItem('token', JSON.stringify(data.access_token));
-  //     this.tokenSubject.next(data.access_token);
-  //     return data;
-  //   }));
-  //   ;
-  // }
 
   logout() {
+    localStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
+
     this.currentUserSubject.next(null);
     this.tokenSubject.next(null);
-    location.reload();
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Request-Method': 'OPTIONS'
+      })
+    };
+    const revokeUrl = this.baseUrl + "/token/revoke";
+    this.httpClient.options(revokeUrl, httpOptions).subscribe({
+      next: () => {
+        console.log('Token revoke request sent successfully.');
+      },
+      error: (err) => {
+        console.error('Error revoking token:', err);
+      },
+      complete: () => {
+        location.reload();
+      }
+    });
   }
+
 }
