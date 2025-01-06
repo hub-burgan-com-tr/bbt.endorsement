@@ -63,7 +63,7 @@ export class AuthService {
 
     this.currentUserSubject.next(null);
     this.tokenSubject.next(null);
-
+    this.clearAllCookies()
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -71,17 +71,51 @@ export class AuthService {
       })
     };
     const revokeUrl = this.baseUrl + "/token/revoke";
-    this.httpClient.options(revokeUrl, httpOptions).subscribe({
-      next: () => {
-        console.log('Token revoke request sent successfully.');
-      },
-      error: (err) => {
-        console.error('Error revoking token:', err);
-      },
+    this.httpClient.post(revokeUrl, {}, httpOptions).subscribe({
+      next: () => console.log('Token revoked successfully.'),
+      error: (err) => console.error('Error revoking token:', err),
       complete: () => {
+        this.clearAllCookies();
         location.reload();
       }
     });
+
   }
+  clearAllCookies() {
+    const cookieName = '.amorphie.token';
+    const domains = [
+      window.location.hostname,           // Mevcut domain
+      '.' + window.location.hostname,     // Alt domainler
+      '.burgan.com.tr',                   // Özel domain
+    ];
+    for (const domain of domains) {
+      document.cookie = `${cookieName}=; Path=/; Domain=${domain}; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+    }
+
+    console.log('.amorphie.token çerezi silindi!');
+
+
+    const cookies = document.cookie.split(";"); // Çerezleri al
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("="); // Çerez adını ayır
+      const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+
+      document.cookie = `${name}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+      document.cookie = `${name}=; Path=/; Domain=${window.location.hostname}; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+
+      const domainParts = window.location.hostname.split(".");
+      while (domainParts.length > 1) {
+        const domain = domainParts.join(".");
+        document.cookie = `${name}=; Path=/; Domain=.${domain}; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+        domainParts.shift(); // Bir üst domain'e geç
+      }
+    }
+
+    sessionStorage.clear();
+    localStorage.clear();
+    console.log("Tüm çerezler ve oturum verileri temizlendi!");
+  }
+
 
 }
