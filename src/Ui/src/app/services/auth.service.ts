@@ -64,7 +64,7 @@ export class AuthService {
     this.currentUserSubject.next(null);
     this.tokenSubject.next(null);
 
-    const revokeUrl = this.baseUrl + "/ebanking/revoke";
+    const revokeUrl = this.baseUrl + "/ebanking/token/revoke";
     this.httpClient.put(revokeUrl, {}).subscribe({
       next: () => console.log('Token revoked successfully.'),
       error: (err) => console.error('Error revoking token:', err),
