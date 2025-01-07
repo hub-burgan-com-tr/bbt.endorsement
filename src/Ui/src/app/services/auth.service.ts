@@ -71,7 +71,7 @@ export class AuthService {
       })
     };
     const revokeUrl = this.baseUrl + "/revoke";
-    this.httpClient.post(revokeUrl, {}, httpOptions).subscribe({
+    this.httpClient.put(revokeUrl, {}, httpOptions).subscribe({
       next: () => console.log('Token revoked successfully.'),
       error: (err) => console.error('Error revoking token:', err),
       complete: () => {
