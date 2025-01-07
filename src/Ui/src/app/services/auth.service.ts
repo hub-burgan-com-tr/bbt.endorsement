@@ -63,14 +63,9 @@ export class AuthService {
 
     this.currentUserSubject.next(null);
     this.tokenSubject.next(null);
-    this.clearAllCookies()
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
+
     const revokeUrl = this.baseUrl + "/ebanking/revoke";
-    this.httpClient.put(revokeUrl, {}, httpOptions).subscribe({
+    this.httpClient.put(revokeUrl, {}).subscribe({
       next: () => console.log('Token revoked successfully.'),
       error: (err) => console.error('Error revoking token:', err),
       complete: () => {
