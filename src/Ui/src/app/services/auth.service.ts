@@ -70,7 +70,7 @@ export class AuthService {
         'Access-Control-Request-Method': 'OPTIONS'
       })
     };
-    const revokeUrl = this.baseUrl + "/revoke";
+    const revokeUrl = this.baseUrl + "/ebanking/revoke";
     this.httpClient.put(revokeUrl, {}, httpOptions).subscribe({
       next: () => console.log('Token revoked successfully.'),
       error: (err) => console.error('Error revoking token:', err),
