@@ -67,7 +67,6 @@ export class AuthService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Access-Control-Request-Method': 'OPTIONS'
       })
     };
     const revokeUrl = this.baseUrl + "/ebanking/revoke";
