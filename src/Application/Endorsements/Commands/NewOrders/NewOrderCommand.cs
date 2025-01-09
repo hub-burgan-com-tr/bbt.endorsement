@@ -15,6 +15,7 @@ namespace Application.Endorsements.Commands.NewOrders
         public StartRequest StartRequest { get; set; }
         public OrderPerson Person { get; set; }
         public Form FormType { get; set; }
+        public string AuthToken { get; set; }
     }
 
     public class NewOrderCommandHandler : IRequestHandler<NewOrderCommand, Response<StartResponse>>
@@ -47,7 +48,8 @@ namespace Application.Endorsements.Commands.NewOrders
                 ExpireInMinutes = expireInMinutes,
                 RetryFrequence = retryFrequence,
                 MaxRetryCount = request.StartRequest.Config.MaxRetryCount,
-                Person = request.Person
+                Person = request.Person,
+                ContractAuthToken = request.AuthToken
             };
 
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });

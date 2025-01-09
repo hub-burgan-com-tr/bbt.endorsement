@@ -43,6 +43,7 @@ namespace Api.Controllers
 
         public async Task<Response<StartResponse>> NewOrder([FromBody] StartRequest request)
         {
+            var token = Request.Headers["Authorization"];
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
@@ -52,7 +53,7 @@ namespace Api.Controllers
             }
             request.Id = Guid.NewGuid().ToString();
             var person = UserExtensions.GetOrderPerson(User.Claims);
-            return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person = person, FormType = Form.Order });
+            return await Mediator.Send(new NewOrderCommand { StartRequest = request, Person = person, FormType = Form.Order, AuthToken = token });
         }
 
         [SwaggerOperation(

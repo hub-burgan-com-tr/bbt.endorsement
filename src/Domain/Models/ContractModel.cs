@@ -32,10 +32,14 @@ public class ContractModel
     public int MaxRetryCount { get; set; }
     public string RetryFrequence { get; set; }
     public string ExpireInMinutes { get; set; }
-
+    
     public string DependencyFormId { get; set; }
     public bool DependecyRules { get; set; }
-
+    public Guid? ContractInstanceId { get; set; }
+    public string ContractCode { get; set; }
+    public string Language { get; set; }
+    public bool UseContractManagement { get; set; }
+    public string ContractAuthToken { get; set; }
     public string Error { get; set; }
 
     public string[] Urls { get; set; }
@@ -146,6 +150,7 @@ public class OrderConfig
     public bool NotPersonalMail { get; set; }
     public bool Device { get; set; }
     public bool NoNotification { get; set; }
+    public bool UseContractManagement { get; set; }
     public string ParameterId { get; set; }
     public string NotifyMessageSMS { get; set; }
     public string NotifyMessagePush { get; set; }
