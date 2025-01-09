@@ -20,6 +20,7 @@ public class Entegration
     public string Sso { get; set; }
     public string MessagingGateway { get; set; }
     public string TsizlUrl { get; set; }
+    public string ContractUrl { get; set; }
 }
 
 public class ServiceEndpoint

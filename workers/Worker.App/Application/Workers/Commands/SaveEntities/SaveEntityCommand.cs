@@ -6,6 +6,7 @@ using Domain.Entities;
 using Domain.Enums;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Worker.App.Application.Workers.Commands.SaveEntities
 {
@@ -33,9 +34,9 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             try
             {
                 if (request.Model.FormType == Form.Order)
-                    response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey);
+                    response = OrderCreate(request.Model.StartRequest, request.Model.Person, request.ProcessInstanceKey, request.Model.ContractAuthToken);
                 else if (request.Model.FormType == Form.FormOrder)
-                    response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey, request.Model.ContentData);
+                    response = FormOrderCreate(request.Model.StartFormRequest, request.Model.Person, request.ProcessInstanceKey, request.Model.ContentData, request.Model.ContractAuthToken);
                 //var documentList = _context.Documents.Where(x => x.OrderId == response.OrderId);
                 //var saveEntityDocuments = new List<SaveEntityDocumentResponse>();
                 //foreach (var item in documentList)
@@ -51,7 +52,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return Response<SaveEntityResponse>.Success(response, 200);
         }
 
-        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest, OrderPerson person, long processInstanceKey, string contentData)
+        private SaveEntityResponse FormOrderCreate(StartFormRequest startFormRequest, OrderPerson person, long processInstanceKey, string contentData, string authToken)
         {
             if (startFormRequest == null) return null;
 
@@ -62,6 +63,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 ExpireInMinutes = formDefinition.ExpireInMinutes,
                 MaxRetryCount = formDefinition.MaxRetryCount,
                 RetryFrequence = formDefinition.RetryFrequence,
+                ContractAuthToken = authToken
 
             };
             if (startFormRequest.OrderConfig != null)
@@ -69,7 +71,8 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.Device = startFormRequest.OrderConfig.Device;
                 config.NotPersonalMail = startFormRequest.OrderConfig.NotPersonalMail;
                 config.NoNotification = startFormRequest.OrderConfig.NoNotification;
-                config.ParameterId = string.IsNullOrWhiteSpace(startFormRequest.OrderConfig.ParameterId)?null: startFormRequest.OrderConfig.ParameterId;
+                config.UseContractManagement = startFormRequest.OrderConfig.UseContractManagement;
+                config.ParameterId = string.IsNullOrWhiteSpace(startFormRequest.OrderConfig.ParameterId) ? null : startFormRequest.OrderConfig.ParameterId;
             }
 
             var actions = new List<DocumentAction>();
@@ -156,7 +159,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     };
                     CreateCallback(orderEntity, startFormRequest.Reference);
 
-                    var orderMap =  new OrderMap
+                    var orderMap = new OrderMap
                     {
                         OrderMapId = Guid.NewGuid().ToString(),
                         OrderGroupId = orderGroup.OrderGroupId,
@@ -273,7 +276,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             return customerId;
         }
 
-        private SaveEntityResponse OrderCreate(StartRequest startRequest, OrderPerson person, long processInstanceKey)
+        private SaveEntityResponse OrderCreate(StartRequest startRequest, OrderPerson person, long processInstanceKey, string authToken)
         {
             if (startRequest == null) return null;
 
@@ -319,6 +322,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             }
 
             var config = new Config();
+            config.ContractAuthToken = authToken;
             if (startRequest.Config != null)
             {
                 config.MaxRetryCount = startRequest.Config.MaxRetryCount;
@@ -327,6 +331,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.NotPersonalMail = startRequest.Config.NotPersonalMail;
                 config.NoNotification = startRequest.Config.NoNotification;
                 config.Device = startRequest.Config.Device;
+                config.UseContractManagement = startRequest.Config.UseContractManagement;
                 config.ParameterId = string.IsNullOrWhiteSpace(startRequest.Config.ParameterId) ? null : startRequest.Config.ParameterId;
 
 
@@ -390,11 +395,11 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
             var callback = orderReference.Callback;
             if (callback == null)
                 return;
-            if (callback.URL.Length<5)
-            return;
+            if (callback.URL.Length < 5)
+                return;
             #endregion
 
-            order.Reference.Callbacks.Add( new Callback {OrderId = order.OrderId, Url = callback.URL, ApiKey = callback.ApiKey});
+            order.Reference.Callbacks.Add(new Callback { OrderId = order.OrderId, Url = callback.URL, ApiKey = callback.ApiKey });
         }
         private string GetFileType(string fileType)
         {

@@ -32,6 +32,8 @@ namespace Domain.Entities
         public bool Device { get; set; }=false;
         public bool NotPersonalMail { get; set; } = false;
         public bool NoNotification { get; set; } = false;
+        public bool UseContractManagement { get; set; } = false;
+        public string ContractAuthToken { get; set; }
         [MaxLength(36)]
         public string ParameterId { get; set; }
         public virtual Parameter Parameter { get; set; }

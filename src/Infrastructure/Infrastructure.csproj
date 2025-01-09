@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="bbt.framework.kafka" Version="6.2024.827.928" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.6" />
 	  <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.6" />
