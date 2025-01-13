@@ -5,6 +5,7 @@ using Domain.Entities;
 using Worker.App.Application.Common.Models;
 using Worker.App.Application.Common.Interfaces;
 using System.Net.Http.Headers;
+using Serilog;
 
 namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
 {
@@ -86,7 +87,23 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                 var result = await client.PostAsync("/workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start", content);
-                var responseContent = result.Content.ReadAsStringAsync().Result;
+                var responseContent = await result.Content.ReadAsStringAsync();
+                
+                if (result.IsSuccessStatusCode)
+                    {
+                        Log.ForContext("ContractInstanceId", request.ContractInstanceId)
+                        .ForContext("FreeContractBody", json)
+                        .ForContext("HttpResponseStatus", result.StatusCode)
+                        .Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
+                    }
+                    else
+                    {
+                        Log.ForContext("ContractInstanceId", request.ContractInstanceId)
+                        .ForContext("UploadedDocument", json)
+                        .ForContext("HttpResponseStatus", result.StatusCode)
+                        .Error($"UploadContractDocumentInstanceCommand Document Upload Error. Content: " + responseContent);
+                    }
+                
 
                 _context.ContractStarts.Add(new ContractStart
                 {
