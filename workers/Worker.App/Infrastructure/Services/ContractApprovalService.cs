@@ -962,7 +962,8 @@ public class ContractApprovalService : IContractApprovalService
             {
                 var approver = variables.FormType == Form.Order ? variables.StartRequest.Approver : variables.StartFormRequest.Approver;
 
-                var response = await _mediator.Send(new StartFreeContractApprovalCommand { 
+                var response = await _mediator.Send(new StartFreeContractApprovalCommand
+                {
                     ContractInstanceId = variables.ContractInstanceId.HasValue ? variables.ContractInstanceId.Value : Guid.NewGuid(),
                     ContractCode = variables.ContractCode,
                     ContractTitle = variables.FormType == Form.Order ? variables.StartRequest.Title : variables.StartFormRequest.Title,
@@ -1020,7 +1021,8 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
-                var response = await _mediator.Send(new UploadContractDocumentInstanceCommand { 
+                var response = await _mediator.Send(new UploadContractDocumentInstanceCommand
+                {
                     OrderId = variables.InstanceId,
                     AuthToken = variables.ContractAuthToken,
                     ToBusinessLine = variables.StartFormRequest.Approver.BusinessLine,
@@ -1030,8 +1032,8 @@ public class ContractApprovalService : IContractApprovalService
                 variables.ContractInstanceId = response.Data.ContractInstanceId;
                 variables.ContractCode = response.Data.ContractCode;
                 variables.Language = response.Data.Language;
-                Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"UploadContractDocumentInstance");
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+                Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"UploadContractDocumentInstance Process Done.");
             }
             catch (Exception ex)
             {
