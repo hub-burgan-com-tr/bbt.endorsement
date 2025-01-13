@@ -126,11 +126,18 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                 }
             }
 
+
             var response = new UploadContractDocumentInstanceResponse
             {
                 ContractInstanceId = contractInstanceId,
-                ContractCode = currentContract.Key
+                ContractCode = currentContract.Key,
+                Language = "tr-TR"
             };
+
+            var config = _context.Configs.FirstOrDefault(x => x.OrderId == request.OrderId);
+            config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
+            _context.Configs.Update(config);
+            _context.SaveChanges();
 
             return Response<UploadContractDocumentInstanceResponse>.Success(response, 200);
         }
