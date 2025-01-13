@@ -223,6 +223,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
                     variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
+                    variables.ContractParameters = orderConfig.Data.ContractParameters;
                 }
             }
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -515,6 +516,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
                     variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
+                    variables.ContractParameters = orderConfig.Data.ContractParameters;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
@@ -952,6 +954,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
                     variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
+                    variables.ContractParameters = orderConfig.Data.ContractParameters;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
@@ -960,14 +963,26 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
+                Guid contractInstanceId = Guid.NewGuid();
+                string contractCode = "";
+                string language = "tr-TR";
+
+                if (!String.IsNullOrEmpty(variables.ContractParameters))
+                {
+                    var parameters = variables.ContractParameters.Split(';');
+                    contractInstanceId = Guid.Parse(parameters[0]);
+                    contractCode = parameters[1];
+                    language = parameters[2];
+                }
+
                 var approver = variables.FormType == Form.Order ? variables.StartRequest.Approver : variables.StartFormRequest.Approver;
 
                 var response = await _mediator.Send(new StartFreeContractApprovalCommand
                 {
-                    ContractInstanceId = variables.ContractInstanceId.HasValue ? variables.ContractInstanceId.Value : Guid.NewGuid(),
-                    ContractCode = variables.ContractCode,
+                    ContractInstanceId = contractInstanceId,
+                    ContractCode = contractCode,
                     ContractTitle = variables.FormType == Form.Order ? variables.StartRequest.Title : variables.StartFormRequest.Title,
-                    ToLangCode = variables.Language,
+                    ToLangCode = language,
                     ToUserReference = approver.CitizenshipNumber.ToString(),
                     ToCustomerNo = approver.CustomerNumber.ToString(),
                     ToBusinessLine = approver.BusinessLine,
@@ -1013,6 +1028,7 @@ public class ContractApprovalService : IContractApprovalService
                     variables.NoNotification = orderConfig.Data.NoNotification;
                     variables.UseContractManagement = orderConfig.Data.UseContractManagement;
                     variables.ContractAuthToken = orderConfig.Data.ContractAuthToken;
+                    variables.ContractParameters = orderConfig.Data.ContractParameters;
                 }
                 variables.IsProcess = true;
                 variables.Completed = false;
@@ -1029,9 +1045,6 @@ public class ContractApprovalService : IContractApprovalService
                     ToUserReference = variables.StartFormRequest.Approver.CitizenshipNumber.ToString()
                 });
 
-                variables.ContractInstanceId = response.Data.ContractInstanceId;
-                variables.ContractCode = response.Data.ContractCode;
-                variables.Language = response.Data.Language;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"UploadContractDocumentInstance Process Done.");
             }

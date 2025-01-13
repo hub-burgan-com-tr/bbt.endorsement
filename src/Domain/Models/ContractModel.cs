@@ -35,11 +35,9 @@ public class ContractModel
     
     public string DependencyFormId { get; set; }
     public bool DependecyRules { get; set; }
-    public Guid? ContractInstanceId { get; set; }
-    public string ContractCode { get; set; }
-    public string Language { get; set; }
     public bool UseContractManagement { get; set; }
     public string ContractAuthToken { get; set; }
+    public string ContractParameters { get; set; }
     public string Error { get; set; }
 
     public string[] Urls { get; set; }

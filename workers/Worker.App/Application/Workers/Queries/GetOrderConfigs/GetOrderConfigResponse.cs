@@ -10,6 +10,7 @@
         public bool NoNotification { get; set; }
         public bool UseContractManagement { get; set; }
         public string ContractAuthToken { get; set; }
-        
+        public string ContractParameters { get; set; }
+
     }
 }

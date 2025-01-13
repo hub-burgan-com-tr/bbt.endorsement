@@ -38,7 +38,8 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                     x.Config.NoNotification,
                     x.Config.Device,
                     x.Config.UseContractManagement,
-                    x.Config.ContractAuthToken
+                    x.Config.ContractAuthToken,
+                    x.Config.ContractParameters
                 }).FirstOrDefault();
 
             var response = new GetOrderConfigResponse
@@ -50,7 +51,8 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                 NoNotification = data.NoNotification,
                 Device = data.Device,
                 UseContractManagement = data.UseContractManagement,
-                ContractAuthToken = data.ContractAuthToken
+                ContractAuthToken = data.ContractAuthToken,
+                ContractParameters = data.ContractParameters
             };
 
             return Response<GetOrderConfigResponse>.Success(response, 200);
