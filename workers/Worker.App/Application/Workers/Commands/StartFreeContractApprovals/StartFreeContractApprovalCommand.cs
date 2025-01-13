@@ -94,14 +94,14 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                         Log.ForContext("ContractInstanceId", request.ContractInstanceId)
                         .ForContext("FreeContractBody", json)
                         .ForContext("HttpResponseStatus", result.StatusCode)
-                        .Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
+                        .Information($"Free contract started.");
                     }
                     else
                     {
                         Log.ForContext("ContractInstanceId", request.ContractInstanceId)
                         .ForContext("UploadedDocument", json)
                         .ForContext("HttpResponseStatus", result.StatusCode)
-                        .Error($"UploadContractDocumentInstanceCommand Document Upload Error. Content: " + responseContent);
+                        .Error($"StartFreeContract Error. Content: " + responseContent);
                     }
                 
 
