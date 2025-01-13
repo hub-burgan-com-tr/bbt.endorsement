@@ -1022,7 +1022,9 @@ public class ContractApprovalService : IContractApprovalService
             {
                 var response = await _mediator.Send(new UploadContractDocumentInstanceCommand { 
                     OrderId = variables.InstanceId,
-                    AuthToken = variables.ContractAuthToken
+                    AuthToken = variables.ContractAuthToken,
+                    ToBusinessLine = variables.StartFormRequest.Approver.BusinessLine,
+                    ToUserReference = variables.StartFormRequest.Approver.CitizenshipNumber.ToString()
                 });
 
                 variables.ContractInstanceId = response.Data.ContractInstanceId;
