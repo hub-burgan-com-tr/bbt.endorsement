@@ -76,6 +76,11 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                 throw new Exception("ContractCode not found!");
             }
 
+            var config = _context.Configs.FirstOrDefault(x => x.OrderId == request.OrderId);
+            config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
+            _context.Configs.Update(config);
+            _context.SaveChanges();
+
             var client = new HttpClient();
             client.BaseAddress = new Uri(StaticValues.ContractUrl);
             foreach (var orderDoc in orderDocuments)
@@ -126,18 +131,12 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                 }
             }
 
-
             var response = new UploadContractDocumentInstanceResponse
             {
                 ContractInstanceId = contractInstanceId,
                 ContractCode = currentContract.Key,
                 Language = "tr-TR"
             };
-
-            var config = _context.Configs.FirstOrDefault(x => x.OrderId == request.OrderId);
-            config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
-            _context.Configs.Update(config);
-            _context.SaveChanges();
 
             return Response<UploadContractDocumentInstanceResponse>.Success(response, 200);
         }
