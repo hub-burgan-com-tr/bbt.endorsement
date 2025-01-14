@@ -86,7 +86,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
-                var result = await client.PostAsync("/workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start", content);
+                var result = await client.PostAsync("workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start", content);
                 var responseContent = await result.Content.ReadAsStringAsync();
                 
                 if (result.IsSuccessStatusCode)

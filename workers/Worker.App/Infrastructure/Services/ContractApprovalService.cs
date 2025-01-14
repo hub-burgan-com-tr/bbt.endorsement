@@ -967,6 +967,7 @@ public class ContractApprovalService : IContractApprovalService
                 string contractCode = "";
                 string language = "tr-TR";
 
+                Log.Information("Contract parameters: " + variables.ContractParameters);
                 if (!String.IsNullOrEmpty(variables.ContractParameters))
                 {
                     var parameters = variables.ContractParameters.Split(';');
@@ -974,6 +975,7 @@ public class ContractApprovalService : IContractApprovalService
                     contractCode = parameters[1];
                     language = parameters[2];
                 }
+                Log.Information("Parsed contract parameters: " + contractInstanceId + "/" + contractCode + "/" + language);
 
                 var approver = variables.FormType == Form.Order ? variables.StartRequest.Approver : variables.StartFormRequest.Approver;
 
