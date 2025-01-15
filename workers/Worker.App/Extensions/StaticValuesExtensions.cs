@@ -14,7 +14,6 @@ public static class StaticValuesExtensions
         StaticValues.MessagingGateway = settings.Entegration.MessagingGateway;
         StaticValues.TsizlUrl = settings.Entegration.TsizlUrl;
         StaticValues.ContractUrl = settings.Entegration.ContractUrl;
-        StaticValues.AmorphieWorkflowUrl = settings.Entegration.AmorphieWorkflowUrl;
     }
 }
 
