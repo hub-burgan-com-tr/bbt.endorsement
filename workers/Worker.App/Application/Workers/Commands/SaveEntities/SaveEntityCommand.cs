@@ -75,6 +75,53 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.ParameterId = string.IsNullOrWhiteSpace(startFormRequest.OrderConfig.ParameterId) ? null : startFormRequest.OrderConfig.ParameterId;
             }
 
+            if (startFormRequest.OrderConfig.UseContractManagement)
+            {
+                Guid contractInstanceId = Guid.NewGuid();
+                var orderDocuments = _context.Documents.Where(x => x.OrderId == startFormRequest.Id).ToList();
+                var documentNames = orderDocuments.Select(x => x.Name.Replace(".pdf", "")).ToList();
+
+                var maps = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && x.RequiresFullMatch)
+                .GroupBy(x => x.ContractCode)
+                .Select(g => new
+                {
+                    ContractCode = g.Key,
+                    Items = g.ToList()
+                }).ToDictionary(x => x.ContractCode, x => x.Items);
+
+                var currentContract = new KeyValuePair<string, List<ContractMap>>();
+
+                foreach (var contract in maps)
+                {
+                    var fullMatchList = contract.Value.Select(x => x.EndorsementCode).ToList();
+                    bool areEqual = new HashSet<string>(fullMatchList).SetEquals(documentNames);
+                    if (areEqual)
+                    {
+                        currentContract = contract;
+                        Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"SaveEntity-FormRequest, Contract Found From RequiresFullMatch.");
+                        break;
+                    }
+                }
+
+                if (String.IsNullOrEmpty(currentContract.Key))
+                {
+                    currentContract = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && !x.RequiresFullMatch)
+                    .GroupBy(x => x.ContractCode).Select(g => new
+                    {
+                        ContractCode = g.Key,
+                        Items = g.ToList()
+                    }).ToDictionary(x => x.ContractCode, x => x.Items).FirstOrDefault();
+                    Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"SaveEntity-Form Request, Contract Found From Not RequiresFullMatch.");
+                }
+
+                if (String.IsNullOrEmpty(currentContract.Key))
+                {
+                    throw new Exception("ContractCode not found!");
+                }
+
+                // config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
+            }
+
             var actions = new List<DocumentAction>();
 
             foreach (var action in formDefinition.Actions)
@@ -333,6 +380,53 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 config.Device = startRequest.Config.Device;
                 config.UseContractManagement = startRequest.Config.UseContractManagement;
                 config.ParameterId = string.IsNullOrWhiteSpace(startRequest.Config.ParameterId) ? null : startRequest.Config.ParameterId;
+            }
+
+            if (startRequest.Config.UseContractManagement)
+            {
+                Guid contractInstanceId = Guid.NewGuid();
+                var orderDocuments = _context.Documents.Where(x => x.OrderId == startRequest.Id).ToList();
+                var documentNames = orderDocuments.Select(x => x.Name.Replace(".pdf", "")).ToList();
+
+                var maps = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && x.RequiresFullMatch)
+                .GroupBy(x => x.ContractCode)
+                .Select(g => new
+                {
+                    ContractCode = g.Key,
+                    Items = g.ToList()
+                }).ToDictionary(x => x.ContractCode, x => x.Items);
+
+                var currentContract = new KeyValuePair<string, List<ContractMap>>();
+
+                foreach (var contract in maps)
+                {
+                    var fullMatchList = contract.Value.Select(x => x.EndorsementCode).ToList();
+                    bool areEqual = new HashSet<string>(fullMatchList).SetEquals(documentNames);
+                    if (areEqual)
+                    {
+                        currentContract = contract;
+                        Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"SaveEntity-OrderRequest, Contract Found From RequiresFullMatch.");
+                        break;
+                    }
+                }
+
+                if (String.IsNullOrEmpty(currentContract.Key))
+                {
+                    currentContract = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && !x.RequiresFullMatch)
+                    .GroupBy(x => x.ContractCode).Select(g => new
+                    {
+                        ContractCode = g.Key,
+                        Items = g.ToList()
+                    }).ToDictionary(x => x.ContractCode, x => x.Items).FirstOrDefault();
+                    Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"SaveEntity-OrderRequest, Contract Found From Not RequiresFullMatch.");
+                }
+
+                if (String.IsNullOrEmpty(currentContract.Key))
+                {
+                    throw new Exception("ContractCode not found!");
+                }
+
+                config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
             }
 
             var customer = GetCustomerId(startRequest.Approver);
