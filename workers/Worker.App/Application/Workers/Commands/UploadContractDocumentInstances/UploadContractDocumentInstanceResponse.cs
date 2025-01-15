@@ -7,7 +7,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 {
     public class UploadContractDocumentInstanceResponse
     {
-        public string ContractInstanceId { get; set; }
+        public Guid ContractInstanceId { get; set; }
         public string ContractCode { get; set; }
         public string Language { get; set; }
     }
