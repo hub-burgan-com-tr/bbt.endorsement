@@ -107,19 +107,12 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
                     };
                     var json = JsonSerializer.Serialize(uploadDoc);
-
-                    Log.ForContext("UploadedDocument", json)
-                    .ForContext("ContractInstanceId", contractInstanceId)
-                    .Information("UploadContractDocumentInstanceCommand, Document Ready.");
-
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                     client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
                     client.DefaultRequestHeaders.Add("user_reference", request.ToUserReference);
 
-                    Log.Information("Headers; " + request.ToBusinessLine + ", " + request.ToUserReference);
-                    
                     var result = await client.PostAsync("document/uploadInstance", content);
                     if (result.IsSuccessStatusCode)
                     {
@@ -145,8 +138,6 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                 ContractCode = currentContract.Key,
                 Language = "tr-TR"
             };
-
-            Log.Information("UploadContractDocumentInstanceCommand, Response Ready.");
 
             return Response<UploadContractDocumentInstanceResponse>.Success(response, 200);
         }
