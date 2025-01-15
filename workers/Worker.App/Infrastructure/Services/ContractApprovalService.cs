@@ -1037,12 +1037,28 @@ public class ContractApprovalService : IContractApprovalService
             }
             string data = "";
 
+            Guid contractInstanceId = Guid.Empty;
+            string contractCode = "";
+            string language = "tr-TR";
+
+            Log.Information("Contract parameters: " + variables.ContractParameters);
+            if (!String.IsNullOrEmpty(variables.ContractParameters))
+            {
+                var parameters = variables.ContractParameters.Split(';');
+                contractInstanceId = Guid.Parse(parameters[0]);
+                contractCode = parameters[1];
+                language = parameters[2];
+            }
+
             try
             {
                 var response = await _mediator.Send(new UploadContractDocumentInstanceCommand
                 {
                     OrderId = variables.InstanceId,
                     AuthToken = variables.ContractAuthToken,
+                    ContractInstanceId =contractInstanceId.ToString(),
+                    ContractCode = contractCode,
+                    Language = language,
                     ToBusinessLine = variables.StartFormRequest.Approver.BusinessLine,
                     ToUserReference = variables.StartFormRequest.Approver.CitizenshipNumber.ToString()
                 });
