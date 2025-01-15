@@ -21,6 +21,7 @@ public class Entegration
     public string MessagingGateway { get; set; }
     public string TsizlUrl { get; set; }
     public string ContractUrl { get; set; }
+    public string AmorphieWorkflowUrl { get; set; }
 }
 
 public class ServiceEndpoint
