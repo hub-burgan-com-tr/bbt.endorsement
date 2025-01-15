@@ -37,15 +37,53 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         public async Task<Response<UploadContractDocumentInstanceResponse>> Handle(UploadContractDocumentInstanceCommand request, CancellationToken cancellationToken)
         {
             Log.Information($"UploadContractDocumentInstanceCommand Started.");
-            
+            Guid contractInstanceId = Guid.NewGuid();
+
             var orderDocuments = _context.Documents.Where(x => x.OrderId == request.OrderId).ToList();
-            var currentContract = _context.ContractMaps.Where(x => x.ContractCode == request.ContractCode)
+            var documentNames = orderDocuments.Select(x => x.Name.Replace(".pdf", "")).ToList();
+
+            var maps = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && x.RequiresFullMatch)
                 .GroupBy(x => x.ContractCode)
                 .Select(g => new
                 {
                     ContractCode = g.Key,
                     Items = g.ToList()
-                }).ToDictionary(x => x.ContractCode, x => x.Items).FirstOrDefault();
+                }).ToDictionary(x => x.ContractCode, x => x.Items); //ASK: serbest döküman için ContractCode boş bırakma?
+
+            var currentContract = new KeyValuePair<string, List<ContractMap>>();
+
+            foreach (var contract in maps)
+            {
+                var fullMatchList = contract.Value.Select(x => x.EndorsementCode).ToList();
+                bool areEqual = new HashSet<string>(fullMatchList).SetEquals(documentNames);
+                if (areEqual)
+                {
+                    currentContract = contract;
+                    Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"UploadContractDocumentInstanceCommand Contract Found From RequiresFullMatch.");
+                    break;
+                }
+            }
+
+            if (String.IsNullOrEmpty(currentContract.Key))
+            {
+                currentContract = _context.ContractMaps.Where(x => documentNames.Contains(x.EndorsementCode) && !x.RequiresFullMatch)
+                    .GroupBy(x => x.ContractCode).Select(g => new
+                    {
+                        ContractCode = g.Key,
+                        Items = g.ToList()
+                    }).ToDictionary(x => x.ContractCode, x => x.Items).FirstOrDefault();
+                Log.ForContext("ContractInstanceId", contractInstanceId).ForContext("ContractCode", currentContract.Key).Information($"UploadContractDocumentInstanceCommand Contract Found From Not RequiresFullMatch.");
+            }
+
+            if (String.IsNullOrEmpty(currentContract.Key))
+            {
+                throw new Exception("ContractCode not found!");
+            }
+
+            var config = _context.Configs.FirstOrDefault(x => x.OrderId == request.OrderId);
+            config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
+            _context.Configs.Update(config);
+            _context.SaveChanges();
 
             var client = new HttpClient();
             client.BaseAddress = new Uri(StaticValues.ContractUrl);
