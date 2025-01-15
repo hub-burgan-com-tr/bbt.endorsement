@@ -119,7 +119,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                     throw new Exception("ContractCode not found!");
                 }
 
-                config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
+                // config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
             }
 
             var actions = new List<DocumentAction>();
