@@ -85,6 +85,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
             client.DefaultRequestHeaders.Add("User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
             client.DefaultRequestHeaders.Add("Behalf-Of-User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
+            client.DefaultRequestHeaders.Add("ClientId", "IbWeb");
             var result = await client.PostAsync("workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start", content);
             var responseContent = await result.Content.ReadAsStringAsync();
 
