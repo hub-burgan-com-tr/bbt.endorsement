@@ -90,7 +90,14 @@ public class ContractApprovalService : IContractApprovalService
             variables.Services.Add("SaveEntity");
             try
             {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity Process Started. UseContractManagement = " + variables.UseContractManagement.ToString());
+                if (variables.StartFormRequest.OrderConfig.UseContractManagement)
+                {
+                    Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity Process Started With Form. UseContractManagement = " + variables.StartFormRequest.OrderConfig.UseContractManagement.ToString());
+                }
+                else if (variables.StartRequest.Config.UseContractManagement)
+                {
+                    Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity Process Started For Orders. UseContractManagement = " + variables.StartRequest.Config.UseContractManagement.ToString());
+                }
                 // var state = customHeaders["State"].ToString();
 
                 //Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity");
