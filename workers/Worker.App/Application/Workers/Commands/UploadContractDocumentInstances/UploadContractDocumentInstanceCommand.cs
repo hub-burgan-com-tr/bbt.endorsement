@@ -18,6 +18,9 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
     {
         public string OrderId { get; set; }
         public string AuthToken { get; set; }
+        public string ContractInstanceId { get; set; }
+        public string ContractCode { get; set; }
+        public string Language { get; set; }
         public string ToBusinessLine { get; set; }
         public string ToUserReference { get; set; }
     }
@@ -92,7 +95,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     UploadContractDocumentInstanceModel uploadDoc = new UploadContractDocumentInstanceModel
                     {
                         ContractCode = currentContract.Key,
-                        ContractInstanceId = contractInstanceId,
+                        ContractInstanceId = Guid.Parse(request.ContractInstanceId),
                     };
 
                     uploadDoc.DocumentInstanceId = Guid.NewGuid();
@@ -116,14 +119,14 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     var result = await client.PostAsync("document/uploadInstance", content);
                     if (result.IsSuccessStatusCode)
                     {
-                        Log.ForContext("ContractInstanceId", contractInstanceId)
+                        Log.ForContext("ContractInstanceId", request.ContractInstanceId)
                         .ForContext("UploadedDocument", json)
                         .ForContext("HttpResponseStatus", result.StatusCode)
                         .Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
                     }
                     else
                     {
-                        Log.ForContext("ContractInstanceId", contractInstanceId)
+                        Log.ForContext("ContractInstanceId", request.ContractInstanceId)
                         .ForContext("UploadedDocument", json)
                         .ForContext("HttpResponseStatus", result.StatusCode)
                         .Error($"UploadContractDocumentInstanceCommand Document Upload Error.");
@@ -134,7 +137,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
             var response = new UploadContractDocumentInstanceResponse
             {
-                ContractInstanceId = contractInstanceId,
+                ContractInstanceId = request.ContractInstanceId,
                 ContractCode = currentContract.Key,
                 Language = "tr-TR"
             };
