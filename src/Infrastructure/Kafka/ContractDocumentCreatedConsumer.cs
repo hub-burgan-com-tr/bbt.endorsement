@@ -24,6 +24,7 @@ namespace Infrastructure.Kafka
         : base(kafkaSettings, cancellationToken, logger)
         {
             _logger = logger;
+            _logger.LogInformation("ContractDocumentCreated constructor works.");
             _context = context;
             _mediator = mediator;
         }
