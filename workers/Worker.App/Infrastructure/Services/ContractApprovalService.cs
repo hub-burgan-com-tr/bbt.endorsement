@@ -90,7 +90,7 @@ public class ContractApprovalService : IContractApprovalService
             variables.Services.Add("SaveEntity");
             try
             {
-                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity Process Started With Form.");
+                Log.ForContext("OrderId", variables.InstanceId).Information($"SaveEntity Process Started.");
 
                 // var state = customHeaders["State"].ToString();
 
