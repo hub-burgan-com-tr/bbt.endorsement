@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
@@ -124,13 +125,15 @@ builder.Services.AddSingleton<IConfigurationRoot>(provider => builder.Configurat
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
-builder.Services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
-builder.Services.Configure<ContractApprovedSettings>(Configuration.GetSection(nameof(ContractApprovedSettings)));
+// builder.Services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
+// builder.Services.Configure<ContractApprovedSettings>(Configuration.GetSection(nameof(ContractApprovedSettings)));
 
 StaticValuesExtensions.SetStaticValues(settings);
 
-builder.Services.AddHostedService<ContractDocumentCreatedWorker>();
-builder.Services.AddHostedService<ZeebeWorkService>();
+
+
+// builder.Services.AddHostedService<ContractDocumentCreatedWorker>();
+// builder.Services.AddHostedService<ZeebeWorkService>();
 
 var app = builder.Build();
 
@@ -139,7 +142,19 @@ if (environment.EnvironmentName == "Prod" || environment.EnvironmentName == "Uat
 
 
 app.AddUseMiddleware();
-await app.RunAsync();
+
+IHost host = Host.CreateDefaultBuilder(args)
+.ConfigureServices(services =>
+{
+    services.AddHostedService<ContractDocumentCreatedWorker>();
+
+    services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
+    
+
+}).UseAllElasticApm()
+.Build();
+
+await host.RunAsync();
 
 using (var scope = app.Services.CreateScope())
 {
