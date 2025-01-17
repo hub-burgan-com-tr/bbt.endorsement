@@ -112,9 +112,6 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                         });
                         e.Console(outputTemplate: "{Level} {ElasticApmTraceId} {ElasticApmTransactionId} {Message:lj:maxlength=10000} {NewLine}{Exception}");
                     }));
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
-builder.Services.Configure<ContractApprovedSettings>(Configuration.GetSection(nameof(ContractApprovedSettings)));
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
@@ -129,6 +126,8 @@ builder.Services.AddHostedService<ContractDocumentCreatedWorker>();
 builder.Services.AddHostedService<ZeebeWorkService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
+builder.Services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
+builder.Services.Configure<ContractApprovedSettings>(Configuration.GetSection(nameof(ContractApprovedSettings)));
 
 StaticValuesExtensions.SetStaticValues(settings);
 
