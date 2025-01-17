@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 namespace Infrastructure.Kafka
 {
@@ -18,7 +19,7 @@ namespace Infrastructure.Kafka
         IApplicationDbContext context, ISender mediator)
         {
             _documentCreatedLogger = documentCreatedLogger;
-            _documentCreatedLogger.LogInformation("ContractDocumentCreated worker constructor works.");
+            Log.Information("ContractDocumentCreated worker constructor works.");
             _contractDocumentCreatedSettings = contractDocumentCreatedSettings;
             _context = context;
             _mediator = mediator;
@@ -26,11 +27,11 @@ namespace Infrastructure.Kafka
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _documentCreatedLogger.LogInformation("ContractDocumentCreated worker executed.");
+            Log.Information("ContractDocumentCreated worker executed.");
             var consumer = new ContractDocumentCreatedConsumer(_contractDocumentCreatedSettings.Value, stoppingToken, _documentCreatedLogger, _context, _mediator);
-            _documentCreatedLogger.LogInformation("ContractDocumentCreated worker created consumer.");
+            Log.Information("ContractDocumentCreated worker created consumer.");
             await consumer.ConsumeAsync();
-            _documentCreatedLogger.LogInformation("ContractDocumentCreated worker started consume.");
+            Log.Information("ContractDocumentCreated worker started consume.");
         }
     }
 }
