@@ -62,13 +62,30 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             var client = new HttpClient();
             // client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
             client.BaseAddress = new Uri("https://preprod-amorphie-workflow.burgan.com.tr/");
+            // object reqObj = new
+            // {
+            //     ContractCode = request.ContractCode,
+            //     ToUserReference = request.ToUserReference,
+            //     ToCustomerNo = request.ToCustomerNo,
+            //     ToLangCode = request.ToLangCode,
+            //     ContractTitle = request.ContractTitle,
+            //     SetTimeout = request.SetTimeout,
+            //     ToBusinessLine = request.ToBusinessLine,
+            //     FreeDocuments = freeDocuments
+            // };
+
+            // var response = new StartFreeContractApprovalResponse
+            // {
+            //     WorkflowId = request.ContractInstanceId
+            // };
+
             object reqObj = new
             {
-                ContractCode = request.ContractCode,
+                ContractCode = "con-serbest-yatirim-fonlari-bildirim",
                 ToUserReference = request.ToUserReference,
                 ToCustomerNo = request.ToCustomerNo,
                 ToLangCode = request.ToLangCode,
-                ContractTitle = request.ContractTitle,
+                ContractTitle = "Serbest Yatırım Fonları",
                 SetTimeout = request.SetTimeout,
                 ToBusinessLine = request.ToBusinessLine,
                 FreeDocuments = freeDocuments
@@ -76,7 +93,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
 
             var response = new StartFreeContractApprovalResponse
             {
-                WorkflowId = request.ContractInstanceId
+                WorkflowId = Guid.NewGuid()
             };
 
             var json = JsonSerializer.Serialize(reqObj);
