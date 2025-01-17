@@ -32,6 +32,11 @@ namespace Infrastructure.Kafka
         {
             _logger.LogInformation("ContractDocumentCreatedConsumer receive the message.");
             var instance = _context.ContractStarts.Where(x => x.ContractInstanceId == kafkaModel.Data.ContractInstanceId).FirstOrDefault();
+            if (instance == null)
+            {
+                return true;
+            }
+            
             var documentCount = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).Count();
             if (documentCount == 1)
             {
