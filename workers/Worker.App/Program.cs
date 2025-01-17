@@ -3,6 +3,7 @@ using Document.Infrastructure;
 using Elastic.Apm.NetCoreAll;
 using Elastic.Apm.SerilogEnricher;
 using Elastic.CommonSchema.Serilog;
+using Infrastructure.Kafka;
 using Infrastructure.Kafka.SettingModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -124,6 +125,7 @@ builder.Services.AddDmsInfrastructure(builder.Configuration);
 builder.Services.AddSingleton<IConfigurationRoot>(provider => builder.Configuration);
 
 
+builder.Services.AddHostedService<ContractDocumentCreatedWorker>();
 builder.Services.AddHostedService<ZeebeWorkService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
