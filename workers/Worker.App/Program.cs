@@ -139,6 +139,7 @@ if (environment.EnvironmentName == "Prod" || environment.EnvironmentName == "Uat
 
 
 app.AddUseMiddleware();
+await app.RunAsync();
 
 using (var scope = app.Services.CreateScope())
 {
