@@ -126,6 +126,8 @@ builder.Services.AddSingleton<IConfigurationRoot>(provider => builder.Configurat
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
 
+StaticValuesExtensions.SetStaticValues(settings);
+
 builder.Services.AddHostedService<ZeebeWorkService>();
 
 var app = builder.Build();
