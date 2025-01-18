@@ -19,7 +19,6 @@ namespace Infrastructure.Kafka
         IApplicationDbContext context, ISender mediator)
         {
             _documentCreatedLogger = documentCreatedLogger;
-            Log.Information("ContractDocumentCreated worker constructor works.");
             _contractDocumentCreatedSettings = contractDocumentCreatedSettings;
             _context = context;
             _mediator = mediator;
@@ -29,7 +28,6 @@ namespace Infrastructure.Kafka
         {
             Log.Information("ContractDocumentCreated worker executed.");
             var consumer = new ContractDocumentCreatedConsumer(_contractDocumentCreatedSettings.Value, stoppingToken, _documentCreatedLogger, _context, _mediator);
-            Log.Information("ContractDocumentCreated worker created consumer.");
             await consumer.ConsumeAsync();
             Log.Information("ContractDocumentCreated worker started consume.");
         }
