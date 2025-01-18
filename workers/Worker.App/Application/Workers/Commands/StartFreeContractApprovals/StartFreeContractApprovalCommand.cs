@@ -60,8 +60,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 });
             }
             var client = new HttpClient();
-            // client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
-            client.BaseAddress = new Uri("https://preprod-amorphie-workflow.burgan.com.tr/");
+            client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
             // object reqObj = new
             // {
             //     ContractCode = request.ContractCode,

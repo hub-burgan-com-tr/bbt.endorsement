@@ -25,6 +25,12 @@
     <None Include="appsettings.Test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+        <None Include="kafka_nonprod.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+        <None Include="kafka_prod.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
