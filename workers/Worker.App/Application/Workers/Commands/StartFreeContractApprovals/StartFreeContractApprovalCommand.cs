@@ -2,8 +2,8 @@ using System.Text;
 using System.Text.Json;
 using MediatR;
 using Domain.Entities;
-using Application.Common.Models;
-using Application.Common.Interfaces;
+using Worker.App.Application.Common.Models;
+using Worker.App.Application.Common.Interfaces;
 using System.Net.Http.Headers;
 using Serilog;
 
