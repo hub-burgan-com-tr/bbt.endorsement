@@ -23,6 +23,7 @@ public class Entegration
     public string DMSService { get; set; }
     public string ClientSecret { get; set; }
     public string ContractUrl { get; set; }
+    public string AmorphieWorkflowUrl { get; set; }
 
     public string ApiSecret { get; set; }
     public string ClientId { get; set; }

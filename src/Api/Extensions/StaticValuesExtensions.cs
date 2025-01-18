@@ -14,6 +14,7 @@ public static class StaticValuesExtensions
         StaticValues.SSOIntegrationService = settings.Entegration.SSoIntegrationService;
         StaticValues.ClientSecret = settings.Entegration.ClientSecret;
         StaticValues.ContractUrl = settings.Entegration.ContractUrl;
+        StaticValues.AmorphieWorkflowUrl = settings.Entegration.AmorphieWorkflowUrl;
         StaticValues.TsizlUrl = settings.Entegration.TsizlUrl;
 
         StaticValues.ApiSecret = settings.Entegration.ApiSecret;
