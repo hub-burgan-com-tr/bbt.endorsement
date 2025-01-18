@@ -109,6 +109,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
                     var json = JsonSerializer.Serialize(uploadDoc);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    Log.Information("Url ready; " + StaticValues.ContractUrl + "document/uploadInstance");
                     Uri uri = new Uri(StaticValues.ContractUrl + "document/uploadInstance");
                     var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
                     httpRequest.Content = content;
