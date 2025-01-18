@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using MediatR;
 using Serilog;
-using Worker.App.Application.Common.Interfaces;
-using Worker.App.Application.Common.Models;
+using Application.Common.Interfaces;
+using Application.Common.Models;
 
 namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstances
 {
@@ -109,6 +109,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
                     var json = JsonSerializer.Serialize(uploadDoc);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    Log.Information("Url ready; " + StaticValues.ContractUrl + "document/uploadInstance");
                     Uri uri = new Uri(StaticValues.ContractUrl + "document/uploadInstance");
                     var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
                     httpRequest.Content = content;
@@ -118,7 +119,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     client.DefaultRequestHeaders.Add("user_reference", request.ToUserReference);
 
                     var result = await client.SendAsync(httpRequest);
-                    
+
                     if (result.IsSuccessStatusCode)
                     {
                         Log.ForContext("ContractInstanceId", contractInstanceId)
