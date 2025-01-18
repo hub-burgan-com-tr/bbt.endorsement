@@ -96,9 +96,11 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             };
 
             string url = StaticValues.AmorphieWorkflowUrl + "workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start";
+            Log.Information("Url ready: " + url);
+            Uri uri = new Uri(url);
             var json = JsonSerializer.Serialize(reqObj);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
             httpRequest.Content = content;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
