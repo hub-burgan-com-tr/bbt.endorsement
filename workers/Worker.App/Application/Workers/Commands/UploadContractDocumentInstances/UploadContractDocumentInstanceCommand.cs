@@ -82,7 +82,8 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
             _context.SaveChanges();
 
             var client = new HttpClient();
-            client.BaseAddress = new Uri(StaticValues.ContractUrl);
+            // client.BaseAddress = new Uri(StaticValues.ContractUrl);
+            
             foreach (var orderDoc in orderDocuments)
             {
                 if (orderDoc.Type != "PlainText")
@@ -105,14 +106,19 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         FileContext = documentInfos[1].Replace("Base64,", "").Replace("base64,", ""),
                         FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
                     };
+
                     var json = JsonSerializer.Serialize(uploadDoc);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    Uri uri = new Uri(StaticValues.ContractUrl + "document/uploadInstance");
+                    var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                    httpRequest.Content = content;
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                     client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
                     client.DefaultRequestHeaders.Add("user_reference", request.ToUserReference);
 
-                    var result = await client.PostAsync("document/uploadInstance", content);
+                    var result = await client.SendAsync(httpRequest);
+                    
                     if (result.IsSuccessStatusCode)
                     {
                         Log.ForContext("ContractInstanceId", contractInstanceId)
