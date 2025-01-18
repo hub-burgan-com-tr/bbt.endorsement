@@ -29,12 +29,13 @@ namespace Infrastructure.Kafka
 
         public override async Task<bool> Process(ContractApprovedModel kafkaModel)
         {
-            Log.Information("ContractApprovedConsumer receive the message.");
             var instance = _context.ContractStarts.Where(x => x.ContractInstanceId == kafkaModel.Data.ContractInstanceId).FirstOrDefault();
             if (instance == null)
             {
                 return true;
             }
+
+            Log.Information("ContractApprovedConsumer receive the message and find instance.");
 
             var documentCount = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).Count();
             if (documentCount > 1)

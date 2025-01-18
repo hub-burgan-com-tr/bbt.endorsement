@@ -127,6 +127,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 ContractInstanceId = response.WorkflowId,
                 OrderId = Guid.Parse(request.OrderId)
             });
+            _context.SaveChanges();
 
             return Response<StartFreeContractApprovalResponse>.Success(response, 200);
         }
