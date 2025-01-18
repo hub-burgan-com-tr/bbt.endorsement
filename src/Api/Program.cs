@@ -10,6 +10,8 @@ using Infrastructure;
 using Infrastructure.Cache;
 using Infrastructure.Configuration;
 using Infrastructure.Configuration.Options;
+using Infrastructure.Kafka;
+using Infrastructure.Kafka.SettingModel;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -181,8 +183,14 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 // });
 
 var settings = builder.Configuration.Get<AppSettings>();
-builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));
+builder.Services.Configure<AppSettings>(options => Configuration.GetSection(nameof(AppSettings)).Bind(options));builder.Services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
+builder.Services.Configure<ContractApprovedSettings>(Configuration.GetSection(nameof(ContractApprovedSettings)));
+
 StaticValuesExtensions.SetStaticValues(settings);
+
+
+
+builder.Services.AddHostedService<ContractDocumentCreatedWorker>();
 
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 //{
