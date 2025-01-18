@@ -60,7 +60,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 });
             }
             var client = new HttpClient();
-            client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
+            //client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
             // object reqObj = new
             // {
             //     ContractCode = request.ContractCode,
@@ -95,14 +95,18 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 WorkflowId = Guid.NewGuid()
             };
 
+            string url = StaticValues.AmorphieWorkflowUrl + "workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start";
             var json = JsonSerializer.Serialize(reqObj);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+            httpRequest.Content = content;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
             client.DefaultRequestHeaders.Add("User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
             client.DefaultRequestHeaders.Add("Behalf-Of-User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
             client.DefaultRequestHeaders.Add("ClientId", "IbWeb");
-            var result = await client.PostAsync("workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start", content);
+            
+            var result = await client.SendAsync(httpRequest);
             var responseContent = await result.Content.ReadAsStringAsync();
 
             if (result.IsSuccessStatusCode)
