@@ -125,14 +125,7 @@ builder.Services.AddSingleton<IConfigurationRoot>(provider => builder.Configurat
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var settings = builder.Configuration.Get<AppSettings>();
-builder.Services.Configure<ContractDocumentCreatedSettings>(Configuration.GetSection(nameof(ContractDocumentCreatedSettings)));
-builder.Services.Configure<ContractApprovedSettings>(Configuration.GetSection(nameof(ContractApprovedSettings)));
 
-StaticValuesExtensions.SetStaticValues(settings);
-
-
-
-builder.Services.AddHostedService<ContractDocumentCreatedWorker>();
 builder.Services.AddHostedService<ZeebeWorkService>();
 
 var app = builder.Build();
