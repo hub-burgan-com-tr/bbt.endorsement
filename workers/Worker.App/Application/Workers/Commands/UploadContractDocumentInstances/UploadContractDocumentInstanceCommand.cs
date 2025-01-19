@@ -79,10 +79,17 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
             var config = _context.Configs.FirstOrDefault(x => x.OrderId == request.OrderId);
             config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
             _context.Configs.Update(config);
+
+            _context.ContractStarts.Add(new ContractStart
+            {
+                ContractStartId = Guid.NewGuid(),
+                ContractInstanceId = contractInstanceId,
+                OrderId = Guid.Parse(request.OrderId),
+                ContractDocuments = String.Join(';', documentNames)
+            });
             _context.SaveChanges();
 
             var client = new HttpClient();
-            // client.BaseAddress = new Uri(StaticValues.ContractUrl);
             
             foreach (var orderDoc in orderDocuments)
             {
@@ -109,7 +116,6 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
                     var json = JsonSerializer.Serialize(uploadDoc);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    Log.Information("Url ready; " + StaticValues.ContractUrl + "document/uploadInstance");
                     Uri uri = new Uri(StaticValues.ContractUrl + "document/uploadInstance");
                     var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
                     httpRequest.Content = content;
@@ -134,7 +140,6 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         .ForContext("HttpResponseStatus", result.StatusCode)
                         .Error($"UploadContractDocumentInstanceCommand Document Upload Error.");
                     }
-                    // var responseContent = result.Content.ReadAsStringAsync().Result;
                 }
             }
 

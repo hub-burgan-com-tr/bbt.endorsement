@@ -44,9 +44,21 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             if (String.IsNullOrEmpty(request.ContractCode))
                 throw new Exception("ContractCode can not be empty!");
 
+            var contractDocumentList = _context.ContractMaps.Where(x => x.ContractCode == request.ContractCode).ToList();
+            var currentDocuments = _context.ContractStarts.Where(x => x.ContractInstanceId == request.ContractInstanceId).Select(x => x.ContractDocuments).FirstOrDefault();
+            var currentDocumentNames = currentDocuments.Split(';');
+
+            List<object> decisionTableTags = new List<object>();
+            foreach (var contractDocument in contractDocumentList)
+            {
+                decisionTableTags.Add(new {
+                    SetRequired = currentDocumentNames.Contains(contractDocument.EndorsementCode),
+                    SetDocument = contractDocument.DocumentCode
+                });
+            }
+
             var orderFreeDocuments = _context.Documents.Where(x => x.OrderId == request.OrderId && x.Type == "PlainText").ToList();
             List<object> freeDocuments = new List<object>();
-
             foreach (var orderDocument in orderFreeDocuments)
             {
                 byte[] decodedBytes = Convert.FromBase64String(orderDocument.Content);
@@ -59,45 +71,31 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                     DocumentContent = decodedString
                 });
             }
+            
             var client = new HttpClient();
-            //client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
-            // object reqObj = new
-            // {
-            //     ContractCode = request.ContractCode,
-            //     ToUserReference = request.ToUserReference,
-            //     ToCustomerNo = request.ToCustomerNo,
-            //     ToLangCode = request.ToLangCode,
-            //     ContractTitle = request.ContractTitle,
-            //     SetTimeout = request.SetTimeout,
-            //     ToBusinessLine = request.ToBusinessLine,
-            //     FreeDocuments = freeDocuments
-            // };
-
-            // var response = new StartFreeContractApprovalResponse
-            // {
-            //     WorkflowId = request.ContractInstanceId
-            // };
-
+            client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
             object reqObj = new
             {
-                ContractCode = "con-serbest-yatirim-fonlari-bildirim",
+                ContractCode = request.ContractCode,
                 ToUserReference = request.ToUserReference,
                 ToCustomerNo = request.ToCustomerNo,
                 ToLangCode = request.ToLangCode,
-                ContractTitle = "Serbest Yatırım Fonları",
+                ContractTitle = request.ContractTitle,
                 SetTimeout = request.SetTimeout,
                 ToBusinessLine = request.ToBusinessLine,
-                FreeDocuments = freeDocuments
+                FreeDocuments = freeDocuments,
+                DecisionTable = new {
+                    Id = "ManageRequiredDocumentsDMN",
+                    Tags = decisionTableTags
+                }
             };
 
             var response = new StartFreeContractApprovalResponse
             {
-                WorkflowId = Guid.NewGuid()
+                WorkflowId = request.ContractInstanceId
             };
 
-            string url = StaticValues.AmorphieWorkflowUrl + "workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start";
-            Log.Information("Url ready: " + url);
-            Uri uri = new Uri(url);
+            Uri uri = new Uri(StaticValues.AmorphieWorkflowUrl + "workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start");
             var json = JsonSerializer.Serialize(reqObj);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
@@ -125,14 +123,6 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 .ForContext("HttpResponseStatus", result.StatusCode)
                 .Error($"StartFreeContract Error. Content: " + responseContent);
             }
-
-            _context.ContractStarts.Add(new ContractStart
-            {
-                ContractStartId = Guid.NewGuid(),
-                ContractInstanceId = response.WorkflowId,
-                OrderId = Guid.Parse(request.OrderId)
-            });
-            _context.SaveChanges();
 
             return Response<StartFreeContractApprovalResponse>.Success(response, 200);
         }

@@ -12,7 +12,9 @@ namespace Infrastructure.Kafka.Model
         public string ContractCode { get; set; }
         public Guid ContractInstanceId { get; set; }
         public int CustomerNo { get; set; }
+        public string Language { get; set; }
         public string Status { get; set; }
+        public int TargetUserBusinessLine { get; set; }
         public string UserReference { get; set; }
     }
 
