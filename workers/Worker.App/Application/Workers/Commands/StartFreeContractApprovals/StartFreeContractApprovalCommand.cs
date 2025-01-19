@@ -83,11 +83,11 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 ContractTitle = request.ContractTitle,
                 SetTimeout = request.SetTimeout,
                 ToBusinessLine = request.ToBusinessLine,
-                FreeDocuments = freeDocuments,
-                DecisionTable = new {
-                    Id = "ManageRequiredDocumentsDMN",
-                    Tags = decisionTableTags
-                }
+                FreeDocuments = freeDocuments
+                // DecisionTable = new {
+                //     Id = "ManageRequiredDocumentsDMN",
+                //     Tags = decisionTableTags
+                // }
             };
 
             var response = new StartFreeContractApprovalResponse
