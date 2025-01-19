@@ -191,6 +191,7 @@ StaticValuesExtensions.SetStaticValues(settings);
 
 
 builder.Services.AddHostedService<ContractDocumentCreatedWorker>();
+builder.Services.AddHostedService<ContractApprovedWorker>();
 
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
 //{

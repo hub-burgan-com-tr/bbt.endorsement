@@ -14,5 +14,6 @@ namespace Domain.Entities
         public Guid ContractStartId { get; set; }
         public Guid ContractInstanceId { get; set; }
         public Guid OrderId { get; set; }
+        public string ContractDocuments { get; set; }
     }
 }
