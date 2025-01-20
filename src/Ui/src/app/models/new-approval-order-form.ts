@@ -20,6 +20,7 @@ export default class NewApprovalOrderForm implements INewApprovalOrderForm {
   title: string;
   source: string;
   dependencyOrderId: string;
+  useContractManagement: boolean =true;
 
   constructor(approver, content, fileType, formId, reference, title, insuranceType, source, dependencyOrderId) {
     this.approver = approver;

@@ -40,7 +40,6 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   waiting: boolean = false;
   isPreview: boolean = true;
   isProcessRequired: boolean = false;
-  useContractManagement: boolean = true;
 
   constructor(private fb: FormBuilder,
     private modal: NgxSmartModalService,
@@ -235,6 +234,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         processNo: this.f.processNo.value,
         tagId: this.f.tag.value,
         formId: this.f.form.value,
+
       }, this.formTitle, iTypes, this.source, this.f.dependencyOrderId.value);
       if (this.isPreview) {
         this.waiting = true;
