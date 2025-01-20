@@ -52,8 +52,8 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             foreach (var contractDocument in contractDocumentList)
             {
                 decisionTableTags.Add(new {
-                    SetRequired = currentDocumentNames.Contains(contractDocument.EndorsementCode),
-                    SetDocument = contractDocument.DocumentCode
+                    setRequired = currentDocumentNames.Contains(contractDocument.EndorsementCode),
+                    setDocument = contractDocument.DocumentCode
                 });
             }
 
