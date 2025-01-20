@@ -165,6 +165,7 @@ public class StartFormRequest
     public string Source { get; set; }
     public string InsuranceType { get; set; }
     public string FileType { get; set; }
+    public bool UseContractManagement { get; set; } = false;
 
     public string DependencyOrderId { get; set; }
   

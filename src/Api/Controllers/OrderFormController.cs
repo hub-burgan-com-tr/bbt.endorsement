@@ -42,6 +42,12 @@ namespace Api.Controllers
         {
             Log.Warning("Request.Headers[\"R-User-Name\"]" + Request.Headers["R-User-Name"]);
             var token = Request.Headers["Authorization"];
+
+            if (request.UseContractManagement)
+            {
+                request.OrderConfig.UseContractManagement = request.UseContractManagement;
+            }
+            
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User?.Claims
