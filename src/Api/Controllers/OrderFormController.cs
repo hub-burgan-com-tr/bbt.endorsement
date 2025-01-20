@@ -45,14 +45,22 @@ namespace Api.Controllers
 
             if (request.UseContractManagement)
             {
-                request.OrderConfig.UseContractManagement = request.UseContractManagement;
+                if (request.OrderConfig == null)
+                {
+                    request.OrderConfig = new OrderConfig();
+                    request.OrderConfig.UseContractManagement = request.UseContractManagement;
+                }
+                else
+                {
+                    request.OrderConfig.UseContractManagement = request.UseContractManagement;
+                }
             }
-            
+
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User?.Claims
                         .Select(c => new { c.Type, c.Value })
-                        .ToList() ;
+                        .ToList();
                 Serilog.Log.Information("CreateOrUpdateFormAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 401);
