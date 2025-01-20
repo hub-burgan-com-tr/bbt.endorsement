@@ -40,6 +40,7 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
   waiting: boolean = false;
   isPreview: boolean = true;
   isProcessRequired: boolean = false;
+  useContractManagement: boolean = true;
 
   constructor(private fb: FormBuilder,
     private modal: NgxSmartModalService,
@@ -229,7 +230,8 @@ export class ApprovalsIWantNewFormComponent implements OnInit, OnDestroy {
         customerNumber: this.person.customerNumber,
         businessLine: this.person.businessLine,
         branchCode: this.person.branchCode,
-      }, this.source === 'file' ? this.fileBase64 : JSON.stringify(e.data), this.f.fileType.value, this.formDefinitionId, <IReference>{
+      } 
+      , this.source === 'file' ? this.fileBase64 : JSON.stringify(e.data), this.f.fileType.value, this.formDefinitionId, <IReference>{
         processNo: this.f.processNo.value,
         tagId: this.f.tag.value,
         formId: this.f.form.value,

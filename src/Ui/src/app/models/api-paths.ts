@@ -23,6 +23,8 @@
 //   GetOrderByFormId = 'Endorsement/FormDefinition/GetOrderByFormId',
 //   GetDocumentPdf = 'Endorsement/get-document-pdf',
 //   Preview = 'Endorsement/Forms/preview-pdf',
+// EndorsementOrders
+// CreateOrUpdateForm
 // }
 export enum ApiPaths {
   Endorsement = 'Endorsement/Endorsement/endorsement',

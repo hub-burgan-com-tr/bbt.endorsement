@@ -63,6 +63,7 @@ export class ApprovalsIWantNewOrderDetailComponent implements OnInit, OnDestroy 
         expireInMinutes: [this.model.config.expireInMinutes, Validators.required],
         retryFrequence: [this.model.config.retryFrequence, Validators.required],
         maxRetryCount: [this.model.config.maxRetryCount, Validators.required],
+        useContractManagement: true,
       })
     });
   }
