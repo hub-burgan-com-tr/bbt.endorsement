@@ -13,7 +13,6 @@ public static class StaticValues
     public static string ApiGateway { get; set; }
     public static string RedirectUri { get; set; }
     public static string ClientSecret { get; set; }
-    public static string ContractUrl { get; set; }
 
     public static string ApiSecret { get; set; }
     public static string ClientId { get; set; }
