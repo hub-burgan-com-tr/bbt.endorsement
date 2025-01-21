@@ -32,13 +32,9 @@ namespace Api.Controllers
             if (HttpContext.Request.Headers.ContainsKey("Authorization"))
             {
                 var value = HttpContext.Request.Headers["Authorization"].ToString();
-                Log.Information("GetUserInfo {Key}: {Value}", "Authorization", value);
                 token = value.Replace("Bearer","").Trim();
             }
-            else
-            {
-                Log.Information("GetUserInfo {Key} header not found.", "Authorization");
-            }
+            
 
             var dto = new GetSearchPersonSummaryDto
             {
@@ -54,10 +50,6 @@ namespace Api.Controllers
             };
             var credentials = claims.Where(c => c.Type == "credentials").Select(x => x.Value).ToList();
             GetCredentials(dto, credentials);
-
-
-            Log.Information("Login-Start GetSearchPersonSummaryDto: {dto} ", JsonSerializer.Serialize(dto));
-
             return dto;
         }
         private void GetCredentials(GetSearchPersonSummaryDto result, List<string> Credentials)

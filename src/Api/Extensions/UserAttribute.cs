@@ -95,12 +95,10 @@ public class UserAttribute : Attribute, IActionFilter
         if (headers.ContainsKey(key))
         {
             var value = headers[key].ToString();
-            Log.Information("UserAttribute {Key}: {Value}", key, value);
             return value;
         }
         else
         {
-            Log.Information("UserAttribute {Key} header not found.", key);
             return defaultValue;
         }
     }

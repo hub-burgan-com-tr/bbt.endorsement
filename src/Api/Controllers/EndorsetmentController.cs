@@ -47,7 +47,6 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("NewOrder - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Response<StartResponse>.Fail("Yetkiniz bulunmuyor.", 401);
             }
@@ -244,7 +243,6 @@ namespace Api.Controllers
         public async Task<IActionResult> GetMyApprovalAsync(int pageNumber = 1, int pageSize = 10)
         {
             var citizenshipNumber = User.GetCitizenshipNumber();
-            Serilog.Log.Information("GetMyApprovalAsync - User citizenshipNumber: {citizenshipNumber}", citizenshipNumber);
 
             var data = await Mediator.Send(new GetMyApprovalQuery { CitizenshipNumber = citizenshipNumber, PageNumber = pageNumber, PageSize = pageSize });
             return Ok(data);
@@ -301,7 +299,6 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWantApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Ok(Response<PaginatedList<GetWantApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 401));
             }
@@ -332,7 +329,6 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWantApprovalDetailAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Ok(Response<GetWantApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 401));
 
@@ -374,7 +370,6 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWatchApprovalAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Ok(Response<PaginatedList<GetWatchApprovalDto>>.Fail("Yetkiniz bulunmuyor.", 401));
             }
@@ -406,7 +401,6 @@ namespace Api.Controllers
             if (!User.IsCredentials(Request.Headers["R-User-Name"]))
             {
                 var userClaims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-                Serilog.Log.Information("GetWatchApprovalDetailAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Ok(Response<GetWatchApprovalDetailsDto>.Fail("Yetkiniz bulunmuyor.", 401));
             }

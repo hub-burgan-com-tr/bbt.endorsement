@@ -32,14 +32,12 @@ public static class ClaimsPrincipalExtensions
         {
             if (!string.IsNullOrEmpty(requestUserName) && !principal.Claims.Any(c => c.Type == "credentials" && c.Value.IndexOf("isReadyFormCreator") != -1))
             {
-                Log.Information("GetSSOClaims start  " + requestUserName);
-
                 var sync = GetSSOClaims(principal, requestUserName).Result;
             }
         }
         catch (Exception e)
         {
-            Log.Warning("GetSSOClaims Hata Alindi UserName= " + requestUserName + " " + e.Message);
+            Log.Error("GetSSOClaims Hata Alindi {UserName} " + requestUserName + " " + e.Message);
         }
 
         var credentials = principal.Claims.Where(c => c.Type == "credentials").ToList();
