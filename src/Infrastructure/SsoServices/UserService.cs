@@ -32,7 +32,6 @@ public class UserService : IUserService
 
             var client = new HttpClient();
 
-            Log.Information("Login-SSO-url {url} ", StaticValues.Authority);
 
 
             var json = @$"{{
@@ -44,7 +43,7 @@ public class UserService : IUserService
                         ""scopes"": [""openid"", ""profile""]
                     }}";
 
-            Log.Information("Login-SSO Result json: {json} " + json);
+            Log.Information("Login-SSO Result json: {AccessTokenRequest} " + json);
             var request = new HttpRequestMessage(HttpMethod.Post, StaticValues.Authority + "/token");
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             request.Content = content;
@@ -53,19 +52,15 @@ public class UserService : IUserService
             if (result.IsSuccessStatusCode)
             {
                 responseContent = await result.Content.ReadAsStringAsync();
-                Log.Information("Login-SSO Response: {responseContent}", responseContent);
             }
             else
             {
                 Log.Error("Login-SSO Failed with status: {statusCode}", result.StatusCode);
             }
 
-            Log.Information("Login-SSO Result: {responseContent} " + responseContent);
             var token = JsonSerializer.Deserialize<AuthTokenResponse>(responseContent);
 
             responseToken = token.AccessToken;
-            // accessToken = token.Access_token;
-            Log.Information("Login-SSOToken2: " + token.AccessToken);
         }
         catch (Exception ex)
         {

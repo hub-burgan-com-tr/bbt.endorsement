@@ -29,8 +29,6 @@ namespace Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public GetSearchPersonSummaryDto Login([FromQuery] string code)
         {
-            Log.Information("Login-Start: ");
-
             try
             {
 
@@ -40,20 +38,13 @@ namespace Api.Controllers
                     throw new ArgumentException("Endorsement Login Code :Authorization code is missing or invalid.");
                 }
 
-                Log.Information("Login-Start-AccessTokenResource ");
 
                 var response = _userService.AccessToken(code).Result;
-                Log.Information("Login-Start-end-AccessToken {response}", response);
 
                 var result = new GetSearchPersonSummaryDto
                 {
                     Token = response
                 };
-                Log.Information("Login-Start result:  " + JsonConvert.SerializeObject(result));
-
-                // GetCredentials(result, response);
-                Log.Information("Login-Start result2:  " + JsonConvert.SerializeObject(result));
-
 
                 if (result != null)
                 {
@@ -65,7 +56,7 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "LoginError" + ex.Message);
+                Log.Error(ex, "LoginError " + ex.Message);
             }
 
             return null;
