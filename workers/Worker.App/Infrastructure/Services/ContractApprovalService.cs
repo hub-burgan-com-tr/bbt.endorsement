@@ -961,7 +961,6 @@ public class ContractApprovalService : IContractApprovalService
                 Log.Information("Parsed contract parameters: " + contractInstanceId + "/" + contractCode + "/" + language);
 
                 var approver = variables.FormType == Form.Order ? variables.StartRequest.Approver : variables.StartFormRequest.Approver;
-                var person = variables.Person;
 
                 var response =   _mediator.Send(new StartFreeContractApprovalCommand
                 {
@@ -974,9 +973,7 @@ public class ContractApprovalService : IContractApprovalService
                     ToBusinessLine = approver.BusinessLine,
                     SetTimeout = variables.ExpireInMinutes,
                     OrderId = variables.InstanceId,
-                    AuthToken = variables.ContractAuthToken,
-                    PersonCustomerNo = person.CustomerNumber.ToString(),
-                    PersonTc = person.CitizenshipNumber.ToString()
+                    AuthToken = variables.ContractAuthToken
                 }).Result;
 
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"StartFreeContractApproval");

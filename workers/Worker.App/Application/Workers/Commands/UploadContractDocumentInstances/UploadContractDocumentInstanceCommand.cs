@@ -150,8 +150,6 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                 Language = "tr-TR"
             };
 
-            Thread.Sleep(5000);
-
             return Response<UploadContractDocumentInstanceResponse>.Success(response, 200);
         }
     }
