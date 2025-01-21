@@ -122,7 +122,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                     client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
-                    client.DefaultRequestHeaders.Add("user_reference", request.ToUserReference);
+                    client.DefaultRequestHeaders.Add("ToUserReference", request.ToUserReference);
 
                     var result = await client.SendAsync(httpRequest);
                     
