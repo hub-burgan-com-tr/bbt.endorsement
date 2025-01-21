@@ -80,9 +80,8 @@ public class ContractApprovalService : IContractApprovalService
 
     private void SaveEntity()
     {
-        // Log.Information("SaveEntity Worker registered ");
 
-        CreateWorker("SaveEntity", async (jobClient, job) =>
+        CreateWorker("SaveEntity", (jobClient, job) =>
         {
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
@@ -94,18 +93,18 @@ public class ContractApprovalService : IContractApprovalService
 
                 if (variables != null)
                 {
-                    var response = await _mediator.Send(new SaveEntityCommand
+                    _ = _mediator.Send(new SaveEntityCommand
                     {
                         Model = variables,
                         ProcessInstanceKey = job.ProcessInstanceKey
-                    });
+                    }).Result;
 
 
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                     data = System.Text.RegularExpressions.Regex.Replace(data, "\"Content\":\"data:[^\"]+\"", "\"Content\":\"...\"");
                     Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"SaveEntity");
 
-                    var success = await jobClient.NewCompleteJobCommand(job.Key)
+                    var success = jobClient.NewCompleteJobCommand(job.Key)
                         .Variables(data)
                         .Send();
                 }
@@ -117,7 +116,7 @@ public class ContractApprovalService : IContractApprovalService
                 variables.Error = ex.Message;
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-                var success = await jobClient.NewCompleteJobCommand(job.Key)
+                var success = jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
             }
@@ -129,7 +128,7 @@ public class ContractApprovalService : IContractApprovalService
     {
         // Log.Information("SaveHistory Worker registered ");
 
-        CreateWorker("SaveHistory", async (jobClient, job) =>
+        CreateWorker("SaveHistory", (jobClient, job) =>
         {
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
@@ -145,31 +144,31 @@ public class ContractApprovalService : IContractApprovalService
                 {
                     if (variables.IsProcess == true)
                     {
-                        await _mediator.Send(new CreateOrderHistoryCommand
+                        _ = _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
                             State = "Yeni Onay Emri Oluşturuldu",
                             Description = "",
                             IsStaff = true
-                        });
+                        }).Result;
 
-                        var response = await _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() });
+                        var response = _mediator.Send(new GetOrderDocumentQuery { OrderId = variables.InstanceId.ToString() }).Result;
                         foreach (var document in response.Data)
                         {
-                            await _mediator.Send(new CreateOrderHistoryCommand
+                            _=  _mediator.Send(new CreateOrderHistoryCommand
                             {
                                 OrderId = variables.InstanceId,
                                 State = "Onay Belgesi Geldi",
                                 Description = document.Name,
                                 DocumentId = document.DocumentId,
                                 IsStaff = true
-                            });
+                            }).Result;
                         }
                     }
                     var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                     Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"SaveHistory");
 
-                    var success = await jobClient.NewCompleteJobCommand(job.Key)
+                    var success = jobClient.NewCompleteJobCommand(job.Key)
                         .Variables(data)
                         .Send();
                 }
@@ -181,7 +180,7 @@ public class ContractApprovalService : IContractApprovalService
                 variables.Error = ex.Message;
                 string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-                var success = await jobClient.NewCompleteJobCommand(job.Key)
+                var success = jobClient.NewCompleteJobCommand(job.Key)
                     .Variables(data)
                     .Send();
             }
@@ -192,14 +191,14 @@ public class ContractApprovalService : IContractApprovalService
     {
         //Log.Information("LoadContactInfo Worker registered ");
 
-        CreateWorker("LoadContactInfo", async (jobClient, job) =>
+        CreateWorker("LoadContactInfo", (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("LoadContactInfo");
             if (variables != null)
             {
                 variables.RetryEnd = true;
-                var orderConfig = await _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId });
+                var orderConfig = _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
                 if (orderConfig != null)
                 {
                     variables.Device = orderConfig.Data.Device;
@@ -228,7 +227,7 @@ public class ContractApprovalService : IContractApprovalService
                 variables.Error = ex.Message;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -237,7 +236,7 @@ public class ContractApprovalService : IContractApprovalService
     {
         // Log.Information("SendOtp Worker registered ");
 
-        CreateWorker("SendOtp", async (jobClient, job) =>
+        CreateWorker("SendOtp",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("SendOtp");
@@ -255,7 +254,7 @@ public class ContractApprovalService : IContractApprovalService
                 var person = new Response<LoadContactInfoResponse>();
                 try
                 {
-                    person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Customer });
+                    person =  _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Customer }).Result;
 
                 }
                 catch (Exception ex)
@@ -271,12 +270,12 @@ public class ContractApprovalService : IContractApprovalService
 
                     try
                     {
-                        var responseSms = await _mediator.Send(new SendSmsTemplateCommand
+                        var responseSms =  _mediator.Send(new SendSmsTemplateCommand
                         {
                             OrderId = variables.InstanceId,
                             GsmPhone = person.Data.Customer.GsmPhone, // gsmPhone
                             CustomerNumber = person.Data.Customer.CustomerNumber,
-                        });
+                        }).Result;
                         var orderHistoryCommand = new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
@@ -290,7 +289,7 @@ public class ContractApprovalService : IContractApprovalService
                             orderHistoryCommand.Response = responseSms.Data.Response;
                             orderHistoryCommand.CustomerId = responseSms.Data.CustomerId;
                         }
-                        await _mediator.Send(orderHistoryCommand);
+                        _=  _mediator.Send(orderHistoryCommand).Result;
                     }
                     catch (Exception ex)
                     {
@@ -300,11 +299,11 @@ public class ContractApprovalService : IContractApprovalService
 
                     try
                     {
-                        var responseMail = await _mediator.Send(new SendMailTemplateCommand
+                        var responseMail =  _mediator.Send(new SendMailTemplateCommand
                         {
                             OrderId = variables.InstanceId,
                             Email = person.Data.Customer.Email,  // email,
-                        });
+                        }).Result;
                         var emailHistory = new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId.ToString(),
@@ -319,20 +318,20 @@ public class ContractApprovalService : IContractApprovalService
                             emailHistory.Response = responseMail.Data.Response;
                             emailHistory.CustomerId = responseMail.Data.CustomerId;
                         }
-                        await _mediator.Send(emailHistory);
+                        _=  _mediator.Send(emailHistory).Result;
                     }
                     catch (Exception ex)
                     {
                         Log.ForContext("OrderId", variables.InstanceId).Error(ex, ex.Message);
                     }
 
-                    await _mediator.Send(new CreateOrderHistoryCommand
+                      _= _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
                         State = "Hatırlatma Mesajı",
                         Description = "",
                         IsStaff = true
-                    });
+                    }).Result;
 
                 }
             }
@@ -346,7 +345,7 @@ public class ContractApprovalService : IContractApprovalService
             }
 
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -356,7 +355,7 @@ public class ContractApprovalService : IContractApprovalService
     {
         //Log.Information("SendPush Worker registered ");
 
-        CreateWorker("SendPush", async (jobClient, job) =>
+        CreateWorker("SendPush",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("SendPush");
@@ -370,13 +369,13 @@ public class ContractApprovalService : IContractApprovalService
             {
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"SendPush");
 
-                await _mediator.Send(new CreateOrderHistoryCommand
+                _=  _mediator.Send(new CreateOrderHistoryCommand
                 {
                     OrderId = variables.InstanceId.ToString(),
                     State = "Hatırlatma Mesajı (Push Notification)",
                     Description = "",
                     IsStaff = true
-                });
+                }).Result;
                 variables.IsProcess = true;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
@@ -389,7 +388,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -397,7 +396,7 @@ public class ContractApprovalService : IContractApprovalService
     private void CreateTSIZL()
     {
 
-        CreateWorker("CreateTSIZL", async (jobClient, job) =>
+        CreateWorker("CreateTSIZL",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("CreateTSIZL");
@@ -409,10 +408,10 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 Log.ForContext("OrderId", variables.InstanceId).Information($"CreateTSIZL");
-                var command = await _mediator.Send(new TSIZLCommand
+                var command =  _mediator.Send(new TSIZLCommand
                 {
                     InstanceId = variables.InstanceId
-                });
+                }).Result;
 
                 //_mediator.Send(new CreateOrderHistoryCommand
                 //{
@@ -440,7 +439,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -449,7 +448,7 @@ public class ContractApprovalService : IContractApprovalService
     {
         //Log.Information("UpdateEntity Worker registered ");
 
-        CreateWorker("UpdateEntity", async (jobClient, job) =>
+        CreateWorker("UpdateEntity",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("UpdateEntity");
@@ -460,20 +459,20 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"UpdateEntity");
 
-                var response = await _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId });
+                var response =  _mediator.Send(new UpdateEntityCommand { OrderId = variables.InstanceId }).Result;
                 if (response.StatusCode == 200)
                 {
-                    await _mediator.Send(new CreateOrderHistoryCommand
+                    _=  _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId,
                         State = "Yeni Onay Emri Zaman Aşımına Uğradı",
                         Description = "",
                         IsStaff = true
-                    });
+                    }).Result;
                 }
             }
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -483,13 +482,13 @@ public class ContractApprovalService : IContractApprovalService
     {
         //Log.Information("ApproveContract Worker registered ");
 
-        CreateWorker("ApproveContract", async (jobClient, job) =>
+        CreateWorker("ApproveContract",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("ApproveContract");
             if (variables != null)
             {
-                var orderConfig = await _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId });
+                var orderConfig =  _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
                 if (orderConfig != null)
                 {
                     variables.RetryFrequence = orderConfig.Data.RetryFrequence;
@@ -520,19 +519,19 @@ public class ContractApprovalService : IContractApprovalService
                 //    });
                 //}
 
-                var orderState = await _mediator.Send(new ApproveContractCommand { Model = variables, OrderId = variables.InstanceId });
+                var orderState =  _mediator.Send(new ApproveContractCommand { Model = variables, OrderId = variables.InstanceId }).Result;
                 if (orderState.Data.OrderState != OrderState.Pending)
                 {
                     foreach (var item in orderState.Data.Documents)
                     {
-                        await _mediator.Send(new CreateOrderHistoryCommand
+                        _=  _mediator.Send(new CreateOrderHistoryCommand
                         {
                             OrderId = variables.InstanceId,
                             DocumentId = item.DocumentId,
                             State = item.ActionTitle,
                             Description = item.DocumentName,
                             IsStaff = true
-                        });
+                        }).Result;
                     }
                 }
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"ApproveContract");
@@ -547,7 +546,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -556,7 +555,7 @@ public class ContractApprovalService : IContractApprovalService
     {
         // Log.Information("DeleteEntity Worker registered ");
 
-        CreateWorker("DeleteEntity", async (jobClient, job) =>
+        CreateWorker("DeleteEntity",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("DeleteEntity");
@@ -565,17 +564,17 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
-                var response = await _mediator.Send(new DeleteEntityCommand { OrderId = variables.InstanceId.ToString() });
+                var response =  _mediator.Send(new DeleteEntityCommand { OrderId = variables.InstanceId.ToString() }).Result;
 
                 if (response != null && response.Data.OrderState == OrderState.Cancel && response.Data.IsUpdated)
                 {
-                    await _mediator.Send(new CreateOrderHistoryCommand
+                     _= _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId.ToString(),
                         State = "Emir iptal edildi",
                         Description = "",
                         IsStaff = true
-                    });
+                    }).Result;
                 }
                 variables.IsProcess = true;
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -589,7 +588,7 @@ public class ContractApprovalService : IContractApprovalService
             }
             Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"DeleteEntity");
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                       .Variables(data)
                       .Send();
 
@@ -606,22 +605,22 @@ public class ContractApprovalService : IContractApprovalService
             variables.Services.Add("ConsumeCallback");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
-            var callback = await _mediator.Send(new ConsumeCallbackCommand
+            var callback =  _mediator.Send(new ConsumeCallbackCommand
             {
                 OrderId = variables.InstanceId.ToString(),
 
-            });
+            }).Result;
             Log.ForContext("variables", data).ForContext("CalbackResponse", JsonSerializer.Serialize(callback, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } })).Information($"ConsumeCallback");
 
-            await _mediator.Send(new CreateOrderHistoryCommand
+            _=  _mediator.Send(new CreateOrderHistoryCommand
             {
                 OrderId = variables.InstanceId.ToString(),
                 State = "Consume Callback status = " + callback.StatusCode,
                 Description = callback.Data.Content
-            });
+            }).Result;
 
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                       .Variables("{\"Approve\":\"" + true + "\"}")
                       .Send();
 
@@ -631,7 +630,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void CheckAllApproved()
     {
-        CreateWorker("CheckAllApproved", async (jobClient, job) =>
+        CreateWorker("CheckAllApproved",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("CheckAllApproved");
@@ -642,27 +641,27 @@ public class ContractApprovalService : IContractApprovalService
             {
 
                 variables.IsProcess = true;
-                var response = await _mediator.Send(new GetOrderStateCommand { OrderId = variables.InstanceId });
+                var response =  _mediator.Send(new GetOrderStateCommand { OrderId = variables.InstanceId }).Result;
 
                 if (response.Data.OrderState == OrderState.Reject || response.Data.OrderState == OrderState.Approve)
                 {
-                    await _mediator.Send(new CreateOrderHistoryCommand
+                    _=  _mediator.Send(new CreateOrderHistoryCommand
                     {
                         OrderId = variables.InstanceId,
                         State = "Workflow tamamlandı",
                         Description = "",
                         IsStaff = true
-                    });
+                    }).Result;
                     variables.IsProcess = true;
                     variables.Approved = true;
                     variables.Completed = true;
 
                     if (response.Data.OrderState == OrderState.Approve)
                     {
-                        await _mediator.Send(new UpdateOrderGroupCommand
+                        _=  _mediator.Send(new UpdateOrderGroupCommand
                         {
                             OrderId = variables.InstanceId
-                        });
+                        }).Result;
                     }
                 }
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -676,7 +675,7 @@ public class ContractApprovalService : IContractApprovalService
             }
             Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"CheckAllApproved");
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -685,7 +684,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void PersonalSendMail()
     {
-        CreateWorker("PersonalSendMail", async (jobClient, job) =>
+        CreateWorker("PersonalSendMail",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("PersonalSendMail");
@@ -701,14 +700,14 @@ public class ContractApprovalService : IContractApprovalService
             {
                 // var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
 
-                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Person });
+                var person =  _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Person }).Result;
                 if (person.Data != null)
                 {
-                    var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+                    var responseEmail =  _mediator.Send(new PersonSendMailTemplateCommand
                     {
                         OrderId = instanceId,
                         Email = person.Data.Customer.BusinessEmail
-                    });
+                    }).Result;
 
                     var createOrderHistoryCommand = new CreateOrderHistoryCommand
                     {
@@ -724,7 +723,7 @@ public class ContractApprovalService : IContractApprovalService
                         createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
                     }
 
-                    await _mediator.Send(createOrderHistoryCommand);
+                    _=  _mediator.Send(createOrderHistoryCommand).Result;
 
                     data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 }
@@ -739,7 +738,7 @@ public class ContractApprovalService : IContractApprovalService
             }
             Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"PersonalSendMail");
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -747,7 +746,7 @@ public class ContractApprovalService : IContractApprovalService
 
     private void PersonalSendMailTimeout()
     {
-        CreateWorker("PersonalSendMailTimeout", async (jobClient, job) =>
+        CreateWorker("PersonalSendMailTimeout",  (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("PersonalSendMailTimeout");
@@ -763,14 +762,14 @@ public class ContractApprovalService : IContractApprovalService
             {
                 // var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
 
-                var person = await _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Person });
+                var person =  _mediator.Send(new LoadContactInfoCommand { InstanceId = variables.InstanceId, EmailSendType = EmailSendType.Person }).Result;
                 if (person.Data != null)
                 {
-                    var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+                    var responseEmail =   _mediator.Send(new PersonSendMailTemplateCommand
                     {
                         OrderId = instanceId,
                         Email = person.Data.Customer.BusinessEmail
-                    });
+                    }).Result;
 
                     var createOrderHistoryCommand = new CreateOrderHistoryCommand
                     {
@@ -786,7 +785,7 @@ public class ContractApprovalService : IContractApprovalService
                         createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
                     }
 
-                    await _mediator.Send(createOrderHistoryCommand);
+                    _=  _mediator.Send(createOrderHistoryCommand).Result;
 
                     data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 }
@@ -801,59 +800,59 @@ public class ContractApprovalService : IContractApprovalService
             }
             Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"PersonalSendMailTimeout");
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =  jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
     }
 
-    private async Task<bool> SendPersonalMail(string instanceId)
-    {
-        try
-        {
-            var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
+    // private async Task<bool> SendPersonalMail(string instanceId)
+    // {
+    //     try
+    //     {
+    //         var person = await _mediator.Send(new LoadContactInfoPersonCommand { InstanceId = instanceId });
 
-            if (person.Data != null)
-            {
-                var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
-                {
-                    OrderId = instanceId,
-                    Email = person.Data.Customer.BusinessEmail
-                });
+    //         if (person.Data != null)
+    //         {
+    //             var responseEmail = await _mediator.Send(new PersonSendMailTemplateCommand
+    //             {
+    //                 OrderId = instanceId,
+    //                 Email = person.Data.Customer.BusinessEmail
+    //             });
 
-                var createOrderHistoryCommand = new CreateOrderHistoryCommand
-                {
-                    OrderId = instanceId,
-                    State = "PY Hatırlatma Mesajı(Email)",
-                    Description = "",
-                    IsStaff = false
-                };
-                if (responseEmail.Data != null)
-                {
-                    createOrderHistoryCommand.Request = responseEmail.Data.Request;
-                    createOrderHistoryCommand.Response = responseEmail.Data.Response;
-                    createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
-                }
+    //             var createOrderHistoryCommand = new CreateOrderHistoryCommand
+    //             {
+    //                 OrderId = instanceId,
+    //                 State = "PY Hatırlatma Mesajı(Email)",
+    //                 Description = "",
+    //                 IsStaff = false
+    //             };
+    //             if (responseEmail.Data != null)
+    //             {
+    //                 createOrderHistoryCommand.Request = responseEmail.Data.Request;
+    //                 createOrderHistoryCommand.Response = responseEmail.Data.Response;
+    //                 createOrderHistoryCommand.PersonId = responseEmail.Data.PersonId;
+    //             }
 
-                await _mediator.Send(createOrderHistoryCommand);
-            }
-            else
-            {
-                Log.ForContext("OrderId", instanceId).Information(person.Message);
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
-        }
-        return true;
-    }
+    //             await _mediator.Send(createOrderHistoryCommand);
+    //         }
+    //         else
+    //         {
+    //             Log.ForContext("OrderId", instanceId).Information(person.Message);
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Log.ForContext("OrderId", instanceId).Error(ex, ex.Message);
+    //     }
+    //     return true;
+    // }
 
     private void CreateDMSDocument()
     {
         // Log.Information("SaveEntity Worker registered ");
 
-        CreateWorker("CreateDMSDocument", async (jobClient, job) =>
+        CreateWorker("CreateDMSDocument",  (jobClient, job) =>
         {
             Dictionary<string, object> customHeaders = JsonSerializer.Deserialize<Dictionary<string, object>>(job.CustomHeaders);
             Dictionary<string, object> _variables = JsonSerializer.Deserialize<Dictionary<string, object>>(job.Variables);
@@ -866,18 +865,18 @@ public class ContractApprovalService : IContractApprovalService
             {
                 try
                 {
-                    var dms = await _mediator.Send(new CreateDMSDocumentCommand
+                    var dms =  _mediator.Send(new CreateDMSDocumentCommand
                     {
                         InstanceId = variables.InstanceId
-                    });
+                    }).Result;
 
                     variables.IsProcess = true;
                     variables.DmsIds = dms.Data.Select(x => new DMSDocumentResponse { DmsReferenceKey = x.DmsReferenceKey, DmsReferenceName = x.DmsReferenceName, DmsRefId = x.DmsRefId }).ToList();
                     //throw new Exception();
-                    var tsizAny = await _mediator.Send(new TSIZLAnyCommand
+                    var tsizAny =   _mediator.Send(new TSIZLAnyCommand
                     {
                         InstanceId = variables.InstanceId
-                    });
+                    }).Result;
                     variables.IsTSIZL = tsizAny.Data;
                 }
                 catch (Exception ex)
@@ -892,7 +891,7 @@ public class ContractApprovalService : IContractApprovalService
                 var data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"CreateDMSDocument");
 
-                var success = await jobClient.NewCompleteJobCommand(job.Key)
+                var success =   jobClient.NewCompleteJobCommand(job.Key)
                    .Variables(data)
                    .Send();
             }
@@ -905,14 +904,14 @@ public class ContractApprovalService : IContractApprovalService
     {
         //Log.Information("ErrorHandler Worker registered");
 
-        CreateWorker("ErrorHandler", async (jobClient, job) =>
+        CreateWorker("ErrorHandler",   (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             variables.Services.Add("ErrorHandler");
             string data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             Log.ForContext("variable", data).Error($"ErrorEntity data");
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =   jobClient.NewCompleteJobCommand(job.Key)
                 .Variables("{\"Approve\":\"" + false + "\"}")
                 .Send();
         });
@@ -920,14 +919,14 @@ public class ContractApprovalService : IContractApprovalService
 
     private void StartFreeContractApproval()
     {
-        CreateWorker("StartFreeContractApproval", async (jobClient, job) =>
+        CreateWorker("StartFreeContractApproval",   (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             Log.ForContext("OrderId", variables.InstanceId).Information($"StartFreeContractApproval Process Started.");
             variables.Services.Add("StartFreeContractApproval");
             if (variables != null)
             {
-                var orderConfig = await _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId });
+                var orderConfig =   _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
                 if (orderConfig != null)
                 {
                     variables.RetryFrequence = orderConfig.Data.RetryFrequence;
@@ -963,7 +962,7 @@ public class ContractApprovalService : IContractApprovalService
 
                 var approver = variables.FormType == Form.Order ? variables.StartRequest.Approver : variables.StartFormRequest.Approver;
 
-                var response = await _mediator.Send(new StartFreeContractApprovalCommand
+                var response =   _mediator.Send(new StartFreeContractApprovalCommand
                 {
                     ContractInstanceId = contractInstanceId,
                     ContractCode = contractCode,
@@ -975,7 +974,7 @@ public class ContractApprovalService : IContractApprovalService
                     SetTimeout = variables.ExpireInMinutes,
                     OrderId = variables.InstanceId,
                     AuthToken = variables.ContractAuthToken
-                });
+                }).Result;
 
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"StartFreeContractApproval");
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
@@ -988,7 +987,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success =   jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
@@ -996,14 +995,14 @@ public class ContractApprovalService : IContractApprovalService
 
     private void UploadContractDocumentInstance()
     {
-        CreateWorker("UploadContractDocumentInstance", async (jobClient, job) =>
+        CreateWorker("UploadContractDocumentInstance", (jobClient, job) =>
         {
             var variables = JsonConvert.DeserializeObject<ContractModel>(job.Variables);
             Log.ForContext("OrderId", variables.InstanceId).Information($"UploadContractDocumentInstance Process Started.");
             variables.Services.Add("UploadContractDocumentInstance");
             if (variables != null)
             {
-                var orderConfig = await _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId });
+                var orderConfig = _mediator.Send(new GetOrderConfigCommand { OrderId = variables.InstanceId }).Result;
                 if (orderConfig != null)
                 {
                     variables.RetryFrequence = orderConfig.Data.RetryFrequence;
@@ -1023,13 +1022,13 @@ public class ContractApprovalService : IContractApprovalService
 
             try
             {
-                var response = await _mediator.Send(new UploadContractDocumentInstanceCommand
+                var response = _mediator.Send(new UploadContractDocumentInstanceCommand
                 {
                     OrderId = variables.InstanceId,
                     AuthToken = variables.ContractAuthToken,
                     ToBusinessLine = variables.StartFormRequest.Approver.BusinessLine,
                     ToUserReference = variables.StartFormRequest.Approver.CitizenshipNumber.ToString()
-                });
+                }).Result;
 
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
                 Log.ForContext("OrderId", variables.InstanceId).ForContext("variable", data).Information($"UploadContractDocumentInstance Process Done.");
@@ -1042,7 +1041,7 @@ public class ContractApprovalService : IContractApprovalService
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             }
 
-            var success = await jobClient.NewCompleteJobCommand(job.Key)
+            var success = jobClient.NewCompleteJobCommand(job.Key)
                 .Variables(data)
                 .Send();
         });
