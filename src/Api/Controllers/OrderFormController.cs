@@ -61,7 +61,6 @@ namespace Api.Controllers
                 var userClaims = HttpContext.User?.Claims
                         .Select(c => new { c.Type, c.Value })
                         .ToList();
-                Serilog.Log.Information("CreateOrUpdateFormAsync - User claims: {Claims}", JsonConvert.SerializeObject(userClaims));
                 Response.StatusCode = 401;
                 return Response<NewOrderFormResponse>.Fail("Yetkiniz bulunmuyor.", 401);
             }
