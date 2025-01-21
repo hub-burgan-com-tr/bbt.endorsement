@@ -21,6 +21,8 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
         public string ToBusinessLine { get; set; }
         public Guid ContractInstanceId { get; set; }
         public string AuthToken { get; set; }
+        public string PersonTc { get; set; }
+        public string PersonCustomerNo { get; set; }
     }
 
     public class StartFreeContractApprovalCommandHandler : IRequestHandler<StartFreeContractApprovalCommand, Response<StartFreeContractApprovalResponse>>
@@ -105,6 +107,9 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             client.DefaultRequestHeaders.Add("User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
             client.DefaultRequestHeaders.Add("Behalf-Of-User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
             client.DefaultRequestHeaders.Add("ClientId", "IbWeb");
+            client.DefaultRequestHeaders.Add("user_reference", request.PersonTc);
+            client.DefaultRequestHeaders.Add("business_line", "X");
+            client.DefaultRequestHeaders.Add("customer_no", request.PersonCustomerNo);
             
             var result = await client.SendAsync(httpRequest);
             var responseContent = await result.Content.ReadAsStringAsync();
