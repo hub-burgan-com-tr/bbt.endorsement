@@ -76,6 +76,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             client.BaseAddress = new Uri(StaticValues.AmorphieWorkflowUrl);
             object reqObj = new
             {
+                ContractInstanceId = request.ContractInstanceId,
                 ContractCode = request.ContractCode,
                 ToUserReference = request.ToUserReference,
                 ToCustomerNo = request.ToCustomerNo,
@@ -95,7 +96,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 WorkflowId = request.ContractInstanceId
             };
 
-            Uri uri = new Uri(StaticValues.AmorphieWorkflowUrl + "workflow/instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start"); //TO DO: Remove
+            Uri uri = new Uri(StaticValues.AmorphieWorkflowUrl + "workflow/instance/" + Guid.NewGuid().ToString() + "/transition/free-contract-approval-start"); //TO DO: Remove
             // Uri uri = new Uri(StaticValues.AmorphieWorkflowUrl + "instance/" + response.WorkflowId.ToString() + "/transition/free-contract-approval-start");
             var json = JsonSerializer.Serialize(reqObj);
             var content = new StringContent(json, Encoding.UTF8, "application/json");

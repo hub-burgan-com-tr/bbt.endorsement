@@ -72,7 +72,10 @@ namespace Api.Controllers
             {
                 var form = await Mediator.Send(new RenderCommand { FormId = request.FormId, Content = request.Content });
                 if (form.Data != null)
+                {
                     request.Content = form.Data.Content;
+                    request.RenderId = form.Data.RenderId;
+                }
             }
 
             //if(User.Claims.Count() == 0)

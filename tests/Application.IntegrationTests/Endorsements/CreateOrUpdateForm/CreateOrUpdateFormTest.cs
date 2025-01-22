@@ -22,7 +22,10 @@ namespace Application.IntegrationTests.Endorsements.CreateOrUpdateForm
 
             var form = await SendAsync(new RenderCommand { FormId = request.FormId, Content = request.Content });
             if (form.Data != null)
+            {
                 request.Content = form.Data.Content;
+                request.RenderId = form.Data.RenderId;
+            }
 
             var person = new OrderPerson
             {
@@ -32,7 +35,7 @@ namespace Application.IntegrationTests.Endorsements.CreateOrUpdateForm
                 Last = "Güler"
             };
 
-            var response= await SendAsync(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
+            var response = await SendAsync(new NewOrderFormCommand { Request = request, Person = person, FormType = Form.FormOrder });
             Assert.IsNotNull(response.Data);
         }
     }

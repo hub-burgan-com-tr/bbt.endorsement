@@ -13,9 +13,10 @@ namespace Infrastructure.Services
             _templateEngineUrl = StaticValues.TemplateEngine;
         }
 
-        public async Task<Response<string>> HtmlRender(string templateName, string content)
+        public async Task<Dictionary<string, string>> HtmlRender(string templateName, string content)
         {
-            var jsonData = GetJsonData(templateName, content);
+            string renderId = Guid.NewGuid().ToString();
+            var jsonData = GetJsonData(templateName, content, renderId);
 
             var restClient = new RestClient(_templateEngineUrl);
             var restRequest = new RestRequest("/Template/Render", Method.Post);
@@ -25,14 +26,17 @@ namespace Infrastructure.Services
             var response = await restClient.ExecutePostAsync(restRequest);
 
             var data = HtmlReplace(response.Content);
-            return Response<string>.Success(data, 200);
+            return new Dictionary<string, string> {
+                { renderId, data }
+            };
         }
 
-        public async Task<Response<string>> PdfRender(string templateName, string content)
+        public async Task<Dictionary<string, string>> PdfRender(string templateName, string content)
         {
             var responseContent = "";
+            string renderId = Guid.NewGuid().ToString();
+            var jsonData = GetJsonData(templateName, content, renderId);
 
-            var jsonData = GetJsonData(templateName, content);
             var restClient = new RestClient(_templateEngineUrl);
             var restRequest = new RestRequest("/Template/Render/Pdf", Method.Post);
             restRequest.AddHeader("Content-Type", "application/json");
@@ -44,7 +48,9 @@ namespace Infrastructure.Services
                 var data = PDFReplace(response.Content);
                 responseContent = "data:application/pdf;base64," + data;
             }
-            return Response<string>.Success(responseContent, 200);
+            return new Dictionary<string, string> {
+                { renderId, responseContent }
+            };
         }
       
         private string HtmlReplace(string content)
@@ -73,11 +79,11 @@ namespace Infrastructure.Services
             return data;
         }
 
-        private string GetJsonData(string templateName, string content)
+        private string GetJsonData(string templateName, string content, string renderId)
         {
             return @"{" +
                             "\"name\":" + "\"" + templateName + "\"" + "," +
-                            "\"render-id\":" + "\"" + Guid.NewGuid().ToString() + "\"" + "," +
+                            "\"render-id\":" + "\"" + renderId + "\"" + "," +
                             "\"render-data\": " + content + "," +
                             "\"render-data-for-log\":  " + content +
           "}";

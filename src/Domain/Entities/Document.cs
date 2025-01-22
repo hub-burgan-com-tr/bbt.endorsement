@@ -33,6 +33,8 @@ namespace Domain.Entities
         public string MimeType { get; set; }
         [MaxLength(500)]
         public string InsuranceType { get; set; }
+        [MaxLength(36)]
+        public string RenderId { get; set; }
 
 
         public virtual FormDefinition FormDefinition { get; set; }
