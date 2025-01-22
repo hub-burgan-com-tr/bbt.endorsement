@@ -95,9 +95,13 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
             
             foreach (var orderDoc in orderDocuments)
             {
+                Log.Information("Foreach Start.");
                 if (orderDoc.Type != "PlainText")
                 {
                     var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name);
+
+                    Log.Information("Foreach current contract: " + currentContract.Key);
+                    Log.Information("Foreach current map: " + currentMap?.DocumentCode);
                     UploadContractDocumentInstanceModel uploadDoc = new UploadContractDocumentInstanceModel
                     {
                         ContractCode = currentContract.Key,
@@ -109,6 +113,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     uploadDoc.DocumentVersion = currentMap.DocumentVersion;
 
                     var documentInfos = orderDoc.Content.Split(';');
+                    Log.Information("Content split.");
                     uploadDoc.DocumentContent = new DocumentContent
                     {
                         ContentType = documentInfos[0].Replace("Data:", "").Replace("data:", ""),
@@ -117,7 +122,9 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     };
 
                     var json = JsonSerializer.Serialize(uploadDoc);
+                    Log.Information("Upload Doc Json: " + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    Log.Information("StaticValues.ContractUrl: " + StaticValues.ContractUrl);
                     Uri uri = new Uri(StaticValues.ContractUrl + "document/uploadInstance");
                     var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
                     httpRequest.Content = content;
@@ -125,6 +132,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                     client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
                     client.DefaultRequestHeaders.Add("ToUserReference", request.ToUserReference);
+                    Log.Information("Headers created.");
 
                     var result = await client.SendAsync(httpRequest);
                     
