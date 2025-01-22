@@ -51,6 +51,8 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
             foreach (var contract in maps)
             {
                 var fullMatchList = contract.Value.Select(x => x.EndorsementCode).ToList();
+                Log.Information("FullMatchList: " + String.Join(';', fullMatchList));
+                Log.Information("DocumentNames: " + String.Join(';', documentNames));
                 bool areEqual = new HashSet<string>(fullMatchList).SetEquals(documentNames);
                 if (areEqual)
                 {
