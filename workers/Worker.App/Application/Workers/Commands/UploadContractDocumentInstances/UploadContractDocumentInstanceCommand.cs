@@ -98,7 +98,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                 Log.Information("Foreach Start.");
                 if (orderDoc.Type != "PlainText")
                 {
-                    var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name);
+                    var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name.Replace(".pdf", ""));
 
                     Log.Information("Foreach current contract: " + currentContract.Key);
                     Log.Information("Foreach current map: " + currentMap?.DocumentCode);
