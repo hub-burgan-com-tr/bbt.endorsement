@@ -61,7 +61,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             List<object> freeDocuments = new List<object>();
             foreach (var orderDocument in orderFreeDocuments)
             {
-                byte[] decodedBytes = Convert.FromBase64String(orderDocument.Content);
+                byte[] decodedBytes = Convert.FromBase64String(orderDocument.Content.Split(',')[1]);
                 string decodedString = Encoding.UTF8.GetString(decodedBytes);
 
                 var documentCode = _context.ContractMaps.Where(x => x.EndorsementCode == orderDocument.Name).Select(x => x.DocumentCode).FirstOrDefault();
