@@ -43,11 +43,12 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
         //content = content.Replace("false", "\"\"");
         //content = content.Replace("False", "\"\"");
         var html = "";
+        string renderId = "";
         if(form.Type == ContentType.HTML.ToString())
         {
             var response = await _templateEngineService.HtmlRender(form.TemplateName, content);
 
-            var plainTextBytes = Encoding.UTF8.GetBytes(response.Data);
+            var plainTextBytes = Encoding.UTF8.GetBytes(response.Values.FirstOrDefault());
             var encode = Convert.ToBase64String(plainTextBytes);
 
             //var base64EncodedBytes = System.Convert.FromBase64String(encode);
@@ -56,13 +57,15 @@ public class RenderCommandHandler : IRequestHandler<RenderCommand, Response<Rend
             var data = "data:text/html;base64," + encode;
 
             html = data;
+            renderId = response.Keys.FirstOrDefault();
         }
         else if(form.Type == ContentType.PDF.ToString())
         {
             var response = await _templateEngineService.PdfRender(form.TemplateName, content);
-            html = response.Data;
+            html = response.Values.FirstOrDefault();
+            renderId = response.Keys.FirstOrDefault();
         }
 
-        return Response<RenderResponse>.Success(new RenderResponse { Content = html }, 200);
+        return Response<RenderResponse>.Success(new RenderResponse { Content = html, RenderId = renderId }, 200);
     }
 }

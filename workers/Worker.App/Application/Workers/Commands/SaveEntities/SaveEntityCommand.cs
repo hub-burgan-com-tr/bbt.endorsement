@@ -98,6 +98,7 @@ namespace Worker.App.Application.Workers.Commands.SaveEntities
                 DocumentId = Guid.NewGuid().ToString(),
                 Content = startFormRequest.Content,
                 ContentData = contentData,
+                RenderId = startFormRequest.RenderId,
                 Name = startFormRequest.Title,
                 Type = startFormRequest.Source == "formio" ? formDefinition.Type.ToString() : GetFileType(startFormRequest.FileType),
                 FileType = startFormRequest.Source == "formio" ? formDefinition.Type.ToString() : GetFileType(startFormRequest.FileType),

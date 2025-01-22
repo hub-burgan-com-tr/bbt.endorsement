@@ -5,6 +5,7 @@ namespace Application.TemplateEngines.Commands.Renders
     public class RenderResponse
     {
         public string Content { get; set; }
+        public string RenderId { get; set; }
     }
 
     public class RenderModel

@@ -37,7 +37,7 @@ namespace Application.OrderForms.Queries.GetPreviewPdf
                 if (form.Type == ContentType.PDF.ToString())
                 {
                     var response = await _templateEngineService.PdfRender(form.TemplateName, content);
-                    html = response.Data;
+                    html = response.Values.FirstOrDefault();
                 }
 
                 return Response<GetPreviewPdfDto>.Success(new GetPreviewPdfDto { Content = html}, 200);

@@ -33,7 +33,18 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
         public async Task<Response<UploadContractDocumentInstanceResponse>> Handle(UploadContractDocumentInstanceCommand request, CancellationToken cancellationToken)
         {
-            Guid contractInstanceId = Guid.NewGuid();
+            var orderGroup = _context.OrderGroups.Where(x => x.OrderMaps.Select(z => z.OrderId).Contains(request.OrderId)).FirstOrDefault();
+            Guid contractInstanceId = Guid.Empty;
+            
+            if (orderGroup != null)
+            {
+                contractInstanceId = Guid.Parse(orderGroup.OrderMaps.OrderBy(x => x.Created).Select(x=> x.OrderId).FirstOrDefault());
+            }
+            else
+            {
+                contractInstanceId = Guid.NewGuid();
+            }
+
             Log.ForContext("ContractInstanceId", contractInstanceId).Information($"UploadContractDocumentInstanceCommand Started.");
             var orderDocuments = _context.Documents.Where(x => x.OrderId == request.OrderId).ToList();
             var documentNames = orderDocuments.Select(x => x.Name.Replace(".pdf", "")).ToList();
@@ -108,6 +119,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     uploadDoc.DocumentInstanceId = Guid.NewGuid();
                     uploadDoc.DocumentCode = currentMap.DocumentCode;
                     uploadDoc.DocumentVersion = currentMap.DocumentVersion;
+                    uploadDoc.RenderId = orderDoc.RenderId;
 
                     var documentInfos = orderDoc.Content.Split(';');
                     uploadDoc.DocumentContent = new DocumentContent
@@ -164,6 +176,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         public Guid DocumentInstanceId { get; set; }
         public string DocumentCode { get; set; }
         public string DocumentVersion { get; set; }
+        public string RenderId { get; set; }
         public DocumentContent DocumentContent { get; set; }
         public List<InstanceMetadata> InstanceMetadata { get; set; }
         //public Notes Notes { get; set; }
