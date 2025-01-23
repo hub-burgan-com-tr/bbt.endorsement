@@ -20,6 +20,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         public string AuthToken { get; set; }
         public string ToBusinessLine { get; set; }
         public string ToUserReference { get; set; }
+        public string ToCustomerNo { get; set; }
     }
 
     public class UploadContractDocumentInstanceCommandHandler : IRequestHandler<UploadContractDocumentInstanceCommand, Response<UploadContractDocumentInstanceResponse>>
@@ -140,6 +141,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
                     client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
                     client.DefaultRequestHeaders.Add("ToUserReference", request.ToUserReference);
+                    client.DefaultRequestHeaders.Add("ToCustomerNo", request.ToCustomerNo);
 
                     var result = await client.SendAsync(httpRequest);
                     
