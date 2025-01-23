@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
 using RestSharp;
+using Serilog;
 using System.Text;
 
 namespace Infrastructure.Services
@@ -45,9 +46,12 @@ namespace Infrastructure.Services
             var response = await restClient.ExecutePostAsync(restRequest);
             if (response.IsSuccessful)
             {
+                Log.Information("Render Success. RenderId: " + renderId);
                 var data = PDFReplace(response.Content);
                 responseContent = "data:application/pdf;base64," + data;
             }
+            else
+                Log.Information("Render Failed. Message: " + response.ErrorMessage);
             return new Dictionary<string, string> {
                 { renderId, responseContent }
             };
