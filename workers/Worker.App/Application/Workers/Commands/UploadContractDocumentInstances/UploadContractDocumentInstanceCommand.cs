@@ -21,6 +21,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         public string ToBusinessLine { get; set; }
         public string ToUserReference { get; set; }
         public string ToCustomerNo { get; set; }
+        public string FormId { get; set; }
     }
 
     public class UploadContractDocumentInstanceCommandHandler : IRequestHandler<UploadContractDocumentInstanceCommand, Response<UploadContractDocumentInstanceResponse>>
@@ -39,7 +40,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
 
             if (orderGroup != null && orderGroup.OrderMaps.Count > 1)
             {
-                var dependentOrderId = Guid.Parse(orderGroup.OrderMaps.OrderBy(x => x.Created).Select(x=> x.OrderId).FirstOrDefault());
+                var dependentOrderId = Guid.Parse(orderGroup.OrderMaps.OrderBy(x => x.Created).Select(x => x.OrderId).FirstOrDefault());
                 contractInstanceId = _context.ContractStarts.Where(x => x.OrderId == dependentOrderId).Select(x => x.ContractInstanceId).FirstOrDefault();
             }
             else
@@ -106,59 +107,124 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
             _context.SaveChanges();
 
             var client = new HttpClient();
-            
-            foreach (var orderDoc in orderDocuments)
+            var formSource = "";
+            if (!String.IsNullOrEmpty(request.FormId))
             {
-                if (orderDoc.Type != "PlainText")
+                formSource = _context.FormDefinitions.Where(x => x.FormDefinitionId == request.FormId).Select(x => x.Source).FirstOrDefault();
+            }
+
+            if (String.IsNullOrEmpty(formSource) || formSource == "file")
+            {
+                foreach (var orderDoc in orderDocuments)
                 {
-                    var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name.Replace(".pdf", ""));
-
-                    UploadContractDocumentInstanceModel uploadDoc = new UploadContractDocumentInstanceModel
+                    if (orderDoc.Type != "PlainText")
                     {
-                        ContractCode = currentContract.Key,
-                        ContractInstanceId = contractInstanceId,
-                    };
+                        var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name.Replace(".pdf", ""));
 
-                    uploadDoc.DocumentInstanceId = Guid.Parse(orderDoc.RenderId);
-                    uploadDoc.DocumentCode = currentMap.DocumentCode;
-                    uploadDoc.DocumentVersion = currentMap.DocumentVersion;
-                    uploadDoc.RenderId = orderDoc.RenderId;
+                        UploadContractDocumentInstanceModel uploadDoc = new UploadContractDocumentInstanceModel
+                        {
+                            ContractCode = currentContract.Key,
+                            ContractInstanceId = contractInstanceId,
+                        };
 
-                    var documentInfos = orderDoc.Content.Split(';');
-                    uploadDoc.DocumentContent = new DocumentContent
-                    {
-                        ContentType = documentInfos[0].Replace("Data:", "").Replace("data:", ""),
-                        FileContext = documentInfos[1].Replace("Base64,", "").Replace("base64,", ""),
-                        FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
-                    };
+                        uploadDoc.DocumentInstanceId = Guid.NewGuid();
+                        uploadDoc.DocumentCode = currentMap.DocumentCode;
+                        uploadDoc.DocumentVersion = currentMap.DocumentVersion;
 
-                    var json = JsonSerializer.Serialize(uploadDoc);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    Uri uri = new Uri(StaticValues.ContractUrl + "document/uploadInstance");
-                    var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
-                    httpRequest.Content = content;
+                        var documentInfos = orderDoc.Content.Split(';');
+                        uploadDoc.DocumentContent = new DocumentContent
+                        {
+                            ContentType = documentInfos[0].Replace("Data:", "").Replace("data:", ""),
+                            FileContext = documentInfos[1].Replace("Base64,", "").Replace("base64,", ""),
+                            FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
+                        };
 
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
-                    client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
-                    client.DefaultRequestHeaders.Add("ToUserReference", request.ToUserReference);
-                    client.DefaultRequestHeaders.Add("ToCustomerNo", request.ToCustomerNo);
+                        var json = JsonSerializer.Serialize(uploadDoc);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+                        Uri uri = new Uri(StaticValues.ContractUrl + "document/uploadInstance");
+                        var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        httpRequest.Content = content;
 
-                    var result = await client.SendAsync(httpRequest);
-                    var responseContent = await result.Content.ReadAsStringAsync();
-                    
-                    if (result.IsSuccessStatusCode)
-                    {
-                        Log.ForContext("ContractInstanceId", contractInstanceId)
-                        .ForContext("UploadedDocument", json)
-                        .ForContext("HttpResponseStatus", result.StatusCode)
-                        .Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
+                        client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
+                        client.DefaultRequestHeaders.Add("ToUserReference", request.ToUserReference);
+                        client.DefaultRequestHeaders.Add("ToCustomerNo", request.ToCustomerNo);
+
+                        var result = await client.SendAsync(httpRequest);
+                        var responseContent = await result.Content.ReadAsStringAsync();
+
+                        if (result.IsSuccessStatusCode)
+                        {
+                            Log.ForContext("ContractInstanceId", contractInstanceId)
+                            .ForContext("UploadedDocument", json)
+                            .ForContext("HttpResponseStatus", result.StatusCode)
+                            .Information($"UploadContractDocumentInstanceCommand Document Uploaded.");
+                        }
+                        else
+                        {
+                            Log.ForContext("ContractInstanceId", contractInstanceId)
+                            .ForContext("UploadedDocument", json)
+                            .ForContext("HttpResponseStatus", result.StatusCode)
+                            .Error($"UploadContractDocumentInstanceCommand Document Upload Error. Content: " + responseContent);
+                        }
                     }
-                    else
+                }
+            }
+            else if (formSource == "formio")
+            {
+                foreach (var orderDoc in orderDocuments)
+                {
+                    if (orderDoc.Type != "PlainText")
                     {
-                        Log.ForContext("ContractInstanceId", contractInstanceId)
-                        .ForContext("UploadedDocument", json)
-                        .ForContext("HttpResponseStatus", result.StatusCode)
-                        .Error($"UploadContractDocumentInstanceCommand Document Upload Error. Content: " + responseContent);
+                        var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name.Replace(".pdf", ""));
+
+                        ContractDocumentInstanceModel uploadDoc = new ContractDocumentInstanceModel
+                        {
+                            ContractCode = currentContract.Key,
+                            ContractInstanceId = contractInstanceId,
+                        };
+
+                        uploadDoc.DocumentInstanceId = Guid.Parse(orderDoc.RenderId);
+                        uploadDoc.DocumentCode = currentMap.DocumentCode;
+                        uploadDoc.DocumentVersion = currentMap.DocumentVersion;
+                        uploadDoc.RenderId = orderDoc.RenderId;
+
+                        var documentInfos = orderDoc.Content.Split(';');
+                        uploadDoc.DocumentContent = new DocumentContent
+                        {
+                            ContentType = documentInfos[0].Replace("Data:", "").Replace("data:", ""),
+                            FileContext = documentInfos[1].Replace("Base64,", "").Replace("base64,", ""),
+                            FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
+                        };
+
+                        var json = JsonSerializer.Serialize(uploadDoc);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+                        Uri uri = new Uri(StaticValues.ContractUrl + "document/instance");
+                        var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        httpRequest.Content = content;
+
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
+                        client.DefaultRequestHeaders.Add("business_line", request.ToBusinessLine);
+                        client.DefaultRequestHeaders.Add("ToUserReference", request.ToUserReference);
+                        client.DefaultRequestHeaders.Add("ToCustomerNo", request.ToCustomerNo);
+
+                        var result = await client.SendAsync(httpRequest);
+                        var responseContent = await result.Content.ReadAsStringAsync();
+
+                        if (result.IsSuccessStatusCode)
+                        {
+                            Log.ForContext("ContractInstanceId", contractInstanceId)
+                            .ForContext("UploadedDocument", json)
+                            .ForContext("HttpResponseStatus", result.StatusCode)
+                            .Information($"UploadContractDocumentInstanceCommand Document Render Instance.");
+                        }
+                        else
+                        {
+                            Log.ForContext("ContractInstanceId", contractInstanceId)
+                            .ForContext("UploadedDocument", json)
+                            .ForContext("HttpResponseStatus", result.StatusCode)
+                            .Error($"UploadContractDocumentInstanceCommand Document Render Instance Error. Content: " + responseContent);
+                        }
                     }
                 }
             }
@@ -175,6 +241,18 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
     }
 
     public class UploadContractDocumentInstanceModel
+    {
+        public string ContractCode { get; set; }
+        public Guid ContractInstanceId { get; set; }
+        public Guid DocumentInstanceId { get; set; }
+        public string DocumentCode { get; set; }
+        public string DocumentVersion { get; set; }
+        public DocumentContent DocumentContent { get; set; }
+        public List<InstanceMetadata> InstanceMetadata { get; set; }
+        //public Notes Notes { get; set; }
+    }
+
+    public class ContractDocumentInstanceModel
     {
         public string ContractCode { get; set; }
         public Guid ContractInstanceId { get; set; }

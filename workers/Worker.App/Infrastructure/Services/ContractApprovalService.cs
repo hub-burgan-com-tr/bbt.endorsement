@@ -1023,13 +1023,16 @@ public class ContractApprovalService : IContractApprovalService
             try
             {
                 var approver = variables.FormType == Form.Order ? variables.StartRequest.Approver : variables.StartFormRequest.Approver;
+                var formId = variables.StartFormRequest?.FormId;
 
                 var response = _mediator.Send(new UploadContractDocumentInstanceCommand
                 {
                     OrderId = variables.InstanceId,
                     AuthToken = variables.ContractAuthToken,
                     ToBusinessLine = approver.BusinessLine,
-                    ToUserReference = approver.CitizenshipNumber.ToString()
+                    ToUserReference = approver.CitizenshipNumber.ToString(),
+                    ToCustomerNo = approver.CustomerNumber.ToString(),
+                    FormId = formId
                 }).Result;
 
                 data = JsonSerializer.Serialize(variables, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
