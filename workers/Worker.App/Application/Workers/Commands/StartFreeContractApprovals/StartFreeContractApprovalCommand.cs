@@ -52,7 +52,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             foreach (var contractDocument in contractDocumentList)
             {
                 decisionTableTags.Add(new {
-                    setRequired = currentDocumentNames.Contains(contractDocument.EndorsementCode),
+                    setRequired = currentDocumentNames.Contains(contractDocument.DocumentCode),
                     setDocument = contractDocument.DocumentCode
                 });
             }

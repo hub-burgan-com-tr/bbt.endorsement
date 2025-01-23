@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using bbt.framework.kafka;
@@ -9,7 +5,6 @@ using Infrastructure.Kafka.Model;
 using Infrastructure.Kafka.SettingModel;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace Infrastructure.Kafka
 {
@@ -29,17 +24,19 @@ namespace Infrastructure.Kafka
 
         public override async Task<bool> Process(ContractApprovedModel kafkaModel)
         {
-            var instance = _context.ContractStarts.Where(x => x.ContractInstanceId == kafkaModel.Data.ContractInstanceId).FirstOrDefault();
+            var documentCodes = String.Join(';', kafkaModel.Data.ApprovedDocuments.Select(x => x.Code));
+            var instance = _context.ContractStarts.Where(x => x.ContractInstanceId == kafkaModel.Data.ContractInstanceId && x.ContractDocuments == documentCodes).FirstOrDefault();
             if (instance == null)
             {
                 return true;
             }
 
-            Log.Information("ContractApprovedConsumer receive the message and find instance.");
+            _logger.LogInformation("ContractApprovedConsumer receive the message and find instance.");
 
             var documentCount = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).Count();
             if (documentCount > 1)
             {
+                _logger.LogInformation("ContractApprovedConsumer process started.");
                 var documents = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).ToList();
 
                 List<Domain.Models.ApproveOrderDocument> approveOrderDocuments = documents.Select(document =>

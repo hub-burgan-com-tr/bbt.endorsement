@@ -94,12 +94,13 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
             config.ContractParameters = contractInstanceId + ";" + currentContract.Key + ";tr-TR";
             _context.Configs.Update(config);
 
+            var contractDocumentCodes = currentContract.Value.Select(x => x.DocumentCode).ToList();
             _context.ContractStarts.Add(new ContractStart
             {
                 ContractStartId = Guid.NewGuid(),
                 ContractInstanceId = contractInstanceId,
                 OrderId = Guid.Parse(request.OrderId),
-                ContractDocuments = String.Join(';', documentNames)
+                ContractDocuments = String.Join(';', contractDocumentCodes)
             });
             _context.SaveChanges();
 

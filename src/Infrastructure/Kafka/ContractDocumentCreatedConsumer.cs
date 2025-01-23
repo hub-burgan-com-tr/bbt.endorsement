@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Endorsements.Commands.ApproveOrderDocuments;
 using bbt.framework.kafka;
-using Domain.Entities;
 using Infrastructure.Kafka.Model;
 using Infrastructure.Kafka.SettingModel;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Kafka
@@ -24,14 +18,13 @@ namespace Infrastructure.Kafka
         : base(kafkaSettings, cancellationToken, logger)
         {
             _logger = logger;
-            _logger.LogInformation("ContractDocumentCreated constructor works.");
             _context = context;
             _mediator = mediator;
         }
 
         public override async Task<bool> Process(ContractDocumentCreatedModel kafkaModel)
         {
-            var instance = _context.ContractStarts.Where(x => x.ContractInstanceId == kafkaModel.Data.ContractInstanceId).FirstOrDefault();
+            var instance = _context.ContractStarts.Where(x => x.ContractInstanceId == kafkaModel.Data.ContractInstanceId && x.ContractDocuments == kafkaModel.Data.DocumentCode).FirstOrDefault();
             if (instance == null)
             {
                 return true;
@@ -42,6 +35,7 @@ namespace Infrastructure.Kafka
             var documentCount = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).Count();
             if (documentCount == 1)
             {
+                _logger.LogInformation("ContractDocumentCreatedConsumer process started.");
                 var document = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).FirstOrDefault();
 
                 List<Domain.Models.ApproveOrderDocument> documents = new List<Domain.Models.ApproveOrderDocument> {
