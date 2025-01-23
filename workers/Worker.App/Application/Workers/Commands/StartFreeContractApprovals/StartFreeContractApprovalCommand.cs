@@ -45,7 +45,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 throw new Exception("ContractCode can not be empty!");
 
             var contractDocumentList = _context.ContractMaps.Where(x => x.ContractCode == request.ContractCode).ToList();
-            var currentDocuments = _context.ContractStarts.Where(x => x.ContractInstanceId == request.ContractInstanceId).Select(x => x.ContractDocuments).FirstOrDefault();
+            var currentDocuments = _context.ContractStarts.Where(x => x.OrderId == Guid.Parse(request.OrderId)).Select(x => x.ContractDocuments).FirstOrDefault();
             var currentDocumentNames = currentDocuments.Split(';');
 
             List<object> decisionTableTags = new List<object>();
