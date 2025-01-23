@@ -35,10 +35,11 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         {
             var orderGroup = _context.OrderGroups.Where(x => x.OrderMaps.Select(z => z.OrderId).Contains(request.OrderId)).FirstOrDefault();
             Guid contractInstanceId = Guid.Empty;
-            
-            if (orderGroup != null)
+
+            if (orderGroup != null && orderGroup.OrderMaps.Count > 1)
             {
-                contractInstanceId = Guid.Parse(orderGroup.OrderMaps.OrderBy(x => x.Created).Select(x=> x.OrderId).FirstOrDefault());
+                var dependentOrderId = Guid.Parse(orderGroup.OrderMaps.OrderBy(x => x.Created).Select(x=> x.OrderId).FirstOrDefault());
+                contractInstanceId = _context.ContractStarts.Where(x => x.OrderId == dependentOrderId).Select(x => x.ContractInstanceId).FirstOrDefault();
             }
             else
             {
