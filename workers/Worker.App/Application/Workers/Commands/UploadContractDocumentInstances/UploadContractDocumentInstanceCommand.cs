@@ -144,6 +144,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     client.DefaultRequestHeaders.Add("ToCustomerNo", request.ToCustomerNo);
 
                     var result = await client.SendAsync(httpRequest);
+                    var responseContent = await result.Content.ReadAsStringAsync();
                     
                     if (result.IsSuccessStatusCode)
                     {
@@ -157,7 +158,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         Log.ForContext("ContractInstanceId", contractInstanceId)
                         .ForContext("UploadedDocument", json)
                         .ForContext("HttpResponseStatus", result.StatusCode)
-                        .Error($"UploadContractDocumentInstanceCommand Document Upload Error.");
+                        .Error($"UploadContractDocumentInstanceCommand Document Upload Error. Content: " + responseContent);
                     }
                 }
             }
