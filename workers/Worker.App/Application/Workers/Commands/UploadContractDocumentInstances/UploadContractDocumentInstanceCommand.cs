@@ -119,7 +119,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         ContractInstanceId = contractInstanceId,
                     };
 
-                    uploadDoc.DocumentInstanceId = Guid.NewGuid();
+                    uploadDoc.DocumentInstanceId = Guid.Parse(orderDoc.RenderId);
                     uploadDoc.DocumentCode = currentMap.DocumentCode;
                     uploadDoc.DocumentVersion = currentMap.DocumentVersion;
                     uploadDoc.RenderId = orderDoc.RenderId;
