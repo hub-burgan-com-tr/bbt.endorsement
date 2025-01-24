@@ -31,19 +31,34 @@ namespace Infrastructure.Kafka
             }
 
             _logger.LogInformation("ContractDocumentCreatedConsumer receive the message and find instance.");
-            
+
             var documentCount = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).Count();
             if (documentCount == 1)
             {
                 _logger.LogInformation("ContractDocumentCreatedConsumer process started.");
                 var document = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).FirstOrDefault();
 
-                List<Domain.Models.ApproveOrderDocument> documents = new List<Domain.Models.ApproveOrderDocument> {
-                    new Domain.Models.ApproveOrderDocument {
+                List<Domain.Models.ApproveOrderDocument> documents = new List<Domain.Models.ApproveOrderDocument>();
+                if (kafkaModel.Data.ApprovalStatus == "Approved")
+                {
+                    documents.Add(new Domain.Models.ApproveOrderDocument
+                    {
                         DocumentId = document.DocumentId,
-                        ActionId = document.DocumentActions.Where(x => x.Type == "Approve").Select(x => x.DocumentActionId).FirstOrDefault(),
-                    }
-                };
+                        ActionId = document.DocumentActions.Where(x => x.Type == "Approve").Select(x => x.DocumentActionId).FirstOrDefault()
+                    });
+
+                    _logger.LogInformation("ContractDocumentCreatedConsumer Document Approved.");
+                }
+                else if (kafkaModel.Data.ApprovalStatus == "Rejected")
+                {
+                    documents.Add(new Domain.Models.ApproveOrderDocument
+                    {
+                        DocumentId = document.DocumentId,
+                        ActionId = document.DocumentActions.Where(x => x.Type == "Reject").Select(x => x.DocumentActionId).FirstOrDefault()
+                    });
+
+                    _logger.LogInformation("ContractDocumentCreatedConsumer Document Rejected.");
+                }
 
                 await _mediator.Send(new ApproveOrderDocumentCommand
                 {
