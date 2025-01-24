@@ -8,6 +8,7 @@ namespace Infrastructure.Kafka.Model
     public class ContractDocumentCreatedModelData
     {
         public DateTime ApprovalDate { get; set; }
+        public string ApprovalStatus { get; set; }
         public string Channel { get; set; }
         public string ClientCode { get; set; }
         public string ContractCode { get; set; }
