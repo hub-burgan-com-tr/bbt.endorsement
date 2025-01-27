@@ -36,16 +36,12 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         public async Task<Response<UploadContractDocumentInstanceResponse>> Handle(UploadContractDocumentInstanceCommand request, CancellationToken cancellationToken)
         {
             var orderGroup = _context.OrderGroups.Where(x => x.OrderMaps.Select(z => z.OrderId).Contains(request.OrderId)).FirstOrDefault();
-            Guid contractInstanceId = Guid.Empty;
+            Guid contractInstanceId = Guid.NewGuid();
 
             if (orderGroup != null && orderGroup.OrderMaps.Count > 1)
             {
                 var dependentOrderId = Guid.Parse(orderGroup.OrderMaps.OrderBy(x => x.Created).Select(x => x.OrderId).FirstOrDefault());
                 contractInstanceId = _context.ContractStarts.Where(x => x.OrderId == dependentOrderId).Select(x => x.ContractInstanceId).FirstOrDefault();
-            }
-            else
-            {
-                contractInstanceId = Guid.NewGuid();
             }
 
             Log.ForContext("ContractInstanceId", contractInstanceId).Information($"UploadContractDocumentInstanceCommand Started.");
@@ -130,6 +126,11 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                         uploadDoc.DocumentInstanceId = Guid.NewGuid();
                         uploadDoc.DocumentCode = currentMap.DocumentCode;
                         uploadDoc.DocumentVersion = currentMap.DocumentVersion;
+                        uploadDoc.Notes = new List<Notes> {
+                            new Notes {
+                                Note = "Created by Endorsement"
+                            }
+                        };
 
                         var documentInfos = orderDoc.Content.Split(';');
                         uploadDoc.DocumentContent = new DocumentContent
@@ -166,6 +167,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                             .ForContext("UploadedDocument", json)
                             .ForContext("HttpResponseStatus", result.StatusCode)
                             .Error($"UploadContractDocumentInstanceCommand Document Upload Error. Content: " + responseContent);
+                            throw new Exception("Instance Request Error. Status Code: " + result.StatusCode);
                         }
                     }
                 }
@@ -178,26 +180,31 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                     {
                         var currentMap = currentContract.Value.FirstOrDefault(x => x.EndorsementCode == orderDoc.Name.Replace(".pdf", ""));
 
-                        ContractDocumentInstanceModel uploadDoc = new ContractDocumentInstanceModel
+                        ContractDocumentInstanceModel instanceDoc = new ContractDocumentInstanceModel
                         {
                             ContractCode = currentContract.Key,
                             ContractInstanceId = contractInstanceId,
                         };
 
-                        uploadDoc.DocumentInstanceId = Guid.Parse(orderDoc.RenderId);
-                        uploadDoc.DocumentCode = currentMap.DocumentCode;
-                        uploadDoc.DocumentVersion = currentMap.DocumentVersion;
-                        uploadDoc.RenderId = orderDoc.RenderId;
+                        instanceDoc.DocumentInstanceId = Guid.Parse(orderDoc.RenderId);
+                        instanceDoc.DocumentCode = currentMap.DocumentCode;
+                        instanceDoc.DocumentVersion = currentMap.DocumentVersion;
+                        instanceDoc.RenderId = orderDoc.RenderId;
+                        instanceDoc.Notes = new List<Notes> {
+                            new Notes {
+                                Note = "Created by Endorsement"
+                            }
+                        };
 
                         var documentInfos = orderDoc.Content.Split(';');
-                        uploadDoc.DocumentContent = new DocumentContent
+                        instanceDoc.DocumentContent = new DocumentContent
                         {
                             ContentType = documentInfos[0].Replace("Data:", "").Replace("data:", ""),
                             FileContext = documentInfos[1].Replace("Base64,", "").Replace("base64,", ""),
                             FileName = orderDoc.Name.Contains('.') ? orderDoc.Name : orderDoc.Name + "." + documentInfos[0].Split('/')[1]
                         };
 
-                        var json = JsonSerializer.Serialize(uploadDoc);
+                        var json = JsonSerializer.Serialize(instanceDoc);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
                         Uri uri = new Uri(StaticValues.ContractUrl + "document/instance");
                         var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
@@ -224,6 +231,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
                             .ForContext("UploadedDocument", json)
                             .ForContext("HttpResponseStatus", result.StatusCode)
                             .Error($"UploadContractDocumentInstanceCommand Document Render Instance Error. Content: " + responseContent);
+                            throw new Exception("Instance Request Error. Status Code: " + result.StatusCode);
                         }
                     }
                 }
@@ -249,7 +257,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         public string DocumentVersion { get; set; }
         public DocumentContent DocumentContent { get; set; }
         public List<InstanceMetadata> InstanceMetadata { get; set; }
-        //public Notes Notes { get; set; }
+        public List<Notes> Notes { get; set; }
     }
 
     public class ContractDocumentInstanceModel
@@ -262,7 +270,7 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
         public string RenderId { get; set; }
         public DocumentContent DocumentContent { get; set; }
         public List<InstanceMetadata> InstanceMetadata { get; set; }
-        //public Notes Notes { get; set; }
+        public List<Notes> Notes { get; set; }
     }
 
     public class DocumentContent
@@ -276,5 +284,10 @@ namespace Worker.App.Application.Workers.Commands.UploadContractDocumentInstance
     {
         public string Code { get; set; }
         public string Data { get; set; }
+    }
+
+    public class Notes
+    {
+        public string Note { get; set; }
     }
 }
