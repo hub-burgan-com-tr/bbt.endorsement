@@ -2,6 +2,9 @@
 using Worker.App.Application.Common.Interfaces;
 using Worker.App.Application.Common.Models;
 using Domain.Enums;
+using System.Text;
+using System.Net.Http.Headers;
+using Serilog;
 
 namespace Worker.App.Application.Workers.Commands.DeleteEntities
 {
@@ -43,6 +46,34 @@ namespace Worker.App.Application.Workers.Commands.DeleteEntities
             }
 
             _context.SaveChanges();
+
+            var authToken = _context.Configs.Where(x => x.OrderId == request.OrderId).Select(x => x.ContractAuthToken).FirstOrDefault();
+            var client = new HttpClient();
+            Uri uri = new Uri(StaticValues.AmorphieWorkflowUrl + request.OrderId + "/transition/cancel-contract");
+            var content = new StringContent("{}", Encoding.UTF8, "application/json");
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+            httpRequest.Content = content;
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken.Replace("Bearer ", ""));
+            // client.DefaultRequestHeaders.Add("User", StaticValues.ContractUserCode);
+            // client.DefaultRequestHeaders.Add("Behalf-Of-User", StaticValues.ContractUserCode);
+            client.DefaultRequestHeaders.Add("User", "05e6eda3-f8e6-4259-9194-db668ce1d88a");
+            client.DefaultRequestHeaders.Add("Behalf-Of-User", "05e6eda3-f8e6-4259-9194-db668ce1d88a");
+
+            var result = await client.SendAsync(httpRequest);
+            var responseContent = await result.Content.ReadAsStringAsync();
+
+            if (result.IsSuccessStatusCode)
+            {
+                Log.ForContext("OrderId", request.OrderId)
+                .ForContext("HttpResponseStatus", result.StatusCode)
+                .Information($"Contract canceled started.");
+            }
+            else
+            {
+                Log.ForContext("OrderId", request.OrderId)
+                .ForContext("HttpResponseStatus", result.StatusCode)
+                .Error($"Contract Cancel Request Error. Content: " + responseContent);
+            }
 
             var orderState = (OrderState)Enum.Parse(typeof(OrderState), order.State.ToString());
             return Response<DeleteEntityResponse>.Success(new DeleteEntityResponse { OrderState = orderState, IsUpdated = true }, 200);

@@ -15,6 +15,7 @@ public static class StaticValuesExtensions
         StaticValues.TsizlUrl = settings.Entegration.TsizlUrl;
         StaticValues.ContractUrl = settings.Entegration.ContractUrl;
         StaticValues.AmorphieWorkflowUrl = settings.Entegration.AmorphieWorkflowUrl;
+        StaticValues.ContractUserCode = settings.Entegration.ContractUserCode;
     }
 }
 

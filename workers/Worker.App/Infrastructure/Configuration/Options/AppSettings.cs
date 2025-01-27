@@ -22,6 +22,7 @@ public class Entegration
     public string TsizlUrl { get; set; }
     public string ContractUrl { get; set; }
     public string AmorphieWorkflowUrl { get; set; }
+    public string ContractUserCode { get; set; }
 }
 
 public class ServiceEndpoint

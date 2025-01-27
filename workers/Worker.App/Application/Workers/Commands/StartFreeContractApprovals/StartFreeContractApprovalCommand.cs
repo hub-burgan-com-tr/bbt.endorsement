@@ -98,15 +98,17 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 WorkflowId = request.ContractInstanceId
             };
 
-            Uri uri = new Uri(StaticValues.AmorphieWorkflowUrl + Guid.NewGuid().ToString() + "/transition/free-contract-approval-start");
+            Uri uri = new Uri(StaticValues.AmorphieWorkflowUrl + request.OrderId + "/transition/free-contract-approval-start");
             var json = JsonSerializer.Serialize(reqObj);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, uri);
             httpRequest.Content = content;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
-            client.DefaultRequestHeaders.Add("User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
-            client.DefaultRequestHeaders.Add("Behalf-Of-User", "650c0ab5-7e1d-4d06-a7ce-f75e6857da68");
+            // client.DefaultRequestHeaders.Add("User", StaticValues.ContractUserCode);
+            // client.DefaultRequestHeaders.Add("Behalf-Of-User", StaticValues.ContractUserCode);
+            client.DefaultRequestHeaders.Add("User", "05e6eda3-f8e6-4259-9194-db668ce1d88a");
+            client.DefaultRequestHeaders.Add("Behalf-Of-User", "05e6eda3-f8e6-4259-9194-db668ce1d88a");
 
             var result = await client.SendAsync(httpRequest);
             var responseContent = await result.Content.ReadAsStringAsync();
@@ -124,6 +126,7 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
                 .ForContext("UploadedDocument", json)
                 .ForContext("HttpResponseStatus", result.StatusCode)
                 .Error($"StartFreeContract Error. Content: " + responseContent);
+                throw new Exception("Start Free Contract Request Error. Status Code: " + result.StatusCode);
             }
 
             return Response<StartFreeContractApprovalResponse>.Success(response, 200);
