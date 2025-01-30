@@ -105,10 +105,8 @@ namespace Worker.App.Application.Workers.Commands.StartFreeContractApprovals
             httpRequest.Content = content;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AuthToken.Replace("Bearer ", ""));
-            // client.DefaultRequestHeaders.Add("User", StaticValues.ContractUserCode);
-            // client.DefaultRequestHeaders.Add("Behalf-Of-User", StaticValues.ContractUserCode);
-            client.DefaultRequestHeaders.Add("User", "05e6eda3-f8e6-4259-9194-db668ce1d88a");
-            client.DefaultRequestHeaders.Add("Behalf-Of-User", "05e6eda3-f8e6-4259-9194-db668ce1d88a");
+            client.DefaultRequestHeaders.Add("User", StaticValues.ContractUserCode);
+            client.DefaultRequestHeaders.Add("Behalf-Of-User", StaticValues.ContractUserCode);
 
             var result = await client.SendAsync(httpRequest);
             var responseContent = await result.Content.ReadAsStringAsync();
