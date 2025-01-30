@@ -255,7 +255,7 @@ app.UseSession();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.EnvironmentName == "Test")
+if (app.Environment.EnvironmentName == "Test"||app.Environment.EnvironmentName == "Uat")
 {
     //app.ConfigureSwagger();
     app.UseSwagger(options =>
