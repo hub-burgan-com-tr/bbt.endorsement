@@ -353,7 +353,6 @@
         <bpmn:extensionElements>
           <zeebe:taskDefinition type="UploadContractDocumentInstance" retries="0" />
         </bpmn:extensionElements>
-        <bpmn:incoming>Flow_01zer41</bpmn:incoming>
         <bpmn:outgoing>Flow_06vdhgo</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:serviceTask id="Activity_StartFreeContractApproval" name="StartFreeContractApproval">
@@ -377,12 +376,8 @@
       <bpmn:exclusiveGateway id="Gateway_UseContractManagement" default="Flow_0jaztcq">
         <bpmn:incoming>Flow_0klllua</bpmn:incoming>
         <bpmn:outgoing>Flow_0jaztcq</bpmn:outgoing>
-        <bpmn:outgoing>Flow_01zer41</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_0jaztcq" sourceRef="Gateway_UseContractManagement" targetRef="Gateway_0vuvde2" />
-      <bpmn:sequenceFlow id="Flow_01zer41" sourceRef="Gateway_UseContractManagement" targetRef="Activity_UploadContractDocumentInstance">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=UseContractManagement = true</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_06vdhgo" sourceRef="Activity_UploadContractDocumentInstance" targetRef="Gateway_0avol32" />
       <bpmn:sequenceFlow id="Flow_1ss665q" sourceRef="Activity_14c73cu" targetRef="Activity_1vix7mz" />
       <bpmn:sequenceFlow id="Flow_0ejiqq5" sourceRef="Activity_1vix7mz" targetRef="Gateway_11eallx" />
@@ -1012,13 +1007,6 @@
       <bpmndi:BPMNEdge id="Flow_0jaztcq_di" bpmnElement="Flow_0jaztcq">
         <di:waypoint x="1245" y="690" />
         <di:waypoint x="1295" y="690" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_01zer41_di" bpmnElement="Flow_01zer41">
-        <di:waypoint x="1220" y="715" />
-        <di:waypoint x="1220" y="850" />
-        <di:waypoint x="380" y="850" />
-        <di:waypoint x="380" y="290" />
-        <di:waypoint x="1080" y="290" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06vdhgo_di" bpmnElement="Flow_06vdhgo">
         <di:waypoint x="1180" y="290" />
