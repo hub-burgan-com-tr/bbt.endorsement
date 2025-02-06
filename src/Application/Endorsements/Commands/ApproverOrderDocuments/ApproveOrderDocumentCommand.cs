@@ -31,7 +31,7 @@ namespace Application.Endorsements.Commands.ApproveOrderDocuments
                 Documents = request.Documents               
             };
             string payload = JsonSerializer.Serialize(model, new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });          
-            var response = await _zeebe.SendMessage(model.InstanceId, "ApproveData", payload);
+            var response =   _zeebe.SendMessage(model.InstanceId, "ApproveData", payload).Result;
             return Response<bool>.Success(true, 200);
         }
     }
