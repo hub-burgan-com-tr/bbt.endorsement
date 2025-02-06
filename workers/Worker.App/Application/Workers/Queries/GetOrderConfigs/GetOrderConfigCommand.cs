@@ -50,7 +50,7 @@ namespace Worker.App.Application.Workers.Queries.GetOrderConfigs
                 NotPersonalMail = data.NotPersonalMail,
                 NoNotification = data.NoNotification,
                 Device = data.Device,
-                UseContractManagement = false,//data.UseContractManagement,
+                UseContractManagement = data.UseContractManagement,
                 ContractAuthToken = data.ContractAuthToken,
                 ContractParameters = data.ContractParameters
             };
