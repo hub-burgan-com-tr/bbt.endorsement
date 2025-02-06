@@ -45,13 +45,6 @@ namespace Api.Controllers
                 {
                     Token = response
                 };
-
-                if (result != null)
-                {
-
-                    Log.Information("Login-Token: " + result.Token);
-                }
-
                 return result;
             }
             catch (Exception ex)
