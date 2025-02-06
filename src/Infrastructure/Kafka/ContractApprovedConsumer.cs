@@ -46,11 +46,11 @@ namespace Infrastructure.Kafka
                         ActionId = document.DocumentActions.Where(x => x.Type == "Approve").Select(x => x.DocumentActionId).FirstOrDefault(),
                     }).ToList();
 
-                await _mediator.Send(new ApproveOrderDocumentCommand
+                _ = _mediator.Send(new ApproveOrderDocumentCommand
                 {
                     OrderId = instance.OrderId.ToString(),
                     Documents = approveOrderDocuments
-                });
+                }).Result;
             }
 
             return true;

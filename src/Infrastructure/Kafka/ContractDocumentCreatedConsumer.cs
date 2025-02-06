@@ -60,11 +60,11 @@ namespace Infrastructure.Kafka
                     _logger.LogInformation("ContractDocumentCreatedConsumer Document Rejected.");
                 }
 
-                await _mediator.Send(new ApproveOrderDocumentCommand
+                _ = _mediator.Send(new ApproveOrderDocumentCommand
                 {
                     OrderId = instance.OrderId.ToString(),
                     Documents = documents
-                });
+                }).Result;
             }
 
             return true;
