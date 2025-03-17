@@ -1,4 +1,5 @@
 FROM docker.io/node:23.10.0-alpine AS build
+RUN apk add --no-cache libxml2=2.13.4-r5
 WORKDIR /app
 COPY ["src/Ui/", "/app/"]
 ENV NODE_ENV=production
