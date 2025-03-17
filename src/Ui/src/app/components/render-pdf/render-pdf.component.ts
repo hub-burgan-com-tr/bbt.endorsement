@@ -37,7 +37,7 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
   }
 
   loadPdf(): void {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/src/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     pdfjsLib.getDocument(this.detail.content).promise.then(pdf => {
       this.pdfDocument = pdf;
       this.totalPages = pdf.numPages;
