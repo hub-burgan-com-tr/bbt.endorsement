@@ -28,7 +28,7 @@
     "formiojs": "^4.14.3",
     "jquery": "^3.6.0",
     "ngx-smart-modal": "^7.4.1",
-    "pdfjs-dist": "^4.10.38",
+    "pdfjs-dist": "^2.16.105",
     "rxjs": "~7.5.0",
     "source-map": "^0.7.3",
     "tslib": "^2.3.0",
