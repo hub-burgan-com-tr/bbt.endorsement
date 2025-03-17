@@ -40,7 +40,8 @@
             ],
             "allowedCommonJsDependencies": [
               "lodash",
-              "formiojs"
+              "formiojs",
+              "pdfjs-dist"
             ]
           },
           "configurations": {
