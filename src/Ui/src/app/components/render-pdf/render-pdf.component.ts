@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { CommonService } from 'src/app/services/common.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CommonService } from 'src/app/services/common.service';
-import * as pdfjsLib from 'pdfjs-dist';
+import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
+import * as pdfjsLib from 'pdfjs-dist';
 
 @Component({
   selector: 'app-render-pdf',
@@ -11,24 +12,33 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./render-pdf.component.scss']
 })
 export class RenderPdfComponent implements OnInit, OnDestroy {
-  @Input() pdfUrl: string;
-  @Input() orderId: string;
-  @Input() documentId: string;
-  @Input() fileName: string;
+  @Input() detail: any;
   private destroy$ = new Subject();
+  orderId: any;
   pdfDocument: any;
   pdfPage: number = 1;
   totalPages: number = 0;
 
-  constructor(private commonService: CommonService) {}
+  constructor(private commonService: CommonService, private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.orderId = params['orderId'];
+      if (!this.orderId) {
+        this.route.params.subscribe(p => {
+          this.orderId = p['orderId'];
+        });
+      }
+    });
+  }
 
   ngOnInit(): void {
-    this.loadPdf();
+    if (this.detail && this.detail.type === 'PDF') {
+      this.loadPdf();
+    }
   }
 
   loadPdf(): void {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
-    pdfjsLib.getDocument(this.pdfUrl).promise.then(pdf => {
+    pdfjsLib.getDocument(this.detail.content).promise.then(pdf => {
       this.pdfDocument = pdf;
       this.totalPages = pdf.numPages;
       this.renderPage(this.pdfPage);
@@ -67,9 +77,9 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
   }
 
   getDocumentPdf(): void {
-    this.commonService.getDocumentPdf(this.orderId, this.documentId).pipe(takeUntil(this.destroy$)).subscribe(
+    this.commonService.getDocumentPdf(this.orderId, this.detail.documentId ? this.detail.documentId : this.detail.actions.documentId).pipe(takeUntil(this.destroy$)).subscribe(
       data => {
-        saveAs(data.body, this.fileName);
+        saveAs(data.body, this.detail.fileName);
       },
       error => {
         console.error('Error downloading PDF', error);
