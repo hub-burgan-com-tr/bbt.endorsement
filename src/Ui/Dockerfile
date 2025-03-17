@@ -1,5 +1,5 @@
 FROM docker.io/node:23.10.0-alpine AS build
-RUN apk add --no-cache libxml2=2.13.4-r5
+RUN apk update && apk upgrade libxml2
 WORKDIR /app
 COPY ["src/Ui/", "/app/"]
 ENV NODE_ENV=production
@@ -14,5 +14,6 @@ RUN npm run build
 RUN ng build --configuration=test   --project=dms --base-href /
 ### STAGE 2: Run ###
 FROM docker.io/nginx:1.27.4-alpine
+RUN apk update && apk upgrade libxml2
 COPY src/Ui/nginx-common.conf /etc/nginx/nginx.conf
 COPY --from=build /app/dist/dms /usr/share/nginx/html
