@@ -1,4 +1,4 @@
-FROM docker.io/node:23.10-alpine AS build
+FROM docker.io/node:23.10.0-alpine AS build
 WORKDIR /app
 COPY ["src/Ui/", "/app/"]
 ENV NODE_ENV=production
