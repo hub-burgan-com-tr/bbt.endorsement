@@ -49,6 +49,7 @@ import {HistoryComponent} from "../components/history/history.component";
     StateClassPipe,
     DownloadLinkComponent,
     RenderFileComponent,
+    RenderPdfComponent,
     PersonSearchComponent,
     HighOrderComponent,
     HistoryComponent
