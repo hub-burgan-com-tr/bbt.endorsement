@@ -33,7 +33,7 @@
         <div *ngFor="let detail of details; let d = index">
           <div class="box p-3 mb-4" *ngIf="d===step">
             <b class="mb-2 d-block">{{detail.name}}</b>
-            <app-render-file [detail]="detail"></app-render-file>
+            <app-render-pdf [detail]="detail"></app-render-pdf>
             <div *ngIf="detail.actions.length != 0">
               <ng-container *ngIf="detail.actions.length > 1;then radio else check"></ng-container>
               <ng-template #check>

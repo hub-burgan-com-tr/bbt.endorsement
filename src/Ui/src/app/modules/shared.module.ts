@@ -13,6 +13,7 @@ import {StatePipe} from "../pipes/state.pipe";
 import {StateClassPipe} from "../pipes/state-class.pipe";
 import {DownloadLinkComponent} from "../components/download-link/download-link.component";
 import {RenderFileComponent} from "../components/render-file/render-file.component";
+import {RenderPdfComponent} from "../components/render-pdf/render-pdf.component";
 import {PersonSearchComponent} from "../components/person-search/person-search.component";
 import {FormsModule} from "@angular/forms";
 import {HighOrderComponent} from "../components/high-order/high-order.component";
@@ -31,6 +32,7 @@ import {HistoryComponent} from "../components/history/history.component";
     StateClassPipe,
     DownloadLinkComponent,
     RenderFileComponent,
+    RenderPdfComponent,
     PersonSearchComponent,
     HighOrderComponent,
     HistoryComponent
