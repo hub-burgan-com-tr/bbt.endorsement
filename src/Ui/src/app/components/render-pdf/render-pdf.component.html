@@ -1,11 +1,13 @@
-<div class="pdf-viewer-container" *ngIf="detail && detail.content" (scroll)="onScroll($event)">
+<div class="pdf-viewer-container" *ngIf="detail && detail.content">
   <ng-container [ngSwitch]="detail.type">
     <ng-template ngSwitchCase="Image">
       <img class="mw-100" [src]="detail.content">
     </ng-template>
     <ng-template ngSwitchCase="PDF">
       <h4 class="mb-3"><a href="javascript:void(0)" (click)="getDocumentPdf()">İndirmek için tıklayınız.</a></h4>
-      <canvas id="pdf-canvas" style="width: 100%;height: auto;"></canvas>
+      <div class="pdf-canvas-container">
+        <canvas id="pdf-canvas"></canvas>
+      </div>
       <div class="pdf-controls">
         <button class="btn btn-primary px-5 mt-5" (click)="prevPage()" [disabled]="pdfPage <= 1">İleri</button>
         <span>Page {{pdfPage}} of {{totalPages}}</span>
