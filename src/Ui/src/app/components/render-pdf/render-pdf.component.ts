@@ -76,6 +76,15 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     }
   }
 
+  onScroll(event: any) {
+    const element = event.target;
+    if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+      this.nextPage();
+    } else if (element.scrollTop === 0) {
+      this.prevPage();
+    }
+  }
+
   getDocumentPdf(): void {
     this.commonService.getDocumentPdf(this.orderId, this.detail.documentId ? this.detail.documentId : this.detail.actions.documentId).pipe(takeUntil(this.destroy$)).subscribe(
       data => {
