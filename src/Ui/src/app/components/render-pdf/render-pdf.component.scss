@@ -4,11 +4,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: auto;
+}
+
+.pdf-canvas-container {
+  width: 100%;
+  height: 500px; /* İhtiyaca göre ayarlanabilir */
+  overflow-y: auto; /* Dikey kaydırma etkinleştir */
+  border: 1px solid #ccc;
 }
 
 canvas {
-  border: 1px solid #ccc;
+  width: 100%; /* Canvas genişliği kapsayıcıya uyacak */
+  height: auto; /* Oranları koruyarak yüksekliği ayarla */
 }
 
 .pdf-controls {
