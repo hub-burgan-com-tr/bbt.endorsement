@@ -76,11 +76,12 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     }
   }
 
-  onScroll(event: any) {
+  onScroll(event: any): void {
     const element = event.target;
-    if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+    if (element.scrollTop + element.clientHeight >= element.scrollHeight && this.pdfPage < this.totalPages) {
       this.nextPage();
-    } else if (element.scrollTop === 0) {
+    }
+    if (element.scrollTop === 0 && this.pdfPage > 1) {
       this.prevPage();
     }
   }
