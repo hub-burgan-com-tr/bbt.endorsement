@@ -39,45 +39,45 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
 
   loadPdf(): void {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
     pdfjsLib.getDocument(this.detail.content).promise.then(pdf => {
       this.pdfDocument = pdf;
       this.totalPages = pdf.numPages;
 
-      this.renderPage(1);
+      for (let pageNumber = 1; pageNumber <= this.totalPages; pageNumber++) {
+        this.renderPage(pageNumber);
+      }
     }).catch(error => {
       console.error('PDF yüklenirken hata oluştu:', error);
     });
   }
 
   renderPage(pageNumber: number): void {
-    if (this.renderedPages.includes(pageNumber)) {
-      return;
-    }
-
     this.pdfDocument.getPage(pageNumber).then(page => {
       const scale = 1.5;
       const viewport = page.getViewport({ scale });
-      const canvas = document.getElementById(`pdf-canvas-${pageNumber}`) as HTMLCanvasElement;
 
-      if (!canvas) {
-        console.error(`Canvas bulunamadı: pdf-canvas-${pageNumber}`);
-        return;
-      }
+      setTimeout(() => {
+        const canvas = document.getElementById(`pdf-canvas-${pageNumber}`) as HTMLCanvasElement;
 
-      const context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+        if (!canvas) {
+          console.error(`Canvas bulunamadı: pdf-canvas-${pageNumber}`);
+          return;
+        }
 
-      const renderContext = {
-        canvasContext: context,
-        viewport: viewport
-      };
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
-      page.render(renderContext).promise.then(() => {
-        console.log(`Sayfa ${pageNumber} render edildi.`);
-      });
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
 
-      this.renderedPages.push(pageNumber);
+        page.render(renderContext).promise.then(() => {
+          console.log(`Sayfa ${pageNumber} render edildi.`);
+        });
+      }, 0); // DOM'un güncellenmesi için kısa bir gecikme
     }).catch(error => {
       console.error(`Sayfa ${pageNumber} render edilirken hata oluştu:`, error);
     });
