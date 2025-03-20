@@ -42,7 +42,10 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     pdfjsLib.getDocument(this.detail.content).promise.then(pdf => {
       this.pdfDocument = pdf;
       this.totalPages = pdf.numPages;
+
       this.renderPage(1);
+    }).catch(error => {
+      console.error('PDF yüklenirken hata oluştu:', error);
     });
   }
 
@@ -50,10 +53,17 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     if (this.renderedPages.includes(pageNumber)) {
       return;
     }
+
     this.pdfDocument.getPage(pageNumber).then(page => {
       const scale = 1.5;
       const viewport = page.getViewport({ scale });
-      const canvas = document.getElementById('pdf-canvas') as HTMLCanvasElement;
+      const canvas = document.getElementById(`pdf-canvas-${pageNumber}`) as HTMLCanvasElement;
+
+      if (!canvas) {
+        console.error(`Canvas bulunamadı: pdf-canvas-${pageNumber}`);
+        return;
+      }
+
       const context = canvas.getContext('2d');
       canvas.height = viewport.height;
       canvas.width = viewport.width;
@@ -62,9 +72,14 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
         canvasContext: context,
         viewport: viewport
       };
-      page.render(renderContext);
+
+      page.render(renderContext).promise.then(() => {
+        console.log(`Sayfa ${pageNumber} render edildi.`);
+      });
 
       this.renderedPages.push(pageNumber);
+    }).catch(error => {
+      console.error(`Sayfa ${pageNumber} render edilirken hata oluştu:`, error);
     });
   }
 
