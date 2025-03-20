@@ -18,6 +18,7 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
   pdfDocument: any;
   pdfPage: number = 1;
   totalPages: number = 0;
+  renderedPages: number[] = [];
 
   constructor(private commonService: CommonService, private route: ActivatedRoute) {
     this.route.queryParams.subscribe(params => {
@@ -41,11 +42,14 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     pdfjsLib.getDocument(this.detail.content).promise.then(pdf => {
       this.pdfDocument = pdf;
       this.totalPages = pdf.numPages;
-      this.renderPage(this.pdfPage);
+      this.renderPage(1);
     });
   }
 
   renderPage(pageNumber: number): void {
+    if (this.renderedPages.includes(pageNumber)) {
+      return;
+    }
     this.pdfDocument.getPage(pageNumber).then(page => {
       const scale = 1.5;
       const viewport = page.getViewport({ scale });
@@ -59,6 +63,8 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
         viewport: viewport
       };
       page.render(renderContext);
+
+      this.renderedPages.push(pageNumber);
     });
   }
 
@@ -79,19 +85,18 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
   onScroll(event: any): void {
     const element = event.target;
 
-    // Eğer aşağı kaydırılıyorsa
-    if (element.scrollTop + element.clientHeight >= element.scrollHeight && this.pdfPage < this.totalPages) {
-      for (let page = this.pdfPage + 1; page <= this.totalPages; page++) {
-        this.renderPage(page);
+    if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+      const nextPage = Math.max(...this.renderedPages) + 1;
+      if (nextPage <= this.totalPages) {
+        this.renderPage(nextPage);
       }
-      this.pdfPage = this.totalPages;
     }
 
-    if (element.scrollTop === 0 && this.pdfPage > 1) {
-      for (let page = this.pdfPage - 1; page >= 1; page--) {
-        this.renderPage(page);
+    if (element.scrollTop === 0) {
+      const prevPage = Math.min(...this.renderedPages) - 1;
+      if (prevPage >= 1) {
+        this.renderPage(prevPage);
       }
-      this.pdfPage = 1;
     }
   }
 
