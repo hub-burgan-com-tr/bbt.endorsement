@@ -78,11 +78,20 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
 
   onScroll(event: any): void {
     const element = event.target;
+
+    // Eğer aşağı kaydırılıyorsa
     if (element.scrollTop + element.clientHeight >= element.scrollHeight && this.pdfPage < this.totalPages) {
-      this.nextPage();
+      for (let page = this.pdfPage + 1; page <= this.totalPages; page++) {
+        this.renderPage(page);
+      }
+      this.pdfPage = this.totalPages;
     }
+
     if (element.scrollTop === 0 && this.pdfPage > 1) {
-      this.prevPage();
+      for (let page = this.pdfPage - 1; page >= 1; page--) {
+        this.renderPage(page);
+      }
+      this.pdfPage = 1;
     }
   }
 
