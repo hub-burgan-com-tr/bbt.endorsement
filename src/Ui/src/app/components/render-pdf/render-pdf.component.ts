@@ -36,13 +36,6 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     if (this.detail && this.detail.type === 'PDF') {
       this.loadPdf();
     }
-
-    window.addEventListener('resize', () => {
-      this.renderedPages = []; // Render edilen sayfaları sıfırla
-      for (let pageNumber = 1; pageNumber <= this.totalPages; pageNumber++) {
-        this.renderPage(pageNumber);
-      }
-    });
   }
 
   loadPdf(): void {
@@ -59,6 +52,8 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
 
       // DOM güncellemelerini tetikle
       this.cdr.detectChanges();
+
+      // Tüm sayfaları render et
       for (let pageNumber = 1; pageNumber <= this.totalPages; pageNumber++) {
         this.renderPage(pageNumber);
       }
@@ -66,15 +61,11 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
       console.error('PDF yüklenirken hata oluştu:', error);
     });
   }
+
   renderPage(pageNumber: number): void {
     this.pdfDocument.getPage(pageNumber).then(page => {
-      const viewport = page.getViewport({ scale: 1 }); // Varsayılan ölçek
-
-      // Ekran boyutuna göre ölçek hesaplama
-      const containerWidth = window.innerWidth * 0.9; // Ekranın %90'ı genişlik
-      const scale = containerWidth / viewport.width; // Ölçek oranı
-      const scaledViewport = page.getViewport({ scale });
-
+      const scale = 1.5;
+      const viewport = page.getViewport({ scale });
       const canvas = document.getElementById(`pdf-canvas-${pageNumber}`) as HTMLCanvasElement;
 
       if (!canvas) {
@@ -83,20 +74,17 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
       }
 
       const context = canvas.getContext('2d');
-      canvas.height = scaledViewport.height;
-      canvas.width = scaledViewport.width;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
 
       const renderContext = {
         canvasContext: context,
-        viewport: scaledViewport
+        viewport: viewport
       };
 
       page.render(renderContext).promise.then(() => {
         console.log(`Sayfa ${pageNumber} render edildi.`);
       });
-
-      // Render edilen sayfayı listeye ekle
-      this.renderedPages.push(pageNumber);
     }).catch(error => {
       console.error(`Sayfa ${pageNumber} render edilirken hata oluştu:`, error);
     });
@@ -106,6 +94,11 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     if (this.pdfPage < this.totalPages) {
       this.pdfPage++;
       this.renderPage(this.pdfPage);
+
+      const container = document.querySelector('.pdf-scroll-container');
+      if (container) {
+        container.scrollTop = 0;
+      }
     }
   }
 
@@ -113,6 +106,11 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     if (this.pdfPage > 1) {
       this.pdfPage--;
       this.renderPage(this.pdfPage);
+
+      const container = document.querySelector('.pdf-scroll-container');
+      if (container) {
+        container.scrollTop = 0;
+      }
     }
   }
 
