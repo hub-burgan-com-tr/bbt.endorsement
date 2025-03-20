@@ -5,7 +5,9 @@
     </ng-template>
     <ng-template ngSwitchCase="PDF">
       <h4 class="mb-3"><a href="javascript:void(0)" (click)="getDocumentPdf()">İndirmek için tıklayınız.</a></h4>
-      <canvas id="pdf-canvas"></canvas>
+      <div *ngFor="let page of renderedPages" class="pdf-page">
+        <canvas [id]="'pdf-canvas-' + page" style="width: 100%; height: auto;"></canvas>
+      </div>
       <div class="pdf-controls">
         <button class="btn btn-primary px-5 mt-5" (click)="prevPage()" [disabled]="pdfPage <= 1">İleri</button>
         <span>Page {{pdfPage}} of {{totalPages}}</span>
