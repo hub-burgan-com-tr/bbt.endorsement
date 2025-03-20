@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy ,ChangeDetectorRef} from '@angular/core';
 import { CommonService } from 'src/app/services/common.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -20,7 +20,8 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
   totalPages: number = 0;
   renderedPages: number[] = [];
 
-  constructor(private commonService: CommonService, private route: ActivatedRoute) {
+
+  constructor(private cdr: ChangeDetectorRef, private commonService: CommonService, private route: ActivatedRoute) {
     this.route.queryParams.subscribe(params => {
       this.orderId = params['orderId'];
       if (!this.orderId) {
@@ -44,6 +45,15 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
       this.pdfDocument = pdf;
       this.totalPages = pdf.numPages;
 
+      // Tüm sayfaları yükle
+      for (let pageNumber = 1; pageNumber <= this.totalPages; pageNumber++) {
+        this.renderedPages.push(pageNumber);
+      }
+
+      // DOM güncellemelerini tetikle
+      this.cdr.detectChanges();
+
+      // Tüm sayfaları render et
       for (let pageNumber = 1; pageNumber <= this.totalPages; pageNumber++) {
         this.renderPage(pageNumber);
       }
@@ -56,28 +66,25 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     this.pdfDocument.getPage(pageNumber).then(page => {
       const scale = 1.5;
       const viewport = page.getViewport({ scale });
+      const canvas = document.getElementById(`pdf-canvas-${pageNumber}`) as HTMLCanvasElement;
 
-      setTimeout(() => {
-        const canvas = document.getElementById(`pdf-canvas-${pageNumber}`) as HTMLCanvasElement;
+      if (!canvas) {
+        console.error(`Canvas bulunamadı: pdf-canvas-${pageNumber}`);
+        return;
+      }
 
-        if (!canvas) {
-          console.error(`Canvas bulunamadı: pdf-canvas-${pageNumber}`);
-          return;
-        }
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
 
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
 
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-
-        page.render(renderContext).promise.then(() => {
-          console.log(`Sayfa ${pageNumber} render edildi.`);
-        });
-      }, 0); // DOM'un güncellenmesi için kısa bir gecikme
+      page.render(renderContext).promise.then(() => {
+        console.log(`Sayfa ${pageNumber} render edildi.`);
+      });
     }).catch(error => {
       console.error(`Sayfa ${pageNumber} render edilirken hata oluştu:`, error);
     });
