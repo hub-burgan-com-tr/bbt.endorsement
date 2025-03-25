@@ -86,8 +86,15 @@
           <div class="box-title mt-5 p-0 no-border">Müşteri Ekle</div>
           <div class="row mt-3">
             <div class="col-12">
-              <app-person-search  pattern="^[0-9]*$" (returnListEvent)="getPersonFromChild($event)" [hasError]="submitted && !person">
-              </app-person-search>
+              <!-- <app-person-search (returnListEvent)="getPersonFromChild($event)" [hasError]="submitted && !person">
+              </app-person-search> -->
+              <input type="text"
+                      class="form-control"
+                      [ngClass]="{'is-invalid': hasError}"
+                      [(ngModel)]="name"
+                      (input)="numericOnly($event)"
+                      (keyup)="search($event)"
+                      placeholder="Kişi numarası giriniz"/>
               <small *ngIf="submitted && !person" class="text-danger">
                 Müşteri seçilmelidir.
               </small>

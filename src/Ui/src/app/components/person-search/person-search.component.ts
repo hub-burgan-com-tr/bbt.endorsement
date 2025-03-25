@@ -28,6 +28,11 @@ export class PersonSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  numericOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+    this.name = input.value;
+  }
   search(e) {
     e.preventDefault();
     if (e.target.value && e.target.value.length >= 5) {
