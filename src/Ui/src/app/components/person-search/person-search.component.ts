@@ -33,19 +33,29 @@ export class PersonSearchComponent implements OnInit {
     input.value = input.value.replace(/[^0-9]/g, '');
     this.name = input.value;
   }
-  search(e) {
+
+  search(e: KeyboardEvent): void {
     e.preventDefault();
-    if (e.target.value && e.target.value.length >= 5) {
-      this.personService.PersonSearch(e.target.value).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        this.persons = res && res.data.persons;
-      })
+    if (this.name && this.name.length >= 5) {
+      this.personService.PersonSearch(this.name)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
+          this.persons = res?.data?.persons || [];
+        });
+    } else {
+      this.persons = [];
     }
   }
 
-  selectPerson(p) {
+  selectPerson(p: any): void {
     this.selectedPerson = p;
     this.returnListEvent.emit(JSON.stringify(this.selectedPerson));
-    this.persons = this.persons.filter(p => p.citizenshipNumber == this.selectedPerson.citizenshipNumber);
+    this.persons = this.persons.filter(person => person.citizenshipNumber === this.selectedPerson.citizenshipNumber);
     this.name = '';
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
