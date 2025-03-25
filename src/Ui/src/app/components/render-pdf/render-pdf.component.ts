@@ -39,8 +39,7 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
   }
 
   loadPdf(): void {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-
+    pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/pdf.worker.min.js';
     pdfjsLib.getDocument(this.detail.content).promise.then(pdf => {
       this.pdfDocument = pdf;
       this.totalPages = pdf.numPages;
@@ -88,30 +87,6 @@ export class RenderPdfComponent implements OnInit, OnDestroy {
     }).catch(error => {
       console.error(`Sayfa ${pageNumber} render edilirken hata oluştu:`, error);
     });
-  }
-
-  nextPage(): void {
-    if (this.pdfPage < this.totalPages) {
-      this.pdfPage++;
-      this.renderPage(this.pdfPage);
-
-      const container = document.querySelector('.pdf-scroll-container');
-      if (container) {
-        container.scrollTop = 0;
-      }
-    }
-  }
-
-  prevPage(): void {
-    if (this.pdfPage > 1) {
-      this.pdfPage--;
-      this.renderPage(this.pdfPage);
-
-      const container = document.querySelector('.pdf-scroll-container');
-      if (container) {
-        container.scrollTop = 0;
-      }
-    }
   }
 
   onScroll(event: any): void {
