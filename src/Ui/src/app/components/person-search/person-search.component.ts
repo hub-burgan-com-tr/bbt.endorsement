@@ -45,7 +45,9 @@ export class PersonSearchComponent implements OnInit {
   }
   onInputChange(event: any) {
     const input = event.target;
-    input.value = input.value.replace(/[^0-9]/g, '');
-    this.name = input.value;
+    const sanitizedValue = input.value.replace(/[^0-9]/g, '');
+    input.value = sanitizedValue;
+    this.name = sanitizedValue;
   }
+  
 }
