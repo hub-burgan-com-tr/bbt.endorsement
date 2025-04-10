@@ -28,14 +28,17 @@ export class PersonSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  search(e) {
-    e.preventDefault();
-    if (e.target.value && e.target.value.length >= 5) {
-      this.personService.PersonSearch(e.target.value).pipe(takeUntil(this.destroy$)).subscribe(res => {
-        this.persons = res && res.data.persons;
-      })
+  search(e?: any) {
+    const value = e?.target?.value || this.name;
+    if (value && value.length >= 5) {
+      this.personService.PersonSearch(value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
+          this.persons = res?.data?.persons;
+        });
     }
   }
+  
 
   selectPerson(p) {
     this.selectedPerson = p;
