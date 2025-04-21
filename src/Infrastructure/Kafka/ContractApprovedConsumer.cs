@@ -33,8 +33,8 @@ namespace Infrastructure.Kafka
 
             _logger.LogInformation("ContractApprovedConsumer receive the message and find instance.");
 
-            var documentCount = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).Count();
-            if (documentCount > 1)
+            var documentCount = _context.Documents.Any(x => x.OrderId == instance.OrderId.ToString());
+            if (documentCount)
             {
                 _logger.LogInformation("ContractApprovedConsumer process started.");
                 var documents = _context.Documents.Where(x => x.OrderId == instance.OrderId.ToString()).ToList();
