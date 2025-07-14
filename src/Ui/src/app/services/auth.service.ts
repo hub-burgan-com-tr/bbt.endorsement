@@ -17,6 +17,7 @@ export class AuthService {
   private tokenSubject: BehaviorSubject<string>;
   public currentUser: Observable<User>;
   public token: Observable<string>;
+  private tokenTimer: any;
 
   constructor(private httpClient: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -33,6 +34,21 @@ export class AuthService {
     return this.tokenSubject.value;
   }
 
+  private startTokenTimer(): void {
+    this.clearTokenTimer();
+    this.tokenTimer = setTimeout(() => {
+      console.log('Token süresi doldu, logout yapılıyor...');
+      this.logout();
+    }, 350000); // Token 360 sn biz 350 de logoutladık
+  }
+
+  private clearTokenTimer(): void {
+    if (this.tokenTimer) {
+      clearTimeout(this.tokenTimer);
+      this.tokenTimer = null;
+    }
+  }
+
   login(code: any) {
     const url = `${this.baseUrl}/${ApiPaths.Login}?code=${code}`;
     console.log('Login URL:', url);
@@ -41,6 +57,7 @@ export class AuthService {
       // localStorage.setItem('token', JSON.stringify(user.token));
       this.tokenSubject.next(user.token);
       this.currentUserSubject.next(user);
+      this.startTokenTimer();
       return user;
     }));
   }
@@ -51,12 +68,15 @@ export class AuthService {
       // localStorage.setItem('token', JSON.stringify(user.token));
       this.tokenSubject.next(user.token);
       this.currentUserSubject.next(user);
+      this.startTokenTimer();
       return user;
     }));
   }
 
 
   logout() {
+    this.clearTokenTimer();
+
     localStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
