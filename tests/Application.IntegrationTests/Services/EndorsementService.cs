@@ -81,10 +81,10 @@ public static class EndorsementService
         var document =new List<OrderDocument>() { new OrderDocument {Type=2,Title="Metin",Content="İçerik",Actions=new List<DocumentActionClass>() { new DocumentActionClass { Choice=1,Title= "Okudum, onayladım" } } } };
         var StartRequest = new StartRequest
         {
-            Approver = new OrderCustomer { CitizenshipNumber= 56906430700, First= "Ahmet",Last= "Güler",CustomerNumber= 130991279 },
+            Approver = new OrderCustomer { CitizenshipNumber= 88888888888, First= "DENEME",Last= "DENER",CustomerNumber= 5555555555 },
             Documents=document,
             Title= "Sigorta Teklif Formu",
-            Reference = new OrderReference { Callback = null, Process = "123", ProcessNo = "Sigorta Formları", State = "Başvuru Formu" },
+            Reference = new OrderReference { Callback = null, Process = "44444", ProcessNo = "Sigorta Formları", State = "Başvuru Formu" },
             Config = new OrderConfig { ExpireInMinutes = 60, MaxRetryCount = 3, RetryFrequence = 15 },
         };
         return StartRequest;
@@ -120,10 +120,10 @@ public static class EndorsementService
     {
      StartFormRequest request=new StartFormRequest
      {
-         Approver=new OrderCustomer { CitizenshipNumber= 17556080776 ,First= "Merve",Last= "Aydın",CustomerNumber= 514250868 },
-         Content= "{\"textField\":\"                              SIGORTA BASVURU FORMU\",\"sigortaliAdiUnvani\":\"AHMET \",\"sigortaliVknTckn\":\"29525155454\",\"sigortaEttirenAdiUnvani\":\"MEHMET\",\"sigortaEttirenVknTckn\":\"29525133478\",\"dainiMurtehin\":\"Selim\",\"sigortaTuru\":{\"esya\":true,\"konut\":false,\"dask\":false,\"kasko\":false,\"trafik\":false,\"isyeri\":false,\"diger\":false},\"textArea\":\"Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i mürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.\",\"textArea1\":\"Yukarıda beyan etmiş olduğum bilgiler çerçevesinde sigorta talebimin alınmasını ve tarafıma sigorta teklifinin yapılmasını talep ederim.\",\"textArea2\":\"Sigorta poliçesi talebiniz kapsamında paylaştığınız kişisel verilerinize ilişkin 6698 sayılı Kişisel Verilerin Korunması Kanunu hakkındaki detaylı bilgilendirmeye www.burgan.com.tr adresinden ulaşabilirsiniz.\",\"adresKoduUavtKodu\":\"295479\",\"binaM2\":\"100\",\"binaSigortaDegeri\":\"1000000\",\"esyaSigortaDegeri\":\"500000\",\"binaYapimYili\":\"2015\",\"toplamKatAdedi\":\"8\",\"bulunduguKat\":\"4\",\"rizikoAdresi\":\"Mahmutbey\",\"ekteIletilenMevcutPoliceSartlarimaGoreDuzenlensin1\":true}",
-         FormId= "b25635e8-1abd-4768-ab97-e1285999a61a",
-         Reference=new OrderReference {ProcessNo="123456"},
+         Approver=new OrderCustomer { CitizenshipNumber= 000000000 ,First= "TEST",Last= "TEST",CustomerNumber= 000000000 },
+         Content= "{\"textField\":\"                              SIGORTA BASVURU FORMU\",\"sigortaliAdiUnvani\":\"TESTER \",\"sigortaliVknTckn\":\"33333333333\",\"sigortaEttirenAdiUnvani\":\"TESTER2\",\"sigortaEttirenVknTckn\":\"444444444444\",\"dainiMurtehin\":\"TESTERMURTEHIN\",\"sigortaTuru\":{\"esya\":true,\"konut\":false,\"dask\":false,\"kasko\":false,\"trafik\":false,\"isyeri\":false,\"diger\":false},\"textArea\":\"Kredi teminatı olan sigortalarda, sigorta bedeli, sigortanın konusunun piyasa değeri ve değerleme raporundaki minimum sigorta bedelini karşılar. Poliçede dain-i mürtehin Burgan Bank A.Ş. olur. Sigorta ettiren, sigorta şirketini seçmekte serbesttir.\",\"textArea1\":\"Yukarıda beyan etmiş olduğum bilgiler çerçevesinde sigorta talebimin alınmasını ve tarafıma sigorta teklifinin yapılmasını talep ederim.\",\"textArea2\":\"Sigorta poliçesi talebiniz kapsamında paylaştığınız kişisel verilerinize ilişkin 6698 sayılı Kişisel Verilerin Korunması Kanunu hakkındaki detaylı bilgilendirmeye www.burgan.com.tr adresinden ulaşabilirsiniz.\",\"adresKoduUavtKodu\":\"343434343434\",\"binaM2\":\"444\",\"binaSigortaDegeri\":\"1000000\",\"esyaSigortaDegeri\":\"500000\",\"binaYapimYili\":\"2015\",\"toplamKatAdedi\":\"8\",\"bulunduguKat\":\"4\",\"rizikoAdresi\":\"DENEMEBEY\",\"ekteIletilenMevcutPoliceSartlarimaGoreDuzenlensin1\":true}",
+         FormId= "665635e8-1abd-4768-ab97-e1285999a61a",
+         Reference=new OrderReference {ProcessNo="987654"},
          
          Title= "Sigorta Başvuru Formu",
         
